@@ -23,7 +23,7 @@
 
 Source69: chromium-version.txt
 
-Name:	hardened-chromium
+Name:	%{chromium_name}
 %{lua:
        local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
        local content = f:read "*all"
@@ -168,7 +168,7 @@ Requires: nss%{_isa} >= 3.26
 Requires: nss-mdns%{_isa}
 Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
-Requires: hardened-chromium-common%{_isa} = %{version}-%{release}
+Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
 
 ExclusiveArch: x86_64
 
@@ -258,14 +258,14 @@ Summary: Files needed for Chromium
 
 %package qt5-ui
 Summary: Qt5 UI built from Chromium
-Requires: hardened-chromium%{_isa} = %{version}-%{release}
+Requires: %{chromium_name}%{_isa} = %{version}-%{release}
 
 %description qt5-ui
 Qt5 UI for chromium.
 
 %package qt6-ui
 Summary: Qt6 UI built from Chromium
-Requires: hardened-chromium%{_isa} = %{version}-%{release}
+Requires: %{chromium_name}%{_isa} = %{version}-%{release}
 
 %description qt6-ui
 Qt6 UI for chromium.
@@ -296,7 +296,7 @@ rm -rf buildtools/third_party/eu-strip/bin/eu-strip
 ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
 
 # Hard code extra version
-sed -i 's/getenv("CHROME_VERSION_EXTRA")/"hardened-chromium"/' chrome/common/channel_info_posix.cc
+sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
 
 # bz#2265957, add correct platform
 sed -i "s/Linux x86_64/Linux %{_arch}/" content/common/user_agent.cc
