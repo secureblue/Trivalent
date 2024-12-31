@@ -1,7 +1,7 @@
 diff -up chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc.me chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc
 --- chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc.me	2023-06-17 19:43:08.481952671 +0200
 +++ chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc	2023-06-17 19:44:26.165349772 +0200
-@@ -20,10 +20,8 @@ bool IsOrganicFirstRun() {
+@@ -20,10 +20,9 @@ bool IsOrganicFirstRun() {
  
  base::FilePath InitialPrefsPath() {
    // The standard location of the initial prefs is next to the chrome binary.
@@ -10,7 +10,7 @@ diff -up chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linu
 -    return base::FilePath();
 -  }
 +  // ...but we patch it to use /etc/chromium
-+  // ...
++  // ...and hardened-chromium needs its own directory
 +  base::FilePath dir_exe = base::FilePath("/etc/hardened-chromium");
  
    return installer::InitialPreferences::Path(dir_exe);
