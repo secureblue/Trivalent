@@ -3,10 +3,10 @@
 <default-apps>
   <web-browsers>
     <web-browser>
-      <name>Chromium</name>
-      <executable>chromium-browser</executable>
-      <command>/usr/bin/chromium-browser %s</command>
-      <icon-name>chromium-browser</icon-name>
+      <name>hardened-chromium</name>
+      <executable>hardened-chromium</executable>
+      <command>/usr/bin/hardened-chromium %s</command>
+      <icon-name>hardened-chromium</icon-name>
       <run-in-terminal>false</run-in-terminal>
       <netscape-remote>false</netscape-remote>
       <!--
