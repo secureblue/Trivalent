@@ -32,15 +32,15 @@ export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Allow users to override command-line options and prefer user defined
 # CHROMIUM_USER_FLAGS from env over system wide CHROMIUM_FLAGS
-[[ -f /etc/chromium/chromium.conf ]] && . /etc/chromium/chromium.conf
+[[ -f /etc/hardened-chromium/hardened-chromium.conf ]] && . /etc/hardened-chromium/hardened-chromium.conf
 CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
 # Check if hardened-chromium's subresource filter is installed,
 # if so runs the installer
-if [ -f /etc/chromium/filter/hardened-chromium-blocklist ] && 
-   [ -f /etc/chromium/filter/hardened-chromium-blocklist-version.txt ] &&
-   [ -f /usr/lib64/chromium-browser/install_filter.sh ]; then
-   /bin/bash /usr/lib64/chromium-browser/install_filter.sh
+if [ -f /etc/hardened-chromium/filter/hardened-chromium-blocklist ] && 
+   [ -f /etc/hardened-chromium/filter/hardened-chromium-blocklist-version.txt ] &&
+   [ -f /usr/lib64/hardened-chromium/install_filter.sh ]; then
+   /bin/bash /usr/lib64/hardened-chromium/install_filter.sh
 fi
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
