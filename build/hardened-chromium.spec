@@ -446,7 +446,7 @@ pushd %{chromebuilddir}
 popd
 
 pushd %{buildroot}%{chromium_path}/
-for f in *.so *.so.1 chrome_crashpad_handler chromium-browser headless_shell chromedriver ; do
+for f in *.so *.so.1 chrome_crashpad_handler %{chromium_name} headless_shell chromedriver ; do
    [ -f $f ] && strip $f
 done
 popd
