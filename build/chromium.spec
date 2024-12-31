@@ -35,10 +35,10 @@ Url: http://www.chromium.org/Home
 License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
 
 Source0: chromium-%{version}-clean.tar.xz
-Source2: chromium.conf
-Source3: chromium-browser.sh
+Source2: %{chromium_name}.conf
+Source3: %{chromium_name}.sh
 Source4: %{chromium_name}.desktop
-Source9: chromium-browser.xml
+Source9: %{chromium_name}.xml
 Source11: master_preferences
 
 ### Patches ###
