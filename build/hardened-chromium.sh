@@ -4,6 +4,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# unify branding
+export CHROMIUM_NAME="@@CHROMIUM_NAME@@"
+
 # Let the wrapped binary know that it has been run through the wrapper.
 export CHROME_WRAPPER="`readlink -f "$0"`"
 
@@ -32,7 +35,7 @@ export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Allow users to override command-line options and prefer user defined
 # CHROMIUM_USER_FLAGS from env over system wide CHROMIUM_FLAGS
-[[ -f /etc/hardened-chromium/hardened-chromium.conf ]] && . /etc/hardened-chromium/hardened-chromium.conf
+[[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
 CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
 # Check if hardened-chromium's subresource filter is installed,
@@ -49,4 +52,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec -a "$0" "$HERE/@@CHROMIUM_NAME@@" $CHROMIUM_FLAGS "$@"
+exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
