@@ -413,11 +413,11 @@ cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_name}.sh
 
 export BUILD_TARGET=`cat /etc/redhat-release`
 export CHROMIUM_PATH=%{chromium_path}
-export chromium_name=%{chromium_name}
+export CHROMIUM_NAME=%{chromium_name}
 
 sed -i "s|@@BUILD_TARGET@@|$BUILD_TARGET|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
 sed -i "s|@@CHROMIUM_PATH@@|$CHROMIUM_PATH|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
-sed -i "s|@@chromium_name@@|$chromium_name|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
+sed -i "s|@@CHROMIUM_NAME@@|$CHROMIUM_NAME|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
 
 ln -s ../..%{chromium_path}/%{chromium_name}.sh %{buildroot}%{_bindir}/%{chromium_name}
 mkdir -p %{buildroot}%{_mandir}/man1/
