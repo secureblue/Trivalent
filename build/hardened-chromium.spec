@@ -30,7 +30,7 @@ Name:	hardened-chromium
        print("Version: "..content.."\n")
 }
 Release: 3
-Summary: A WebKit (Blink) powered web browser that Google doesn't want you to use
+Summary: A security hardened browser built upon Google's Chromium web browser
 Url: http://www.chromium.org/Home
 License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
 
@@ -249,10 +249,10 @@ Requires(post): /usr/sbin/semanage
 Requires(post): /usr/sbin/restorecon
 
 %description
-Chromium is an open-source web browser, powered by WebKit (Blink).
+hardened-chromium is a security hardened browser built upon the Chromium web browser.
 
 %package common
-Summary: Files needed for both the headless_shell and full Chromium
+Summary: Files needed for Chromium
 %description common
 %{summary}.
 
