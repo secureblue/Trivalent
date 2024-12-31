@@ -1,7 +1,8 @@
-diff -up chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc.me chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc
---- chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc.me	2023-06-17 19:43:08.481952671 +0200
-+++ chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linux.cc	2023-06-17 19:44:26.165349772 +0200
-@@ -20,10 +20,9 @@ bool IsOrganicFirstRun() {
+diff --git a/chrome/browser/first_run/first_run_internal_linux.cc b/chrome/browser/first_run/first_run_internal_linux.cc
+index 33fd5790123ea..a778eb4471405 100644
+--- a/chrome/browser/first_run/first_run_internal_linux.cc
++++ b/chrome/browser/first_run/first_run_internal_linux.cc
+@@ -20,10 +20,8 @@ bool IsOrganicFirstRun() {
  
  base::FilePath InitialPrefsPath() {
    // The standard location of the initial prefs is next to the chrome binary.
@@ -9,9 +10,36 @@ diff -up chromium-115.0.5790.32/chrome/browser/first_run/first_run_internal_linu
 -  if (!base::PathService::Get(base::DIR_EXE, &dir_exe)) {
 -    return base::FilePath();
 -  }
-+  // ...but we patch it to use /etc/chromium
-+  // ...and hardened-chromium needs its own directory
++  // ... but we want to mimic Fedora and use our own directory
 +  base::FilePath dir_exe = base::FilePath("/etc/hardened-chromium");
  
    return installer::InitialPreferences::Path(dir_exe);
  }
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index ec09803ffabcf..4475a3112326d 100644
+--- a/chrome/common/chrome_paths.cc
++++ b/chrome/common/chrome_paths.cc
+@@ -609,7 +609,7 @@ bool PathProvider(int key, base::FilePath* result) {
+           FILE_PATH_LITERAL("/etc/opt/chrome/native-messaging-hosts"));
+ #else
+       cur = base::FilePath(
+-          FILE_PATH_LITERAL("/etc/chromium/native-messaging-hosts"));
++          FILE_PATH_LITERAL("/etc/hardened-chromium/native-messaging-hosts"));
+ #endif
+ #endif  // !BUILDFLAG(IS_MAC)
+       break;
+diff --git a/components/policy/core/common/policy_paths.cc b/components/policy/core/common/policy_paths.cc
+index 7c15eeaa4f875..a1bc336139867 100644
+--- a/components/policy/core/common/policy_paths.cc
++++ b/components/policy/core/common/policy_paths.cc
+@@ -18,7 +18,9 @@ const char kPolicyPath[] = "/etc/opt/chrome/policies";
+ #elif BUILDFLAG(GOOGLE_CHROME_FOR_TESTING_BRANDING)
+ const char kPolicyPath[] = "/etc/opt/chrome_for_testing/policies";
+ #else
+-const char kPolicyPath[] = "/etc/chromium/policies";
++// we can try to account for policies in the main directory but that may be too dirty
++// we just want new directories
++const char kPolicyPath[] = "/etc/hardened-chromium/policies";
+ #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ #endif  // BUILDFLAG(IS_POSIX) && !BUILDFLAG(IS_MAC)
+ 
