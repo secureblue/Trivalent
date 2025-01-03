@@ -30,7 +30,7 @@ Name:	%{chromium_name}
        print("Version: "..content.."\n")
 }
 Release: 3
-Summary: A security hardened browser built upon Google's Chromium web browser
+Summary: A security-focused browser built upon Google's Chromium web browser
 Url: http://www.chromium.org/Home
 License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
 
@@ -249,7 +249,7 @@ Requires(post): /usr/sbin/semanage
 Requires(post): /usr/sbin/restorecon
 
 %description
-hardened-chromium is a security hardened browser built upon the Chromium web browser.
+hardened-chromium is a security-focused browser built upon the Chromium web browser.
 
 %package common
 Summary: Files needed for Chromium
