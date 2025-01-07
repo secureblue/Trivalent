@@ -13,8 +13,10 @@
 %global chromebuilddir out/Release
 %global debug_package %{nil}
 %global debug_level 0
-%global chromium_name trivalent
-%global chromium_path %{_libdir}/%{chromium_name}
+%global chromium_channel %{nil}
+%global chromium_menu_name Chromium
+%global chromium_browser_channel chromium-browser%{chromium_channel}
+%global chromium_path %{_libdir}/chromium-browser%{chromium_channel}
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
@@ -23,35 +25,36 @@
 
 Source69: chromium-version.txt
 
-Name:	%{chromium_name}
+Name:	hardened-chromium%{chromium_channel}
 %{lua:
        local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
        local content = f:read "*all"
        print("Version: "..content.."\n")
 }
 Release: 3
-Summary: A security-focused browser built upon Google's Chromium web browser
+Summary: A WebKit (Blink) powered web browser that Google doesn't want you to use
 Url: http://www.chromium.org/Home
 License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
 
 Source0: chromium-%{version}-clean.tar.xz
-Source2: %{chromium_name}.conf
-Source3: %{chromium_name}.sh
-Source4: %{chromium_name}.desktop
-Source9: %{chromium_name}.xml
+Source2: chromium.conf
+Source3: chromium-browser.sh
+Source4: %{chromium_browser_channel}.desktop
+Source9: chromium-browser.xml
 Source11: master_preferences
 
 ### Patches ###
 %{lua:
     rpm.execute("pwd")
+    os.execute("echo 'Current home: $HOME'")
     if posix.getenv("HOME") == "/builddir" then
         fpatches = rpm.glob('/builddir/build/SOURCES/fedora-*.patch')
         vpatches = rpm.glob('/builddir/build/SOURCES/vanadium-*.patch')
-        hpatches = rpm.glob('/builddir/build/SOURCES/%{chromium_name}-*.patch')
+        hpatches = rpm.glob('/builddir/build/SOURCES/hardened-chromium-*.patch')
     else
         fpatches = rpm.glob(macros['_sourcedir']..'/fedora-*.patch')
         vpatches = rpm.glob(macros['_sourcedir']..'/vanadium-*.patch')
-        hpatches = rpm.glob(macros['_sourcedir']..'/%{chromium_name}-*.patch')
+        hpatches = rpm.glob(macros['_sourcedir']..'/hardened-chromium-*.patch')
     end
 
     local count = 1000
@@ -80,7 +83,7 @@ Source11: master_preferences
     printPatch = ""
     for p in ipairs(hpatches) do
         os.execute("echo 'Patching in "..hpatches[p].."'")
-        printPatch = "Patch"..count..": %{chromium_name}-"..count..".patch"
+        printPatch = "Patch"..count..": hardened-chromium-"..count..".patch"
         rpm.execute("echo", printPatch)
         print(printPatch.."\n")
         count = count + 1
@@ -103,6 +106,8 @@ BuildRequires: pkgconfig(libavcodec)
 BuildRequires: pkgconfig(libavfilter)
 BuildRequires: pkgconfig(libavformat)
 BuildRequires: pkgconfig(libavutil)
+Conflicts: libavformat-free%{_isa} < 6.0.1
+Conflicts: ffmpeg-libs%{_isa} < 6.0.1-2
 BuildRequires: pkgconfig(openh264)
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
@@ -152,6 +157,8 @@ BuildRequires:	hwdata
 BuildRequires:	kernel-headers
 BuildRequires:	libffi-devel
 BuildRequires:	libudev-devel
+Requires: libusbx >= 1.0.21-0.1.git448584a
+BuildRequires: libusbx-devel >= 1.0.21-0.1.git448584a
 BuildRequires:	libva-devel
 BuildRequires:	libxshmfence-devel
 BuildRequires:	mesa-libGL-devel
@@ -168,7 +175,7 @@ Requires: nss%{_isa} >= 3.26
 Requires: nss-mdns%{_isa}
 Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
-Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
+Requires: hardened-chromium-common%{_isa} = %{version}-%{release}
 
 ExclusiveArch: x86_64
 
@@ -212,7 +219,7 @@ Provides: bundled(libsecret)
 Provides: bundled(libsrtp)
 Provides: bundled(libtiff)
 Provides: bundled(libudis86)
-Provides: bundled(libusbx)
+Provides: bundled(libusb)
 Provides: bundled(libvpx)
 Provides: bundled(libwebp)
 Provides: bundled(libyuv)
@@ -249,23 +256,23 @@ Requires(post): /usr/sbin/semanage
 Requires(post): /usr/sbin/restorecon
 
 %description
-Trivalent is a security-focused browser built upon the Chromium web browser.
+Chromium is an open-source web browser, powered by WebKit (Blink).
 
 %package common
-Summary: Files needed for Chromium
+Summary: Files needed for both the headless_shell and full Chromium
 %description common
 %{summary}.
 
 %package qt5-ui
 Summary: Qt5 UI built from Chromium
-Requires: %{chromium_name}%{_isa} = %{version}-%{release}
+Requires: hardened-chromium%{_isa} = %{version}-%{release}
 
 %description qt5-ui
 Qt5 UI for chromium.
 
 %package qt6-ui
 Summary: Qt6 UI built from Chromium
-Requires: %{chromium_name}%{_isa} = %{version}-%{release}
+Requires: hardened-chromium%{_isa} = %{version}-%{release}
 
 %description qt6-ui
 Qt6 UI for chromium.
@@ -296,7 +303,7 @@ rm -rf buildtools/third_party/eu-strip/bin/eu-strip
 ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
 
 # Hard code extra version
-sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
+sed -i 's/getenv("CHROME_VERSION_EXTRA")/"hardened-chromium"/' chrome/common/channel_info_posix.cc
 
 # bz#2265957, add correct platform
 sed -i "s/Linux x86_64/Linux %{_arch}/" content/common/user_agent.cc
@@ -405,21 +412,21 @@ rm -rf %{buildroot}
 
 mkdir -p %{buildroot}%{_bindir} \
          %{buildroot}%{chromium_path}/locales \
-         %{buildroot}%{_sysconfdir}/%{chromium_name}
+         %{buildroot}%{_sysconfdir}/chromium
 
 # install system wide chromium config
-cp -a %{SOURCE2} %{buildroot}%{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
-cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_name}.sh
+cp -a %{SOURCE2} %{buildroot}%{_sysconfdir}/chromium/chromium.conf
+cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
 
 export BUILD_TARGET=`cat /etc/redhat-release`
 export CHROMIUM_PATH=%{chromium_path}
-export CHROMIUM_NAME=%{chromium_name}
+export CHROMIUM_BROWSER_CHANNEL=%{chromium_browser_channel}
 
-sed -i "s|@@BUILD_TARGET@@|$BUILD_TARGET|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
-sed -i "s|@@CHROMIUM_PATH@@|$CHROMIUM_PATH|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
-sed -i "s|@@CHROMIUM_NAME@@|$CHROMIUM_NAME|g" %{buildroot}%{chromium_path}/%{chromium_name}.sh
+sed -i "s|@@BUILD_TARGET@@|$BUILD_TARGET|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+sed -i "s|@@CHROMIUM_PATH@@|$CHROMIUM_PATH|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+sed -i "s|@@CHROMIUM_BROWSER_CHANNEL@@|$CHROMIUM_BROWSER_CHANNEL|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
 
-ln -s ../..%{chromium_path}/%{chromium_name}.sh %{buildroot}%{_bindir}/%{chromium_name}
+ln -s ../..%{chromium_path}/%{chromium_browser_channel}.sh %{buildroot}%{_bindir}/%{chromium_browser_channel}
 mkdir -p %{buildroot}%{_mandir}/man1/
 
 pushd %{chromebuilddir}
@@ -429,11 +436,11 @@ pushd %{chromebuilddir}
   cp -a libvk_swiftshader.so %{buildroot}%{chromium_path}
   cp -a libvulkan.so.1 %{buildroot}%{chromium_path}
   cp -a vk_swiftshader_icd.json %{buildroot}%{chromium_path}
-	cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
+	cp -a chrome %{buildroot}%{chromium_path}/%{chromium_browser_channel}
 	cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
-	cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-	sed -i "s|@@PACKAGE@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-	sed -i "s|@@MENUNAME@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+	cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
+	sed -i "s|@@PACKAGE@@|%{chromium_browser_channel}|g" %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
+	sed -i "s|@@MENUNAME@@|%{chromium_menu_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
 
 	# V8 initial snapshots
 	# https://code.google.com/p/chromium/issues/detail?id=421063
@@ -446,38 +453,38 @@ pushd %{chromebuilddir}
 popd
 
 pushd %{buildroot}%{chromium_path}/
-for f in *.so *.so.1 chrome_crashpad_handler %{chromium_name} headless_shell chromedriver ; do
+for f in *.so *.so.1 chrome_crashpad_handler chromium-browser headless_shell chromedriver ; do
    [ -f $f ] && strip $f
 done
 popd
 
 # Add directories for policy management
-mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/managed
-mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/recommended
+mkdir -p %{buildroot}%{_sysconfdir}/chromium/policies/managed
+mkdir -p %{buildroot}%{_sysconfdir}/chromium/policies/recommended
 
 cp -a out/Release/gen/chrome/app/policy/common/html/en-US/*.html .
 cp -a out/Release/gen/chrome/app/policy/linux/examples/chrome.json .
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
-cp -a chrome/app/theme/chromium/product_logo_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
+cp -a chrome/app/theme/chromium/product_logo_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_browser_channel}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
-cp -a chrome/app/theme/chromium/product_logo_128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
+cp -a chrome/app/theme/chromium/product_logo_128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_browser_channel}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
-cp -a chrome/app/theme/chromium/product_logo_64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
+cp -a chrome/app/theme/chromium/product_logo_64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_browser_channel}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
-cp -a chrome/app/theme/chromium/product_logo_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
+cp -a chrome/app/theme/chromium/product_logo_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_browser_channel}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
-cp -a chrome/app/theme/chromium/product_logo_24.png %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
+cp -a chrome/app/theme/chromium/product_logo_24.png %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_browser_channel}.png
 
 # Install the master_preferences file
-install -m 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/%{chromium_name}/
+install -m 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/chromium/
 
 mkdir -p %{buildroot}%{_datadir}/applications/
 desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE4}
 
 install -D -m0644 chrome/installer/linux/common/chromium-browser/chromium-browser.appdata.xml \
-  ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_name}.appdata.xml
-appstream-util validate-relax --nonet ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_name}.appdata.xml
+  ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_browser_channel}.appdata.xml
+appstream-util validate-relax --nonet ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_browser_channel}.appdata.xml
 
 mkdir -p %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
@@ -486,30 +493,30 @@ cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 # Set SELinux labels - semanage itself will adjust the lib directory naming
 # But only do it when selinux is enabled, otherwise, it gets noisy.
 if selinuxenabled; then
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_name} &>/dev/null || :
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_name}/%{chromium_name}.sh &>/dev/null || :
-	restorecon -R -v %{chromium_path}/%{chromium_name} &>/dev/null || :
+	semanage fcontext -a -t bin_t /usr/lib/%{chromium_browser_channel} &>/dev/null || :
+	semanage fcontext -a -t bin_t /usr/lib/%{chromium_browser_channel}/%{chromium_browser_channel}.sh &>/dev/null || :
+	restorecon -R -v %{chromium_path}/%{chromium_browser_channel} &>/dev/null || :
 fi
 
 %files
 %doc AUTHORS
 %doc chrome_policy_list.html *.json
 %license LICENSE
-%config(noreplace) %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
-%config %{_sysconfdir}/%{chromium_name}/master_preferences
-%config %{_sysconfdir}/%{chromium_name}/policies/
-%{_bindir}/%{chromium_name}
+%config(noreplace) %{_sysconfdir}/chromium/chromium.conf
+%config %{_sysconfdir}/chromium/master_preferences
+%config %{_sysconfdir}/chromium/policies/
+%{_bindir}/%{chromium_browser_channel}
 %{chromium_path}/*.bin
 %{chromium_path}/chrome_*.pak
 %{chromium_path}/chrome_crashpad_handler
 %{chromium_path}/resources.pak
-%{chromium_path}/%{chromium_name}
-%{chromium_path}/%{chromium_name}.sh
-%{_mandir}/man1/%{chromium_name}.*
-%{_datadir}/icons/hicolor/*/apps/%{chromium_name}.png
+%{chromium_path}/%{chromium_browser_channel}
+%{chromium_path}/%{chromium_browser_channel}.sh
+%{_mandir}/man1/%{chromium_browser_channel}.*
+%{_datadir}/icons/hicolor/*/apps/%{chromium_browser_channel}.png
 %{_datadir}/applications/*.desktop
 %{_datadir}/metainfo/*.appdata.xml
-%{_datadir}/gnome-control-center/default-apps/%{chromium_name}.xml
+%{_datadir}/gnome-control-center/default-apps/chromium-browser.xml
 
 %files qt5-ui
 %{chromium_path}/libqt5_shim.so

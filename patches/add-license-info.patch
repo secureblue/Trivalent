@@ -6,9 +6,9 @@ index 6864d76343794..64f78b165a83d 100644
      <settings-section>
        <div class="info-sections">
          <div class="info-section">
-+          <div class="secondary">Trivalent</div>
-+          <div class="secondary">Copyright 2024 The Trivalent authors.</div>
-+          <div class="secondary">Trivalent license:
++          <div class="secondary">hardened-chromium</div>
++          <div class="secondary">Copyright 2024 The hardened-chromium authors.</div>
++          <div class="secondary">hardened-chromium license:
 +            <pre>
 +This program is free software; you can redistribute it and/or
 +modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ index 6864d76343794..64f78b165a83d 100644
 +https://www.gnu.org/licenses/.
 +            </pre>
 +          </div>
-+	  <div class="secondary">The Trivalent source code is available <a href="https://github.com/secureblue/trivalent">on github</a>.</div>
++	  <div class="secondary">The hardened-chromium source code is available <a href="https://github.com/secureblue/hardened-chromium">on github</a>.</div>
 +        </div>
 +        <hr />
 +        <div class="info-section">

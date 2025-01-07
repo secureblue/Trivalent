@@ -6,7 +6,7 @@ index 9be2589cac759..50562fe458d7c 100644
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
-+  // Trivalent
++  // hardened-chromium
 +  (*s_allowlist)[::prefs::kWebRTCIPHandlingPolicy] =
 +      settings_api::PrefType::kString;
 +  (*s_allowlist)[::prefs::kDisable3DAPIs] =

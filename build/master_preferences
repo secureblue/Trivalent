@@ -1,5 +1,6 @@
 {
-  "homepage_is_newtabpage": true,
+  "homepage": "about:blank",
+  "homepage_is_newtabpage": false,
   "distribution": {
      "alternate_shortcut_text": false,
      "oem_bubble": true,
@@ -7,6 +8,9 @@
      "create_all_shortcuts": true,
      "show_welcome_page": true,
      "system_level": false,
-     "verbose_logging": false,
+     "verbose_logging": false
   },
+  "first_run_tabs": [
+     "about:blank"
+  ]
 }

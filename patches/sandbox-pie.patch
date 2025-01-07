@@ -1,0 +1,20 @@
+diff -up chromium-70.0.3538.67/sandbox/linux/BUILD.gn.sandboxpie chromium-70.0.3538.67/sandbox/linux/BUILD.gn
+--- chromium-70.0.3538.67/sandbox/linux/BUILD.gn.sandboxpie	2018-10-18 12:14:05.766939769 -0400
++++ chromium-70.0.3538.67/sandbox/linux/BUILD.gn	2018-10-18 12:16:37.820027182 -0400
+@@ -315,10 +315,16 @@ if (is_linux) {
+       # For ULLONG_MAX
+       "-std=gnu99",
+ 
++      "-fPIE",
++
+       # These files have a suspicious comparison.
+       # TODO fix this and re-enable this warning.
+       "-Wno-sign-compare",
+     ]
++
++    ldflags = [
++      "-pie",
++    ]
+   }
+ }
+ 
