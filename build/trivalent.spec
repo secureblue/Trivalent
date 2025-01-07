@@ -13,7 +13,7 @@
 %global chromebuilddir out/Release
 %global debug_package %{nil}
 %global debug_level 0
-%global chromium_name hardened-chromium
+%global chromium_name trivalent
 %global chromium_path %{_libdir}/%{chromium_name}
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
@@ -47,11 +47,11 @@ Source11: master_preferences
     if posix.getenv("HOME") == "/builddir" then
         fpatches = rpm.glob('/builddir/build/SOURCES/fedora-*.patch')
         vpatches = rpm.glob('/builddir/build/SOURCES/vanadium-*.patch')
-        hpatches = rpm.glob('/builddir/build/SOURCES/hardened-chromium-*.patch')
+        hpatches = rpm.glob('/builddir/build/SOURCES/%{chromium_name}-*.patch')
     else
         fpatches = rpm.glob(macros['_sourcedir']..'/fedora-*.patch')
         vpatches = rpm.glob(macros['_sourcedir']..'/vanadium-*.patch')
-        hpatches = rpm.glob(macros['_sourcedir']..'/hardened-chromium-*.patch')
+        hpatches = rpm.glob(macros['_sourcedir']..'/%{chromium_name}-*.patch')
     end
 
     local count = 1000
@@ -80,7 +80,7 @@ Source11: master_preferences
     printPatch = ""
     for p in ipairs(hpatches) do
         os.execute("echo 'Patching in "..hpatches[p].."'")
-        printPatch = "Patch"..count..": hardened-chromium-"..count..".patch"
+        printPatch = "Patch"..count..": %{chromium_name}-"..count..".patch"
         rpm.execute("echo", printPatch)
         print(printPatch.."\n")
         count = count + 1
@@ -249,7 +249,7 @@ Requires(post): /usr/sbin/semanage
 Requires(post): /usr/sbin/restorecon
 
 %description
-hardened-chromium is a security-focused browser built upon the Chromium web browser.
+Trivalent is a security-focused browser built upon the Chromium web browser.
 
 %package common
 Summary: Files needed for Chromium
