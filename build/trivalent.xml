@@ -3,10 +3,10 @@
 <default-apps>
   <web-browsers>
     <web-browser>
-      <name>hardened-chromium</name>
-      <executable>hardened-chromium</executable>
-      <command>/usr/bin/hardened-chromium %s</command>
-      <icon-name>hardened-chromium</icon-name>
+      <name>Trivalent</name>
+      <executable>trivalent</executable>
+      <command>/usr/bin/trivalent %s</command>
+      <icon-name>trivalent</icon-name>
       <run-in-terminal>false</run-in-terminal>
       <netscape-remote>false</netscape-remote>
       <!--
