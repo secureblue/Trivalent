@@ -38,7 +38,7 @@ export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 [[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
 CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
-# Check if hardened-chromium's subresource filter is installed,
+# Check if Trivalent's subresource filter is installed,
 # if so runs the installer
 if [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist ] && 
    [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist-version.txt ] &&
