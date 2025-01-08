@@ -4,6 +4,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# unify branding
+export CHROMIUM_NAME="@@CHROMIUM_NAME@@"
+
 # Let the wrapped binary know that it has been run through the wrapper.
 export CHROME_WRAPPER="`readlink -f "$0"`"
 
@@ -32,15 +35,15 @@ export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Allow users to override command-line options and prefer user defined
 # CHROMIUM_USER_FLAGS from env over system wide CHROMIUM_FLAGS
-[[ -f /etc/chromium/chromium.conf ]] && . /etc/chromium/chromium.conf
+[[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
 CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
-# Check if hardened-chromium's subresource filter is installed,
+# Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-if [ -f /etc/chromium/filter/hardened-chromium-blocklist ] && 
-   [ -f /etc/chromium/filter/hardened-chromium-blocklist-version.txt ] &&
-   [ -f /usr/lib64/chromium-browser/install_filter.sh ]; then
-   /bin/bash /usr/lib64/chromium-browser/install_filter.sh
+if [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist ] && 
+   [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist-version.txt ] &&
+   [ -f /usr/lib64/$CHROMIUM_NAME/install_filter.sh ]; then
+   /bin/bash /usr/lib64/$CHROMIUM_NAME/install_filter.sh
 fi
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
@@ -49,4 +52,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec -a "$0" "$HERE/@@CHROMIUM_BROWSER_CHANNEL@@" $CHROMIUM_FLAGS "$@"
+exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
