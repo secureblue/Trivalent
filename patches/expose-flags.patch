@@ -8,38 +8,38 @@ index 9d0181f447a1a..8e10017c678f9 100644
  #include "chrome/browser/unexpire_flags_gen.inc"
 +    {"show-punycode-domains", "Show punycode for IDN domains",
 +     "Shows punycode for IDN domains to mitigate IDN homograph attacks. "
-+     "Disabled by default. This feature is provided by hardened-chromium.",
++     "Disabled by default. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(url::kShowPunycodeDomains)},
 +    {"clear-cross-origin-referrers", "Clear cross-origin referrers",
 +     "Clears referrers when navigating across origins. Disabled by default. "
-+     "This feature is provided by hardened-chromium.", kOsAll,
++     "This feature is provided by Trivalent.", kOsAll,
 +     FEATURE_VALUE_TYPE(net::features::kDisableCrossOriginReferrers)},
 +    {"cross-origin-trim-referrer", "Cross-origin referrer trimming",
 +     "Trims the referrer to just the origin on cross origin navigation. "
-+     "Enabled by default. This feature is exposed by hardened-chromium.",
++     "Enabled by default. This feature is exposed by Trivalent.",
 +     kOsAll,
 +     FEATURE_VALUE_TYPE(net::features::kCapReferrerToOriginOnCrossOrigin)},
 +    {"network-service-sandbox", "Enable the network service sandbox",
 +     "Enables restrictions on the Network Service process. NOTE: Disabling "
 +     "this flag may help with data persistence issues. Enabled by default. "
-+     "This feature is exposed by hardened-chromium", kOsLinux,
++     "This feature is exposed by Trivalent", kOsLinux,
 +     FEATURE_VALUE_TYPE(sandbox::policy::features::kNetworkServiceSandbox)},
 +    {"strict-popup-blocking", "Strict Popup Blocking",
 +     "Controls the strictness of the popup blocker. This switch is provided "
-+     "by hardened-chromium.", kOsAll,
++     "by Trivalent.", kOsAll,
 +     SINGLE_DISABLE_VALUE_TYPE("disable-strict-popup-blocking")},
 +    {"hide-profile-icon", "Hide profile icon in toolbar",
 +     "Hides the profile icon in the toolbar in regular profiles. Enabled "
-+     "by default. This feature is provided by hardened-chromium." , kOsAll,
++     "by default. This feature is provided by Trivalent." , kOsAll,
 +     FEATURE_VALUE_TYPE(features::kHideProfileIcon)},
 +    {"internal-page-jit", "Internal Page Jit",
 +     "Toggle JIT for JavaScript and WASM on internal pages & extensions. "
-+     "Disabled by default. This feature is provided by hardened-chromium.",
++     "Disabled by default. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(features::kEnableInternalPageJit)},
 +    {"gssapi-support", "GSSAPI Authentication",
 +     "Enables GSSAPI for authentication. WARNING! This can cause the "
 +     "network service sandbox to become persistently disabled, enable only "
-+     "if absolutely necessary. This switch is provided by hardened-chromium.",
++     "if absolutely necessary. This switch is provided by Trivalent.",
 +     kOsLinux, SINGLE_VALUE_TYPE("enable-gssapi")},
      {variations::switches::kEnableBenchmarking,
       flag_descriptions::kEnableBenchmarkingName,
