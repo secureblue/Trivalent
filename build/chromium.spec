@@ -42,6 +42,11 @@ Source3: chromium-browser.sh
 Source4: %{chromium_browser_channel}.desktop
 Source9: chromium-browser.xml
 Source11: master_preferences
+Source12: trivalent16.png
+Source13: trivalent22.png
+Source14: trivalent32.png
+Source15: trivalent44.png
+Source16: trivalent64.png
 
 ### Patches ###
 %{lua:
@@ -284,6 +289,21 @@ Qt6 UI for chromium.
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}
 %autopatch -p1 -m 3000 -M %{_hardeningPatchCount}
+
+### Branding ###
+cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/linux/product_logo_16.png
+cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/linux/product_logo_32.png
+cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/product_logo_16.png
+cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/product_logo_32.png
+cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22.png
+cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22_white.png
+
+cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/linux/product_logo_16.png
+cp -a %{SOURCE16} chrome/app/theme/default_200_percent/chromium/linux/product_logo_32.png
+cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/product_logo_16.png
+cp -a %{SOURCE16} chrome/app/theme/default_200_percent/chromium/product_logo_32.png
+cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22.png
+cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22_white.png
 
 # Change shebang in all relevant files in this directory and all subdirectories
 # See `man find` for how the `-exec command {} +` syntax works
