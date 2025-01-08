@@ -31,7 +31,7 @@ Name:	hardened-chromium%{chromium_channel}
        local content = f:read "*all"
        print("Version: "..content.."\n")
 }
-Release: 3
+Release: 1
 Summary: A WebKit (Blink) powered web browser that Google doesn't want you to use
 Url: http://www.chromium.org/Home
 License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
