@@ -247,6 +247,7 @@ Provides: bundled(webrtc)
 Provides: bundled(woff2)
 Provides: bundled(xdg-mime)
 Provides: bundled(xdg-user-dirs)
+Provides: bundled(zlib)
 Provides: bundled(zstd)
 
 # For selinux scriptlet
@@ -291,8 +292,6 @@ cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/product_logo_32.
 cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22.png
 cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22_white.png
 
-cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/linux/product_logo_16.png
-cp -a %{SOURCE16} chrome/app/theme/default_200_percent/chromium/linux/product_logo_32.png
 cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/product_logo_16.png
 cp -a %{SOURCE16} chrome/app/theme/default_200_percent/chromium/product_logo_32.png
 cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22.png
