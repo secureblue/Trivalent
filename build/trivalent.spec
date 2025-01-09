@@ -284,6 +284,25 @@ Qt6 UI for chromium.
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}
 %autopatch -p1 -m 3000 -M %{_hardeningPatchCount}
 
+### String Branding ###
+find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
+    ! -path "*ash_strings*" \
+    ! -path "*android*" \
+    ! -path "*chromeos_strings*" \
+    ! -path "*ios/chrome*" \
+    ! -path "*tools/grit/*" \
+    ! -path "*device/fido/*" \
+    ! -path "*chromeos/*" \
+    ! -path "*remoting_strings*" \
+    -exec sed -i \
+        -e 's/\bph>Chromium<ph\b/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/g' \
+        -e 's/\bGoogle Chrome\b/REMOVE_PLACEHOLDER_GOOGLE_CHROME/g' \
+        -e 's/\bThe Chromium Authors\b/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/g' \
+        -e 's/\bChrom\(e\|ium\)\b/Trivalent/g' \
+        -e 's/REMOVE_PLACEHOLDER_GOOGLE_CHROME/Google Chrome/g' \
+        -e 's/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/The Chromium Authors/g' \
+        -e 's/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/ph>Chromium<ph/g' {} + 
+
 ### Branding ###
 cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/linux/product_logo_16.png
 cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/linux/product_logo_32.png
