@@ -91,7 +91,7 @@ index d54888d0e712f..82ddb98c12256 100644
 +      <settings-toggle-button class="cr-row"
 +        pref="{{net.network_service_sandbox}}"
 +        label="Network Service Sandbox"
-+        sub-label="Disabling can fix issues with cookie persistence, changes to this setting requires a restart">
++        sub-label="Disabling may fix issues with data persistence, requires a restart">
 +      </settings-toggle-button>
 +</if>
 +      <settings-toggle-button class="cr-row"
