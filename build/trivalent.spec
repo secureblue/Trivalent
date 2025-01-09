@@ -247,7 +247,7 @@ Provides: bundled(webrtc)
 Provides: bundled(woff2)
 Provides: bundled(xdg-mime)
 Provides: bundled(xdg-user-dirs)
-Provides: bindled(zlib)
+Provides: bundled(zlib)
 Provides: bundled(zstd)
 
 # For selinux scriptlet
