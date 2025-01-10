@@ -422,7 +422,7 @@ CHROMIUM_GN_DEFINES+=' use_gio=true use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
-CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is nchrome/app/theme/chromium/product_logo_64.pngot found
+CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
 
 system_libs=()
