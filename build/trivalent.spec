@@ -46,6 +46,11 @@ Source14: %{chromium_name}32.png
 Source15: %{chromium_name}44.png
 Source16: %{chromium_name}64.png
 
+Source17: %{chromium_name}24.png
+Source18: %{chromium_name}48.png
+Source19: %{chromium_name}128.png
+Source20: %{chromium_name}256.png
+
 ### Patches ###
 %{lua:
     rpm.execute("pwd")
@@ -417,7 +422,7 @@ CHROMIUM_GN_DEFINES+=' use_gio=true use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
-CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
+CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is nchrome/app/theme/chromium/product_logo_64.pngot found
 export CHROMIUM_GN_DEFINES
 
 system_libs=()
@@ -497,15 +502,15 @@ cp -a out/Release/gen/chrome/app/policy/common/html/en-US/*.html .
 cp -a out/Release/gen/chrome/app/policy/linux/examples/chrome.json .
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
-cp -a chrome/app/theme/chromium/product_logo_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
+cp -a %{SOURCE20} %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
-cp -a chrome/app/theme/chromium/product_logo_128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
+cp -a %{SOURCE19} %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
-cp -a chrome/app/theme/chromium/product_logo_64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
+cp -a %{SOURCE16} %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
-cp -a chrome/app/theme/chromium/product_logo_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
+cp -a %{SOURCE18} %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
-cp -a chrome/app/theme/chromium/product_logo_24.png %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
+cp -a %{SOURCE17} %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
 
 # Install the master_preferences file
 install -m 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/%{chromium_name}/
