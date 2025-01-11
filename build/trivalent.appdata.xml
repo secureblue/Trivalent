@@ -2,19 +2,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>trivalent.desktop</id>
-  <!-- <update_contact>chromium-dev@chromium.org</update_contact> -->
+  <!-- <update_contact>@@MAINTMAIL@@</update_contact> -->
   <metadata_license>GPL-2.0 license</metadata_license>
   <project_license>BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)</project_license>
+  <developer_name>The Trivalent Authors</developer_name>
   <name>Trivalent</name>
-  <summary>The web browser for secureblue</summary>
+  <summary>The security focused browser</summary>
   <description>
     <p>
     Trivalent is a web browser built on the Chromium open source project with the
-    goal of improving security and usability.
+    goal of improving security.
     </p>
   </description>
   <url type="homepage">https://github.com/secureblue/Trivalent</url>
-  <translation/>
-  <developer_name>The Trivalent Authors</developer_name>
   <url type="bugtracker">https://github.com/secureblue/Trivalent/issues</url>
+  <!-- <url type="help">@@HELPURL@@</url> -->
+  <!-- <screenshots>
+    <screenshot type="default">
+      <image>https://www.gstatic.com/chrome/appstream/chrome-2.png</image>
+      <caption/>
+    </screenshot>
+  </screenshots> -->
+  <translation/>
 </component>
