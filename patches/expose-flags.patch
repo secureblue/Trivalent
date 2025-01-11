@@ -2,7 +2,7 @@ diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
 index ad599311ac46d..6c89de2fca405 100644
 --- a/chrome/browser/about_flags.cc
 +++ b/chrome/browser/about_flags.cc
-@@ -4238,6 +4238,46 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4220,6 +4220,41 @@ const FeatureEntry kFeatureEntries[] = {
  // //tools/flags/generate_unexpire_flags.py.
  #include "build/chromeos_buildflags.h"
  #include "chrome/browser/unexpire_flags_gen.inc"
@@ -24,11 +24,6 @@ index ad599311ac46d..6c89de2fca405 100644
 +     "Enabled by default. This feature is exposed by Trivalent.",
 +     kOsAll,
 +     FEATURE_VALUE_TYPE(net::features::kCapReferrerToOriginOnCrossOrigin)},
-+    {"network-service-sandbox", "Enable the network service sandbox",
-+     "Enables restrictions on the Network Service process. NOTE: Disabling "
-+     "this flag may help with data persistence issues. Enabled by default. "
-+     "This feature is exposed by Trivalent", kOsLinux,
-+     FEATURE_VALUE_TYPE(sandbox::policy::features::kNetworkServiceSandbox)},
 +    {"strict-popup-blocking", "Strict Popup Blocking",
 +     "Controls the strictness of the popup blocker. This switch is provided "
 +     "by Trivalent.", kOsAll,
