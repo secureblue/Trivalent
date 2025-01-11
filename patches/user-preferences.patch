@@ -2,7 +2,7 @@ diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chro
 index 9be2589cac759..50562fe458d7c 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -172,6 +172,20 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -172,6 +172,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -14,6 +14,8 @@ index 9be2589cac759..50562fe458d7c 100644
 +  (*s_allowlist)[::prefs::kWebKitForceDarkModeEnabled] =
 +      settings_api::PrefType::kBoolean;
 +  (*s_allowlist)[::prefs::kDisableExtensions] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kNetworkServiceSandboxEnabled] =
 +      settings_api::PrefType::kBoolean;
 +  (*s_allowlist)[::prefs::kManagedPrivateNetworkAccessRestrictionsEnabled] =
 +      settings_api::PrefType::kBoolean;
@@ -53,7 +55,7 @@ index d54888d0e712f..82ddb98c12256 100644
  
        .bullet-line {
          align-items: center;
-@@ -227,3 +230,37 @@
+@@ -227,3 +230,44 @@
            on-click="onChromeCertificatesClick_">
        </cr-link-row>
  </if>
@@ -85,6 +87,13 @@ index d54888d0e712f..82ddb98c12256 100644
 +          menu-options="[[webrtcHandlingPolicyOptions_]]">
 +        </settings-dropdown-menu>
 +      </div>
++<if expr="is_linux or is_win">
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.net.network_service_sandbox}}"
++        label="Network Service Sandbox"
++        sub-label="Disabling may fix issues with data persistence, requires a restart">
++      </settings-toggle-button>
++</if>
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.extensions.disabled}}"
 +        label="Disable Extensions"

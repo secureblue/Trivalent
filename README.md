@@ -30,7 +30,9 @@ Official support is only provided via [secureblue](https://github.com/secureblue
 
 ## Post-install
 
-Some additional preferences are added to `chrome://settings/security`, these provide additional security and privacy controls should they be needed. There is also a Website Dark Mode preference added to `chrome://settings/appearance`.
+Some additional preferences are added to `chrome://settings/security`, these provide additional security and privacy controls should they be needed. An example of one toggle is the `Network Service Sandbox`, which is known to occasionally clear cookies on exit, disabling the sandbox may help.
+\
+There is also a Website Dark Mode preference added to `chrome://settings/appearance`.
 \
 \
 Additionally, the following flags are available that provide extra hardening but may cause breakage or usability issues:
@@ -38,7 +40,7 @@ Additionally, the following flags are available that provide extra hardening but
 - `chrome://flags/#show-punycode-domains`
 - `chrome://flags/#clear-cross-origin-referrers`
 
-Other flags are also provided for compatibility should you experience an issue related to some of the hardening enabled by default. For example, if you experience cookies being cleared on each run of chromium, disable `chrome://flags/#network-service-sandbox`.
+Other flags are also provided for compatibility should you experience an issue related to some of the hardening enabled by default. For example, the default pop-up blocker is very strict, it may optionally be disabled `chrome://flags/#strict-popup-blocking` to improve usability.
 
 ## Contributing
 
