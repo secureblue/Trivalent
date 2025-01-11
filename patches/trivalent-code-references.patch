@@ -1,0 +1,38 @@
+diff --git a/chrome/browser/shell_integration_linux.cc b/chrome/browser/shell_integration_linux.cc
+index 29a9515238937..420799f254862 100644
+--- a/chrome/browser/shell_integration_linux.cc
++++ b/chrome/browser/shell_integration_linux.cc
+@@ -488,7 +488,7 @@ std::string GetIconName() {
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+   return "google-chrome";
+ #else  // BUILDFLAG(CHROMIUM_BRANDING)
+-  return "chromium-browser";
++  return "trivalent";
+ #endif
+ }
+ 
+diff --git a/chrome/common/channel_info_posix.cc b/chrome/common/channel_info_posix.cc
+index 9bcf0cef8d857..1a93fbcc29bb4 100644
+--- a/chrome/common/channel_info_posix.cc
++++ b/chrome/common/channel_info_posix.cc
+@@ -125,6 +125,7 @@ std::string GetChannelSuffixForExtraFlagsEnvVarName() {
+ // of lacros-chrome is complete.
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
+ std::string GetDesktopName(base::Environment* env) {
++  return "trivalent.desktop";
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+   // Google Chrome packaged as a snap is a special case: the application name
+   // is always "google-chrome", regardless of the channel (channels are built
+diff --git a/media/audio/pulse/pulse_util.cc b/media/audio/pulse/pulse_util.cc
+index a3523a9bbb1d7..460fdbe273da2 100644
+--- a/media/audio/pulse/pulse_util.cc
++++ b/media/audio/pulse/pulse_util.cc
+@@ -44,7 +44,7 @@ namespace {
+ constexpr char kBrowserDisplayName[] = "google-chrome";
+ #define PRODUCT_STRING "Google Chrome"
+ #else
+-constexpr char kBrowserDisplayName[] = "chromium-browser";
++constexpr char kBrowserDisplayName[] = "trivalent";
+ #define PRODUCT_STRING "Chromium"
+ #endif
+ 
