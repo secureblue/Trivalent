@@ -21,10 +21,10 @@ ENROLLMENTDIR=/etc/trivalent/policies/enrollment
 MENUNAME="Trivalent"
 
 # Brief package description.
-SHORTDESC="The security focused browser"
+SHORTDESC="A security hardened Chromium for desktop Linux"
 
 # Detailed package description.
-FULLDESC="Trivalent is a web browser built on the Chromium open source project with the goal of improving security."
+FULLDESC="Trivalent is a Linux desktop web browser built on the Chromium open source project with the goal of improving security."
 
 # Package maintainer information.
 # TODO(mmoss) Setup a mailbox for this address
