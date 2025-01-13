@@ -1,13 +1,14 @@
 diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
-index 6864d76343794..64f78b165a83d 100644
+index 6864d76343794..678a7c240d91e 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -148,6 +148,75 @@
+@@ -148,7 +148,75 @@
      <settings-section>
        <div class="info-sections">
          <div class="info-section">
+-          <div class="secondary">$i18n{aboutProductTitle}</div>
 +          <div class="secondary">Trivalent</div>
-+          <div class="secondary">Copyright 2024 The Trivalent authors.</div>
++          <div class="secondary">Copyright 2024-2025 The Trivalent authors.</div>
 +          <div class="secondary">Trivalent license:
 +            <pre>
 +This program is free software; you can redistribute it and/or
@@ -29,7 +30,7 @@ index 6864d76343794..64f78b165a83d 100644
 +        <hr />
 +        <div class="info-section">
 +          <div class="secondary">This project contains code from Vanadium.</div>
-+          <div class="secondary">Copyright © 2016-2024 GrapheneOS</div>
++          <div class="secondary">Copyright © 2016-2025 GrapheneOS</div>
 +          <div class="secondary">Vanadium patches license:
 +            <pre>
 +Vanadium patches are available under the terms of the GNU General Public
@@ -75,6 +76,6 @@ index 6864d76343794..64f78b165a83d 100644
 +        <hr />
 +        <div class="info-section">
 +          <div class="secondary">This project is based on the Chromium open source project.</div>
-           <div class="secondary">$i18n{aboutProductTitle}</div>
            <div class="secondary">$i18n{aboutProductCopyright}</div>
          </div>
+ 
