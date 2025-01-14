@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index e06062eed220e..2a50bfc2b4260 100644
+index 791ef35fb7bb0..012e8a3f6ec5c 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
 @@ -375,7 +375,7 @@ void PrefsTabHelper::RegisterProfilePrefs(
@@ -8,6 +8,6 @@ index e06062eed220e..2a50bfc2b4260 100644
        !base::FeatureList::IsEnabled(features::kNoReferrers));
 -  registry->RegisterBooleanPref(prefs::kEnableEncryptedMedia, true);
 +  registry->RegisterBooleanPref(prefs::kEnableEncryptedMedia, false);
-   registry->RegisterStringPref(prefs::kPrefixedVideoFullscreenApiAvailability,
-                                "runtime-enabled");
    registry->RegisterBooleanPref(prefs::kScrollToTextFragmentEnabled, true);
+ #if BUILDFLAG(IS_ANDROID)
+   registry->RegisterDoublePref(browser_ui::prefs::kWebKitFontScaleFactor, 1.0);

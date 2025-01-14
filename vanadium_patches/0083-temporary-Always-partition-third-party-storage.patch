@@ -13,10 +13,10 @@ https://developers.google.com/privacy-sandbox/blog/storage-partitioning-deprecat
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/third_party/blink/common/features.cc b/third_party/blink/common/features.cc
-index 584ce465961b8..4c1af1fd6adeb 100644
+index 9ab75c72dc1ef..03cd21ec7c7c8 100644
 --- a/third_party/blink/common/features.cc
 +++ b/third_party/blink/common/features.cc
-@@ -771,7 +771,7 @@ BASE_FEATURE(kDiscardInputEventsToRecentlyMovedFrames,
+@@ -707,7 +707,7 @@ BASE_FEATURE(kDiscardInputEventsToRecentlyMovedFrames,
  
  BASE_FEATURE(kDisableThirdPartyStoragePartitioningDeprecationTrial2,
               "DisableThirdPartyStoragePartitioningDeprecationTrial2",
@@ -26,10 +26,10 @@ index 584ce465961b8..4c1af1fd6adeb 100644
  // Kill switch for not WebGL DrawingBuffer using SharedImage without
  // GpuMemoryBuffer (overlay or low latency canvas).
 diff --git a/third_party/blink/renderer/platform/runtime_enabled_features.json5 b/third_party/blink/renderer/platform/runtime_enabled_features.json5
-index 298f1e0b95e61..e2c25e453e83a 100644
+index db7c64eebdf34..88c88dc756fc5 100644
 --- a/third_party/blink/renderer/platform/runtime_enabled_features.json5
 +++ b/third_party/blink/renderer/platform/runtime_enabled_features.json5
-@@ -1485,9 +1485,9 @@
+@@ -1491,9 +1491,9 @@
        name: "DisableThirdPartyStoragePartitioning2",
        origin_trial_feature_name: "DisableThirdPartyStoragePartitioning2",
        origin_trial_type: "deprecation",

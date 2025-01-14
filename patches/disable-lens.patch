@@ -49,15 +49,16 @@ index d029f6f7242b4..bf1a8c24e5d2d 100644
  BASE_FEATURE(kLensOverlayTranslateButton,
               "LensOverlayTranslateButton",
 diff --git a/components/lens/lens_overlay_permission_utils.cc b/components/lens/lens_overlay_permission_utils.cc
-index f707b2c4d1991..6e864faf60c78 100644
+index 5c54e349a6d27..72f40a9593388 100644
 --- a/components/lens/lens_overlay_permission_utils.cc
 +++ b/components/lens/lens_overlay_permission_utils.cc
-@@ -17,7 +17,7 @@ namespace prefs {
- void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -19,7 +19,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+   // policies are registered just in case.
    registry->RegisterIntegerPref(
        kLensOverlaySettings,
 -      static_cast<int>(LensOverlaySettingsPolicyValue::kEnabled));
 +      static_cast<int>(LensOverlaySettingsPolicyValue::kDisabled));
  
-   registry->RegisterBooleanPref(kLensSharingPageScreenshotEnabled, false);
-   registry->RegisterBooleanPref(kLensSharingPageContentEnabled, false);
+   registry->RegisterIntegerPref(
+       kGenAiLensOverlaySettings,
+
