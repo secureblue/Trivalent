@@ -1,3 +1,25 @@
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index 7d47622af880c..144760befee18 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -119,7 +119,7 @@
+             $i18n{siteSettingsJavascriptOptimizerDescription}
+           </div>
+           <settings-category-default-radio-group
+-              category="[[contentSettingsTypesEnum_.JAVASCRIPT_OPTIMIZER]]"
++              category="[[contentSettingsTypesEnum_.JAVASCRIPT_JIT]]"
+               allow-option-label=
+                   "$i18n{siteSettingsJavascriptOptimizerAllowed}"
+               allow-option-sub-label=
+@@ -129,7 +129,7 @@
+                   "$i18n{siteSettingsJavascriptOptimizerBlockedSubLabel}">
+           </settings-category-default-radio-group>
+           <category-setting-exceptions
+-              category="[[contentSettingsTypesEnum_.JAVASCRIPT_OPTIMIZER]]"
++              category="[[contentSettingsTypesEnum_.JAVASCRIPT_JIT]]"
+               allow-header="$i18n{siteSettingsJavascriptOptimizerAllowedExceptions}"
+               block-header="$i18n{siteSettingsJavascriptOptimizerBlockedExceptions}"
+               search-filter="[[searchFilter_]]">
 diff --git a/chrome/browser/resources/settings/site_settings/constants.ts b/chrome/browser/resources/settings/site_settings/constants.ts
 index 4ed920a8aabf9..8436627f13298 100644
 --- a/chrome/browser/resources/settings/site_settings/constants.ts
@@ -11,41 +33,6 @@ index 4ed920a8aabf9..8436627f13298 100644
    KEYBOARD_LOCK = 'keyboard-lock',
    LOCAL_FONTS = 'local-fonts',
    MIC = 'media-stream-mic',  // AKA Microphone.
-diff --git a/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts b/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
-index a42f9b0e0ed2b..290a515734e18 100644
---- a/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
-+++ b/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
-@@ -225,7 +225,7 @@ function getCategoryItemMap(): Map<ContentSettingsTypes, CategoryListItem> {
-     },
-     {
-       route: routes.SITE_SETTINGS_JAVASCRIPT_OPTIMIZER,
--      id: Id.JAVASCRIPT_OPTIMIZER,
-+      id: Id.JAVASCRIPT_JIT,
-       label: 'siteSettingsJavascriptOptimizer',
-       icon: 'privacy:v8',
-       enabledLabel: 'siteSettingsJavascriptOptimizerAllowed',
-@@ -565,7 +565,7 @@ export class SettingsSiteSettingsPageElement extends
-               Id.ANTI_ABUSE,
-               Id.SITE_DATA,
-               Id.PERFORMANCE,
--              Id.JAVASCRIPT_OPTIMIZER,
-+              Id.JAVASCRIPT_JIT,
-               Id.AUTOMATIC_FULLSCREEN,
-               Id.OFFER_WRITING_HELP,
-             ]),
-diff --git a/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts b/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
-index ee83684be5439..dce066b5988b6 100644
---- a/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
-+++ b/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
-@@ -97,7 +97,7 @@ export function getLocalizationStringForContentType(
-       return 'siteSettingsZoomLevelsMidSentence';
-     // The following members do not have a mid-sentence localization.
-     case ContentSettingsTypes.ANTI_ABUSE:
--    case ContentSettingsTypes.JAVASCRIPT_OPTIMIZER:
-+    case ContentSettingsTypes.JAVASCRIPT_JIT:
-     case ContentSettingsTypes.PDF_DOCUMENTS:
-     case ContentSettingsTypes.PERFORMANCE:
-     case ContentSettingsTypes.PRIVATE_NETWORK_DEVICES:
 diff --git a/chrome/browser/resources/settings/site_settings/settings_category_default_radio_group.ts b/chrome/browser/resources/settings/site_settings/settings_category_default_radio_group.ts
 index f41407671c3aa..dbd118d942f34 100644
 --- a/chrome/browser/resources/settings/site_settings/settings_category_default_radio_group.ts
@@ -59,25 +46,37 @@ index f41407671c3aa..dbd118d942f34 100644
        case ContentSettingsTypes.MIXEDSCRIPT:
        case ContentSettingsTypes.PAYMENT_HANDLER:
        case ContentSettingsTypes.POPUPS:
-diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 3edf3a7f14612..1003e54c4ca38 100644
---- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
-+++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -117,7 +117,7 @@
-             $i18n{siteSettingsJavascriptOptimizerDescription}
-           </div>
-           <settings-category-default-radio-group
--              category="[[contentSettingsTypesEnum_.JAVASCRIPT_OPTIMIZER]]"
-+              category="[[contentSettingsTypesEnum_.JAVASCRIPT_JIT]]"
-               allow-option-label=
-                   "$i18n{siteSettingsJavascriptOptimizerAllowed}"
-               allow-option-sub-label=
-@@ -127,7 +127,7 @@
-                   "$i18n{siteSettingsJavascriptOptimizerBlockedSubLabel}">
-           </settings-category-default-radio-group>
-           <category-setting-exceptions
--              category="[[contentSettingsTypesEnum_.JAVASCRIPT_OPTIMIZER]]"
-+              category="[[contentSettingsTypesEnum_.JAVASCRIPT_JIT]]"
-               allow-header="$i18n{siteSettingsJavascriptOptimizerAllowedExceptions}"
-               block-header="$i18n{siteSettingsJavascriptOptimizerBlockedExceptions}"
-               search-filter="[[searchFilter_]]">
+diff --git a/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts b/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
+index dfb10f1a4817d..a02b8cdeede73 100644
+--- a/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
++++ b/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
+@@ -225,7 +225,7 @@ function getCategoryItemMap(): Map<ContentSettingsTypes, CategoryListItem> {
+     },
+     {
+       route: routes.SITE_SETTINGS_JAVASCRIPT_OPTIMIZER,
+-      id: Id.JAVASCRIPT_OPTIMIZER,
++      id: Id.JAVASCRIPT_JIT,
+       label: 'siteSettingsJavascriptOptimizer',
+       icon: 'privacy:v8',
+       enabledLabel: 'siteSettingsJavascriptOptimizerAllowed',
+@@ -562,7 +562,7 @@ export class SettingsSiteSettingsPageElement extends
+               Id.ANTI_ABUSE,
+               Id.SITE_DATA,
+               Id.PERFORMANCE,
+-              Id.JAVASCRIPT_OPTIMIZER,
++              Id.JAVASCRIPT_JIT,
+               Id.AUTOMATIC_FULLSCREEN,
+               Id.OFFER_WRITING_HELP,
+             ]),
+diff --git a/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts b/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
+index 0c615bb7e5f4f..754fd07a0da5d 100644
+--- a/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
++++ b/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
+@@ -99,6 +99,7 @@ export function getLocalizationStringForContentType(
+       return 'siteSettingsZoomLevelsMidSentence';
+     // The following members do not have a mid-sentence localization.
+     case ContentSettingsTypes.ANTI_ABUSE:
++    case ContentSettingsTypes.JAVASCRIPT_JIT:
+     case ContentSettingsTypes.PDF_DOCUMENTS:
+     case ContentSettingsTypes.PERFORMANCE:
+     case ContentSettingsTypes.PRIVATE_NETWORK_DEVICES:

@@ -12,19 +12,10 @@ index 2ddc318a2b738..6fd447d8e5ce1 100644
  #endif
  
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index 703fc03b7e6cc..60347901f0d21 100644
+index 886af67983837..120272ceacfa8 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -22,7 +22,7 @@ BASE_FEATURE(kWebAppIconInTitlebar,
- );
- 
- // Enables Chrome Labs menu in the toolbar. See https://crbug.com/1145666
--BASE_FEATURE(kChromeLabs, "ChromeLabs", base::FEATURE_ENABLED_BY_DEFAULT);
-+BASE_FEATURE(kChromeLabs, "ChromeLabs", base::FEATURE_DISABLED_BY_DEFAULT);
- const char kChromeLabsActivationParameterName[] =
-     "chrome_labs_activation_percentage";
- const base::FeatureParam<int> kChromeLabsActivationPercentage{
-@@ -280,11 +280,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
+@@ -243,11 +243,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
  // https://crbug.com/928954
  BASE_FEATURE(kTabHoverCardImages,
               "TabHoverCardImages",
@@ -37,7 +28,7 @@ index 703fc03b7e6cc..60347901f0d21 100644
  
  const char kTabHoverCardImagesNotReadyDelayParameterName[] =
 diff --git a/components/history_clusters/core/features.cc b/components/history_clusters/core/features.cc
-index a2244cdbd0e7e..9058d86b5e8d7 100644
+index 897479817c607..a5fad5e8bb7fd 100644
 --- a/components/history_clusters/core/features.cc
 +++ b/components/history_clusters/core/features.cc
 @@ -26,7 +26,7 @@ constexpr auto enabled_by_default_desktop_only =

@@ -43,7 +43,7 @@ index ca51e9017e5bc..3f290596b8576 100644
  <if expr="not chromeos_ash">
          <template is="dom-if" if="[[signinAllowed_]]">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index cbc13c12082ec..65e66ec1cf441 100644
+index 7d47622af880c..468303b31b657 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -87,8 +87,8 @@
@@ -57,7 +57,7 @@ index cbc13c12082ec..65e66ec1cf441 100644
              on-click="onSecurityPageClick_"
              role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
          <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -189,7 +189,7 @@
+@@ -191,7 +191,7 @@
        </template>
  
        <template is="dom-if" route-path="/security">
@@ -67,10 +67,10 @@ index cbc13c12082ec..65e66ec1cf441 100644
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
            <settings-security-page prefs="{{prefs}}"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index 130e9e9b38a68..16a37c0200ecd 100644
+index f3df01d26ac04..28eef94c62fee 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-@@ -634,8 +634,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -643,8 +643,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
  
    private shouldShowAdPrivacy_(): boolean {
@@ -81,20 +81,13 @@ index 130e9e9b38a68..16a37c0200ecd 100644
  
    private shouldShowComposeProactiveNudge_(): boolean {
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 4b09d7e1e9cb3..d54888d0e712f 100644
+index 6ac062af92b06..0edc8e2134222 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
-@@ -77,143 +77,6 @@
+@@ -79,155 +79,6 @@
          pointer-events: auto;
        }
      </style>
--    <picture>
--      <source
--          srcset="chrome://settings/images/safe_browsing_banner_dark.svg"
--          media="(prefers-color-scheme: dark)">
--      <img id="banner" alt=""
--          src="chrome://settings/images/safe_browsing_banner.svg">
--    </picture>
 -    <div id="safeBrowsingSection">
 -      <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
 -      <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
@@ -111,7 +104,8 @@ index 4b09d7e1e9cb3..d54888d0e712f 100644
 -            expand-aria-label="$i18n{safeBrowsingEnhancedExpandA11yLabel}"
 -            on-expand-clicked="onEnhancedProtectionExpandButtonClicked_"
 -            no-automatic-collapse>
--            <div id="enhancedProtectionDescContainer" slot="collapse"
+-          <div slot="collapse">
+-            <div id="enhancedProtectionDescContainer"
 -                class="settings-columned-section">
 -              <div class="column">
 -                <h3 class="description-header">
@@ -146,13 +140,15 @@ index 4b09d7e1e9cb3..d54888d0e712f 100644
 -                      $i18n{safeBrowsingEnhancedWhenOnBulFour}
 -                    </div>
 -                  </li>
--                  <li>
--                    <cr-icon icon="settings20:vpn-key-new" aria-hidden="true">
--                    </cr-icon>
--                    <div class="secondary">
--                      $i18n{safeBrowsingEnhancedWhenOnBulFive}
--                    </div>
--                  </li>
+-                  <template is="dom-if" if="[[!enablePasswordLeakToggleMove_]]">
+-                    <li>
+-                      <cr-icon icon="settings20:vpn-key-new" aria-hidden="true">
+-                      </cr-icon>
+-                      <div class="secondary">
+-                        $i18n{safeBrowsingEnhancedWhenOnBulFive}
+-                      </div>
+-                    </li>
+-                  </template>
 -                </ul>
 -              </div>
 -              <div class="column">
@@ -179,13 +175,27 @@ index 4b09d7e1e9cb3..d54888d0e712f 100644
 -                    </div>
 -                  </li>
 -                </ul>
--                <div id="learnMoreLabelContainer" class="cr-secondary-text">
+-                <template is="dom-if" if="[[!enablePasswordLeakToggleMove_]]">
+-                  <div id="learnMoreLabelContainerOld"
+-                      class="cr-secondary-text">
+-                    $i18nRaw{safeBrowsingEnhancedLearnMoreLabel}
+-                  </div>
+-                </template>
+-              </div>
+-            </div>
+-            <template is="dom-if" if="[[enablePasswordLeakToggleMove_]]">
+-              <div id="learnMoreLabelContainer">
+-                <div class="cr-secondary-text">
 -                  $i18nRaw{safeBrowsingEnhancedLearnMoreLabel}
 -                </div>
 -              </div>
--            </div>
+-            </template>
+-          </div>
 -        </settings-collapse-radio-button>
 -        <settings-collapse-radio-button id="safeBrowsingStandard"
+-            no-collapse="[[computeSafeBrowsingStandardNoCollapse_(
+-                            hideExtendedReportingRadioButton_,
+-                            enablePasswordLeakToggleMove_)]]"
 -            name="[[safeBrowsingSettingEnum_.STANDARD]]"
 -            pref="[[prefs.generated.safe_browsing]]"
 -            label="$i18n{safeBrowsingStandard}"
@@ -207,13 +217,15 @@ index 4b09d7e1e9cb3..d54888d0e712f 100644
 -                              prefs.generated.safe_browsing.*)]]">
 -              </settings-toggle-button>
 -            </template>
--            <settings-toggle-button id="passwordsLeakToggle"
--                label="$i18n{passwordsLeakDetectionLabel}"
--                pref="{{prefs.generated.password_leak_detection}}"
--                sub-label="[[getPasswordsLeakToggleSubLabel_(
--                              prefs.profile.password_manager_leak_detection.*,
--                              prefs.generated.password_leak_detection.*)]]">
--            </settings-toggle-button>
+-            <template is="dom-if" if="[[!enablePasswordLeakToggleMove_]]">
+-              <settings-toggle-button id="passwordsLeakToggleOld"
+-                  label="$i18n{passwordsLeakDetectionLabel}"
+-                  pref="{{prefs.generated.password_leak_detection}}"
+-                  sub-label="[[getPasswordsLeakToggleSubLabel_(
+-                                prefs.profile.password_manager_leak_detection.*,
+-                                prefs.generated.password_leak_detection.*)]]">
+-              </settings-toggle-button>
+-            </template>
 -          </div>
 -        </settings-collapse-radio-button>
 -        <settings-collapse-radio-button id="safeBrowsingDisabled" no-collapse
@@ -228,16 +240,16 @@ index 4b09d7e1e9cb3..d54888d0e712f 100644
      <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
        <div id="secureConnectionsSection">
          <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
-@@ -254,7 +117,7 @@
+@@ -268,7 +119,7 @@
        </cr-collapse>
      </template>
      <div class="cr-row first">
 -      <h2 class="cr-title-text">$i18n{advancedPageTitle}</h2>
 +      <h2 class="cr-title-text">$i18n{securityPageTitle}</h2>
      </div>
-     <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
-       <settings-toggle-button id="httpsOnlyModeToggle"
-@@ -364,18 +227,3 @@
+     <template is="dom-if" if="[[enablePasswordLeakToggleMove_]]">
+       <settings-toggle-button id="passwordsLeakToggle"
+@@ -389,18 +240,3 @@
            on-click="onChromeCertificatesClick_">
        </cr-link-row>
  </if>
@@ -257,10 +269,10 @@ index 4b09d7e1e9cb3..d54888d0e712f 100644
 -      </settings-simple-confirmation-dialog>
 -    </template>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 335c735439b24..b0371a95c7dbe 100644
+index 552f3b5534b01..7c7bad3962f68 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -333,10 +333,6 @@ export class SettingsSecurityPageElement extends
+@@ -342,10 +342,6 @@ export class SettingsSecurityPageElement extends
        }
      });
  
@@ -285,12 +297,12 @@ index 5f0ac710c3a63..30d076f0127e3 100644
          </a>
          <a role="menuitem" id="autofill" href="/autofill"
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 1d51499e5f1a4..2953b0d365232 100644
+index 89f3190f3bde5..2ff32d4c675ed 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -362,10 +362,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
-   html_source->AddBoolean("userCannotManuallyEnterPassword", false);
- #endif  // !BUILDFLAG(IS_CHROMEOS_LACROS)
+@@ -353,10 +353,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   html_source->AddBoolean("isOSSettings", false);
+ #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
  
 -  bool show_privacy_guide =
 -      base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
@@ -301,10 +313,10 @@ index 1d51499e5f1a4..2953b0d365232 100644
    html_source->AddBoolean(
        "enableCbdTimeframeRequired",
 diff --git a/chrome/common/chrome_features.cc b/chrome/common/chrome_features.cc
-index b27e1ead33dc9..b36b34c9a9f8a 100644
+index 1010d8d4b20a7..08b60ed8b845d 100644
 --- a/chrome/common/chrome_features.cc
 +++ b/chrome/common/chrome_features.cc
-@@ -1074,11 +1074,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
+@@ -1030,11 +1030,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
  // Enables Safety Hub feature.
  BASE_FEATURE(kSafetyHub,
               "SafetyHub",

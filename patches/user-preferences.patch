@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index 9be2589cac759..50562fe458d7c 100644
+index d506286648bde..99041371e46ef 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -172,6 +172,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -173,6 +173,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -42,24 +42,24 @@ index 47120511edffd..53f2330898dd9 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index d54888d0e712f..82ddb98c12256 100644
+index 6ac062af92b06..34e88dd013ed6 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
-@@ -7,6 +7,9 @@
+@@ -4,6 +4,10 @@
          padding: 0 var(--cr-section-padding);
        }
  
 +      #webrtcLabel {
 +        flex: 1;
 +      }
- 
++
        .bullet-line {
          align-items: center;
-@@ -227,3 +230,44 @@
+         display: flex;
+@@ -389,6 +393,46 @@
            on-click="onChromeCertificatesClick_">
        </cr-link-row>
  </if>
-+
 +    <div id="hardeningSection">
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
 +      <settings-toggle-button class="cr-row first"
@@ -100,8 +100,11 @@ index d54888d0e712f..82ddb98c12256 100644
 +        sub-label="Changes to this setting requires a restart">
 +      </settings-toggle-button>
 +    </div>
+ 
+     <cr-link-row id="advanced-protection-program-link" class="hr"
+         label="$i18n{advancedProtectionProgramTitle}"
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index b0371a95c7dbe..60857ef0ee296 100644
+index 552f3b5534b01..2d7808ca85ebb 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
 @@ -111,6 +111,19 @@ export class SettingsSecurityPageElement extends
