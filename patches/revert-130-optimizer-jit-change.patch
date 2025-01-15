@@ -46,6 +46,19 @@ index f41407671c3aa..dbd118d942f34 100644
        case ContentSettingsTypes.MIXEDSCRIPT:
        case ContentSettingsTypes.PAYMENT_HANDLER:
        case ContentSettingsTypes.POPUPS:
+diff --git a/chrome/browser/resources/settings/site_settings/site_details.html b/chrome/browser/resources/settings/site_settings/site_details.html
+index ada08944de384..7ed0a2fa850b3 100644
+--- a/chrome/browser/resources/settings/site_settings/site_details.html
++++ b/chrome/browser/resources/settings/site_settings/site_details.html
+@@ -247,7 +247,7 @@
+           label="$i18n{siteSettingsInsecureContent}">
+       </site-details-permission>
+       <site-details-permission
+-          category="[[contentSettingsTypesEnum_.JAVASCRIPT_OPTIMIZER]]"
++          category="[[contentSettingsTypesEnum_.JAVASCRIPT_JIT]]"
+           icon="privacy:v8"
+           label="$i18n{siteSettingsJavascriptOptimizer}">
+       </site-details-permission>
 diff --git a/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts b/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
 index dfb10f1a4817d..a02b8cdeede73 100644
 --- a/chrome/browser/resources/settings/site_settings_page/site_settings_page.ts
