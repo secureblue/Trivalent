@@ -32,12 +32,12 @@ Name:	%{chromium_name}
 
        -- This will automatically increment the release every ~1 hour
        --                                           V - ~3 (2.77) hours of precision stripped
-       --print("Release: ".. ( os.time() * 3 ) // 10000 .."\n")
+       --print("Release: "..(( os.time() * 3 ) // 10000).."\n")
        --                                  ^ - reduces precision strip from 3 to ~1 (55 min) hour
        --                                      doubling this to 6 reduces it to ~46 minutes
        --                                      tripling to 9 reduces to ~30 minutes
        
-       --print("Release: ".. os.time() // 4000 .."\n")
+       --print("Release: "..(os.time() // 4000).."\n")
        --                                  ^ - ~1 (64 minutes) hour of precision stripped
        --                                      halfing to 2000 reduces to 32 minutes
 }
