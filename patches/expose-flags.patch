@@ -1,20 +1,24 @@
 diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
-index ad599311ac46d..6c89de2fca405 100644
+index 7613006656aaa..ee707f847ccba 100644
 --- a/chrome/browser/about_flags.cc
 +++ b/chrome/browser/about_flags.cc
-@@ -4220,6 +4220,41 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4343,6 +4343,45 @@ const FeatureEntry kFeatureEntries[] = {
  // //tools/flags/generate_unexpire_flags.py.
  #include "build/chromeos_buildflags.h"
  #include "chrome/browser/unexpire_flags_gen.inc"
 +    {"middle-click-autoscroll", "Autoscroll with Middleclick",
 +     "Enables scrolling with middleclick. Displays a security warning. "
 +     "This feature is exposed by Trivalent.", kOsLinux,
-+     SINGLE_VALUE_TYPE_AND_VALUE(switches::kEnableBlinkFeatures, 
++     SINGLE_VALUE_TYPE_AND_VALUE(switches::kEnableBlinkFeatures,
 +                                 "MiddleClickAutoscroll")},
 +    {"show-punycode-domains", "Show punycode for IDN domains",
 +     "Shows punycode for IDN domains to mitigate IDN homograph attacks. "
 +     "Disabled by default. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(url::kShowPunycodeDomains)},
++    {"pdf-javascript", "Enable PDF JavaScript",
++     "Toggle JavaScript for rendered PDFs (this also disables XFA). "
++     "Enabled by default. This feature is provided by Trivalent.",
++     kOsAll, FEATURE_VALUE_TYPE(chrome_pdf::features::kPdfJavaScript)},
 +    {"clear-cross-origin-referrers", "Clear cross-origin referrers",
 +     "Clears referrers when navigating across origins. Disabled by default. "
 +     "This feature is provided by Trivalent.", kOsAll,
