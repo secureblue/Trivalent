@@ -82,14 +82,15 @@ index dfb10f1a4817d..a02b8cdeede73 100644
                Id.OFFER_WRITING_HELP,
              ]),
 diff --git a/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts b/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
-index 0c615bb7e5f4f..754fd07a0da5d 100644
+index 0c615bb7e5f4f..c36a2a63f2075 100644
 --- a/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
 +++ b/chrome/browser/resources/settings/site_settings_page/site_settings_page_util.ts
-@@ -99,6 +99,7 @@ export function getLocalizationStringForContentType(
-       return 'siteSettingsZoomLevelsMidSentence';
-     // The following members do not have a mid-sentence localization.
-     case ContentSettingsTypes.ANTI_ABUSE:
+@@ -53,7 +53,7 @@ export function getLocalizationStringForContentType(
+       return 'siteSettingsImagesMidSentence';
+     case ContentSettingsTypes.JAVASCRIPT:
+       return 'siteSettingsJavascriptMidSentence';
+-    case ContentSettingsTypes.JAVASCRIPT_OPTIMIZER:
 +    case ContentSettingsTypes.JAVASCRIPT_JIT:
-     case ContentSettingsTypes.PDF_DOCUMENTS:
-     case ContentSettingsTypes.PERFORMANCE:
-     case ContentSettingsTypes.PRIVATE_NETWORK_DEVICES:
+       return 'siteSettingsJavascriptOptimizerMidsentence';
+     case ContentSettingsTypes.KEYBOARD_LOCK:
+       return 'siteSettingsKeyboardLockMidSentence';
