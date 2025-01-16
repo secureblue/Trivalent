@@ -27,7 +27,7 @@ Name:	%{chromium_name}
 %{lua:
        local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
        local content = f:read "*all"
-       -- This will dynamically set the version based on the chromium's latest stable release
+       -- This will dynamically set the version based on chromium's latest stable release channel
        print("Version: "..content.."\n")
 
        -- This will automatically increment the release every ~1 hour
