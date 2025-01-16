@@ -27,12 +27,19 @@ Name:	%{chromium_name}
 %{lua:
        local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
        local content = f:read "*all"
-       -- This will dynamically set the version based on the chromium's latest stable release,
-       -- and automatically increment releases every ~32 minutes using a reduced epoch time
-       -- (divided by 2000 because: by 1000 to remove the appending 3 numbers which represent
-       -- ~16 minutes, and by 2 to reduce incrementation speed in half reducing further to ~32
-       -- minutes of reduced precision. This keeps the number smaller for longer, ie more stable)
-       print("Version: "..content.."\nRelease: "..os.time()/2000.."\n")
+       -- This will dynamically set the version based on the chromium's latest stable release
+       print("Version: "..content.."\n")
+
+       -- This will automatically increment the release every ~1 hour
+       --                                           V - ~3 (2.77) hours of precision stripped
+       --print("Release: ".. ( os.time() * 3 ) // 10000 .."\n")
+       --                                  ^ - reduces precision strip from 3 to ~1 (55 min) hour
+       --                                      doubling this to 6 reduces it to ~46 minutes
+       --                                      tripling to 9 reduces to ~30 minutes
+       
+       --print("Release: ".. os.time() // 4000 .."\n")
+       --                                  ^ - ~1 (64 minutes) hour of precision stripped
+       --                                      halfing to 2000 reduces to 32 minutes
 }
 Summary: A security-focused browser built upon Google's Chromium web browser
 Url: https://github.com/secureblue/Trivalent
