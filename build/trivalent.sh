@@ -40,10 +40,8 @@ CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-if [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist ] && 
-   [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist-version.txt ] &&
-   [ -f /usr/lib64/$CHROMIUM_NAME/install_filter.sh ]; then
-   /bin/bash /usr/lib64/$CHROMIUM_NAME/install_filter.sh
+if [ rpm -q trivalent-subresource-filter]; then
+   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
 if [[ ! pgrep -x "trivalent" > /dev/null ] && [ -f $HOME/.config/chromium/SingletonLock]]; then
