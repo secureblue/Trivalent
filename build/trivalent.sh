@@ -46,6 +46,11 @@ if [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist ] &&
    /bin/bash /usr/lib64/$CHROMIUM_NAME/install_filter.sh
 fi
 
+if [[ ! pgrep -x "trivalent" > /dev/null ] && [ -f $HOME/.config/chromium/SingletonLock]]; then
+  echo "Errm, what the sigma? This shouldn't be here."
+  rm $HOME/.config/chromium/Singleton*
+fi
+
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
 # processes (http://crbug.com/376567).
 exec < /dev/null
