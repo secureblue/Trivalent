@@ -40,13 +40,16 @@ CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-if [ rpm -q trivalent-subresource-filter]; then
+if rpm -q trivalent-subresource-filter; then
    /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
-if [[ ! pgrep -x "trivalent" > /dev/null ] && [ -f $HOME/.config/chromium/SingletonLock]]; then
-  echo "Errm, what the sigma? This shouldn't be here."
-  rm $HOME/.config/chromium/Singleton*
+# Fix SingletonLock if the browser isn't running
+if ! pgrep -x "$CHROMIUM_NAME" > /dev/null; then
+  if [ -f $HOME/.config/chromium/SingletonLock ]; then
+    echo "Errm, what the sigma? This shouldn't be here."
+    rm $HOME/.config/chromium/Singleton*
+  fi
 fi
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
