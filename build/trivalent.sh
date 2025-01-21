@@ -44,16 +44,18 @@ if rpm -q "trivalent-subresource-filter" > /dev/null; then
    /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
-# Fix SingletonLock if the browser isn't running
-if ! ps aux | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null; then
-  if [ -f "$HOME/.config/chromium/SingletonLock" ]; then
-    if ! ps aux | grep "chromium-browser --type=zygote" | grep -v "grep" > /dev/null; then
-      echo "Ruh roh! This shouldn't be here."
-      rm "$HOME/.config/chromium/Singleton"*
-    else
-      echo "Chromium is already open in this directory."
-    fi
-  fi
+PROCESSES=$(ps aux)
+echo $PROCESSES | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null
+IS_TRIVALENT_RUNNING=$?
+echo $PROCESSES | grep "chromium-browser --type=zygote" | grep -v "grep" > /dev/null
+IS_CHROMIUM_RUNNING=$?
+
+# Fix SingletonLock if the browser isn't running and the file is present
+if [[ $IS_TRIVALENT_RUNNING -ne 0 && $IS_CHROMIUM_RUNNING -ne 0 && -f "$HOME/.config/chromium/SingletonLock" ]]; then
+  echo "Ruh roh! This shouldn't be here..."
+  rm "$HOME/.config/chromium/Singleton"*
+else
+  echo "A process is already open in this directory or SingletonLock is not present."
 fi
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
