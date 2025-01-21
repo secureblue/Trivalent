@@ -48,7 +48,7 @@ fi
 if ! ps aux | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null; then
   if [ -f "$HOME/.config/chromium/SingletonLock" ]; then
     if ! ps aux | grep "chromium-browser --type=zygote" | grep -v "grep" > /dev/null; then
-      echo "Errm, what the sigma? This shouldn't be here."
+      echo "Ruh roh! This shouldn't be here."
       rm "$HOME/.config/chromium/Singleton"*
     else
       echo "Chromium is already open in this directory."
