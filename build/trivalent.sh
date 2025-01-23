@@ -44,16 +44,26 @@ if rpm -q "trivalent-subresource-filter" > /dev/null; then
    /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
+# handle migration from the old directory
+# the migration file just tells this wrapper not to copy over data
+NEW_DIR="$HOME/.config/$CHROMIUM_NAME"
+OLD_DIR="$HOME/.config/chromium"
+MIGRATION_FILE="$NEW_DIR-migration"
+if [[ ! -d "$NEW_DIR" && ! -f "$MIGRATION_FILE" ]]; then
+  if [[ -d "$OLD_DIR" ]]; then
+    cp "$OLD_DIR" "$NEW_DIR"
+  fi
+  touch "$MIGRATION_FILE"
+fi
+
 PROCESSES=$(ps aux)
 echo $PROCESSES | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null
 IS_TRIVALENT_RUNNING=$?
-echo $PROCESSES | grep "chromium-browser --type=zygote" | grep -v "grep" > /dev/null
-IS_CHROMIUM_RUNNING=$?
 
 # Fix SingletonLock if the browser isn't running and the file is present
-if [[ $IS_TRIVALENT_RUNNING -ne 0 && $IS_CHROMIUM_RUNNING -ne 0 && -f "$HOME/.config/chromium/SingletonLock" ]]; then
+if [[ $IS_TRIVALENT_RUNNING -ne 0 && -f "$HOME/.config/$CHROMIUM_NAME/SingletonLock" ]]; then
   echo "Ruh roh! This shouldn't be here..."
-  rm "$HOME/.config/chromium/Singleton"*
+  rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
   echo "A process is already open in this directory or SingletonLock is not present."
 fi
