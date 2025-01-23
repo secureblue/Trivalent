@@ -11,7 +11,7 @@ index 62da648c6acb0..d5d0678b96d7f 100644
  #endif
 -  *result = config_dir.Append(data_dir_basename + GetChannelSuffixForDataDir());
 +  // We don't have channels
-+  *result = data_dir_basename;
++  *result = config_dir.Append(data_dir_basename);
    return true;
  }
  
