@@ -48,12 +48,18 @@ fi
 # the migration file just tells this wrapper not to copy over data
 NEW_DIR="$HOME/.config/$CHROMIUM_NAME"
 OLD_DIR="$HOME/.config/chromium"
-MIGRATION_FILE="$NEW_DIR-migration"
-if [[ ! -d "$NEW_DIR" && ! -f "$MIGRATION_FILE" ]]; then
-  if [[ -d "$OLD_DIR" ]]; then
-    cp "$OLD_DIR" "$NEW_DIR"
-  fi
+MIGRATION_FILE="$HOME/.config/.$CHROMIUM_NAME-migration"
+if [[ ! -d "$NEW_DIR" && -d "$OLD_DIR" && ! -f "$MIGRATION_FILE" ]]; then
+  echo "Migrating user data directory..."
+  cp "$OLD_DIR" "$NEW_DIR"
+else
+  echo "Data directory already present, no old data to migrate, or..."
+fi
+if [[ ! -f "$MIGRATION_FILE" ]]; then
+  echo "Missing migration file, remembering..."
   touch "$MIGRATION_FILE"
+else
+  echo "Data already migrated."
 fi
 
 PROCESSES=$(ps aux)
