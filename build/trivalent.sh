@@ -51,15 +51,13 @@ OLD_DIR="$HOME/.config/chromium"
 MIGRATION_FILE="$HOME/.config/.$CHROMIUM_NAME-migration"
 if [[ ! -d "$NEW_DIR" && -d "$OLD_DIR" && ! -f "$MIGRATION_FILE" ]]; then
   echo "Migrating user data directory..."
-  cp "$OLD_DIR" "$NEW_DIR"
+  cp -r "$OLD_DIR" "$NEW_DIR"
 else
-  echo "Data directory already present, no old data to migrate, or..."
+  echo "Data directory already present, no old data to migrate, or data already migrated."
 fi
 if [[ ! -f "$MIGRATION_FILE" ]]; then
-  echo "Missing migration file, remembering..."
+  echo "Remembering migration status..."
   touch "$MIGRATION_FILE"
-else
-  echo "Data already migrated."
 fi
 
 PROCESSES=$(ps aux)
