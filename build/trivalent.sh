@@ -40,10 +40,22 @@ CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-if [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist ] && 
-   [ -f /etc/$CHROMIUM_NAME/filter/$CHROMIUM_NAME-blocklist-version.txt ] &&
-   [ -f /usr/lib64/$CHROMIUM_NAME/install_filter.sh ]; then
-   /bin/bash /usr/lib64/$CHROMIUM_NAME/install_filter.sh
+if rpm -q "trivalent-subresource-filter" > /dev/null; then
+   /bin/bash /usr/lib64/trivalent/install_filter.sh
+fi
+
+PROCESSES=$(ps aux)
+echo $PROCESSES | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null
+IS_TRIVALENT_RUNNING=$?
+echo $PROCESSES | grep "chromium-browser --type=zygote" | grep -v "grep" > /dev/null
+IS_CHROMIUM_RUNNING=$?
+
+# Fix SingletonLock if the browser isn't running and the file is present
+if [[ $IS_TRIVALENT_RUNNING -ne 0 && $IS_CHROMIUM_RUNNING -ne 0 && -f "$HOME/.config/chromium/SingletonLock" ]]; then
+  echo "Ruh roh! This shouldn't be here..."
+  rm "$HOME/.config/chromium/Singleton"*
+else
+  echo "A process is already open in this directory or SingletonLock is not present."
 fi
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child

@@ -27,9 +27,12 @@ Name:	%{chromium_name}
 %{lua:
        local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
        local content = f:read "*all"
+       -- This will dynamically set the version based on chromium's latest stable release channel
        print("Version: "..content.."\n")
+
+       -- This will automatically increment the release every ~1 hour
+       print("Release: "..(os.time() // 4000).."\n")
 }
-Release: 1
 Summary: A security-focused browser built upon Google's Chromium web browser
 Url: https://github.com/secureblue/Trivalent
 License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
@@ -308,9 +311,11 @@ find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
     -exec sed -i \
         -e 's/\bph>Chromium<ph\b/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/g' \
         -e 's/\bGoogle Chrome\b/REMOVE_PLACEHOLDER_GOOGLE_CHROME/g' \
+        -e 's/\Chrome Web Store\b/REMOVE_PLACEHOLDER_CHROME_WEB_STORE/g' \
         -e 's/\bThe Chromium Authors\b/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/g' \
         -e 's/\bChrom\(e\|ium\)\b/Trivalent/g' \
         -e 's/REMOVE_PLACEHOLDER_GOOGLE_CHROME/Google Chrome/g' \
+        -e 's/REMOVE_PLACEHOLDER_CHROME_WEB_STORE/Chrome Web Store/g' \
         -e 's/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/The Chromium Authors/g' \
         -e 's/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/ph>Chromium<ph/g' {} + 
 
