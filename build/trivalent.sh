@@ -38,12 +38,6 @@ export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 [[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
 CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
 
-# Check if Trivalent's subresource filter is installed,
-# if so runs the installer
-if rpm -q "trivalent-subresource-filter" > /dev/null; then
-   /bin/bash /usr/lib64/trivalent/install_filter.sh
-fi
-
 # handle migration from the old directory
 # the migration file just tells this wrapper not to copy over data
 NEW_DIR="$HOME/.config/$CHROMIUM_NAME"
@@ -51,13 +45,19 @@ OLD_DIR="$HOME/.config/chromium"
 MIGRATION_FILE="$HOME/.config/.$CHROMIUM_NAME-migration"
 if [[ ! -d "$NEW_DIR" && -d "$OLD_DIR" && ! -f "$MIGRATION_FILE" ]]; then
   echo "Migrating user data directory..."
-  cp -r "$OLD_DIR" "$NEW_DIR"
+  mv "$OLD_DIR" "$NEW_DIR"
 else
   echo "Data directory already present, no old data to migrate, or data already migrated."
 fi
 if [[ ! -f "$MIGRATION_FILE" ]]; then
   echo "Remembering migration status..."
   touch "$MIGRATION_FILE"
+fi
+
+# Check if Trivalent's subresource filter is installed,
+# if so runs the installer
+if rpm -q "trivalent-subresource-filter" > /dev/null; then
+   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
 PROCESSES=$(ps aux)
