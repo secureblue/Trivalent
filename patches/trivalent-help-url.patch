@@ -7,7 +7,7 @@ index 6a382e69c9766..a71bda61c5632 100644
  
  inline constexpr char kChromeHelpViaWebUIURL[] =
 -    "https://support.google.com/chrome?p=help&ctx=settings";
-+    "https://github.com/secureblue/Trivalent";
++    "https://github.com/secureblue/Trivalent/issues";
  #if BUILDFLAG(IS_CHROMEOS_ASH)
  inline constexpr char kChromeOsHelpViaWebUIURL[] =
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
