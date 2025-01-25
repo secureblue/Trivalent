@@ -56,7 +56,7 @@ fi
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-if rpm -q "trivalent-subresource-filter" > /dev/null; then
+if [ -f "/usr/lib64/trivalent/install_filter.sh" ]; then
    /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
