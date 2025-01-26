@@ -43,7 +43,6 @@ Source0: chromium-%{version}-clean.tar.xz
 Source2: %{chromium_name}.conf
 Source3: %{chromium_name}.sh
 Source4: %{chromium_name}.desktop
-Source8: %{chromium_name}.info
 Source9: %{chromium_name}.xml
 Source10: %{chromium_name}.appdata.xml
 Source11: master_preferences
@@ -295,8 +294,6 @@ Qt6 UI for chromium.
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}
 %autopatch -p1 -m 3000 -M %{_hardeningPatchCount}
-
-cp -a %{SOURCE8} chrome/installer/linux/common/chromium-browser.info
 
 ### String Branding ###
 find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
