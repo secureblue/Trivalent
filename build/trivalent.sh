@@ -12,6 +12,7 @@ export CHROME_WRAPPER="`readlink -f "$0"`"
 
 HERE="`dirname "$CHROME_WRAPPER"`"
 
+
 # We include some xdg utilities next to the binary, and we want to prefer them
 # over the system versions when we know the system versions are very old. We
 # detect whether the system xdg utilities are sufficiently new to be likely to
@@ -53,6 +54,10 @@ if [[ ! -f "$MIGRATION_FILE" ]]; then
   echo "Remembering migration status..."
   touch "$MIGRATION_FILE"
 fi
+
+restorecon -vR $HOME/.config/$CHROMIUM_NAME
+restorecon -vR $HOME/.cache/$CHROMIUM_NAME
+restorecon -vR $HOME/Downloads
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
