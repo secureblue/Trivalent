@@ -56,7 +56,6 @@ fi
 
 restorecon -vR $HOME/.config/$CHROMIUM_NAME
 restorecon -vR $HOME/.cache/$CHROMIUM_NAME
-restorecon -vR $HOME/Downloads
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
