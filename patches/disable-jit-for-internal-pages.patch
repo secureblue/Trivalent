@@ -2,18 +2,13 @@ diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/ch
 index e5ce608907f72..09159a4e83115 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -8013,9 +8013,12 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -8013,9 +8013,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
  
 -  // Only disable JIT for web schemes.
 -  if (!site_url.SchemeIsHTTPOrHTTPS())
-+  // Disable JIT for non-web schemes.
-+  if (!site_url.SchemeIsHTTPOrHTTPS()) {
-+    if (!base::FeatureList::IsEnabled(features::kEnableInternalPageJit))
-+      return true;
-     return false;
-+  }
+-    return false;
  
    return (map && map->GetContentSetting(site_url, site_url,
                                          ContentSettingsType::JAVASCRIPT_JIT) ==
@@ -21,17 +16,7 @@ diff --git a/content/public/common/content_features.cc b/content/public/common/c
 index 2d95d5e1df911..e7a29a6687a07 100644
 --- a/content/public/common/content_features.cc
 +++ b/content/public/common/content_features.cc
-@@ -16,6 +16,9 @@
- 
- namespace features {
- 
-+BASE_FEATURE(kEnableInternalPageJit, "EnableInternalPageJit",
-+             base::FEATURE_DISABLED_BY_DEFAULT);
-+
- // All features in alphabetical order.
- 
- // Kill switch to guard additional security checks performed by the browser
-@@ -1067,7 +1070,7 @@ BASE_FEATURE(kDisableProcessReuse,
+@@ -1067,7 +1067,7 @@ BASE_FEATURE(kDisableProcessReuse,
  // This feature is only consulted in site-per-process mode.
  BASE_FEATURE(kSpareRendererForSitePerProcess,
               "SpareRendererForSitePerProcess",
@@ -40,16 +25,3 @@ index 2d95d5e1df911..e7a29a6687a07 100644
  
  // Controls whether site isolation should use origins instead of scheme and
  // eTLD+1.
-diff --git a/content/public/common/content_features.h b/content/public/common/content_features.h
-index a69dcd3b24015..2f6f3d9265bbf 100644
---- a/content/public/common/content_features.h
-+++ b/content/public/common/content_features.h
-@@ -21,6 +21,8 @@
- 
- namespace features {
- 
-+CONTENT_EXPORT BASE_DECLARE_FEATURE(kEnableInternalPageJit);
-+
- // BEFORE MODIFYING THIS FILE: If your feature is only used inside content/, add
- // your feature in `content/common/features.h` instead.
- 
