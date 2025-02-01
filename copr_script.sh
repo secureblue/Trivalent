@@ -21,11 +21,19 @@ for ((i=0; i<${#patches[@]}; i++)); do
 done
 cd ..
 
-# copy hardened-chromium patches to the build dir
+# copy Trivalent patches to the build dir
 cd patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp ${patches[i]} ../build/trivalent-$((i+3000)).patch
+done
+cd ..
+
+# copy Fedora's ARM patches to the build dir
+cd fedora_patches/
+patches=(*.patch)
+for ((i=0; i<${#patches[@]}; i++)); do
+	cp ${patches[i]} ../build/fedora-arm-$((i+1500)).patch
 done
 cd ..
 
