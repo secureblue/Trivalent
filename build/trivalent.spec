@@ -64,10 +64,12 @@ Source20: %{chromium_name}256.png
         fpatches = rpm.glob('/builddir/build/SOURCES/fedora-*.patch')
         vpatches = rpm.glob('/builddir/build/SOURCES/vanadium-*.patch')
         hpatches = rpm.glob('/builddir/build/SOURCES/'..macros['chromium_name']..'-*.patch')
+        fpatches = rpm.glob('/builddir/build/SOURCES/fedora-arm-*.patch')
     else
         fpatches = rpm.glob(macros['_sourcedir']..'/fedora-*.patch')
         vpatches = rpm.glob(macros['_sourcedir']..'/vanadium-*.patch')
         hpatches = rpm.glob(macros['_sourcedir']..'/'..macros['chromium_name']..'-*.patch')
+        fpatches = rpm.glob(macros['_sourcedir']..'/fedora-arm-*.patch')
     end
 
     local count = 1000
@@ -102,10 +104,22 @@ Source20: %{chromium_name}256.png
         count = count + 1
     end
     rpm.define("_hardeningPatchCount "..count-1)
+    
+    count = 1500
+    printPatch = ""
+    for p in ipairs(farmpatches) do
+        os.execute("echo 'Patching in "..farmpatches[p].."'")
+        printPatch = "Patch"..count..": fedora-arm-"..count..".patch"
+        rpm.execute("echo", printPatch)
+        print(printPatch.."\n")
+        count = count + 1
+    end
+    rpm.define("_fedoraARMPatchCount "..count-1)
 
-    os.execute("echo 'Autopatch F: "..macros['_fedoraPatchCount'].."'")
-    os.execute("echo 'Autopatch V: "..macros['_vanadiumPatchCount'].."'")
-    os.execute("echo 'Autopatch H: "..macros['_hardeningPatchCount'].."'")
+    os.execute("echo 'Autopatch Fedora: "..macros['_fedoraPatchCount'].."'")
+    os.execute("echo 'Autopatch Vanadium: "..macros['_vanadiumPatchCount'].."'")
+    os.execute("echo 'Autopatch Hardening: "..macros['_hardeningPatchCount'].."'")
+    os.execute("echo 'Autopatch Fedora-ARM: "..macros['_fedoraARMPatchCount'].."'")
 }
 
 BuildRequires: golang-github-evanw-esbuild
@@ -294,6 +308,9 @@ Qt6 UI for chromium.
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}
 %autopatch -p1 -m 3000 -M %{_hardeningPatchCount}
+%ifarch aarch64
+%autopatch -p1 -m 1500 -M %{_fedoraARMPatchCount}
+%endif
 
 ### String Branding ###
 find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
@@ -342,9 +359,9 @@ ln -sf %{_bindir}/esbuild third_party/devtools-frontend/src/third_party/esbuild/
 
 # Get rid of the pre-built eu-strip binary, it is x86_64 and of mysterious origin
 rm -rf buildtools/third_party/eu-strip/bin/eu-strip
-  
+
 # Replace it with a symlink to the Fedora copy
-ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
+ln -s $(which eu-strip) buildtools/third_party/eu-strip/bin/eu-strip
 
 # Hard code extra version
 sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
@@ -378,14 +395,21 @@ export LDFLAGS
 export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
+
+# set rustc version
 rustc_version="$(rustc --version)"
-rust_bindgen_root="%{_prefix}"
+# set rust bindgen root
+rust_bindgen_root="$(which bindgen | sed 's#/bin/.*##')"
+rust_sysroot_absolute="$(rustc --print sysroot)"
 
 # set clang version
 clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
 clang_base_path="$(clang --version | grep InstalledDir | cut -d' ' -f2 | sed 's#/bin##')"
 
 CHROMIUM_GN_DEFINES=""
+%ifarch aarch64
+CHROMIUM_GN_DEFINES+=' target_cpu="arm64"'
+%endif
 CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' is_debug=false dcheck_always_on=false dcheck_is_configurable=false'
@@ -428,7 +452,12 @@ CHROMIUM_GN_DEFINES+=' use_qt=true moc_qt5_path="%{_libdir}/qt5/bin/"'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_gio=true use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
+%ifarch aarch64
+CHROMIUM_GN_DEFINES+=' use_vaapi=false'
+CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
+%else
 CHROMIUM_GN_DEFINES+=' use_vaapi=true'
+%endif
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
