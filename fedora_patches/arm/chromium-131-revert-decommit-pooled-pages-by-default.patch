@@ -1,0 +1,32 @@
+commit 1ab1a14ad97394d384d8dc6de51bb229625e66d6
+Author: Benoît Lizé <lizeb@chromium.org>
+Date:   Mon Sep 16 12:01:14 2024 +0200
+ 
+    [cppgc] Decommit pooled pages by default
+    
+    This reduces committed memory by a large amount, which matters on
+    Windows. See the field trial results, which measure committed memory:
+    https://screenshot.googleplex.com/kEBAScqJSEXuRoy
+    
+    Bug: chromium:326303884
+    Change-Id: I619257871bcdb7ed50a71f41af341d0df634428a
+    Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/5864909
+    Reviewed-by: Michael Lippautz <mlippautz@chromium.org>
+    Reviewed-by: Anton Bikineev <bikineev@chromium.org>
+    Commit-Queue: Anton Bikineev <bikineev@chromium.org>
+    Auto-Submit: Benoit Lize <lizeb@chromium.org>
+    Cr-Commit-Position: refs/heads/main@{#96107}
+ 
+diff --git a/v8/src/flags/flag-definitions.h b/v8/src/flags/flag-definitions.h
+index 69946faf5ed..85c4b68612e 100644
+--- a/v8/src/flags/flag-definitions.h
++++ b/v8/src/flags/flag-definitions.h
+@@ -821,7 +821,7 @@ DEFINE_BOOL(trace_block_coverage, false,
+             "trace collected block coverage information")
+ DEFINE_BOOL(trace_protector_invalidation, false,
+             "trace protector cell invalidations")
+-DEFINE_BOOL(decommit_pooled_pages, false,
++DEFINE_BOOL(decommit_pooled_pages, true,
+             "decommit, rather than discard pooled pages")
+ 
+ #ifdef V8_MINORMS_STRING_SHORTCUTTING
