@@ -1,13 +1,13 @@
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 25b5c325f612d..b5d404abbca92 100644
+index a1a8e77a2ef3f..63a4ef556e036 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -1579,7 +1579,7 @@ void ChromeContentBrowserClient::RegisterLocalStatePrefs(
+@@ -1556,7 +1556,7 @@ void ChromeContentBrowserClient::RegisterLocalStatePrefs(
  // static
  void ChromeContentBrowserClient::RegisterProfilePrefs(
      user_prefs::PrefRegistrySyncable* registry) {
 -  registry->RegisterBooleanPref(prefs::kDisable3DAPIs, false);
 +  registry->RegisterBooleanPref(prefs::kDisable3DAPIs, true);
-   registry->RegisterBooleanPref(prefs::kEnableHyperlinkAuditing, false);
+   registry->RegisterBooleanPref(prefs::kEnableHyperlinkAuditing, true);
    // Register user prefs for mapping SitePerProcess and IsolateOrigins in
    // user policy in addition to the same named ones in Local State (which are

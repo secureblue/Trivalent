@@ -1,38 +1,11 @@
 diff --git a/components/lens/lens_features.cc b/components/lens/lens_features.cc
-index d029f6f7242b4..bf1a8c24e5d2d 100644
+index 12b0f931fa71d..cc5952d04b9ae 100644
 --- a/components/lens/lens_features.cc
 +++ b/components/lens/lens_features.cc
-@@ -13,7 +13,7 @@ namespace lens::features {
+@@ -16,16 +16,11 @@ namespace lens::features {
  
  BASE_FEATURE(kLensStandalone,
               "LensStandalone",
--             base::FEATURE_ENABLED_BY_DEFAULT);
-+             base::FEATURE_DISABLED_BY_DEFAULT);
- 
- BASE_FEATURE(kLensSearchOptimizations,
-              "LensSearchOptimizations",
-@@ -21,7 +21,7 @@ BASE_FEATURE(kLensSearchOptimizations,
- 
- BASE_FEATURE(kEnableLatencyLogging,
-              "LensImageLatencyLogging",
--             base::FEATURE_ENABLED_BY_DEFAULT);
-+             base::FEATURE_DISABLED_BY_DEFAULT);
- 
- BASE_FEATURE(kEnableRegionSearchKeyboardShortcut,
-              "LensEnableRegionSearchKeyboardShortcut",
-@@ -33,7 +33,7 @@ BASE_FEATURE(kEnableImageTranslate,
- 
- BASE_FEATURE(kEnableImageSearchSidePanelFor3PDse,
-              "EnableImageSearchSidePanelFor3PDse",
--             base::FEATURE_ENABLED_BY_DEFAULT);
-+             base::FEATURE_DISABLED_BY_DEFAULT);
- 
- BASE_FEATURE(kLensRegionSearchStaticPage,
-              "LensRegionSearchStaticPage",
-@@ -41,16 +41,11 @@ BASE_FEATURE(kLensRegionSearchStaticPage,
- 
- BASE_FEATURE(kEnableContextMenuInLensSidePanel,
-              "EnableContextMenuInLensSidePanel",
 -             base::FEATURE_ENABLED_BY_DEFAULT);
 +             base::FEATURE_DISABLED_BY_DEFAULT);
  
@@ -49,10 +22,10 @@ index d029f6f7242b4..bf1a8c24e5d2d 100644
  BASE_FEATURE(kLensOverlayTranslateButton,
               "LensOverlayTranslateButton",
 diff --git a/components/lens/lens_overlay_permission_utils.cc b/components/lens/lens_overlay_permission_utils.cc
-index 5c54e349a6d27..72f40a9593388 100644
+index 5c54e349a6d27..1c3a00f4c0f67 100644
 --- a/components/lens/lens_overlay_permission_utils.cc
 +++ b/components/lens/lens_overlay_permission_utils.cc
-@@ -19,7 +19,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -19,11 +19,11 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
    // policies are registered just in case.
    registry->RegisterIntegerPref(
        kLensOverlaySettings,
@@ -61,4 +34,8 @@ index 5c54e349a6d27..72f40a9593388 100644
  
    registry->RegisterIntegerPref(
        kGenAiLensOverlaySettings,
-
+-      static_cast<int>(GenAiLensOverlaySettingsPolicyValue::kAllowed));
++      static_cast<int>(GenAiLensOverlaySettingsPolicyValue::kDisabled));
+ 
+   registry->RegisterBooleanPref(kLensSharingPageScreenshotEnabled, false);
+   registry->RegisterBooleanPref(kLensSharingPageContentEnabled, false);

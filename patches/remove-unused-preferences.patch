@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index e33e49405479b..ee86bb13d87d4 100644
+index d79fef3c81ede..b6faaad86b752 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
 @@ -27,7 +27,7 @@
@@ -11,51 +11,8 @@ index e33e49405479b..ee86bb13d87d4 100644
                section="people">
              <settings-people-page prefs="{{prefs}}"
                  page-visibility="[[pageVisibility]]">
-@@ -215,13 +215,6 @@
-                 </settings-spell-check-page>
-               </settings-section>
-             </template>
--            <settings-section page-title="$i18n{translatePageTitle}"
--                section="translate" nest-under-section="languages">
--              <settings-translate-page prefs="{{prefs}}"
--                  languages="{{languages}}"
--                  language-helper="{{languageHelper}}">
--              </settings-translate-page>
--            </settings-section>
- </if>
-             <template is="dom-if" if="[[showPage_(pageVisibility.downloads)]]"
-                 restamp>
-diff --git a/chrome/browser/resources/settings/basic_page/basic_page.ts b/chrome/browser/resources/settings/basic_page/basic_page.ts
-index 06ed8d7e28bc0..165fdeea5c3e6 100644
---- a/chrome/browser/resources/settings/basic_page/basic_page.ts
-+++ b/chrome/browser/resources/settings/basic_page/basic_page.ts
-@@ -350,8 +350,7 @@ export class SettingsBasicPageElement extends SettingsBasicPageElementBase {
-   }
- 
-   private showSafetyCheckPage_(visibility?: boolean): boolean {
--    return !loadTimeData.getBoolean('enableSafetyHub') &&
--        this.showPage_(visibility);
-+    return false && this.showPage_(visibility); // Kept to prevent errors
-   }
- 
-   private showSafetyHubEntryPointPage_(visibility?: boolean): boolean {
-diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html b/chrome/browser/resources/settings/languages_page/translate_page.html
-index fcebeb17e856f..fbe0becf128c5 100644
---- a/chrome/browser/resources/settings/languages_page/translate_page.html
-+++ b/chrome/browser/resources/settings/languages_page/translate_page.html
-@@ -1,10 +1,4 @@
- <style include="cr-shared-style settings-shared md-select iron-flex"></style>
--<settings-toggle-button id="offerTranslateOtherLanguages"
--    pref="{{prefs.translate.enabled}}"
--    label="$i18n{offerToEnableTranslate}"
--    sub-label="$i18n{offerToEnableTranslateSublabel}"
--    on-settings-boolean-control-change="onTranslateToggleChange_">
--</settings-toggle-button>
- <cr-collapse opened="[[prefs.translate.enabled.value]]">
-   <div class="cr-row continuation">
-     <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index ca51e9017e5bc..3f290596b8576 100644
+index 4d187ff2f57a9..788d8af1e9f0a 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
 @@ -107,12 +107,6 @@ shown on non-ChromeOS platforms -->
@@ -72,10 +29,10 @@ index ca51e9017e5bc..3f290596b8576 100644
  <if expr="not chromeos_ash">
          <template is="dom-if" if="[[signinAllowed_]]">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 7d47622af880c..468303b31b657 100644
+index b2577376fdb93..5fca74b795af4 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -87,8 +87,8 @@
+@@ -76,8 +76,8 @@
            </cr-link-row>
          </template>
          <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
@@ -86,7 +43,7 @@ index 7d47622af880c..468303b31b657 100644
              on-click="onSecurityPageClick_"
              role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
          <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -191,7 +191,7 @@
+@@ -180,7 +180,7 @@
        </template>
  
        <template is="dom-if" route-path="/security">
@@ -96,10 +53,10 @@ index 7d47622af880c..468303b31b657 100644
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
            <settings-security-page prefs="{{prefs}}"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index f3df01d26ac04..28eef94c62fee 100644
+index e09c5bda751ca..642feef913a1c 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-@@ -643,8 +643,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -631,8 +631,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
  
    private shouldShowAdPrivacy_(): boolean {
@@ -110,7 +67,7 @@ index f3df01d26ac04..28eef94c62fee 100644
  
    private shouldShowComposeProactiveNudge_(): boolean {
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 6ac062af92b06..0edc8e2134222 100644
+index 117b42d142e9e..0edc8e2134222 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -79,155 +79,6 @@
@@ -170,7 +127,7 @@ index 6ac062af92b06..0edc8e2134222 100644
 -                    </div>
 -                  </li>
 -                  <template is="dom-if" if="[[!enablePasswordLeakToggleMove_]]">
--                    <li>
+-                    <li id="whenOnBulFive">
 -                      <cr-icon icon="settings20:vpn-key-new" aria-hidden="true">
 -                      </cr-icon>
 -                      <div class="secondary">
@@ -326,7 +283,7 @@ index 12390b95903a6..8f8fabc099463 100644
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
      r.SIGN_OUT.isNavigableDialog = true;
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 5f0ac710c3a63..30d076f0127e3 100644
+index 20e21e770d21f..897469dece88a 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -54,7 +54,7 @@
@@ -339,10 +296,10 @@ index 5f0ac710c3a63..30d076f0127e3 100644
          </a>
          <a role="menuitem" id="autofill" href="/autofill"
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 89f3190f3bde5..2ff32d4c675ed 100644
+index b57e66a90e566..86629759a9bce 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -353,10 +353,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+@@ -346,10 +346,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
    html_source->AddBoolean("isOSSettings", false);
  #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
  
@@ -352,24 +309,21 @@ index 89f3190f3bde5..2ff32d4c675ed 100644
 -  html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
 +  html_source->AddBoolean("showPrivacyGuide", false);
  
-   html_source->AddBoolean(
-       "enableCbdTimeframeRequired",
+   html_source->AddBoolean("enableHandTrackingContentSetting",
+ #if BUILDFLAG(ENABLE_VR)
 diff --git a/chrome/common/chrome_features.cc b/chrome/common/chrome_features.cc
-index 1010d8d4b20a7..08b60ed8b845d 100644
+index b2fe398bcf5a8..39abd4a64ee3b 100644
 --- a/chrome/common/chrome_features.cc
 +++ b/chrome/common/chrome_features.cc
-@@ -1030,11 +1030,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
+@@ -961,7 +961,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
+ #endif
+ 
  // Enables Safety Hub feature.
- BASE_FEATURE(kSafetyHub,
-              "SafetyHub",
--#if BUILDFLAG(IS_ANDROID)
-              base::FEATURE_DISABLED_BY_DEFAULT
--#else
--             base::FEATURE_ENABLED_BY_DEFAULT
--#endif  // BUILDFLAG(IS_ANDROID)
- );
+-BASE_FEATURE(kSafetyHub, "SafetyHub", base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kSafetyHub, "SafetyHub", base::FEATURE_DISABLED_BY_DEFAULT);
  
  #if BUILDFLAG(IS_ANDROID)
+ // Enables Safety Hub card in magic stack.
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
 index 69992131be6df..9f7e15f55bc0a 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js

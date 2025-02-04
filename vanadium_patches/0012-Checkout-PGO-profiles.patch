@@ -8,10 +8,10 @@ Subject: [PATCH] Checkout PGO profiles
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEPS b/DEPS
-index 52d2c6e300624..4e22051c3515e 100644
+index 928234f52fad2..39c3cb827ce9e 100644
 --- a/DEPS
 +++ b/DEPS
-@@ -145,7 +145,7 @@ vars = {
+@@ -149,7 +149,7 @@ vars = {
    'checkout_clang_coverage_tools': False,
  
    # Fetch the pgo profiles to optimize official builds.
