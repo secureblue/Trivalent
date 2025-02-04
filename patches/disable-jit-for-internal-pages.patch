@@ -7,11 +7,11 @@ index e5ce608907f72..09159a4e83115 100644
    }
  
 -  // Only disable JIT for web schemes.
-+  // Force disable JIT for non-web schemes, file schemes, or extensions.
 -  if (!site_url.SchemeIsHTTPOrHTTPS())
+-    return false;
++  // Force disable JIT for non-web schemes, file schemes, or extensions.
 +  if (!(site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIs("chrome-extension")
 +      && !site_url.SchemeIsFile())
--    return false;
 +    return true;
  
    return (map && map->GetContentSetting(site_url, site_url,
