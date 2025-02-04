@@ -1,0 +1,13 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 88109264ea962..ac9f6663f2cf5 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -1991,7 +1991,7 @@ config("default_warnings") {
+         cflags_cc += [ "-Wno-dangling-assignment-gsl" ]
+ 
+         # TODO(crbug.com/376641662): Fix and re-enable.
+-        cflags += [ "-Wno-nontrivial-memcall" ]
++        cflags += [ "-Wno-nontrivial-memaccess" ]
+       }
+     }
+ 
