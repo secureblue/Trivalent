@@ -2,13 +2,17 @@ diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/ch
 index e5ce608907f72..09159a4e83115 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -8013,9 +8013,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -8013,9 +8013,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
  
 -  // Only disable JIT for web schemes.
++  // Force disable JIT for non-web schemes, file schemes, or extensions.
 -  if (!site_url.SchemeIsHTTPOrHTTPS())
++  if (!(site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIs("chrome-extension")
++      && !site_url.SchemeIsFile())
 -    return false;
++    return true;
  
    return (map && map->GetContentSetting(site_url, site_url,
                                          ContentSettingsType::JAVASCRIPT_JIT) ==
