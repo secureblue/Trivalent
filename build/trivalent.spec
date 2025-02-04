@@ -16,6 +16,9 @@
 %global chromium_name trivalent
 %global chromium_path %{_libdir}/%{chromium_name}
 
+# ffmpeg can be bundled, but not really
+%global bundleffmpegfree 0
+
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
 %global __provides_exclude_from ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
@@ -115,10 +118,12 @@ BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
 BuildRequires: bindgen-cli
+%if ! %{bundleffmpegfree}
 BuildRequires: pkgconfig(libavcodec)
 BuildRequires: pkgconfig(libavfilter)
 BuildRequires: pkgconfig(libavformat)
 BuildRequires: pkgconfig(libavutil)
+%endif
 BuildRequires: pkgconfig(openh264)
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
@@ -202,6 +207,9 @@ Provides: bundled(double-conversion)
 Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 Provides: bundled(fdmlibm)
+%if %{bundleffmpegfree}
+Provides: bundled(ffmpeg)
+%endif
 Provides: bundled(flac)
 Provides: bundled(fips181)
 Provides: bundled(fontconfig)
@@ -412,7 +420,11 @@ CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
-CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_ffmpeg_video_decoders=true media_use_ffmpeg=true'
+%if ! %{bundleffmpegfree}
+CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_ffmpeg_video_decoders=true media_use_ffmpeg=true'
+%else
+CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chromium" proprietary_codecs=false is_component_ffmpeg=false enable_ffmpeg_video_decoders=false media_use_ffmpeg=true'
+%endif
 CHROMIUM_GN_DEFINES+=' media_use_openh264=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_h264=true'
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
