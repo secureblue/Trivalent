@@ -381,13 +381,7 @@ export RUSTC_BOOTSTRAP=1
 rustc_version="$(rustc --version)"
 rust_bindgen_root="%{_prefix}"
 
-# set clang version
-clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
-clang_base_path="$(clang --version | grep InstalledDir | cut -d' ' -f2 | sed 's#/bin##')"
-
 CHROMIUM_GN_DEFINES=""
-CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' is_debug=false dcheck_always_on=false dcheck_is_configurable=false'
 CHROMIUM_GN_DEFINES+=' enable_nacl=false'
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
@@ -398,8 +392,6 @@ CHROMIUM_GN_DEFINES+=' is_cfi=true use_thin_lto=true'
 CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
-CHROMIUM_GN_DEFINES+=" clang_base_path=\"$clang_base_path\""
-CHROMIUM_GN_DEFINES+=" clang_version=\"$clang_version\""
 CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
 CHROMIUM_GN_DEFINES+=' use_lld=true'
 CHROMIUM_GN_DEFINES+=' rust_sysroot_absolute="%{_prefix}"'
