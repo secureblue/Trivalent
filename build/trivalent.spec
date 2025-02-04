@@ -438,7 +438,9 @@ CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
 
 system_libs=()
-system_libs+=(ffmpeg)
+%if ! %{bundleffmpegfree}
+	system_libs+=(ffmpeg)
+%endif
 system_libs+=(openh264)
 build/linux/unbundle/replace_gn_files.py --system-libraries ${system_libs[@]}
 
