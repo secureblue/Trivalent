@@ -303,13 +303,15 @@ Qt6 UI for chromium.
 
 ### Proprietary Cleaner ###
 %if %{bundleffmpegfree}
-    ln -s %{SOURCE30} .
-    ln -s %{SOURCE31} .
+cp %{SOURCE30} .
+cp %{SOURCE31} .
+chmod a+rx ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
 %ifarch aarch64
-    ./clean_ffmpeg.sh . 1
+./clean_ffmpeg.sh . 1
 %else
-    ./clean_ffmpeg.sh . 0
+./clean_ffmpeg.sh . 0
 %endif
+rm ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
 %endif
 find src/third_party/openh264/src -type f -not -name '*.h' -delete
 
