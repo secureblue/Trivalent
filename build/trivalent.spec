@@ -307,9 +307,9 @@ cp %{SOURCE30} .
 cp %{SOURCE31} .
 chmod a+rx ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
 %ifarch aarch64
-./clean_ffmpeg.sh . 1
-%else
 ./clean_ffmpeg.sh . 0
+%else
+./clean_ffmpeg.sh . 1
 %endif
 rm ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
 %endif
