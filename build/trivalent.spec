@@ -60,6 +60,9 @@ Source18: %{chromium_name}48.png
 Source19: %{chromium_name}128.png
 Source20: %{chromium_name}256.png
 
+Source30: clean_ffmpeg.sh
+Source31: get_free_ffmpeg_source_files.py
+
 ### Patches ###
 %{lua:
     rpm.execute("pwd")
@@ -297,6 +300,18 @@ Qt6 UI for chromium.
 
 %prep
 %setup -q -n chromium-%{version}
+
+### Proprietary Cleaner ###
+%if ${bundleffmpegfree}
+    ln -s %{SOURCE30} .
+    ln -s %{SOURCE31} .
+%ifarch aarch64
+    ./clean_ffmpeg.sh . 1
+%else
+    ./clean_ffmpeg.sh . 0
+%endif
+%endif
+find src/third_party/openh264/src -type f -not -name '*.h' -delete
 
 ### Patches ###
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
