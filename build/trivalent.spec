@@ -17,7 +17,7 @@
 %global chromium_path %{_libdir}/%{chromium_name}
 
 # ffmpeg can be bundled, but not really
-%global bundleffmpegfree 1
+%global bundleffmpeg 1
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
@@ -121,7 +121,7 @@ BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
 BuildRequires: bindgen-cli
-%if ! %{bundleffmpegfree}
+%if ! %{bundleffmpeg}
 BuildRequires: pkgconfig(libavcodec)
 BuildRequires: pkgconfig(libavfilter)
 BuildRequires: pkgconfig(libavformat)
@@ -210,7 +210,7 @@ Provides: bundled(double-conversion)
 Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 Provides: bundled(fdmlibm)
-%if %{bundleffmpegfree}
+%if %{bundleffmpeg}
 Provides: bundled(ffmpeg)
 %endif
 Provides: bundled(flac)
@@ -302,7 +302,8 @@ Qt6 UI for chromium.
 %setup -q -n chromium-%{version}
 
 ### Proprietary Cleaner ###
-%if %{bundleffmpegfree}
+# Only clean ffmpeg if it is bundled
+%if %{bundleffmpeg}
 cp %{SOURCE30} .
 cp %{SOURCE31} .
 chmod a+rx ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
@@ -445,7 +446,7 @@ CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
-%if ! %{bundleffmpegfree}
+%if ! %{bundleffmpeg}
 CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_ffmpeg_video_decoders=true media_use_ffmpeg=true'
 %else
 CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chromium" proprietary_codecs=false is_component_ffmpeg=false enable_ffmpeg_video_decoders=false media_use_ffmpeg=true'
@@ -463,7 +464,7 @@ CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
 
 system_libs=()
-%if ! %{bundleffmpegfree}
+%if ! %{bundleffmpeg}
 	system_libs+=(ffmpeg)
 %endif
 system_libs+=(openh264)
