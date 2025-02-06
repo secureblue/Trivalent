@@ -314,7 +314,7 @@ chmod a+rx ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
 %endif
 rm ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
 %endif
-find src/third_party/openh264/src -type f -not -name '*.h' -delete
+find ./third_party/openh264/src -type f -not -name '*.h' -delete
 
 ### Patches ###
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
