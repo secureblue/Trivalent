@@ -19,7 +19,7 @@
 # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- 
+
 # $1 files
 # $2 verbose
 function copy_files() {
@@ -32,7 +32,6 @@ function copy_files() {
 		else
 			tmp_dir_name=$file
 		fi
- 
 		if [ "$2" -eq 1 ]; then
 			cp "$file" "../tmp_ffmpeg/$tmp_dir_name"
 		else
@@ -40,13 +39,9 @@ function copy_files() {
 		fi
 	done
 }
- 
+
 where=$(pwd)
- 
-pushd $1
-patch -p0 < ../ffmpeg-clean.patch
-popd
- 
+
 if ! generated_files=$(./get_free_ffmpeg_source_files.py "$1" "$2"); then
 	exit 1
 fi
@@ -59,7 +54,7 @@ if [ "$2" -ne "1" ]; then
 	generated_files_headers="$generated_files_headers ${generated_files//.S/.h}"
 fi
 generated_files_headers="$generated_files_headers ${generated_files//.asm/.h}"
- 
+
 header_files="	libavcodec/x86/inline_asm.h \
 		libavcodec/x86/hpeldsp.h \
 		libavcodec/x86/mathops.h \
@@ -231,8 +226,8 @@ header_files="	libavcodec/x86/inline_asm.h \
 		libswresample/version.h \
 		libswresample/version_major.h \
 		compat/va_copy.h "
- 
-manual_files=" libavcodec/aarch64/h264pred_neon.S \
+
+manual_files="  libavcodec/aarch64/h264pred_neon.S \
 		libavcodec/aarch64/hpeldsp_neon.S \
 		libavcodec/aarch64/neon.S \
 		libavcodec/aarch64/vorbisdsp_neon.S \
@@ -298,7 +293,7 @@ manual_files=" libavcodec/aarch64/h264pred_neon.S \
 		libavutil/executor.c \
 		libavutil/x86/x86inc.asm \
 		libavutil/x86/x86util.asm "
- 
+
 mp3_files="	libavcodec/aarch64/aacpsdsp_init_aarch64.c \
 		libavcodec/aarch64/aacpsdsp_neon.S \
 		libavcodec/aarch64/autorename_libavcodec_aarch64_aacpsdsp_neon.S \
@@ -345,7 +340,7 @@ mp3_files="	libavcodec/aarch64/aacpsdsp_init_aarch64.c \
 		libavformat/mov.c \
 		libavformat/mov_chan.c \
 		libavformat/mp3dec.c "
- 
+
 other_files="	BUILD.gn \
 		Changelog \
 		COPYING.GPLv2 \
@@ -363,28 +358,28 @@ other_files="	BUILD.gn \
 		README.chromium \
 		README.md \
 		RELEASE "
- 
+
 cd "$1/third_party/ffmpeg" || exit 1
- 
+
 copy_files "$generated_files" 0
 copy_files "$generated_files_headers" 0
 copy_files "$manual_files" 1
 copy_files "$other_files" 1
 copy_files "$header_files" 1
 copy_files "$mp3_files" 1
- 
+
 mkdir -p ../tmp_ffmpeg/tmp_chromium/config
 cp -r chromium/config ../tmp_ffmpeg/tmp_chromium
- 
+
 cd ../tmp_ffmpeg || exit 1
- 
+
 while IFS= read -r -d '' tmp_directory
 do
 	new_name=${tmp_directory//tmp_/}
 	mv "$tmp_directory" "$new_name"
 done <  <(find . -type d -name 'tmp_*' -print0)
- 
+
 cd "$where" || exit 1
- 
+
 rm -rf "$1/third_party/ffmpeg"
 mv "$1/third_party/tmp_ffmpeg" "$1/third_party/ffmpeg"
