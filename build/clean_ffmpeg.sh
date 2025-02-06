@@ -70,6 +70,7 @@ header_files="	libavcodec/x86/inline_asm.h \
 		libavcodec/parser.h \
 		libavcodec/aac_defines.h \
 		libavcodec/ac3.h \
+		libavcodec/ac3_channel_layout_tab.h \
 		libavcodec/ac3defs.h \
 		libavcodec/ac3tab.h \
 		libavcodec/adts_header.h \
