@@ -17,7 +17,7 @@
 %global chromium_path %{_libdir}/%{chromium_name}
 
 # ffmpeg can be bundled, but not really
-%global bundleffmpegfree 0
+%global bundleffmpegfree 1
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
