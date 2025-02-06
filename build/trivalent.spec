@@ -302,7 +302,7 @@ Qt6 UI for chromium.
 %setup -q -n chromium-%{version}
 
 ### Proprietary Cleaner ###
-%if ${bundleffmpegfree}
+%if %{bundleffmpegfree}
     ln -s %{SOURCE30} .
     ln -s %{SOURCE31} .
 %ifarch aarch64
