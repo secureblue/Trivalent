@@ -246,6 +246,7 @@ manual_files="  libavcodec/aarch64/h264pred_neon.S \
 		libavcodec/x86/vp3dsp.asm \
 		libavcodec/x86/vp8dsp.asm \
   		libavcodec/ac3_channel_layout_tab.c \
+		libavcodec/ac3_parser.c \
 		libavcodec/bit_depth_template.c \
 		libavcodec/flacdec.c \
 		libavcodec/flacdsp.c \
