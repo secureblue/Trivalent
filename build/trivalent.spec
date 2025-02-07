@@ -60,9 +60,6 @@ Source18: %{chromium_name}48.png
 Source19: %{chromium_name}128.png
 Source20: %{chromium_name}256.png
 
-Source30: clean_ffmpeg.sh
-Source31: get_free_ffmpeg_source_files.py
-
 ### Patches ###
 %{lua:
     rpm.execute("pwd")
@@ -301,21 +298,6 @@ Qt6 UI for chromium.
 %prep
 %setup -q -n chromium-%{version}
 
-### Proprietary Cleaner ###
-# Only clean ffmpeg if it is bundled
-%if %{bundleffmpeg}
-cp %{SOURCE30} .
-cp %{SOURCE31} .
-chmod a+rx ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
-%ifarch aarch64
-./clean_ffmpeg.sh . 0
-%else
-./clean_ffmpeg.sh . 1
-%endif
-rm ./clean_ffmpeg.sh ./get_free_ffmpeg_source_files.py
-%endif
-find ./third_party/openh264/src -type f -not -name '*.h' -delete
-
 ### Patches ###
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}
@@ -447,7 +429,7 @@ CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_le
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
 %if ! %{bundleffmpeg}
-CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_ffmpeg_video_decoders=true'
+CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true'
 %else
 CHROMIUM_BROWSER_GN_DEFINES+=' enable_ffmpeg_video_decoders=false'
 %endif
