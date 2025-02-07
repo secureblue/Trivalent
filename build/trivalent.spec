@@ -394,7 +394,6 @@ clang_base_path="$(clang --version | grep InstalledDir | cut -d' ' -f2 | sed 's#
 CHROMIUM_GN_DEFINES=""
 CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' is_debug=false dcheck_always_on=false dcheck_is_configurable=false'
 CHROMIUM_GN_DEFINES+=' enable_nacl=false'
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
@@ -431,12 +430,10 @@ CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true 
 %else
 CHROMIUM_BROWSER_GN_DEFINES+=' enable_ffmpeg_video_decoders=false'
 %endif
-CHROMIUM_GN_DEFINES+=' media_use_openh264=true'
-CHROMIUM_GN_DEFINES+=' rtc_use_h264=true'
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt=true moc_qt5_path="%{_libdir}/qt5/bin/"'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
-CHROMIUM_GN_DEFINES+=' use_gio=true use_pulseaudio=true'
+CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
@@ -446,8 +443,8 @@ export CHROMIUM_GN_DEFINES
 system_libs=()
 %if ! %{bundleffmpeg}
 	system_libs+=(ffmpeg)
+	system_libs+=(openh264)
 %endif
-system_libs+=(openh264)
 build/linux/unbundle/replace_gn_files.py --system-libraries ${system_libs[@]}
 
 # Check that there is no system 'google' module, shadowing bundled ones:
