@@ -1,0 +1,15 @@
+diff --git a/media/filters/ffmpeg_glue.cc b/media/filters/ffmpeg_glue.cc
+index 26bb9e8b92614..05143a0130b22 100644
+--- a/media/filters/ffmpeg_glue.cc
++++ b/media/filters/ffmpeg_glue.cc
+@@ -109,10 +109,6 @@ FFmpegGlue::FFmpegGlue(FFmpegURLProtocol* protocol) {
+   // Enable fast, but inaccurate seeks for MP3.
+   format_context_->flags |= AVFMT_FLAG_FAST_SEEK;
+ 
+-  // We don't allow H.264 parsing during demuxing since we have our own parser
+-  // and the ffmpeg one increases memory usage unnecessarily.
+-  format_context_->flags |= AVFMT_FLAG_NOH264PARSE;
+-
+   // Ensures format parsing errors will bail out. From an audit on 11/2017, all
+   // instances were real failures. Solves bugs like http://crbug.com/710791.
+   format_context_->error_recognition |= AV_EF_EXPLODE;
