@@ -439,12 +439,12 @@ CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
 
-system_libs=()
 %if ! %{bundleffmpegfree}
-	system_libs+=(ffmpeg)
-	system_libs+=(openh264)
-%endif
+system_libs=()
+system_libs+=(ffmpeg)
+system_libs+=(openh264)
 build/linux/unbundle/replace_gn_files.py --system-libraries ${system_libs[@]}
+%endif
 
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
