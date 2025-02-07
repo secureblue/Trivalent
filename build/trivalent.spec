@@ -17,7 +17,7 @@
 %global chromium_path %{_libdir}/%{chromium_name}
 
 # ffmpeg can be bundled, but not really
-%global bundleffmpeg 1
+%global bundleffmpegfree 0
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
@@ -205,7 +205,7 @@ Provides: bundled(double-conversion)
 Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 Provides: bundled(fdmlibm)
-%if %{bundleffmpeg}
+%if %{bundleffmpegfree}
 Provides: bundled(ffmpeg)
 %endif
 Provides: bundled(flac)
@@ -425,23 +425,22 @@ CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
-%if ! %{bundleffmpeg}
-CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true'
+%if ! %{bundleffmpegfree}
+CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_widevine=true'
 %else
-CHROMIUM_BROWSER_GN_DEFINES+=' enable_ffmpeg_video_decoders=false'
+CHROMIUM_BROWSER_GN_DEFINES+=' enable_ffmpeg_video_decoders=false enable_widevine=false' # removes support for proprietary codecs, H264 and Widevine
 %endif
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt=true moc_qt5_path="%{_libdir}/qt5/bin/"'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
-CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
 
 system_libs=()
-%if ! %{bundleffmpeg}
+%if ! %{bundleffmpegfree}
 	system_libs+=(ffmpeg)
 	system_libs+=(openh264)
 %endif
