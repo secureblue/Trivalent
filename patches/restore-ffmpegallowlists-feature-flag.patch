@@ -15,7 +15,7 @@ index 4df38fe102c1b..1d52e585902c1 100644
  // Enables audio offload when supported by endpoints.
  BASE_FEATURE(kAudioOffload, "AudioOffload", base::FEATURE_DISABLED_BY_DEFAULT);
 diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
-index cfd0552ee3108..155da24a6a069 100644
+index cfd0552ee3108..e395e733d9a33 100644
 --- a/media/ffmpeg/ffmpeg_common.cc
 +++ b/media/ffmpeg/ffmpeg_common.cc
 @@ -76,7 +76,7 @@ const char* GetAllowedVideoDecoders() {
@@ -23,7 +23,7 @@ index cfd0552ee3108..155da24a6a069 100644
    // Future versions of ffmpeg may copy the allow list from the format
    // context.
 -  if (!codec_context->codec_whitelist) {
-+  if (base::FeatureList::isEnabled(kFFmpegAllowlists) && !codec_context->codec_whitelist) {
++  if (base::FeatureList::IsEnabled(kFFmpegAllowLists) && !codec_context->codec_whitelist) {
      // Note: FFmpeg will try to free this string, so we must duplicate it.
      codec_context->codec_whitelist =
          av_strdup(codec_context->codec_type == AVMEDIA_TYPE_AUDIO
