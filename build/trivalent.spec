@@ -118,12 +118,10 @@ BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
 BuildRequires: bindgen-cli
-%if ! %{bundleffmpeg}
 BuildRequires: pkgconfig(libavcodec)
 BuildRequires: pkgconfig(libavfilter)
 BuildRequires: pkgconfig(libavformat)
 BuildRequires: pkgconfig(libavutil)
-%endif
 BuildRequires: pkgconfig(openh264)
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
