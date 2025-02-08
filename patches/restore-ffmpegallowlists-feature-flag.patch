@@ -14,6 +14,18 @@ index 4df38fe102c1b..1d52e585902c1 100644
  #if BUILDFLAG(IS_WIN)
  // Enables audio offload when supported by endpoints.
  BASE_FEATURE(kAudioOffload, "AudioOffload", base::FEATURE_DISABLED_BY_DEFAULT);
+diff --git a/media/base/media_switches.h b/media/base/media_switches.h
+index a659f74765496..1dd65d9583459 100644
+--- a/media/base/media_switches.h
++++ b/media/base/media_switches.h
+@@ -515,6 +515,7 @@ MEDIA_EXPORT BASE_DECLARE_FEATURE(kFuchsiaMediacodecVideoEncoder);
+ MEDIA_EXPORT BASE_DECLARE_FEATURE(kVideoDecodeBatching);
+ 
+ MEDIA_EXPORT BASE_DECLARE_FEATURE(kUseWindowBoundsForPip);
++MEDIA_EXPORT BASE_DECLARE_FEATURE(kFFmpegAllowLists);
+ 
+ MEDIA_EXPORT BASE_DECLARE_FEATURE(kMediaLogToConsole);
+ 
 diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
 index cfd0552ee3108..e395e733d9a33 100644
 --- a/media/ffmpeg/ffmpeg_common.cc
