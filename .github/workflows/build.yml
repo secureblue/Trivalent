@@ -4,45 +4,28 @@ on:
 name: Create RPM Release
 
 jobs:
-    build:
-        name: Create RPM Release
-        runs-on: ubuntu-latest
-        container: fedora:41
-
-        steps:
-
-        - name: Create Release
-          id: create_release
-          uses: actions/create-release@latest
-          env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-          with:
-              tag_name: ${{ github.ref }}
-              release_name: Release ${{ github.ref }}
-              body: |
-                Changes in this Release
-                - Create RPM
-                - Upload Source RPM
-              draft: false
-              prerelease: false
-            
-        - name: build RPM package
-          shell: bash
-          id: rpm_build
-          run: |
-            sudo dnf copr enable secureblue/trivalent
-            sudo dnf install trivalent-chromium-clean-source
-            git clone git@github.com:secureblue/Trivalent.git
-            bash ./Trivalent/copr_script.sh
-            rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
-            mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
-            mkdir ${{ github.workspace }}/RPMOutput
-            cp *.rpm "${{ github.workspace }}/RPMOutput
-            
-        - name: Upload Release Asset
-          id: upload-release-asset 
-          uses: actions/upload-release-asset@v1
-          env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-              rpm_content: ${{ github.workspace }}/RPMOutput
+  build:
+    name: Create RPM Release
+    runs-on: ubuntu-latest
+    container: fedora:41
+    steps:
+      - name: build RPM package
+        shell: bash
+        id: rpm_build
+        run: |
+          sudo dnf copr enable secureblue/trivalent
+          sudo dnf install trivalent-chromium-clean-source
+          git clone git@github.com:secureblue/Trivalent.git
+          bash ./Trivalent/copr_script.sh
+          rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mkdir ${{ github.workspace }}/RPMOutput
+          cp *.rpm "${{ github.workspace }}/RPMOutput
+          
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            rpm_content: ${{ github.workspace }}/RPMOutput
