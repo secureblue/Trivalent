@@ -5,20 +5,31 @@ name: Create RPM Release
 
 jobs:
   build:
+    name: Create RPM Release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
 
-    - name: build RPM package
-      id: rpm
-      uses: naveenrajm7/rpmbuild@master
-      with:
-        spec_file: "trivalent.spec"
+      - name: build RPM package
+        shell: bash
+        id: rpm_build
+        run: |
+          docker run --privileged --cap-add=SYS_ADMIN fedora:41 /bin/bash
+          sudo dnf copr enable secureblue/trivalent -y
+          sudo dnf update -y
+          sudo dnf install git mock wget rpmbuild trivalent-chromium-clean-source -y
+          git clone https://github.com/secureblue/Trivalent.git
+          bash ./Trivalent/copr_script.sh
+          rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mkdir ${{ github.workspace }}/RPMOutput
+          cp *.rpm "${{ github.workspace }}/RPMOutput
+          
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            rpm_content: ${{ github.workspace }}/RPMOutput
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: Binary RPM
-        path: ${{ steps.rpm.outputs.rpm_dir_path }}
 
-            
