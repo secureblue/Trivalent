@@ -15,7 +15,7 @@ jobs:
         run: |
           sudo dnf copr enable secureblue/trivalent -y
           sudo dnf update -y
-          sudo dnf install trivalent-chromium-clean-source
+          sudo dnf install trivalent-chromium-clean-source -y
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
