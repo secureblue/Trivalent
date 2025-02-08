@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: fedora:41
-      options: --privileged --cap-add=SYS_ADMIN
+      options: --cap-add=SYS_ADMIN
     steps:
 
       - name: build RPM package
