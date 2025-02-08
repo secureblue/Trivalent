@@ -27,10 +27,18 @@ index a659f74765496..1dd65d9583459 100644
  MEDIA_EXPORT BASE_DECLARE_FEATURE(kMediaLogToConsole);
  
 diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
-index cfd0552ee3108..e395e733d9a33 100644
+index cfd0552ee3108..9e1dd96a1e77a 100644
 --- a/media/ffmpeg/ffmpeg_common.cc
 +++ b/media/ffmpeg/ffmpeg_common.cc
-@@ -76,7 +76,7 @@ const char* GetAllowedVideoDecoders() {
+@@ -19,6 +19,7 @@
+ #include "media/base/audio_decoder_config.h"
+ #include "media/base/decoder_buffer.h"
+ #include "media/base/encryption_scheme.h"
++#include "media/base/media_switches.h"
+ #include "media/base/media_util.h"
+ #include "media/base/supported_types.h"
+ #include "media/base/video_aspect_ratio.h"
+@@ -76,7 +77,7 @@ const char* GetAllowedVideoDecoders() {
  void ApplyCodecContextSecuritySettings(AVCodecContext* codec_context) {
    // Future versions of ffmpeg may copy the allow list from the format
    // context.
