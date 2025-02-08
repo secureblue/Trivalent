@@ -16,7 +16,7 @@ jobs:
           sudo dnf copr enable secureblue/trivalent
           sudo dnf update -y
           sudo dnf install trivalent-chromium-clean-source
-          git clone git@github.com:secureblue/Trivalent.git
+          git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
