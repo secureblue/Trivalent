@@ -7,14 +7,13 @@ jobs:
   build:
     name: Create RPM Release
     runs-on: ubuntu-latest
-    container: fedora:41
     steps:
-
 
       - name: build RPM package
         shell: bash
         id: rpm_build
         run: |
+          docker run --privileged --cap-add=SYS_ADMIN fedora:41 /bin/bash
           sudo dnf copr enable secureblue/trivalent -y
           sudo dnf update -y
           sudo dnf install git mock wget rpmbuild trivalent-chromium-clean-source -y
