@@ -12,14 +12,14 @@ jobs:
 
       - name: Maximize build space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        
+
       - name: build RPM package
         shell: bash
         id: rpm_build
         run: |
           sudo dnf copr enable secureblue/trivalent -y
           sudo dnf update -y
-          sudo dnf install trivalent-chromium-clean-source -y
+          sudo dnf install git mock rpmbuild trivalent-chromium-clean-source -y
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
