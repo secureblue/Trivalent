@@ -13,7 +13,7 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
-          sudo dnf copr enable secureblue/trivalent
+          sudo dnf copr enable secureblue/trivalent -y
           sudo dnf update -y
           sudo dnf install trivalent-chromium-clean-source
           git clone https://github.com/secureblue/Trivalent.git
