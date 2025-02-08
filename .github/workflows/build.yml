@@ -7,6 +7,7 @@ jobs:
   build:
     name: Create RPM Release
     runs-on: ubuntu-latest
+    container: fedora:41
     steps:
 
       - name: build RPM package
