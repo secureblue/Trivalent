@@ -21,7 +21,7 @@ jobs:
           dnf install git mock wget rpmbuild trivalent-chromium-clean-source -y
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
-          rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          sudo rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
