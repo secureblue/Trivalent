@@ -7,7 +7,9 @@ jobs:
   build:
     name: Create RPM Release
     runs-on: ubuntu-latest
-    container: fedora:41
+    container: 
+      image: fedora:41
+      options: --privileged
     steps:
 
       - name: build RPM package
@@ -20,7 +22,7 @@ jobs:
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
-          sudo mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
           
