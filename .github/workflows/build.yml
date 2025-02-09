@@ -42,7 +42,7 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
-          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mock --resultdir=. -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Save RPM
         uses: actions/upload-artifact@v4
