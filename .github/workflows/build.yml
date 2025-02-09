@@ -42,7 +42,6 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
-          dnf install mock -y
           mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Save RPM
