@@ -41,12 +41,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: srpm-artifact
-          path: "*.rpm"
       - name: Build RPM 
         shell: bash
         id: rpm_build
         run: |
-          mock -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Save RPM
         uses: actions/upload-artifact@v4
