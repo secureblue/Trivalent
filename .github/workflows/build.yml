@@ -11,7 +11,7 @@ jobs:
       image: fedora:41
       options: --cap-add=SYS_ADMIN
     steps:
-      - name: Build RPM 
+      - name: Build SRPM 
         shell: bash
         id: rpm_build
         run: |
@@ -21,11 +21,10 @@ jobs:
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
-          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
 
-      - name: Save rpm
+      - name: Save SRPM
         uses: actions/upload-artifact@v4
         with:
           name: docker-artifact
@@ -52,7 +51,7 @@ jobs:
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
 
-      - name: Save rpm
+      - name: Save RPM
         uses: actions/upload-artifact@v2
         with:
           name: docker-artifact
