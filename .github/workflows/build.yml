@@ -35,7 +35,7 @@ jobs:
     needs: buildsrpm
     container: 
       image: ghcr.io/royaloughtness/rpmbuild-container
-      options: --privileged
+      options: --privileged --cap-add=SYS_ADMIN
     steps:      
       - name: Retrieve SRPM
         uses: actions/download-artifact@v4
