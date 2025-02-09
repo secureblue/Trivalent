@@ -21,14 +21,13 @@ jobs:
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
-          mkdir ${{ github.workspace }}/RPMOutput
-          cp *.rpm "${{ github.workspace }}/RPMOutput
+          
 
       - name: Save SRPM
         uses: actions/upload-artifact@v4
         with:
-          name: docker-artifact
-          path: "${{ github.workspace }}/RPMOutput/*.rpm"
+          name: srpm-artifact
+          path: *.rpm
           retention-days: 1
 
   buildrpm:
@@ -39,8 +38,8 @@ jobs:
       - name: Retrieve SRPM
         uses: actions/download-artifact@v4
         with:
-          name: docker-artifact
-          path: "${{ github.workspace }}/RPMOutput/*.rpm"
+          name: srpm-artifact
+          path: *.rpm
       - name: Build RPM 
         shell: bash
         id: rpm_build
