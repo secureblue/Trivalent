@@ -31,7 +31,7 @@ jobs:
 
   buildrpm:
     name: Build RPM
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: buildsrpm
     container: 
       image: ghcr.io/royaloughtness/rpmbuild-container
