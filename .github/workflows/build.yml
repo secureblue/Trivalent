@@ -46,7 +46,7 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
-          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mock -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
 
