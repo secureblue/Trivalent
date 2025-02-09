@@ -51,8 +51,8 @@ jobs:
           cp *.rpm "${{ github.workspace }}/RPMOutput
 
       - name: Save RPM
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: docker-artifact
-          path: "${{ github.workspace }}/RPMOutput/*.rpm"
+          name: rpm-artifact
+          path: "*.rpm"
           retention-days: 1
