@@ -4,15 +4,14 @@ on:
 name: Create RPM Release
 
 jobs:
-  build:
-    name: Create RPM Release
+  buildsrpm:
+    name: Build SRPM
     runs-on: ubuntu-latest
     container: 
       image: fedora:41
       options: --cap-add=SYS_ADMIN
     steps:
-
-      - name: build RPM package
+      - name: Build RPM 
         shell: bash
         id: rpm_build
         run: |
@@ -25,13 +24,36 @@ jobs:
           mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
-          
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save rpm
+        uses: actions/upload-artifact@v2
         with:
-            rpm_content: ${{ github.workspace }}/RPMOutput
+          name: docker-artifact
+          path: "${{ github.workspace }}/RPMOutput/*.rpm"
+          retention-days: 1
 
+  buildrpm:
+    name: Build RPM
+    runs-on: ubuntu-latest
+    steps:      
+      - name: Retrieve SRPM
+        uses: actions/download-artifact@v2
+        with:
+          name: docker-artifact
+          path: "${{ github.workspace }}/RPMOutput/*.rpm"
+      - name: Build RPM 
+        shell: bash
+        id: rpm_build
+        run: |
+          sudo apt-get install rpmbuild mock
+          rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mkdir ${{ github.workspace }}/RPMOutput
+          cp *.rpm "${{ github.workspace }}/RPMOutput
 
+      - name: Save rpm
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-artifact
+          path: "${{ github.workspace }}/RPMOutput/*.rpm"
+          retention-days: 1
