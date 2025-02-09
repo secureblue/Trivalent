@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: srpm-artifact
-          path: *.rpm
+          path: "*.rpm"
           retention-days: 1
 
   buildrpm:
@@ -39,7 +39,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: srpm-artifact
-          path: *.rpm
+          path: "*.rpm"
       - name: Build RPM 
         shell: bash
         id: rpm_build
