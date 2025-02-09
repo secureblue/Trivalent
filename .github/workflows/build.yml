@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Build SRPM 
         shell: bash
-        id: rpm_build
+        id: srpm_build
         run: |
           dnf copr enable secureblue/trivalent -y
           dnf update -y
