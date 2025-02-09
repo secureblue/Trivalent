@@ -47,8 +47,6 @@ jobs:
         id: rpm_build
         run: |
           mock -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
-          mkdir ${{ github.workspace }}/RPMOutput
-          cp *.rpm "${{ github.workspace }}/RPMOutput
 
       - name: Save RPM
         uses: actions/upload-artifact@v4
