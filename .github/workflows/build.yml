@@ -8,7 +8,7 @@ jobs:
     name: Build SRPM
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/royaloughtness/rpmbuild-container
+      image: fedora:41
     steps:
       - name: Build SRPM 
         shell: bash
@@ -16,7 +16,7 @@ jobs:
         run: |
           dnf copr enable secureblue/trivalent -y
           dnf update -y
-          dnf install trivalent-chromium-clean-source -y
+          dnf install git wget rpmbuild trivalent-chromium-clean-source -y
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
@@ -31,11 +31,8 @@ jobs:
 
   buildrpm:
     name: Build RPM
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     needs: buildsrpm
-    container: 
-      image: ghcr.io/royaloughtness/rpmbuild-container
-      options: --privileged --cap-add=SYS_ADMIN
     steps:      
       - name: Retrieve SRPM
         uses: actions/download-artifact@v4
@@ -45,6 +42,7 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
+          dnf install mock -y
           mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Save RPM
