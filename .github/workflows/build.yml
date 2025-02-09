@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: fedora:41
-      options: --cap-add=SYS_ADMIN
     steps:
       - name: Build SRPM 
         shell: bash
@@ -47,8 +46,7 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
-          sudo dnf install rpmbuild mock
-          rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          dnf install rpmbuild mock
           mock --resultdir=dist -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
           mkdir ${{ github.workspace }}/RPMOutput
           cp *.rpm "${{ github.workspace }}/RPMOutput
