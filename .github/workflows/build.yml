@@ -32,7 +32,7 @@ jobs:
   buildrpm:
     name: Build RPM
     runs-on: self-hosted
-    timeout-minutes: 600
+    timeout-minutes: 1800
     needs: buildsrpm
     steps:      
       - name: Retrieve SRPM
