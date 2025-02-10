@@ -397,7 +397,7 @@ CHROMIUM_GN_DEFINES+=' chrome_pgo_phase=0'
 CHROMIUM_GN_DEFINES+=' is_cfi=true use_thin_lto=true'
 CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
-CHROMIUM_GN_DEFINES+=' safe_browsing_mode' # safe browsing requires an API key which we dont have, this disables it in full
+CHROMIUM_GN_DEFINES+=' safe_browsing_mode=0' # safe browsing requires an API key which we dont have, this disables it in full
 CHROMIUM_GN_DEFINES+=' is_clang=true'
 CHROMIUM_GN_DEFINES+=" clang_base_path=\"$clang_base_path\""
 CHROMIUM_GN_DEFINES+=" clang_version=\"$clang_version\""
