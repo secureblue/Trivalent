@@ -17,7 +17,14 @@
 %global chromium_path %{_libdir}/%{chromium_name}
 
 # ffmpeg can be bundled, but not really
-%global bundleffmpegfree 0
+%global bundleffmpeg 0
+# if we do want to bundle ffmpeg, we also want to offer it without proprietary stuff
+%global ffmpegfree 1
+
+# ffmpeg free cannot be bundled without ffmpeg itself being bundled
+%if %{ffmpegfree} && ! %{bundleffmpeg}
+%global ffmpegfree 0
+%endif
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
@@ -118,11 +125,13 @@ BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
 BuildRequires: bindgen-cli
+%if ! %{bundleffmpeg}
 BuildRequires: pkgconfig(libavcodec)
 BuildRequires: pkgconfig(libavfilter)
 BuildRequires: pkgconfig(libavformat)
 BuildRequires: pkgconfig(libavutil)
 BuildRequires: pkgconfig(openh264)
+%endif
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -205,7 +214,7 @@ Provides: bundled(double-conversion)
 Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 Provides: bundled(fdmlibm)
-%if %{bundleffmpegfree}
+%if %{bundleffmpeg}
 Provides: bundled(ffmpeg)
 %endif
 Provides: bundled(flac)
@@ -425,10 +434,13 @@ CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
-%if ! %{bundleffmpegfree}
-CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_widevine=true'
+%if ! %{ffmpegfree}
+CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_widevine=true'
 %else
 CHROMIUM_BROWSER_GN_DEFINES+=' enable_ffmpeg_video_decoders=false enable_widevine=false' # removes support for proprietary codecs, H264 and Widevine
+%endif
+%if ! %{bundleffmpeg}
+CHROMIUM_GN_DEFINES+=' is_component_ffmpeg=true'
 %endif
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt=true moc_qt5_path="%{_libdir}/qt5/bin/"'
@@ -439,7 +451,7 @@ CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
 
-%if ! %{bundleffmpegfree}
+%if ! %{bundleffmpeg}
 system_libs=()
 system_libs+=(ffmpeg)
 system_libs+=(openh264)
