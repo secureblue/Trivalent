@@ -42,9 +42,9 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
-          sudo dnf config-manager --set-enabled crb
-          sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm
-          sudo dnf install mock
+          sudo dnf config-manager --set-enabled crb -y
+          sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm -y
+          sudo dnf install mock -y
           mock --resultdir=. -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Save RPM
