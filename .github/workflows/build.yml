@@ -45,7 +45,7 @@ jobs:
         run: |
           sudo dnf config-manager --set-enabled crb -y
           sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm -y
-          sudo dnf install mock -y
+          sudo dnf install mock rclone -y
           sudo usermod -aG mock $(whoami)
           mock --resultdir=. -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
@@ -67,6 +67,4 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          sudo apt-get update
-          sudo apt-get install -y rclone
           rclone copy $SOURCE_DIR R2:trivalent
