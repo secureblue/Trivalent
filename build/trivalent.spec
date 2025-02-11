@@ -115,11 +115,6 @@ BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
 BuildRequires: bindgen-cli
-BuildRequires: pkgconfig(libavcodec)
-BuildRequires: pkgconfig(libavfilter)
-BuildRequires: pkgconfig(libavformat)
-BuildRequires: pkgconfig(libavutil)
-BuildRequires: pkgconfig(openh264)
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -202,6 +197,7 @@ Provides: bundled(double-conversion)
 Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 Provides: bundled(fdmlibm)
+Provides: bundled(ffmpeg)
 Provides: bundled(flac)
 Provides: bundled(fips181)
 Provides: bundled(fontconfig)
@@ -239,6 +235,7 @@ Provides: bundled(lzma)
 Provides: bundled(mesa)
 Provides: bundled(NSBezierPath)
 Provides: bundled(mozc)
+Provides: bundled(openh264)
 Provides: bundled(opus)
 Provides: bundled(ots)
 Provides: bundled(protobuf)
@@ -388,7 +385,6 @@ clang_base_path="$(clang --version | grep InstalledDir | cut -d' ' -f2 | sed 's#
 CHROMIUM_GN_DEFINES=""
 CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' is_debug=false dcheck_always_on=false dcheck_is_configurable=false'
 CHROMIUM_GN_DEFINES+=' enable_nacl=false'
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
@@ -420,23 +416,16 @@ CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
-CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true is_component_ffmpeg=true enable_ffmpeg_video_decoders=true media_use_ffmpeg=true'
-CHROMIUM_GN_DEFINES+=' media_use_openh264=true'
-CHROMIUM_GN_DEFINES+=' rtc_use_h264=true'
+CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true'
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt=true moc_qt5_path="%{_libdir}/qt5/bin/"'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
-CHROMIUM_GN_DEFINES+=' use_gio=true use_pulseaudio=true'
+CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
-
-system_libs=()
-system_libs+=(ffmpeg)
-system_libs+=(openh264)
-build/linux/unbundle/replace_gn_files.py --system-libraries ${system_libs[@]}
 
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
