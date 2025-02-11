@@ -6,6 +6,7 @@ name: Create RPM Release
 jobs:
   buildsrpm:
     name: Build SRPM
+    if: github.triggering_actor == 'royaloughtness'
     runs-on: ubuntu-latest
     container: 
       image: fedora:41
@@ -31,6 +32,7 @@ jobs:
 
   buildrpm:
     name: Build RPM
+    if: github.triggering_actor == 'royaloughtness'
     runs-on: self-hosted
     timeout-minutes: 1800
     needs: buildsrpm
