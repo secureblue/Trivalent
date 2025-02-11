@@ -26,7 +26,7 @@ A hardened chromium for desktop Linux inspired by [Vanadium](https://github.com/
 
 ## Installation
 
-Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via COPR](https://copr.fedorainfracloud.org/coprs/secureblue/trivalent/).
+Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/trivalent.spec).
 
 ## Post-install
 
