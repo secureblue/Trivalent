@@ -56,15 +56,15 @@ jobs:
           path: "*.rpm"
           retention-days: 1
 
-      - name: Sign RPM 
+      - name: Prepare for upload
         shell: bash
-        env:
-          RPM_SIGNING_KEY: ${{ secrets.RPM_SIGNING_KEY }}
         run: |
           rm trivalent-*.src.rpm
           echo "$RPM_SIGNING_KEY" > rpm --sign *.rpm
-          mkdir ./Packages
-          cp *.rpm ./Packages
+          mkdir ./upload
+          mkdir ./upload/Packages
+          cp *.rpm ./upload/Packages
+          cd ./upload
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
@@ -77,4 +77,4 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy ./Packages R2:rpm
+          rclone copy . R2:rpm
