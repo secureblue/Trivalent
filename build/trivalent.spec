@@ -202,6 +202,7 @@ Provides: bundled(double-conversion)
 Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 Provides: bundled(fdmlibm)
+Provides: bundled(ffmpeg)
 Provides: bundled(flac)
 Provides: bundled(fips181)
 Provides: bundled(fontconfig)
@@ -239,6 +240,7 @@ Provides: bundled(lzma)
 Provides: bundled(mesa)
 Provides: bundled(NSBezierPath)
 Provides: bundled(mozc)
+Provides: bundled(openh264)
 Provides: bundled(opus)
 Provides: bundled(ots)
 Provides: bundled(protobuf)
@@ -432,11 +434,6 @@ CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
-
-system_libs=()
-system_libs+=(ffmpeg)
-system_libs+=(openh264)
-build/linux/unbundle/replace_gn_files.py --system-libraries ${system_libs[@]}
 
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
