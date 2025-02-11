@@ -16,7 +16,7 @@ jobs:
         run: |
           dnf copr enable secureblue/trivalent -y
           dnf update -y
-          dnf install git wget rpmbuild trivalent-chromium-clean-source -y
+          dnf install git wget rpmbuild yum-utils rpm-sign trivalent-chromium-clean-source -y
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
@@ -56,6 +56,16 @@ jobs:
           path: "*.rpm"
           retention-days: 1
 
+      - name: Sign RPM 
+        shell: bash
+        env:
+          RPM_SIGNING_KEY: ${{ secrets.RPM_SIGNING_KEY }}
+        run: |
+          rm trivalent-*.src.rpm
+          echo "$RPM_SIGNING_KEY" > rpm --sign *.rpm
+          mkdir ./Packages
+          cp *.rpm ./Packages
+
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
         env:
@@ -67,4 +77,4 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy $SOURCE_DIR R2:trivalent
+          rclone copy ./Packages R2:rpm
