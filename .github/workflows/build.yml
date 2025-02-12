@@ -1,0 +1,82 @@
+on:
+    workflow_dispatch: 
+  
+name: Create RPM Release
+
+jobs:
+  buildsrpm:
+    name: Build SRPM
+    if: github.triggering_actor == 'royaloughtness'
+    runs-on: ubuntu-latest
+    container: 
+      image: fedora:41
+    steps:
+      - name: Build SRPM 
+        shell: bash
+        id: srpm_build
+        run: |
+          dnf copr enable secureblue/trivalent -y
+          dnf update -y
+          dnf install git wget rpmbuild yum-utils rpm-sign trivalent-chromium-clean-source -y
+          git clone https://github.com/secureblue/Trivalent.git
+          bash ./Trivalent/copr_script.sh
+          rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          
+
+      - name: Save SRPM
+        uses: actions/upload-artifact@v4
+        with:
+          name: srpm-artifact
+          path: "*.rpm"
+          retention-days: 1
+
+  buildrpm:
+    name: Build RPM
+    if: github.triggering_actor == 'royaloughtness'
+    runs-on: self-hosted
+    timeout-minutes: 1800
+    needs: buildsrpm
+    steps:      
+      - name: Retrieve SRPM
+        uses: actions/download-artifact@v4
+        with:
+          name: srpm-artifact
+      - name: Build RPM 
+        shell: bash
+        id: rpm_build
+        run: |
+          sudo dnf config-manager --set-enabled crb -y
+          sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm -y
+          sudo dnf install mock rclone -y
+          sudo usermod -aG mock $(whoami)
+          mock --resultdir=. -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+
+      - name: Save RPM
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-artifact
+          path: "*.rpm"
+          retention-days: 1
+
+      - name: Prepare for upload
+        shell: bash
+        run: |
+          rm trivalent-*.src.rpm
+          echo "$RPM_SIGNING_KEY" > rpm --sign *.rpm
+          mkdir ./upload
+          mkdir ./upload/Packages
+          cp *.rpm ./upload/Packages
+          cd ./upload
+
+      - name: Upload RPM and logs to R2 to trivalent Bucket
+        shell: bash
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          SOURCE_DIR: .
+        run: |
+          rclone copy . R2:rpm
