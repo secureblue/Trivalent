@@ -62,7 +62,6 @@ jobs:
         shell: bash
         run: |
           rm trivalent-*.src.rpm
-          echo "$RPM_SIGNING_KEY" > rpm --sign *.rpm
           mkdir ./upload
           mkdir ./upload/Packages
           cp *.rpm ./upload/Packages
@@ -79,4 +78,4 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy . R2:rpm
+          rclone copy ./upload/ R2
