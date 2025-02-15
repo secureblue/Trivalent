@@ -6,8 +6,6 @@
 
 <h1 align="center">Trivalent</h1>
 
-[![Trivalent](https://img.shields.io/badge/dynamic/json?color=blue&label=trivalent&query=builds.latest.source_package.version&url=https%3A%2F%2Fcopr.fedorainfracloud.org%2Fapi_3%2Fpackage%3Fownername%3Dsecureblue%26projectname%3Dtrivalent%26packagename%3Dtrivalent%26with_latest_build%3DTrue)](https://copr.fedorainfracloud.org/coprs/secureblue/trivalent/)
-
 A hardened chromium for desktop Linux inspired by [Vanadium](https://github.com/GrapheneOS/Vanadium), using [Fedora's Chromium](https://src.fedoraproject.org/rpms/chromium) as a base. Intended for use with [hardened_malloc](https://github.com/GrapheneOS/hardened_malloc) as packaged and provided by [secureblue](https://github.com/secureblue/secureblue).
 
 ## Scope
@@ -26,7 +24,7 @@ A hardened chromium for desktop Linux inspired by [Vanadium](https://github.com/
 
 ## Installation
 
-Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/trivalent.spec).
+Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo).
 
 ## Post-install
 

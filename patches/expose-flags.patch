@@ -14,9 +14,9 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "Shows punycode for IDN domains to mitigate IDN homograph attacks. "
 +     "Disabled by default. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(url::kShowPunycodeDomains)},
-+    {"pdf-javascript", "Enable PDF JavaScript",
-+     "Toggle JavaScript for rendered PDFs (this also disables XFA). "
-+     "Enabled by default. This feature is provided by Trivalent.",
++    {"pdf-javascript", "PDF JavaScript",
++     "Toggle JavaScript for rendered PDFs (this also controls XFA Forms). "
++     "Disabled by default. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(chrome_pdf::features::kPdfJavaScript)},
 +    {"clear-cross-origin-referrers", "Clear cross-origin referrers",
 +     "Clears referrers when navigating across origins. Disabled by default. "

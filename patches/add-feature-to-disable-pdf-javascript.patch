@@ -8,7 +8,7 @@ index e4dbc7d5b0834..973bc515cea96 100644
  
 +// Trivalent
 +BASE_FEATURE(kPdfJavaScript, "PdfJavaScript",
-+             base::FEATURE_ENABLED_BY_DEFAULT);
++             base::FEATURE_DISABLED_BY_DEFAULT);
 +
  BASE_FEATURE(kAccessiblePDFForm,
               "AccessiblePDFForm",

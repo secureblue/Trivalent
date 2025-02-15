@@ -1,0 +1,14 @@
+diff --git a/components/safe_browsing/core/common/safe_browsing_prefs.cc b/components/safe_browsing/core/common/safe_browsing_prefs.cc
+index 1f92a936e44f1..53d6a91ccc32c 100644
+--- a/components/safe_browsing/core/common/safe_browsing_prefs.cc
++++ b/components/safe_browsing/core/common/safe_browsing_prefs.cc
+@@ -149,8 +149,7 @@ bool IsExtendedReportingPolicyManaged(const PrefService& prefs) {
+ }
+ 
+ bool IsSafeBrowsingPolicyManaged(const PrefService& prefs) {
+-  return prefs.IsManagedPreference(prefs::kSafeBrowsingEnabled) ||
+-         prefs.IsManagedPreference(prefs::kSafeBrowsingEnhanced);
++  return true; // just assume Safe Browsing cannot be modified
+ }
+ 
+ bool IsSafeBrowsingExtensionControlled(const PrefService& prefs) {

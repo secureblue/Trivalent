@@ -56,9 +56,9 @@ Enable the COPR repository (as root):
 
 `dnf copr enable secureblue/trivalent`
 
-Install the `chromium-clean-source` package (as root):
+Install the `trivalent-chromium-clean-source` package (as root):
 
-`dnf install chromium-clean-source`
+`dnf install trivalent-chromium-clean-source`
 
 > This command can take a while especially on a slow network, the package is over 3 gigabytes
 
@@ -73,7 +73,7 @@ Then run the COPR script:
 #### Build RPM
 Build the patched chromium source from the spec file:
 
-`rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" chromium.spec`
+`rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec`
 
 Rebuild the source for your system:
 

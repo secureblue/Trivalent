@@ -2,13 +2,15 @@ diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chro
 index d506286648bde..99041371e46ef 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -173,6 +173,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -173,6 +173,24 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
 +  // Trivalent
 +  (*s_allowlist)[::prefs::kWebRTCIPHandlingPolicy] =
 +      settings_api::PrefType::kString;
++  (*s_allowlist)[::prefs::kPrintingEnabled] =
++      settings_api::PrefType::kBoolean;
 +  (*s_allowlist)[::prefs::kDisable3DAPIs] =
 +      settings_api::PrefType::kBoolean;
 +  (*s_allowlist)[::prefs::kWebKitForceDarkModeEnabled] =
@@ -56,7 +58,7 @@ index 6ac062af92b06..34e88dd013ed6 100644
        .bullet-line {
          align-items: center;
          display: flex;
-@@ -389,6 +393,46 @@
+@@ -389,6 +393,51 @@
            on-click="onChromeCertificatesClick_">
        </cr-link-row>
  </if>
@@ -87,6 +89,11 @@ index 6ac062af92b06..34e88dd013ed6 100644
 +          menu-options="[[webrtcHandlingPolicyOptions_]]">
 +        </settings-dropdown-menu>
 +      </div>
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.printing.enabled}}"
++        label="Enable Printing"
++        sub-label="Enables printing capabilities within the browser">
++      </settings-toggle-button>
 +<if expr="is_linux or is_win">
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.net.network_service_sandbox}}"
