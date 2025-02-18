@@ -366,8 +366,7 @@ index 69992131be6df..9f7e15f55bc0a 100644
    setupSSLDebuggingInfo();
    document.addEventListener('keypress', handleKeypress);
 
-diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_gues
-t/incognito_tab.html
+diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 index 2ac18f2965e7d..682f29a54437a 100644
 --- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 +++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
