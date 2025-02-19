@@ -365,4 +365,21 @@ index 69992131be6df..9f7e15f55bc0a 100644
 -  setupEnhancedProtectionMessage();
    setupSSLDebuggingInfo();
    document.addEventListener('keypress', handleKeypress);
- 
+
+diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
+index 2ac18f2965e7d..682f29a54437a 100644
+--- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
++++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
+@@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
+ <div class="content">
+   <div class="icon" role="presentation" alt=""></div>
+   <h1>$i18n{incognitoTabHeading}</h1>
+-  <p id="subtitle">
+-    <span>$i18n{incognitoTabDescription}</span>
+-    <a class="learn-more-button"
+-        href="$i18n{learnMoreLink}"
+-        aria-label="$i18nPolymer{learnMoreA11yLabel}">$i18n{learnMore}</a>
+-  </p>
+   <div id="bulletpoints-wrapper">
+     <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
+     <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
