@@ -16,3 +16,18 @@ index c152260117ccc..904423cc3095b 100644
    // Initially exclude users with this type of override. Consult b/302675777 for
    // next steps.
    if (profile_prefs_->HasPrefPath(prefs::kSearchProviderOverrides)) {
+diff --git a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
+index 96286eaf96db2..75f0eee1d82c4 100644
+--- a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
++++ b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
+@@ -128,10 +128,6 @@ SearchEngineChoiceDialogServiceFactory::BuildServiceInstanceForBrowserContext(
+ 
+   base::CommandLine* const command_line =
+       base::CommandLine::ForCurrentProcess();
+-  if (!g_is_chrome_build &&
+-      !command_line->HasSwitch(switches::kForceSearchEngineChoiceScreen)) {
+-    return nullptr;
+-  }
+ 
+   if (command_line->HasSwitch(switches::kNoFirstRun) &&
+       !command_line->HasSwitch(
