@@ -67,12 +67,13 @@ PROCESSES=$(ps aux)
 echo $PROCESSES | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null
 IS_TRIVALENT_RUNNING=$?
 
-# Fix SingletonLock if the browser isn't running and the file is present
-if [[ $IS_TRIVALENT_RUNNING -ne 0 && -f "$HOME/.config/$CHROMIUM_NAME/SingletonLock" ]]; then
+# Fix Singleton process locking if the browser isn't running and the singleton files are present
+if [[ $IS_TRIVALENT_RUNNING -ne 0 ]] && [[ -f "$HOME/.config/$CHROMIUM_NAME/SingletonLock" ||
+      -f "$HOME/.config/$CHROMIUM_NAME/SingletonCookie" || -f "$HOME/.config/$CHROMIUM_NAME/SingletonSocket" ]]; then
   echo "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
-  echo "A process is already open in this directory or SingletonLock is not present."
+  echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
