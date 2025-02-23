@@ -1,5 +1,5 @@
 diff --git a/net/dns/public/doh_provider_entry.cc b/net/dns/public/doh_provider_entry.cc
-index 910a0c91aa1fa..4478396cdbe35 100644
+index 910a0c91aa1fa..bfe959f1475f2 100644
 --- a/net/dns/public/doh_provider_entry.cc
 +++ b/net/dns/public/doh_provider_entry.cc
 @@ -77,7 +77,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
@@ -20,7 +20,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
          /*display_countries=*/{},
          LoggingLevel::kNormal},
         {"CleanBrowsingSecure",
-@@ -117,15 +117,105 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -117,15 +117,107 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderCloudflare,
                                                base::FEATURE_ENABLED_BY_DEFAULT),
          {"1.1.1.1", "1.0.0.1", "2606:4700:4700::1111", "2606:4700:4700::1001"},
@@ -36,6 +36,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
          /*display_globally=*/true,
          /*display_countries=*/{},
          LoggingLevel::kExtra},
++       // Cloudflare Source: https://developers.cloudflare.com/1.1.1.1/infrastructure/network-operators/#available-endpoints
 +       {"CloudflareSecurity",
 +        MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderCloudflareSecurity,
 +                                              base::FEATURE_ENABLED_BY_DEFAULT),
@@ -60,6 +61,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
 +        /*display_globally=*/true,
 +        /*display_countries=*/{},
 +        LoggingLevel::kExtra},
++       // Control D source: https://controld.com/free-dns
 +       {"ControlD",
 +        MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderControlD,
 +                                              base::FEATURE_ENABLED_BY_DEFAULT),
@@ -129,7 +131,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
         {"Comcast",
          MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderComcast,
                                                base::FEATURE_ENABLED_BY_DEFAULT),
-@@ -181,7 +271,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -181,7 +273,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          /*ui_name=*/"Google (Public DNS)",
          "https://developers.google.com/speed/public-dns/"
          /*privacy_policy=*/"privacy",
@@ -138,7 +140,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
          /*display_countries=*/{},
          LoggingLevel::kExtra},
         {"GoogleDns64",
-@@ -225,7 +315,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -225,7 +317,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          /*dns_over_tls_hostnames=*/{}, "https://chromium.dns.nextdns.io",
          /*ui_name=*/"NextDNS",
          /*privacy_policy=*/"https://nextdns.io/privacy",
@@ -147,7 +149,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
          LoggingLevel::kNormal},
         {"OpenDNS",
          MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderOpenDNS,
-@@ -237,7 +327,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -237,7 +329,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          /*ui_name=*/"OpenDNS",
          "https://www.cisco.com/c/en/us/about/legal/"
          /*privacy_policy=*/"privacy-full.html",
@@ -156,7 +158,7 @@ index 910a0c91aa1fa..4478396cdbe35 100644
          /*display_countries=*/{},
          LoggingLevel::kNormal},
         {"OpenDNSFamily",
-@@ -282,7 +372,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -282,7 +374,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          "https://dns.quad9.net/dns-query",
          /*ui_name=*/"Quad9 (9.9.9.9)",
          /*privacy_policy=*/"https://www.quad9.net/home/privacy/",
