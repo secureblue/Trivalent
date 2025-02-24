@@ -27,17 +27,3 @@ index 1e0cd989c0d3e..e6d1bb6aab0b3 100644
    }
  }
  
-diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
-index a1e6e4e25d3e2..cbb9a39236010 100644
---- a/content/public/browser/gpu_utils.cc
-+++ b/content/public/browser/gpu_utils.cc
-@@ -89,8 +89,7 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
-       command_line->HasSwitch(switches::kSingleProcess) ||
-       command_line->HasSwitch(switches::kInProcessGPU);
- 
--  gpu_preferences.gpu_sandbox_start_early =
--      command_line->HasSwitch(switches::kGpuSandboxStartEarly);
-+  gpu_preferences.gpu_sandbox_start_early = true;
- 
-   gpu_preferences.enable_vulkan_protected_memory =
-       command_line->HasSwitch(switches::kEnableVulkanProtectedMemory);
