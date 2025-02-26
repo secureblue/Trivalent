@@ -1,5 +1,5 @@
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 1e0cd989c0d3e..a2e2426b09597 100644
+index 1e0cd989c0d3e..ec10997fdeaf4 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -52,8 +52,8 @@ using sandbox::syscall_broker::BrokerProcess;
@@ -22,15 +22,17 @@ index 1e0cd989c0d3e..a2e2426b09597 100644
      std::vector<BrokerFilePermission>* permissions) {
    // For the ANGLE passthrough command decoder.
    static const char* const kReadOnlyList[] = {"libEGL.so", "libGLESv2.so"};
-@@ -269,6 +269,7 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
-       // Allow libglvnd files and libs.
-       "/usr/share/glvnd/egl_vendor.d",
-       "/usr/share/glvnd/egl_vendor.d/50_mesa.json",
+@@ -261,6 +261,9 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+       // that requires the following libs and files to be accessible.
+       "/usr/lib64/libEGL.so.1",
+       "/usr/lib64/libGLESv2.so.2",
++#if !BUILDFLAG(IS_CHROMEOS)
 +      "/usr/lib64/gbm/dri_gbm.so",
-       "/usr/lib64/libEGL_mesa.so.0",
-       "/usr/lib64/libGLdispatch.so.0"};
-   for (const char* item : kReadOnlyList)
-@@ -502,9 +503,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
++#endif
+       "/usr/lib64/libglapi.so.0",
+       "/usr/lib64/libgallium_dri.so",
+       "/usr/lib64/dri/r300_dri.so",
+@@ -502,9 +505,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
  
    AddVulkanICDPermissions(&permissions);
  
@@ -42,7 +44,7 @@ index 1e0cd989c0d3e..a2e2426b09597 100644
      if (UseV4L2Codec(options))
        AddV4L2GpuPermissions(&permissions, options);
      if (IsArchitectureArm()) {
-@@ -604,10 +605,17 @@ void LoadArmGpuLibraries() {
+@@ -604,10 +607,17 @@ void LoadArmGpuLibraries() {
  
  bool LoadAmdGpuLibraries() {
    // Preload the amdgpu-dependent libraries.
@@ -60,7 +62,7 @@ index 1e0cd989c0d3e..a2e2426b09597 100644
  
    const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
  #if defined(DRI_DRIVER_DIR)
-@@ -662,7 +670,7 @@ bool LoadLibrariesForGpu(
+@@ -662,7 +672,7 @@ bool LoadLibrariesForGpu(
    if (IsArchitectureArm()) {
      LoadArmGpuLibraries();
    }
@@ -69,7 +71,7 @@ index 1e0cd989c0d3e..a2e2426b09597 100644
      if (options.use_amd_specific_policies) {
        if (!LoadAmdGpuLibraries())
          return false;
-@@ -685,7 +693,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+@@ -685,7 +695,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
    command_set.set(sandbox::syscall_broker::COMMAND_ACCESS);
    command_set.set(sandbox::syscall_broker::COMMAND_OPEN);
    command_set.set(sandbox::syscall_broker::COMMAND_STAT);
