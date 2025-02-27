@@ -81,3 +81,27 @@ index 1e0cd989c0d3e..aa779a8cb9177 100644
        (options.use_amd_specific_policies ||
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
+diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
+index 1f6067c3b0d1f..a4107837fe842 100644
+--- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
++++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
+@@ -97,8 +97,8 @@ namespace {
+ // nacl_helper needs to be tiny and includes only part of content/
+ // in its dependencies. Make sure to not link things that are not needed.
+ #if !defined(IN_NACL_HELPER)
+-inline bool IsChromeOS() {
+-#if BUILDFLAG(IS_CHROMEOS)
++inline bool IsLinux() {
++#if BUILDFLAG(IS_LINUX)
+   return true;
+ #else
+   return false;
+@@ -123,7 +123,7 @@ inline bool IsArchitectureArm() {
+ 
+ std::unique_ptr<BPFBasePolicy> GetGpuProcessSandbox(
+     const SandboxSeccompBPF::Options& options) {
+-  if (IsChromeOS() || UseChromecastSandboxAllowlist()) {
++  if (IsLinux() || UseChromecastSandboxAllowlist()) {
+     if (IsArchitectureArm()) {
+       return std::make_unique<CrosArmGpuProcessPolicy>(
+           base::CommandLine::ForCurrentProcess()->HasSwitch(
