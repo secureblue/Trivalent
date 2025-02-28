@@ -28,10 +28,10 @@ index 7613006656aaa..ee707f847ccba 100644
 +     kOsAll,
 +     FEATURE_VALUE_TYPE(net::features::kCapReferrerToOriginOnCrossOrigin)},
 +    {"gpu-sandbox", "Force GPU Sandbox",
-+     "Enables the GPU sandbox. WARNING: This is *highly& experimental and "
-+     "can disable hardware acceleration or cause crashes. It is enabled "
-+     "on AMD hardware when Vulkan is not enabled. This flag is exposed "
-+     "by Trivalent.", kOsLinux,
++     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
++     "can disable hardware acceleration or cause crashes. It is "
++     "currently enabled on AMD hardware when Vulkan is not enabled. "
++     "This flag is exposed by Trivalent.", kOsLinux,
 +     SINGLE_VALUE_TYPE(switches::kGpuSandboxStartEarly)},
 +    {"gtk-version-4", "GTK Version 4",
 +     "Enables Trivalent to use GTK 4 instead of GTK 3, useful for IME. "
