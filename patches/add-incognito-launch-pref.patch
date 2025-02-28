@@ -6,7 +6,9 @@ index 252de88cbf948..56b816ea68dde 100644
    }
    bool should_use_incognito =
        forced_by_switch ||
-+      (prefs->GetBoolean(prefs::kIncognitoLaunch) && !for_subsequent_browsers) ||
++      (prefs->GetBoolean(prefs::kIncognitoLaunch) && !for_subsequent_browsers &&
++      (!command_line.HasSwitch(switches::kAppId) ||
++       !command_line.HasSwitch(switches::kApp))) ||
        GetAvailabilityInternal(prefs, DONT_CHECK_PARENTAL_CONTROLS) ==
            IncognitoModeAvailability::kForced;
    return should_use_incognito &&
