@@ -1,3 +1,4 @@
+# These patches are only tested for AMD currently
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
 index 1e0cd989c0d3e..aa779a8cb9177 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
