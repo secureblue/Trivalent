@@ -27,12 +27,6 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "Enabled by default. This feature is exposed by Trivalent.",
 +     kOsAll,
 +     FEATURE_VALUE_TYPE(net::features::kCapReferrerToOriginOnCrossOrigin)},
-+    {"gpu-sandbox", "Force GPU Sandbox",
-+     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
-+     "can disable hardware acceleration or cause crashes. It is "
-+     "currently enabled on AMD hardware when Vulkan is not enabled. "
-+     "This flag is exposed by Trivalent.", kOsLinux,
-+     SINGLE_VALUE_TYPE(switches::kGpuSandboxStartEarly)},
 +    {"gtk-version-4", "GTK Version 4",
 +     "Enables Trivalent to use GTK 4 instead of GTK 3, useful for IME. "
 +     "This flag is exposed by Trivalent.", kOsAll,
@@ -50,6 +44,12 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "network service sandbox to become persistently disabled, enable only "
 +     "if absolutely necessary. This switch is provided by Trivalent.",
 +     kOsLinux, SINGLE_VALUE_TYPE("enable-gssapi")},
++    {"gpu-sandbox-test", "Force GPU Sandbox For Testing",
++     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
++     "can disable hardware acceleration or cause crashes. It is for "
++     "testing only, as the sandbox may already be enabled in some cases. "
++     "This flag is exposed by Trivalent.", kOsLinux,
++     SINGLE_VALUE_TYPE(switches::kGpuSandboxStartEarly)},
      {variations::switches::kEnableBenchmarking,
       flag_descriptions::kEnableBenchmarkingName,
       flag_descriptions::kEnableBenchmarkingDescription, kOsAll,
