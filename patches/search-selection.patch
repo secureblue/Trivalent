@@ -1,24 +1,8 @@
-diff --git a/components/search_engines/search_engine_choice/search_engine_choice_utils.cc b/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
-index aa9f283b37a63..e50d9dd971e97 100644
---- a/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
-+++ b/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
-@@ -142,9 +142,8 @@ ChoiceScreenData::~ChoiceScreenData() = default;
- bool IsEeaChoiceCountry(int country_id) {
-   // Consider the search engine list command line country override as an EEA
-   // region country to display the search engine choice screen.
--  return HasSearchEngineCountryListOverride()
--             ? true
--             : kEeaChoiceCountriesIds.contains(country_id);
-+  // We want the search choice screen so we assume everything is EEA.
-+  return true;
- }
- 
- void RecordChoiceScreenProfileInitCondition(
 diff --git a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
-index 96286eaf96db2..75f0eee1d82c4 100644
+index e4d2eacf3f316..0dfdd8c0d365d 100644
 --- a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
 +++ b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
-@@ -128,10 +128,6 @@ SearchEngineChoiceDialogServiceFactory::BuildServiceInstanceForBrowserContext(
+@@ -129,10 +129,6 @@ SearchEngineChoiceDialogServiceFactory::BuildServiceInstanceForBrowserContext(
  
    base::CommandLine* const command_line =
        base::CommandLine::ForCurrentProcess();
@@ -29,3 +13,17 @@ index 96286eaf96db2..75f0eee1d82c4 100644
  
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
+diff --git a/components/search_engines/search_engine_choice/search_engine_choice_utils.cc b/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
+index a36caff5013d7..31c49a9409008 100644
+--- a/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
++++ b/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
+@@ -140,7 +140,8 @@ ChoiceScreenData::ChoiceScreenData(
+ ChoiceScreenData::~ChoiceScreenData() = default;
+ 
+ bool IsEeaChoiceCountry(int country_id) {
+-  return regional_capabilities::IsEeaCountry(country_id);
++  // We want the search choice screen so we assume everything is EEA.
++  return true;
+ }
+ 
+ void RecordChoiceScreenProfileInitCondition(
