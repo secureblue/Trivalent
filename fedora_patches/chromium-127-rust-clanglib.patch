@@ -1,7 +1,12 @@
 diff -up chromium-127.0.6533.72/build/rust/rust_bindgen.gni.me chromium-127.0.6533.72/build/rust/rust_bindgen.gni
 --- chromium-127.0.6533.72/build/rust/rust_bindgen.gni.me	2024-07-25 16:11:18.754551595 +0200
 +++ chromium-127.0.6533.72/build/rust/rust_bindgen.gni	2024-07-25 16:11:33.997837660 +0200
-@@ -22,7 +22,7 @@ _libclang_path = rust_bindgen_root
+@@ -19,11 +19,11 @@
+ 
+ # On Windows, the libclang.dll is beside the bindgen.exe, otherwise it is in
+ # ../lib.
+-_libclang_path = rust_bindgen_root
++_libclang_path = clang_base_path
  if (host_os == "win") {
    _libclang_path += "/bin"
  } else {
@@ -68,7 +73,12 @@ diff -up chromium-121.0.6167.57/build/config/clang/BUILD.gn.rust-clang_lib chrom
 diff -up chromium-132.0.6834.57/build/rust/rust_bindgen_generator.gni.me chromium-132.0.6834.57/build/rust/rust_bindgen_generator.gni
 --- chromium-132.0.6834.57/build/rust/rust_bindgen_generator.gni.me	2024-12-31 15:08:27.013151672 +0100
 +++ chromium-132.0.6834.57/build/rust/rust_bindgen_generator.gni	2024-12-31 15:08:49.538663024 +0100
-@@ -22,7 +22,7 @@ _libclang_path = rust_bindgen_root
+@@ -18,11 +18,11 @@
+ 
+ # On Windows, the libclang.dll is beside the bindgen.exe, otherwise it is in
+ # ../lib.
+-_libclang_path = rust_bindgen_root
++_libclang_path = clang_base_path
  if (host_os == "win") {
    _libclang_path += "/bin"
  } else {

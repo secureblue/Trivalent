@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/prefs/incognito_mode_prefs.cc b/chrome/browser/prefs/incognito_mode_prefs.cc
-index 252de88cbf948..56b816ea68dde 100644
+index ce5660ca65a4f..4cf8a3dbb1eaa 100644
 --- a/chrome/browser/prefs/incognito_mode_prefs.cc
 +++ b/chrome/browser/prefs/incognito_mode_prefs.cc
-@@ -163,6 +163,9 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
+@@ -162,6 +162,9 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
    }
    bool should_use_incognito =
        forced_by_switch ||
@@ -13,10 +13,10 @@ index 252de88cbf948..56b816ea68dde 100644
            IncognitoModeAvailability::kForced;
    return should_use_incognito &&
 diff --git a/chrome/browser/profiles/profile.cc b/chrome/browser/profiles/profile.cc
-index 89254771117da..3154d48f383de 100644
+index a490fefce8c79..1b071f5c7c571 100644
 --- a/chrome/browser/profiles/profile.cc
 +++ b/chrome/browser/profiles/profile.cc
-@@ -306,6 +306,7 @@ const char Profile::kProfileKey[] = "__PROFILE__";
+@@ -316,6 +316,7 @@ const char Profile::kProfileKey[] = "__PROFILE__";
  
  // static
  void Profile::RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
@@ -25,16 +25,16 @@ index 89254771117da..3154d48f383de 100644
        prefs::kSearchSuggestEnabled,
        true,
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index d094b283d332f..58886f9396708 100644
+index 32141931a58d5..93cf4c2a33d54 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -25,6 +25,9 @@ namespace prefs {
+@@ -28,6 +28,9 @@ namespace prefs {
  // *************** PROFILE PREFS ***************
  // These are attached to the user profile
  
 +// Launch sessions and open external links in Incognito
 +inline constexpr char kIncognitoLaunch[] = "incognito.launch_mode";
 +
- // This preference determines if the browser will use the Compact Mode UI.
- inline constexpr char kCompactModeEnabled[] = "compact_mode";
- 
+ // A string property indicating whether default apps should be installed
+ // in this profile.  Use the value "install" to enable defaults apps, or
+ // "noinstall" to disable them.  This property is usually set in the
