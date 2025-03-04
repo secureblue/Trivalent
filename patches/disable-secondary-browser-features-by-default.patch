@@ -12,23 +12,23 @@ index 2ddc318a2b738..6fd447d8e5ce1 100644
  #endif
  
 diff --git a/chrome/browser/ui/toolbar/chrome_labs/chrome_labs_prefs.cc b/chrome/browser/ui/toolbar/chrome_labs/chrome_labs_prefs.cc
-index f792842f91922..28cc7122da39c 100644
+index 2e0e1e41c3c58..d4b7b33d8830d 100644
 --- a/chrome/browser/ui/toolbar/chrome_labs/chrome_labs_prefs.cc
 +++ b/chrome/browser/ui/toolbar/chrome_labs/chrome_labs_prefs.cc
-@@ -49,7 +49,7 @@ const int kChromeLabsActivationThresholdDefaultValue = -1;
+@@ -50,7 +50,7 @@ const int kChromeLabsActivationThresholdDefaultValue = -1;
  const int kChromeLabsNewExperimentPrefValue = -1;
  
  void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 -  registry->RegisterBooleanPref(kBrowserLabsEnabledEnterprisePolicy, true);
 +  registry->RegisterBooleanPref(kBrowserLabsEnabledEnterprisePolicy, false);
- #if BUILDFLAG(IS_CHROMEOS_ASH)
+ #if BUILDFLAG(IS_CHROMEOS)
    registry->RegisterDictionaryPref(kChromeLabsNewBadgeDictAshChrome);
  #endif
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index 886af67983837..120272ceacfa8 100644
+index 7579ada331de3..abe60e0839fd8 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -243,11 +243,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
+@@ -206,11 +206,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
  // https://crbug.com/928954
  BASE_FEATURE(kTabHoverCardImages,
               "TabHoverCardImages",
@@ -41,7 +41,7 @@ index 886af67983837..120272ceacfa8 100644
  
  const char kTabHoverCardImagesNotReadyDelayParameterName[] =
 diff --git a/components/history_clusters/core/features.cc b/components/history_clusters/core/features.cc
-index 897479817c607..a5fad5e8bb7fd 100644
+index a85534a986fc8..be4d151f7be66 100644
 --- a/components/history_clusters/core/features.cc
 +++ b/components/history_clusters/core/features.cc
 @@ -26,7 +26,7 @@ constexpr auto enabled_by_default_desktop_only =
