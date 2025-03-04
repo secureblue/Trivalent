@@ -58,7 +58,7 @@ index 6ac062af92b06..34e88dd013ed6 100644
        .bullet-line {
          align-items: center;
          display: flex;
-@@ -367,6 +371,51 @@
+@@ -389,6 +393,51 @@
            on-click="onChromeCertificatesClick_">
        </cr-link-row>
  </if>
