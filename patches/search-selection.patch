@@ -13,17 +13,19 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
  
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
-diff --git a/components/search_engines/search_engine_choice/search_engine_choice_utils.cc b/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
-index a36caff5013d7..31c49a9409008 100644
---- a/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
-+++ b/components/search_engines/search_engine_choice/search_engine_choice_utils.cc
-@@ -140,7 +140,8 @@ ChoiceScreenData::ChoiceScreenData(
- ChoiceScreenData::~ChoiceScreenData() = default;
- 
- bool IsEeaChoiceCountry(int country_id) {
--  return regional_capabilities::IsEeaCountry(country_id);
-+  // We want the search choice screen so we assume everything is EEA.
+diff --git a/components/regional_capabilities/regional_capabilities_utils.cc b/components/regional_capabilities/regional_capabilities_utils.cc
+index cbdceda6674e2..be04a19262c35 100644
+--- a/components/regional_capabilities/regional_capabilities_utils.cc
++++ b/components/regional_capabilities/regional_capabilities_utils.cc
+@@ -21,9 +21,8 @@ bool IsEeaCountry(int country_id) {
+   // the current profile country.
+   // TODO(crbug.com/328040066): Move this check to
+   // `RegionalCapabilitiesService::IsInEeaCountry()`.
+-  return HasSearchEngineCountryListOverride()
+-             ? true
+-             : kEeaChoiceCountriesIds.contains(country_id);
++  // We want the search choice screen no matter what
 +  return true;
  }
  
- void RecordChoiceScreenProfileInitCondition(
+ std::optional<SearchEngineCountryOverride> GetSearchEngineCountryOverride() {
