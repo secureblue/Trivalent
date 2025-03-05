@@ -54,9 +54,6 @@ if [[ ! -f "$MIGRATION_FILE" ]]; then
   touch "$MIGRATION_FILE"
 fi
 
-restorecon -vR $HOME/.config/$CHROMIUM_NAME
-restorecon -vR $HOME/.cache/$CHROMIUM_NAME
-
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
 if [ -f "/usr/lib64/trivalent/install_filter.sh" ]; then
