@@ -270,13 +270,6 @@ Summary: Files needed for Chromium
 %description common
 %{summary}.
 
-%package qt5-ui
-Summary: Qt5 UI built from Chromium
-Requires: %{chromium_name}%{_isa} = %{version}-%{release}
-
-%description qt5-ui
-Qt5 UI for chromium.
-
 %package qt6-ui
 Summary: Qt6 UI built from Chromium
 Requires: %{chromium_name}%{_isa} = %{version}-%{release}
@@ -418,7 +411,6 @@ CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
 CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true'
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
-CHROMIUM_GN_DEFINES+=' use_qt=true moc_qt5_path="%{_libdir}/qt5/bin/"'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
@@ -481,7 +473,6 @@ pushd %{chromebuilddir}
 
 	# This is ANGLE, not to be confused with the similarly named files under swiftshader/
 	cp -a libEGL.so libGLESv2.so %{buildroot}%{chromium_path}
-  cp -a libqt5_shim.so %{buildroot}%{chromium_path}
   cp -a libqt6_shim.so %{buildroot}%{chromium_path}
 popd
 
@@ -550,8 +541,6 @@ fi
 %{_datadir}/metainfo/*.appdata.xml
 %{_datadir}/gnome-control-center/default-apps/%{chromium_name}.xml
 
-%files qt5-ui
-%{chromium_path}/libqt5_shim.so
 
 %files qt6-ui
 %{chromium_path}/libqt6_shim.so
