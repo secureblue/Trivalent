@@ -76,11 +76,10 @@ jobs:
         with:
           name: rpm-artifact
 
-
       - name: Setup
         shell: bash
         run: |
-          dnf install reposync rpm-sign createrepo
+          dnf install reposync rpm-sign createrepo rclone
           curl -o /etc/yum.repos.d/secureblue.repo https://repo.secureblue.dev/secureblue.repo
           dnf update --refresh -y
           echo "${{ secrets.RPM_SIGNING_KEY }}" | gpg --import
@@ -92,7 +91,13 @@ jobs:
       - name: Sign
         shell: bash
         run: |
+          rpm --add-sign *.rpm
           reposync --repo secureblue
+          mv *.rpm secureblue/Packages
+          cd secureblue
+          rm -rf repodata
+          createrepo .
+          gpg --detach-sign --local-user 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41 --armor repodata/repomd.xml
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
@@ -105,4 +110,5 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy ./upload/ R2
+          rclone copy ./secureblue/ R2:rpm 
+
