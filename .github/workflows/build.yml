@@ -22,13 +22,12 @@ jobs:
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           
-
       - name: Save SRPM
         uses: actions/upload-artifact@v4
         with:
           name: srpm-artifact
           path: "*.rpm"
-          retention-days: 1
+          retention-days: 30
 
   buildrpm:
     name: Build RPM
@@ -61,10 +60,10 @@ jobs:
         with:
           name: rpm-artifact
           path: "*.rpm"
-          retention-days: 1
+          retention-days: 7
 
   pushrpm:
-    name: Push SRPM
+    name: Push RPM
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ubuntu-latest
     container: 
