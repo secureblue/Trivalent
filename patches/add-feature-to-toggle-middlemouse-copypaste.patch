@@ -19,7 +19,7 @@ index b1a4514e7bdc4..d6c4abcbd7ca0 100644
 -      !delegate_->IsReadOnly()) {
 +      !delegate_->IsReadOnly() &&
 +      // MiddleClickAutoscroll can still paste without this check, so
-+      // they are mutually exclusive
++      // these features are mutually exclusive in favor of autoscroll
 +      !base::FeatureList::IsEnabled(
 +                          blink::features::kMiddleClickAutoscroll) &&
 +      base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
