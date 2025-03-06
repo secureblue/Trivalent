@@ -31,7 +31,7 @@ jobs:
 
   buildrpm:
     name: Build RPM
-    if: github.triggering_actor == 'royaloughtness2'
+    if: github.triggering_actor == 'royaloughtness'
     runs-on: self-hosted
     timeout-minutes: 1800
     needs: buildsrpm
@@ -68,17 +68,12 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: fedora:41
-    #needs: buildrpm
+    needs: buildrpm
     steps:
-      # - name: Retrieve SRPM
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: rpm-artifact
-
-      - name: (remove this) create test rpm
-        shell: bash
-        run: |
-          touch test.rpm
+      - name: Retrieve SRPM
+        uses: actions/download-artifact@v4
+        with:
+          name: rpm-artifact
 
       - name: Setup
         shell: bash
@@ -95,9 +90,9 @@ jobs:
       - name: Sign
         shell: bash
         run: |
-          # rpm --addsign *.rpm
+          rpm --addsign *.rpm
           reposync --repo secureblue -y
-          # mv *.rpm secureblue/Packages
+          mv *.rpm secureblue/Packages
           cd secureblue
           rm -rf repodata
           createrepo .
