@@ -114,5 +114,5 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy ./secureblue/ R2:rpm 
+          rclone copy ./secureblue/ R2:/ 
 
