@@ -97,7 +97,7 @@ jobs:
         run: |
           # rpm --addsign *.rpm
           reposync --repo secureblue -y
-          mv *.rpm secureblue/Packages
+          # mv *.rpm secureblue/Packages
           cd secureblue
           rm -rf repodata
           createrepo .
