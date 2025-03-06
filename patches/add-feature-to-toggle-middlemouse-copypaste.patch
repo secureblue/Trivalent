@@ -12,12 +12,14 @@ index b1a4514e7bdc4..d6c4abcbd7ca0 100644
  #include "ui/views/selection_controller.h"
  
  #include <algorithm>
-@@ -87,7 +90,10 @@ bool SelectionController::OnMousePressed(
+@@ -87,7 +90,12 @@ bool SelectionController::OnMousePressed(
    }
  
    if (handles_selection_clipboard_ && event.IsOnlyMiddleMouseButton() &&
 -      !delegate_->IsReadOnly()) {
 +      !delegate_->IsReadOnly() &&
++      // MiddleClickAutoscroll can still paste without this check, so
++      // they are mutually exclusive
 +      !base::FeatureList::IsEnabled(
 +                          blink::features::kMiddleClickAutoscroll) &&
 +      base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
