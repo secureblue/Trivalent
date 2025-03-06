@@ -32,7 +32,7 @@ jobs:
 
   buildrpm:
     name: Build RPM
-    if: github.triggering_actor == 'royaloughtness'
+    if: github.triggering_actor == 'royaloughtness2'
     runs-on: self-hosted
     timeout-minutes: 1800
     needs: buildsrpm
@@ -71,10 +71,15 @@ jobs:
       image: fedora:41
     needs: buildrpm
     steps:
-      - name: Retrieve SRPM
-        uses: actions/download-artifact@v4
-        with:
-          name: rpm-artifact
+      # - name: Retrieve SRPM
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: rpm-artifact
+
+      - name: (remove this) create test rpm
+        shell: bash
+        run: |
+          touch test.rpm
 
       - name: Setup
         shell: bash
