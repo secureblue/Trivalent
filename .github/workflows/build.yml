@@ -79,7 +79,7 @@ jobs:
       - name: Setup
         shell: bash
         run: |
-          dnf install reposync rpm-sign createrepo rclone
+          dnf install reposync rpm-sign createrepo rclone -y
           curl -o /etc/yum.repos.d/secureblue.repo https://repo.secureblue.dev/secureblue.repo
           dnf update --refresh -y
           echo "${{ secrets.RPM_SIGNING_KEY }}" | gpg --import
