@@ -95,7 +95,7 @@ jobs:
       - name: Sign
         shell: bash
         run: |
-          rpm --addsign *.rpm
+          # rpm --addsign *.rpm
           reposync --repo secureblue -y
           mv *.rpm secureblue/Packages
           cd secureblue
