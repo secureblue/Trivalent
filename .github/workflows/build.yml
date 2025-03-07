@@ -23,7 +23,7 @@ jobs:
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           
       - name: Save SRPM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: srpm-artifact
           path: "*.rpm"
@@ -37,7 +37,7 @@ jobs:
     needs: buildsrpm
     steps:      
       - name: Retrieve SRPM
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: srpm-artifact
       - name: Build RPM 
@@ -56,7 +56,7 @@ jobs:
           rm trivalent-*.src.rpm
 
       - name: Save RPM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: rpm-artifact
           path: "*.rpm"
@@ -70,8 +70,8 @@ jobs:
       image: fedora:41
     needs: buildrpm
     steps:
-      - name: Retrieve SRPM
-        uses: actions/download-artifact@v4
+      - name: Retrieve RPM
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: rpm-artifact
 
