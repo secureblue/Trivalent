@@ -14,7 +14,7 @@ jobs:
         id: approvers
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-required: 2
+          min-required: 1
           approvers: |
             RoyalOughtness
             RKNF404
