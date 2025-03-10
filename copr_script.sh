@@ -1,7 +1,7 @@
 #! /bin/bash -x
 
 wget https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions/all/releases?filter=endtime=none -O chromium-version.json
-cat chromium-version.json | grep \"version\" | grep -oh "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" > chromium-version.txt
+grep \"version\" chromium-version.json | grep -oh "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" > chromium-version.txt
 
 cd Trivalent
 
@@ -9,7 +9,7 @@ cd Trivalent
 cd fedora_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp ${patches[i]} ../build/fedora-$((i+1000)).patch
+	cp "${patches[i]}" "../build/fedora-$((i+1000)).patch"
 done
 cd ..
 
@@ -17,7 +17,7 @@ cd ..
 cd vanadium_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp ${patches[i]} ../build/vanadium-$((i+2000)).patch
+	cp "${patches[i]}" "../build/vanadium-$((i+2000)).patch"
 done
 cd ..
 
@@ -25,7 +25,7 @@ cd ..
 cd patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp ${patches[i]} ../build/trivalent-$((i+3000)).patch
+	cp "${patches[i]}" "../build/trivalent-$((i+3000)).patch"
 done
 cd ..
 
