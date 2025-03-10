@@ -118,7 +118,7 @@ update_fedora_patches() {
 		done
 		if [[ $patch_not_found_counter == ${#remote_fedora_patches[@]} ]]; then
 			echo "Deleting removed patch ${current_fedora_patches[i]}"
-			rm "${current_fedora_patches[$i]}""
+			rm "${current_fedora_patches[$i]}"
 			removed_counter=$((removed_counter+1))
 		fi
 		patch_not_found_counter=0
