@@ -1,0 +1,13 @@
+diff --git a/content/common/features.cc b/content/common/features.cc
+index 5323e486d6e15..8eac47176a2dc 100644
+--- a/content/common/features.cc
++++ b/content/common/features.cc
+@@ -431,7 +431,7 @@ const base::FeatureParam<base::TimeDelta> kTextInputClientIPCTimeout{
+ // only enabled by default on CrOS and Windows.
+ BASE_FEATURE(kTouchpadOverscrollHistoryNavigation,
+              "TouchpadOverscrollHistoryNavigation",
+-#if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_WIN)
++#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_WIN)
+              base::FEATURE_ENABLED_BY_DEFAULT
+ #else
+              base::FEATURE_DISABLED_BY_DEFAULT

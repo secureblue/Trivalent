@@ -22,13 +22,12 @@ jobs:
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           
-
       - name: Save SRPM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: srpm-artifact
           path: "*.rpm"
-          retention-days: 1
+          retention-days: 30
 
   buildrpm:
     name: Build RPM
@@ -38,7 +37,7 @@ jobs:
     needs: buildsrpm
     steps:      
       - name: Retrieve SRPM
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: srpm-artifact
       - name: Build RPM 
@@ -51,21 +50,53 @@ jobs:
           sudo usermod -aG mock $(whoami)
           mock --resultdir=. -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
 
-      - name: Save RPM
-        uses: actions/upload-artifact@v4
-        with:
-          name: rpm-artifact
-          path: "*.rpm"
-          retention-days: 1
-
       - name: Prepare for upload
         shell: bash
         run: |
           rm trivalent-*.src.rpm
-          mkdir ./upload
-          mkdir ./upload/Packages
-          cp *.rpm ./upload/Packages
-          cd ./upload
+
+      - name: Save RPM
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: rpm-artifact
+          path: "*.rpm"
+          retention-days: 7
+
+  pushrpm:
+    name: Push RPM
+    if: github.triggering_actor == 'royaloughtness'
+    runs-on: ubuntu-latest
+    container: 
+      image: fedora:41
+    needs: buildrpm
+    steps:
+      - name: Retrieve RPM
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        with:
+          name: rpm-artifact
+
+      - name: Setup
+        shell: bash
+        run: |
+          dnf install reposync rpm-sign createrepo rclone -y
+          curl -o /etc/yum.repos.d/secureblue.repo https://repo.secureblue.dev/secureblue.repo
+          dnf update --refresh -y
+          echo "${{ secrets.RPM_SIGNING_KEY }}" | gpg --import
+          echo "
+          %_signature gpg
+          %_gpg_name 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41
+          " > ~/.rpmmacros
+
+      - name: Sign
+        shell: bash
+        run: |
+          rpm --addsign *.rpm
+          reposync --repo secureblue -y
+          mv *.rpm secureblue/Packages
+          cd secureblue
+          rm -rf repodata
+          createrepo .
+          gpg --detach-sign --local-user 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41 --armor repodata/repomd.xml
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
@@ -78,4 +109,5 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy ./upload/ R2
+          rclone copy ./secureblue/ R2:/ 
+
