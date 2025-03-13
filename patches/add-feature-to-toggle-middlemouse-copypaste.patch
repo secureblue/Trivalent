@@ -1,0 +1,57 @@
+diff --git a/ui/views/selection_controller.cc b/ui/views/selection_controller.cc
+index b1a4514e7bdc4..d6c4abcbd7ca0 100644
+--- a/ui/views/selection_controller.cc
++++ b/ui/views/selection_controller.cc
+@@ -2,6 +2,9 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
++#include "ui/views/views_features.h"
++#include "third_party/blink/public/common/features_generated.h"
++
+ #include "ui/views/selection_controller.h"
+ 
+ #include <algorithm>
+@@ -87,7 +90,12 @@ bool SelectionController::OnMousePressed(
+   }
+ 
+   if (handles_selection_clipboard_ && event.IsOnlyMiddleMouseButton() &&
+-      !delegate_->IsReadOnly()) {
++      !delegate_->IsReadOnly() &&
++      // MiddleClickAutoscroll can still paste without this check, so
++      // these features are mutually exclusive in favor of autoscroll
++      !base::FeatureList::IsEnabled(
++                          blink::features::kMiddleClickAutoscroll) &&
++      base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
+     delegate_->OnBeforePointerAction();
+     const bool selection_changed =
+         render_text->MoveCursorToPoint(event.location(), false);
+diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
+index b6352269a2a8b..50365c274e3a3 100644
+--- a/ui/views/views_features.cc
++++ b/ui/views/views_features.cc
+@@ -43,4 +43,11 @@ BASE_FEATURE(kMacWindowFollowsColorProviderColorMode,
+              "MacWindowFollowsColorProviderColorMode",
+              base::FEATURE_ENABLED_BY_DEFAULT);
+ 
++// Controls the behavior of middle-mouse copy and pasting.
++// This may be overridden by the kMiddleClickAutoscroll
++// blink feature.
++BASE_FEATURE(kMiddleClickCopyPaste,
++             "MiddleClickCopyPaste",
++             base::FEATURE_ENABLED_BY_DEFAULT);
++
+ }  // namespace views::features
+diff --git a/ui/views/views_features.h b/ui/views/views_features.h
+index 0a86cbad6f271..24c504b18119a 100644
+--- a/ui/views/views_features.h
++++ b/ui/views/views_features.h
+@@ -18,6 +18,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kKeyboardAccessibleTooltipInViews);
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kMacWindowFollowsColorProviderColorMode);
+ 
++VIEWS_EXPORT BASE_DECLARE_FEATURE(kMiddleClickCopyPaste);
++
+ }  // namespace views::features
+ 
+ #endif  // UI_VIEWS_VIEWS_FEATURES_H_

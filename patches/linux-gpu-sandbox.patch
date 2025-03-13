@@ -1,0 +1,108 @@
+# These patches are only tested for AMD currently
+diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
+index 1e0cd989c0d3e..aa779a8cb9177 100644
+--- a/content/common/gpu_pre_sandbox_hook_linux.cc
++++ b/content/common/gpu_pre_sandbox_hook_linux.cc
+@@ -52,8 +52,8 @@ using sandbox::syscall_broker::BrokerProcess;
+ namespace content {
+ namespace {
+ 
+-inline bool IsChromeOS() {
+-#if BUILDFLAG(IS_CHROMEOS)
++inline bool IsLinux() {
++#if BUILDFLAG(IS_LINUX)
+   return true;
+ #else
+   return false;
+@@ -104,7 +104,7 @@ static const char kLibTegraPath[] = "/usr/lib/libtegrav4l2.so";
+ 
+ constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE;
+ 
+-void AddStandardChromeOsPermissions(
++void AddStandardLinuxPermissions(
+     std::vector<BrokerFilePermission>* permissions) {
+   // For the ANGLE passthrough command decoder.
+   static const char* const kReadOnlyList[] = {"libEGL.so", "libGLESv2.so"};
+@@ -261,6 +261,10 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+       // that requires the following libs and files to be accessible.
+       "/usr/lib64/libEGL.so.1",
+       "/usr/lib64/libGLESv2.so.2",
++#if !BUILDFLAG(IS_CHROMEOS)
++      "/usr/lib64/libwayland-server.so.0",
++      "/usr/lib64/gbm/dri_gbm.so",
++#endif
+       "/usr/lib64/libglapi.so.0",
+       "/usr/lib64/libgallium_dri.so",
+       "/usr/lib64/dri/r300_dri.so",
+@@ -502,9 +506,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+ 
+   AddVulkanICDPermissions(&permissions);
+ 
+-  if (IsChromeOS()) {
++  if (IsLinux()) {
+     // Permissions are additive, there can be multiple GPUs in the system.
+-    AddStandardChromeOsPermissions(&permissions);
++    AddStandardLinuxPermissions(&permissions);
+     if (UseV4L2Codec(options))
+       AddV4L2GpuPermissions(&permissions, options);
+     if (IsArchitectureArm()) {
+@@ -604,10 +608,17 @@ void LoadArmGpuLibraries() {
+ 
+ bool LoadAmdGpuLibraries() {
+   // Preload the amdgpu-dependent libraries.
++#if BUILDFLAG(IS_CHROMEOS)
+   if (nullptr == dlopen("libglapi.so", dlopen_flag)) {
+     LOG(ERROR) << "dlopen(libglapi.so) failed with error: " << dlerror();
+     return false;
+   }
++#else
++  if (nullptr == dlopen("libglapi.so.0", dlopen_flag)) {
++    LOG(ERROR) << "dlopen(libglapi.so.0) failed with error: " << dlerror();
++    return false;
++  }
++#endif // IS_CHROMEOS
+ 
+   const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
+ #if defined(DRI_DRIVER_DIR)
+@@ -662,7 +673,7 @@ bool LoadLibrariesForGpu(
+   if (IsArchitectureArm()) {
+     LoadArmGpuLibraries();
+   }
+-  if (IsChromeOS()) {
++  if (IsLinux()) {
+     if (options.use_amd_specific_policies) {
+       if (!LoadAmdGpuLibraries())
+         return false;
+@@ -685,7 +696,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+   command_set.set(sandbox::syscall_broker::COMMAND_ACCESS);
+   command_set.set(sandbox::syscall_broker::COMMAND_OPEN);
+   command_set.set(sandbox::syscall_broker::COMMAND_STAT);
+-  if (IsChromeOS() &&
++  if (IsLinux() &&
+       (options.use_amd_specific_policies ||
+        options.use_intel_specific_policies ||
+        options.use_nvidia_specific_policies ||
+diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
+index 1f6067c3b0d1f..a4107837fe842 100644
+--- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
++++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
+@@ -97,8 +97,8 @@ namespace {
+ // nacl_helper needs to be tiny and includes only part of content/
+ // in its dependencies. Make sure to not link things that are not needed.
+ #if !defined(IN_NACL_HELPER)
+-inline bool IsChromeOS() {
+-#if BUILDFLAG(IS_CHROMEOS)
++inline bool IsLinux() {
++#if BUILDFLAG(IS_LINUX)
+   return true;
+ #else
+   return false;
+@@ -123,7 +123,7 @@ inline bool IsArchitectureArm() {
+ 
+ std::unique_ptr<BPFBasePolicy> GetGpuProcessSandbox(
+     const SandboxSeccompBPF::Options& options) {
+-  if (IsChromeOS() || UseChromecastSandboxAllowlist()) {
++  if (IsLinux() || UseChromecastSandboxAllowlist()) {
+     if (IsArchitectureArm()) {
+       return std::make_unique<CrosArmGpuProcessPolicy>(
+           base::CommandLine::ForCurrentProcess()->HasSwitch(
