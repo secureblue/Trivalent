@@ -33,7 +33,7 @@ cd ..
 cd fedora_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp ${patches[i]} ../build/fedora-arm-$((i+1500)).patch
+	cp "${patches[i]}" ../build/fedora-arm-$((i+1500)).patch
 done
 cd ..
 
