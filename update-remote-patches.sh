@@ -123,8 +123,8 @@ update_fedora_patches() {
 				updated_counter=$((updated_counter+1))
     			elif [[ "${remote_fedora_patches[$j]}" == "${current_fedora_arm_patches[$k]}" && "$k" != -1 ]]; then
 				echo "Updating patch ${current_fedora_arm_patches[$k]} from Fedora (ARM)"
-				rm ./arm/${current_fedora_arm_patches[$k]}
-				cp $repo_directory/fedora-patches-tmp/chromium/${remote_fedora_patches[$j]} ./arm/
+				rm ./arm/"${current_fedora_arm_patches[$k]}"
+				cp "$repo_directory/fedora-patches-tmp/chromium/${remote_fedora_patches[$j]}" ./arm/
 				updated_counter=$((updated_counter+1))
 			else
 				patch_not_found_counter=$((patch_not_found_counter+1))
