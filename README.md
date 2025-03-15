@@ -24,7 +24,7 @@ A hardened chromium for desktop Linux inspired by [Vanadium](https://github.com/
 
 ## Installation
 
-Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo).
+Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks [SELinux confinement](https://github.com/secureblue/secureblue/tree/live/files/scripts/selinux/trivalent).
 
 ## Post-install
 
