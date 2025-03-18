@@ -15,6 +15,38 @@ index 2ac18f2965e7d..682f29a54437a 100644
    <div id="bulletpoints-wrapper">
      <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
      <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
+diff --git a/chrome/browser/resources/settings/a11y_page/live_translate_section.html b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
+index b038bf5b739c4..c8ce8d033c500 100644
+--- a/chrome/browser/resources/settings/a11y_page/live_translate_section.html
++++ b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
+@@ -25,27 +25,3 @@
+     width: 100%;
+   }
+ </style>
+-<div class="cr-row cr-row-with-template">
+-  <settings-toggle-button id="liveTranslateToggleButton"
+-      pref="{{prefs.accessibility.captions.live_translate_enabled}}"
+-      on-change="onLiveTranslateEnabledChange_"
+-      label="$i18n{captionsEnableLiveTranslateTitle}"
+-      sub-label="$i18n{captionsEnableLiveTranslateSubtitle}">
+-  </settings-toggle-button>
+-</div>
+-<cr-collapse
+-    opened="[[prefs.accessibility.captions.live_translate_enabled.value]]">
+-  <div class="cr-row continuation subsection-group">
+-    <div class="start cr-padded-text" aria-hidden="true">
+-        $i18n{captionsLiveTranslateTargetLanguage}
+-        <div class="secondary">
+-          $i18n{captionsLiveTranslateTargetLanguageSubtitle}
+-        </div>
+-    </div>
+-    <settings-dropdown-menu id="targetLanguageDropdown"
+-        class="language-dropdown"
+-        pref="{{prefs.accessibility.captions.live_translate_target_language}}"
+-        menu-options="[[translatableLanguages_]]">
+-    </settings-dropdown-menu>
+-  </div>
+-</cr-collapse>
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
 index b6d8feb09ef9f..a7bc25bf5b601 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
