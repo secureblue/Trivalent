@@ -1,3 +1,20 @@
+diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
+index 2ac18f2965e7d..682f29a54437a 100644
+--- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
++++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
+@@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
+ <div class="content">
+   <div class="icon" role="presentation" alt=""></div>
+   <h1>$i18n{incognitoTabHeading}</h1>
+-  <p id="subtitle">
+-    <span>$i18n{incognitoTabDescription}</span>
+-    <a class="learn-more-button"
+-        href="$i18n{learnMoreLink}"
+-        aria-label="$i18nPolymer{learnMoreA11yLabel}">$i18n{learnMore}</a>
+-  </p>
+   <div id="bulletpoints-wrapper">
+     <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
+     <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
 index b6d8feb09ef9f..a7bc25bf5b601 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
@@ -82,9 +99,18 @@ index 7f98d8ac8d2f3..3f62a0e059a11 100644
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
            <settings-security-page prefs="{{prefs}}"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index 2e5d4330a63fd..2faf0eb76d9f9 100644
+index 2e5d4330a63fd..feec23cd1f499 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
+@@ -316,7 +316,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+       shouldShowSafetyHub_: {
+         type: Boolean,
+         value() {
+-          return !loadTimeData.getBoolean('isGuest');
++          return false;
+         },
+       },
+ 
 @@ -629,8 +629,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
  
@@ -365,21 +391,4 @@ index 69992131be6df..9f7e15f55bc0a 100644
 -  setupEnhancedProtectionMessage();
    setupSSLDebuggingInfo();
    document.addEventListener('keypress', handleKeypress);
-
-diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
-index 2ac18f2965e7d..682f29a54437a 100644
---- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
-+++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
-@@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
- <div class="content">
-   <div class="icon" role="presentation" alt=""></div>
-   <h1>$i18n{incognitoTabHeading}</h1>
--  <p id="subtitle">
--    <span>$i18n{incognitoTabDescription}</span>
--    <a class="learn-more-button"
--        href="$i18n{learnMoreLink}"
--        aria-label="$i18nPolymer{learnMoreA11yLabel}">$i18n{learnMore}</a>
--  </p>
-   <div id="bulletpoints-wrapper">
-     <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
-     <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
+ 
