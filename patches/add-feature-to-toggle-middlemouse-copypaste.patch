@@ -1,3 +1,108 @@
+diff --git a/chrome/browser/ui/views/location_bar/location_bar_view.cc b/chrome/browser/ui/views/location_bar/location_bar_view.cc
+index a81ff31023f55..f846af92c5206 100644
+--- a/chrome/browser/ui/views/location_bar/location_bar_view.cc
++++ b/chrome/browser/ui/views/location_bar/location_bar_view.cc
+@@ -2,6 +2,9 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
++#include "ui/views/views_features.h"
++#include "third_party/blink/public/common/features_generated.h"
++
+ #include "chrome/browser/ui/views/location_bar/location_bar_view.h"
+ 
+ #include <algorithm>
+@@ -1657,7 +1660,11 @@ bool LocationBarView::IsEditingOrEmpty() const {
+ void LocationBarView::OnLocationIconPressed(const ui::MouseEvent& event) {
+   if (event.IsOnlyMiddleMouseButton() &&
+       ui::Clipboard::IsSupportedClipboardBuffer(
+-          ui::ClipboardBuffer::kSelection)) {
++          ui::ClipboardBuffer::kSelection) &&
++      !base::FeatureList::IsEnabled(
++                          blink::features::kMiddleClickAutoscroll) &&
++      base::FeatureList::IsEnabled(
++                         views::features::kMiddleClickCopyPaste)) {
+     std::u16string text;
+     ui::Clipboard::GetForCurrentThread()->ReadText(
+         ui::ClipboardBuffer::kSelection, /* data_dst = */ nullptr, &text);
+diff --git a/chrome/browser/ui/views/tabs/tab_strip.cc b/chrome/browser/ui/views/tabs/tab_strip.cc
+index 3cc13da526ba7..a8738cf3eb88a 100644
+--- a/chrome/browser/ui/views/tabs/tab_strip.cc
++++ b/chrome/browser/ui/views/tabs/tab_strip.cc
+@@ -2,6 +2,9 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
++#include "ui/views/views_features.h"
++#include "third_party/blink/public/common/features_generated.h"
++
+ #include "chrome/browser/ui/views/tabs/tab_strip.h"
+ 
+ #include <stddef.h>
+@@ -2108,7 +2111,11 @@ void TabStrip::NewTabButtonPressed(const ui::Event& event) {
+     const ui::MouseEvent& mouse = static_cast<const ui::MouseEvent&>(event);
+     if (mouse.IsOnlyMiddleMouseButton()) {
+       if (ui::Clipboard::IsSupportedClipboardBuffer(
+-              ui::ClipboardBuffer::kSelection)) {
++              ui::ClipboardBuffer::kSelection) &&
++          !base::FeatureList::IsEnabled(
++                              blink::features::kMiddleClickAutoscroll) &&
++          base::FeatureList::IsEnabled(
++                             views::features::kMiddleClickCopyPaste)) {
+         ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+         CHECK(clipboard)
+             << "Clipboard instance is not available, cannot proceed with "
+diff --git a/ui/views/controls/label.cc b/ui/views/controls/label.cc
+index 02297c5213b62..d95a298b43242 100644
+--- a/ui/views/controls/label.cc
++++ b/ui/views/controls/label.cc
+@@ -39,6 +39,9 @@
+ #include "ui/views/selection_controller.h"
+ #include "ui/views/style/typography_provider.h"
+ 
++#include "ui/views/views_features.h"
++#include "third_party/blink/public/common/features_generated.h"
++
+ namespace {
+ 
+ // An enum giving different RenderText properties unique keys for the
+@@ -1030,7 +1033,10 @@ bool Label::OnMousePressed(const ui::MouseEvent& event) {
+ 
+   if (ui::Clipboard::IsSupportedClipboardBuffer(
+           ui::ClipboardBuffer::kSelection)) {
+-    if (event.IsOnlyMiddleMouseButton() && GetFocusManager() && !had_focus) {
++    if (event.IsOnlyMiddleMouseButton() && GetFocusManager() && !had_focus &&
++        !base::FeatureList::IsEnabled(
++                          blink::features::kMiddleClickAutoscroll) &&
++        base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
+       GetFocusManager()->SetFocusedView(this);
+     }
+   }
+diff --git a/ui/views/controls/textfield/textfield.cc b/ui/views/controls/textfield/textfield.cc
+index 076be6ed3360d..ef6eb07cc8db0 100644
+--- a/ui/views/controls/textfield/textfield.cc
++++ b/ui/views/controls/textfield/textfield.cc
+@@ -81,6 +81,8 @@
+ #include "ui/views/widget/widget.h"
+ #include "ui/wm/core/coordinate_conversion.h"
+ 
++#include "third_party/blink/public/common/features_generated.h"
++
+ #if BUILDFLAG(IS_WIN)
+ #include "base/win/win_util.h"
+ #endif
+@@ -736,7 +738,10 @@ bool Textfield::OnMousePressed(const ui::MouseEvent& event) {
+ 
+   if (ui::Clipboard::IsSupportedClipboardBuffer(
+           ui::ClipboardBuffer::kSelection)) {
+-    if (!handled && !had_focus && event.IsOnlyMiddleMouseButton()) {
++    if (!handled && !had_focus && event.IsOnlyMiddleMouseButton() &&
++        !base::FeatureList::IsEnabled(
++                          blink::features::kMiddleClickAutoscroll) &&
++        base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
+       RequestFocusWithPointer(ui::EventPointerType::kMouse);
+     }
+   }
 diff --git a/ui/views/selection_controller.cc b/ui/views/selection_controller.cc
 index b1a4514e7bdc4..d6c4abcbd7ca0 100644
 --- a/ui/views/selection_controller.cc
@@ -12,14 +117,12 @@ index b1a4514e7bdc4..d6c4abcbd7ca0 100644
  #include "ui/views/selection_controller.h"
  
  #include <algorithm>
-@@ -87,7 +90,12 @@ bool SelectionController::OnMousePressed(
+@@ -87,7 +90,10 @@ bool SelectionController::OnMousePressed(
    }
  
    if (handles_selection_clipboard_ && event.IsOnlyMiddleMouseButton() &&
 -      !delegate_->IsReadOnly()) {
 +      !delegate_->IsReadOnly() &&
-+      // MiddleClickAutoscroll can still paste without this check, so
-+      // these features are mutually exclusive in favor of autoscroll
 +      !base::FeatureList::IsEnabled(
 +                          blink::features::kMiddleClickAutoscroll) &&
 +      base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
