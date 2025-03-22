@@ -1,7 +1,7 @@
 diff --git a/gtk/gtksettings.c b/gtk/gtksettings.c
 index 186bebf..db00d52 100644
---- a/gtk/gtksettings.c
-+++ b/gtk/gtksettings.c
+--- a/third_party/wayland-protocols/gtk/gtksettings.c
++++ b/third_party/wayland-protocols/gtk/gtksettings.c
 @@ -1075,7 +1075,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                               g_param_spec_boolean ("gtk-enable-primary-paste",
                                                                     P_("Enable primary paste"),
