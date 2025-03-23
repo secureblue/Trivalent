@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index d506286648bde..99041371e46ef 100644
+index 3ed0fd8d011f8..e842df8ef96f3 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -173,6 +173,24 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -174,6 +174,24 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -28,7 +28,7 @@ index d506286648bde..99041371e46ef 100644
    (*s_allowlist)[::embedder_support::kAlternateErrorPagesEnabled] =
        settings_api::PrefType::kBoolean;
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index 47120511edffd..53f2330898dd9 100644
+index c24506a3294cb..29e4ac0aea997 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
 @@ -119,6 +119,11 @@
@@ -44,7 +44,7 @@ index 47120511edffd..53f2330898dd9 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 6ac062af92b06..34e88dd013ed6 100644
+index d5079082c7fc0..d75f6a430fd09 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -4,6 +4,10 @@
@@ -58,7 +58,7 @@ index 6ac062af92b06..34e88dd013ed6 100644
        .bullet-line {
          align-items: center;
          display: flex;
-@@ -389,6 +393,51 @@
+@@ -385,6 +389,46 @@
            on-click="onChromeCertificatesClick_">
        </cr-link-row>
  </if>
@@ -89,11 +89,6 @@ index 6ac062af92b06..34e88dd013ed6 100644
 +          menu-options="[[webrtcHandlingPolicyOptions_]]">
 +        </settings-dropdown-menu>
 +      </div>
-+      <settings-toggle-button class="cr-row"
-+        pref="{{prefs.printing.enabled}}"
-+        label="Enable Printing"
-+        sub-label="Enables printing capabilities within the browser">
-+      </settings-toggle-button>
 +<if expr="is_linux or is_win">
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.net.network_service_sandbox}}"
@@ -111,7 +106,7 @@ index 6ac062af92b06..34e88dd013ed6 100644
      <cr-link-row id="advanced-protection-program-link" class="hr"
          label="$i18n{advancedProtectionProgramTitle}"
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 552f3b5534b01..2d7808ca85ebb 100644
+index 625814a9c2a65..9102cb53ac617 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
 @@ -111,6 +111,19 @@ export class SettingsSecurityPageElement extends
@@ -134,3 +129,22 @@ index 552f3b5534b01..2d7808ca85ebb 100644
        /**
         * Whether the secure DNS setting should be displayed.
         */
+diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
+index 348f170d65209..759c0dfd98dcd 100644
+--- a/chrome/browser/resources/settings/system_page/system_page.html
++++ b/chrome/browser/resources/settings/system_page/system_page.html
+@@ -17,6 +17,14 @@
+       </template>
+     </settings-toggle-button>
+ 
++<if expr="enable_printing">
++    <settings-toggle-button class="cr-row"
++        pref="{{prefs.printing.enabled}}"
++        label="Enable Printing"
++        sub-label="Enables printing capabilities within the browser">
++    </settings-toggle-button>
++</if>
++
+     <!-- <if expr="_google_chrome and is_win"> -->
+       <template is="dom-if" if="[[showFeatureNotificationsSetting_]]">
+         <div class="hr"></div>
