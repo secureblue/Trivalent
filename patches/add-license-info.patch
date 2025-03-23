@@ -11,21 +11,19 @@ index 6864d76343794..678a7c240d91e 100644
 +          <div class="secondary">Copyright 2024-2025 The Trivalent authors.</div>
 +          <div class="secondary">Trivalent license:
 +            <pre>
-+This program is free software; you can redistribute it and/or
-+modify it under the terms of the GNU General Public License
-+Version 2 as published by the Free Software Foundation;
++Copyright © 2016-2025 The Trivalent Authors
 +
-+This program is distributed in the hope that it will be useful,
-+but WITHOUT ANY WARRANTY; without even the implied warranty of
-+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+GNU General Public License for more details.
++Trivalent is available under the terms of the GNU General Public
++License version 2 only, according to LICENSE.GPL-2.0. Also see
++LICENSE.WebView-note and LICENSE.Apache-2.0-note for exceptions from the GPLv2
++terms.
 +
-+You should have received a copy of the GNU General Public License
-+along with this program; if not, see
-+https://www.gnu.org/licenses/.
++In order for us to contribute upstream, contributors to Trivalent
++give permission to the secureblue project to submit their changes to the
++Chromium project or a future replacement upstream base under the preferred choice of licensing for that project. Only the code accepted by upstream will then be made available under upstream's preferred license.
 +            </pre>
 +          </div>
-+	  <div class="secondary">The Trivalent source code is available <a href="https://github.com/secureblue/trivalent">on github</a>.</div>
++	  <div class="secondary">The Trivalent source code is available <a href="https://github.com/secureblue/Trivalent">on github</a>. The Trivalent patches are licensed under the <a href="https://github.com/secureblue/Trivalent/blob/live/patches/LICENSE">Apache License, Version 2.0</a>.</div>
 +        </div>
 +        <hr />
 +        <div class="info-section">
