@@ -2,7 +2,7 @@ diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chro
 index 6864d76343794..678a7c240d91e 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -148,7 +148,75 @@
+@@ -148,7 +148,73 @@
      <settings-section>
        <div class="info-sections">
          <div class="info-section">
