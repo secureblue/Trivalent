@@ -1,5 +1,5 @@
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 97f7221cb1a56..c5eb71df37ce8 100644
+index 97f7221cb1a56..9c73c53866388 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -48,8 +48,8 @@ using sandbox::syscall_broker::BrokerProcess;
@@ -31,38 +31,43 @@ index 97f7221cb1a56..c5eb71df37ce8 100644
      std::vector<BrokerFilePermission>* permissions) {
    // For the ANGLE passthrough command decoder.
    static const char* const kReadOnlyList[] = {"libEGL.so", "libGLESv2.so"};
-@@ -257,6 +257,10 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -257,6 +257,12 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libEGL.so.1",
        "/usr/lib64/libGLESv2.so.2",
 +#if !BUILDFLAG(IS_CHROMEOS)
 +      "/usr/lib64/libwayland-server.so.0",
 +      "/usr/lib64/gbm/dri_gbm.so",
++      "/usr/lib64/dri/iHD_drv_video.so"
++      "/usr/lib64/libgallium-25.0.0.so",
 +#endif
        "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libgallium_dri.so",
        "/usr/lib64/dri/r300_dri.so",
-@@ -324,6 +328,9 @@ void AddIntelGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -324,6 +330,11 @@ void AddIntelGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        // To support threads in mesa we use --gpu-sandbox-start-early and
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libgallium_dri.so",
 +#if !BUILDFLAG(IS_CHROMEOS)
++      "/usr/lib64/libgallium-25.0.0.so",
 +      "/usr/lib64/gbm/dri_gbm.so",
++      "/usr/lib64/dri/iHD_drv_video.so"
 +#endif
        "/usr/lib64/libEGL.so.1", "/usr/lib64/libGLESv2.so.2",
        "/usr/lib64/libelf.so.1", "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libdrm_amdgpu.so.1", "/usr/lib64/libdrm_radeon.so.1",
-@@ -363,6 +370,9 @@ void AddVirtIOGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -363,6 +374,10 @@ void AddVirtIOGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libc++.so.1",
        "/usr/lib64/libgallium_dri.so",
 +#if !BUILDFLAG(IS_CHROMEOS)
++      "/usr/lib64/libwayland-server.so.0",
 +      "/usr/lib64/gbm/dri_gbm.so",
 +#endif
        // If kms_swrast_dri is not usable, swrast_dri is used instead.
        "/usr/lib64/dri/swrast_dri.so",
        "/usr/lib64/dri/kms_swrast_dri.so",
-@@ -498,9 +508,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+@@ -498,9 +513,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
  
    AddVulkanICDPermissions(&permissions);
  
@@ -74,7 +79,7 @@ index 97f7221cb1a56..c5eb71df37ce8 100644
      if (UseV4L2Codec(options))
        AddV4L2GpuPermissions(&permissions, options);
      if (IsArchitectureArm()) {
-@@ -600,10 +610,12 @@ void LoadArmGpuLibraries() {
+@@ -600,10 +615,12 @@ void LoadArmGpuLibraries() {
  
  bool LoadAmdGpuLibraries() {
    // Preload the amdgpu-dependent libraries.
@@ -87,7 +92,7 @@ index 97f7221cb1a56..c5eb71df37ce8 100644
  
    const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
  #if defined(DRI_DRIVER_DIR)
-@@ -658,7 +670,7 @@ bool LoadLibrariesForGpu(
+@@ -658,7 +675,7 @@ bool LoadLibrariesForGpu(
    if (IsArchitectureArm()) {
      LoadArmGpuLibraries();
    }
@@ -96,7 +101,7 @@ index 97f7221cb1a56..c5eb71df37ce8 100644
      if (options.use_amd_specific_policies) {
        if (!LoadAmdGpuLibraries())
          return false;
-@@ -681,7 +693,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+@@ -681,7 +698,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
    command_set.set(sandbox::syscall_broker::COMMAND_ACCESS);
    command_set.set(sandbox::syscall_broker::COMMAND_OPEN);
    command_set.set(sandbox::syscall_broker::COMMAND_STAT);
