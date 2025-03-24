@@ -2,7 +2,7 @@ diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chro
 index 6864d76343794..678a7c240d91e 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -148,7 +148,73 @@
+@@ -148,7 +148,66 @@
      <settings-section>
        <div class="info-sections">
          <div class="info-section">
@@ -11,16 +11,9 @@ index 6864d76343794..678a7c240d91e 100644
 +          <div class="secondary">Copyright 2024-2025 The Trivalent authors.</div>
 +          <div class="secondary">Trivalent license:
 +            <pre>
-+Copyright © 2016-2025 The Trivalent Authors
-+
 +Trivalent is available under the terms of the GNU General Public
 +License version 2 only, according to LICENSE.GPL-2.0. Also see
-+LICENSE.WebView-note and LICENSE.Apache-2.0-note for exceptions from the GPLv2
-+terms.
-+
-+In order for us to contribute upstream, contributors to Trivalent
-+give permission to the secureblue project to submit their changes to the
-+Chromium project or a future replacement upstream base under the preferred choice of licensing for that project. Only the code accepted by upstream will then be made available under upstream's preferred license.
++LICENSE.Apache-2.0-note for an exception from the GPLv2 terms.
 +            </pre>
 +          </div>
 +	  <div class="secondary">The Trivalent source code is available <a href="https://github.com/secureblue/Trivalent">on github</a>. The Trivalent patches are licensed under the <a href="https://github.com/secureblue/Trivalent/blob/live/patches/LICENSE">Apache License, Version 2.0</a>.</div>

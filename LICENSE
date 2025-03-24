@@ -1,10 +1,11 @@
-Copyright © 2016-2025 The Trivalent Authors
+Copyright © 2024-2025 The Trivalent Authors
 
 Trivalent is available under the terms of the GNU General Public
 License version 2 only, according to LICENSE.GPL-2.0. Also see
-LICENSE.WebView-note and LICENSE.Apache-2.0-note for exceptions from the GPLv2
-terms.
+LICENSE.Apache-2.0-note for an exception from the GPLv2 terms.
 
 In order for us to contribute upstream, contributors to Trivalent
 give permission to the secureblue project to submit their changes to the
-Chromium project or a future replacement upstream base under the preferred choice of licensing for that project. Only the code accepted by upstream will then be made available under upstream's preferred license.
+Chromium project or a future replacement upstream base under the preferred 
+choice of licensing for that project. Only the code accepted by upstream 
+will then be made available under upstream's preferred license.
