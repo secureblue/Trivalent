@@ -35,7 +35,7 @@ Name:	%{chromium_name}
 }
 Summary: A security-focused browser built upon Google's Chromium web browser
 Url: https://github.com/secureblue/Trivalent
-License: (GPL-2.0-only WITH (Apache-2.0-note AND FTL-note AND WebView-note)) AND BSD-3-Clause AND BSD-2-Clause AND dtoa AND SunPro AND IJG AND Zlib AND Libpng AND libtiff AND FTL AND LGPL-2.1 AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
+License: (GPL-2.0-only WITH (Apache-2.0-note AND FTL-note AND WebView-note)) AND BSD-3-Clause AND BSD-2-Clause AND dtoa AND SunPro AND Zlib AND Libpng AND libtiff AND FTL AND LGPL-2.1 AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
 # Replace the old package
 Obsoletes: hardened-chromium
 
