@@ -1,3 +1,21 @@
+diff --git a/chrome/browser/download/download_ui_safe_browsing_util.cc b/chrome/browser/download/download_ui_safe_browsing_util.cc
+index 9718af702bf29..131529fcf95d4 100644
+--- a/chrome/browser/download/download_ui_safe_browsing_util.cc
++++ b/chrome/browser/download/download_ui_safe_browsing_util.cc
+@@ -49,12 +49,7 @@ bool WasSafeBrowsingVerdictObtained(const download::DownloadItem* item) {
+ }
+ 
+ bool ShouldShowWarningForNoSafeBrowsing(Profile* profile) {
+-#if BUILDFLAG(FULL_SAFE_BROWSING)
+-  return safe_browsing::GetSafeBrowsingState(*profile->GetPrefs()) ==
+-         safe_browsing::SafeBrowsingState::NO_SAFE_BROWSING;
+-#else
+-  return true;
+-#endif
++  return false; // We do not have safe browsing
+ }
+ 
+ bool CanUserTurnOnSafeBrowsing(Profile* profile) {
 diff --git a/components/safe_browsing/core/common/safe_browsing_prefs.cc b/components/safe_browsing/core/common/safe_browsing_prefs.cc
 index 1f92a936e44f1..53d6a91ccc32c 100644
 --- a/components/safe_browsing/core/common/safe_browsing_prefs.cc
