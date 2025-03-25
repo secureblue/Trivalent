@@ -13,7 +13,8 @@ index 6864d76343794..678a7c240d91e 100644
 +            <pre>
 +Trivalent is available under the terms of the GNU General Public
 +License version 2 only, according to LICENSE.GPL-2.0. Also see
-+LICENSE.Apache-2.0-note for an exception from the GPLv2 terms.
++LICENSE.Apache-2.0-note, LICENSE.FTL-note, and LICENSE.Webview-note
++for exceptions to the GPLv2 terms.
 +            </pre>
 +          </div>
 +	  <div class="secondary">The Trivalent source code is available <a href="https://github.com/secureblue/Trivalent">on github</a>. The Trivalent patches are licensed under the <a href="https://github.com/secureblue/Trivalent/blob/live/patches/LICENSE">Apache License, Version 2.0</a>.</div>
