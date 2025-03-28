@@ -1,13 +1,13 @@
 diff --git a/third_party/blink/common/features.cc b/third_party/blink/common/features.cc
-index 7f1f766294588..364c2405591c0 100644
+index 18e5ae64bc200..c0e466ba9f807 100644
 --- a/third_party/blink/common/features.cc
 +++ b/third_party/blink/common/features.cc
-@@ -1758,7 +1758,7 @@ const base::FeatureParam<bool> kPartialLowEndModeExcludeCanvasFontCache{
- // top-level site, frame origin>.
+@@ -1859,7 +1859,7 @@ BASE_FEATURE_PARAM(bool,
+ // <link url, top-level site, frame origin>
  BASE_FEATURE(kPartitionVisitedLinkDatabase,
               "PartitionVisitedLinkDatabase",
 -             base::FEATURE_DISABLED_BY_DEFAULT);
 +             base::FEATURE_ENABLED_BY_DEFAULT);
  
- // When enabled, this flag partitions the :visited link hashtable by <link url,
- // top-level site, frame origin> AND adds the "self link" <link url, link as a
+ // Enables the use of the PaintCache for Path2D objects that are rasterized
+ // out of process.  Has no effect when kCanvasOopRasterization is disabled.
