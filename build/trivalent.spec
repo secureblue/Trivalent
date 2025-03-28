@@ -195,7 +195,7 @@ Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
 Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
 
-ExclusiveArch: x86_64
+ExclusiveArch: x86_64 aarch64
 
 # License: BSD-3-Clause
 Provides: bundled(angle)
