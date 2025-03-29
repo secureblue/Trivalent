@@ -35,7 +35,7 @@ Name:	%{chromium_name}
 }
 Summary: A security-focused browser built upon Google's Chromium web browser
 Url: https://github.com/secureblue/Trivalent
-License: BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
+License: (GPL-2.0-only WITH (Apache-2.0-note AND FTL-note AND WebView-note)) AND BSD-3-Clause AND BSD-2-Clause AND dtoa AND SunPro AND Zlib AND Libpng AND libtiff AND FTL AND LGPL-2.1 AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
 # Replace the old package
 Obsoletes: hardened-chromium
 
@@ -183,79 +183,217 @@ Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
 
 ExclusiveArch: x86_64
 
+# License: BSD-3-Clause
 Provides: bundled(angle)
+
+# License: MIT
 Provides: bundled(bintrees)
+
+# License: Apache-2.0
 Provides: bundled(boringssl)
+
+# License: MIT
 Provides: bundled(brotli)
+
+# License: BSD-2-Clause
 Provides: bundled(bspatch)
+
+# License: Apache-2.0
 Provides: bundled(cacheinvalidation)
+
+# License: BSD-3-Clause
 Provides: bundled(colorama)
+
+# License: Apache-2.0
 Provides: bundled(crashpad)
+
+# License: BSD-3-Clause
 Provides: bundled(crc32c)
+
+# License: BSD-2-Clause
 Provides: bundled(dav1d)
+
+# License: BSD-3-Clause
 Provides: bundled(double-conversion)
+
+# License: dtoa
 Provides: bundled(dmg_fp)
+
+# License: MIT
 Provides: bundled(expat)
+
+# License: SunPro
 Provides: bundled(fdmlibm)
+
+# License: LGPL-2.1-or-later 
 Provides: bundled(ffmpeg)
+
+# License: BSD-3-Clause
 Provides: bundled(flac)
+
+# License: BSD-3-Clause
 Provides: bundled(fips181)
+
+# License: MIT
 Provides: bundled(fontconfig)
+
+# License: FTL
 Provides: bundled(freetype)
+
+# License: BSD-3-Clause
 Provides: bundled(gperftools)
+
+# License: MIT
 Provides: bundled(harfbuzz-ng)
+
+# License: Apache-2.0
 Provides: bundled(highway)
+
+# License: MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only
 Provides: bundled(hunspell)
+
+# License: IJG
 Provides: bundled(iccjpeg)
+
+# License: Unicode-3.0
 Provides: bundled(icu)
-Provides: bundled(kitchensink)
+
+# License: MIT
 Provides: bundled(lcms2)
+
+# License: BSD-3-Clause
 Provides: bundled(leveldb)
+
+# License: Apache-2.0
 Provides: bundled(libaddressinput)
+
+# License: BSD-2-Clause
 Provides: bundled(libaom)
+
+# License: MIT
 Provides: bundled(libdrm)
+
+# License: BSD-3-Clause
 Provides: bundled(libevent)
+
+# License: BSD-3-Clause
 Provides: bundled(libjingle)
+
+# License: Zlib AND IJG and BSD-3-Clause
 Provides: bundled(libjpeg)
+
+# License: BSD-2-Clause
 Provides: bundled(libopenjpeg2)
+
+# License: Apache-2.0
 Provides: bundled(libphonenumber)
+
+# License: Libpng
 Provides: bundled(libpng)
+
+# License: LGPL-2.1
 Provides: bundled(libsecret)
+
+# License: BSD-3-Clause
 Provides: bundled(libsrtp)
+
+# License: libtiff
 Provides: bundled(libtiff)
+
+# License: BSD-2-Clause
 Provides: bundled(libudis86)
+
+# License: LGPL-2.1
 Provides: bundled(libusbx)
+
+# License: BSD-3-Clause
 Provides: bundled(libvpx)
+
+# License: BSD-3-Clause
 Provides: bundled(libwebp)
+
+# License: BSD-3-Clause
 Provides: bundled(libyuv)
+
+# License: MIT
 Provides: bundled(libxml)
+
+# License: MIT
 Provides: bundled(libxslt)
-Provides: bundled(libXNVCtrl)
+
+# Public Domain
 Provides: bundled(lzma)
+
+# License: MIT
 Provides: bundled(mesa)
-Provides: bundled(NSBezierPath)
+
+# License: BSD-3-Clause
 Provides: bundled(mozc)
+
+# License: BSD-2-Clause
 Provides: bundled(openh264)
+
+# License: BSD-3-Clause
 Provides: bundled(opus)
+
+# License: BSD-3-Clause
 Provides: bundled(ots)
+
+# License: BSD-3-Clause
 Provides: bundled(protobuf)
+
+# License: MIT
 Provides: bundled(qcms)
+
+# License: BSD-3-Clause
 Provides: bundled(re2)
+
+# License: Apache-2.0
 Provides: bundled(sfntly)
+
+# License: BSD-3-Clause
 Provides: bundled(skia)
+
+# License: MIT
 Provides: bundled(SMHasher)
+
+# License: BSD-3-Clause
 Provides: bundled(snappy)
+
+# License: LGPL-2.1
 Provides: bundled(speech-dispatcher)
+
+# Public domain
 Provides: bundled(sqlite)
+
+# License: MIT
 Provides: bundled(superfasthash)
+
+# License: LGPL-3.0-or-later 
 Provides: bundled(talloc)
+
+# License: BSD-3-Clause
 Provides: bundled(usrsctp)
+
+# License: BSD-3-Clause
 Provides: bundled(v8)
+
+# License: BSD-3-Clause
 Provides: bundled(webrtc)
+
+# License: MIT
 Provides: bundled(woff2)
+
+# License: MIT
 Provides: bundled(xdg-mime)
+
+# License: MIT
 Provides: bundled(xdg-user-dirs)
+
+# License: Zlib 
 Provides: bundled(zlib)
+
+# License: BSD-3-Clause
 Provides: bundled(zstd)
 
 # For selinux scriptlet
