@@ -1,13 +1,13 @@
 diff --git a/chrome/common/url_constants.h b/chrome/common/url_constants.h
-index 6a382e69c9766..a71bda61c5632 100644
+index f16884e429de1..7e69337046e84 100644
 --- a/chrome/common/url_constants.h
 +++ b/chrome/common/url_constants.h
-@@ -136,7 +136,7 @@ inline constexpr char kChromeHelpViaMenuURL[] =
- #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+@@ -135,7 +135,7 @@ inline constexpr char kChromeHelpViaMenuURL[] =
+ #endif  // BUILDFLAG(IS_CHROMEOS)
  
  inline constexpr char kChromeHelpViaWebUIURL[] =
 -    "https://support.google.com/chrome?p=help&ctx=settings";
 +    "https://github.com/secureblue/Trivalent/issues";
- #if BUILDFLAG(IS_CHROMEOS_ASH)
+ #if BUILDFLAG(IS_CHROMEOS)
  inline constexpr char kChromeOsHelpViaWebUIURL[] =
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
