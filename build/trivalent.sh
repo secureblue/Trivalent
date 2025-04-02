@@ -79,4 +79,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
+exec /usr/bin/bwrap --dev-bind / / --ro-bind /dev/null /etc/ld.so.preload "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
