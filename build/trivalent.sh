@@ -1,8 +1,15 @@
 #!/bin/bash
 #
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
+# Copyright (c) 2025 The Trivalent Authors. All rights reserved.
+# Use of this source code is governed by a Apache-style license that can be
 # found in the LICENSE file.
+
+# Sanitize risky env variables
+export PATH="/usr/bin"
+export LD_PRELOAD=""
+export LD_LIBRARY_PATH=""
+export LD_AUDIT=""
+export LD_PROFILE=""
 
 # unify branding
 export CHROMIUM_NAME="@@CHROMIUM_NAME@@"
