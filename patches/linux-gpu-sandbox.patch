@@ -144,3 +144,18 @@ index 1f6067c3b0d1f..a4107837fe842 100644
      if (IsArchitectureArm()) {
        return std::make_unique<CrosArmGpuProcessPolicy>(
            base::CommandLine::ForCurrentProcess()->HasSwitch(
+diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
+index 268d28b9f3..ef60f924c0 100644
+--- a/gpu/ipc/service/gpu_init.cc
++++ b/gpu/ipc/service/gpu_init.cc
+@@ -394,7 +394,9 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+ #endif
+ 
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+-  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
++  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early &&
++                         // Vulkan is not supported by the sandbox
++                         gpu_preferences.gr_context_type != GrContextType::kVulkan;
+ #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
+   // For some reasons MacOSX's VideoToolbox might crash when called after
+   // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
