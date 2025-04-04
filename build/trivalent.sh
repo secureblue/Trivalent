@@ -1,8 +1,11 @@
 #!/bin/bash
-#
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+
+# Sanitize risky env variables
+export PATH="/usr/bin:/bin"
+export LD_PRELOAD=""
+export LD_LIBRARY_PATH=""
+export LD_AUDIT=""
+export LD_PROFILE=""
 
 # unify branding
 export CHROMIUM_NAME="@@CHROMIUM_NAME@@"
@@ -79,4 +82,9 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
+BWRAP_ARGS="--dev-bind / /"
+if [ -f "/etc/ld.so.preload" ]; then
+  BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload"
+fi
+
+exec /usr/bin/bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"

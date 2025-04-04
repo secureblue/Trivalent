@@ -177,6 +177,7 @@ Requires: nss%{_isa} >= 3.26
 Requires: nss-mdns%{_isa}
 Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
+Requires: bubblewrap
 Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
 
 ExclusiveArch: x86_64
@@ -502,8 +503,12 @@ rust_bindgen_root="%{_prefix}"
 
 # set clang version
 clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
+%if 0%{?fedora} > 41
+clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/.*##')"
+%else
 clang_base_path="$(clang --version | grep InstalledDir | cut -d' ' -f2 | sed 's#/bin##')"
-
+%endif
+ 
 CHROMIUM_GN_DEFINES=""
 CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
