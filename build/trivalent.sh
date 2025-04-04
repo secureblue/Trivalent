@@ -7,7 +7,7 @@ if [ "$OZONE_PLATFORM" != "wayland" ] && [ "$OZONE_PLATFORM" != "x11" ]; then
 fi
 
 # Sanitize risky env variables
-export PATH="/usr/bin"
+export PATH="/usr/bin:/bin"
 export LD_PRELOAD=""
 export LD_LIBRARY_PATH=""
 export LD_AUDIT=""
