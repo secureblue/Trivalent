@@ -86,7 +86,7 @@ BWRAP_ARGS="--dev-bind / /"
 if [ -f "/etc/ld.so.preload" ]; then
   BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload"
 fi
-if [ "$OZONE_PLATFORM" != "x11" ]; then
+if [ "$USE_WAYLAND" == "true" ]; then
   BWRAP_ARGS+=" --unshare-ipc" # prevent IPC where it isn't needed (x11 performance depends on IPC)
 fi
 
