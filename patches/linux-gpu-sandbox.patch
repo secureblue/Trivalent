@@ -38,7 +38,7 @@ index 97f7221cb1..85b8566e45 100644
 +#if !BUILDFLAG(IS_CHROMEOS)
 +      "/usr/lib64/libwayland-server.so.0",
 +      "/usr/lib64/gbm/dri_gbm.so",
-+      "/usr/lib64/dri/iHD_drv_video.so"
++      "/usr/lib64/dri/iHD_drv_video.so",
 +      "/usr/lib64/libgallium-25.0.0.so",
 +#endif
        "/usr/lib64/libglapi.so.0",
@@ -62,7 +62,7 @@ index 97f7221cb1..85b8566e45 100644
 +//      "/usr/lib64/libgallium-25.0.0.so"
 +      "/usr/lib64/libgallium-25.0.2.so",
 +      "/usr/lib64/gbm/dri_gbm.so",
-+      "/usr/lib64/dri/iHD_drv_video.so"
++      "/usr/lib64/dri/iHD_drv_video.so",
 +#endif
        "/usr/lib64/libEGL.so.1", "/usr/lib64/libGLESv2.so.2",
        "/usr/lib64/libelf.so.1", "/usr/lib64/libglapi.so.0",
@@ -72,7 +72,7 @@ index 97f7221cb1..85b8566e45 100644
        "/usr/lib64/libc++.so.1",
        "/usr/lib64/libgallium_dri.so",
 +#if !BUILDFLAG(IS_CHROMEOS)
-+      "/usr/lib64/dri/virtio_gpu_drv_video.so"
++      "/usr/lib64/dri/virtio_gpu_drv_video.so",
 +      "/usr/lib64/libwayland-server.so.0",
 +      "/usr/lib64/gbm/dri_gbm.so",
 +#endif
