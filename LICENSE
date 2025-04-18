@@ -2,7 +2,8 @@ Copyright © 2024-2025 The Trivalent Authors
 
 Trivalent is available under the terms of the GNU General Public
 License version 2 only, according to LICENSE.GPL-2.0. Also see
-LICENSE.Apache-2.0-note for an exception from the GPLv2 terms.
+LICENSE.Apache-2.0-note, LICENSE.FTL-note, and LICENSE.Webview-note
+for exceptions to the GPLv2 terms.
 
 In order for us to contribute upstream, contributors to Trivalent
 give permission to the secureblue project to submit their changes to the

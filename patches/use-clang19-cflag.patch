@@ -1,13 +1,13 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 88109264ea962..ac9f6663f2cf5 100644
+index 15141254347c3..3f63b3f37c333 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -1991,7 +1991,7 @@ config("default_warnings") {
-         cflags_cc += [ "-Wno-dangling-assignment-gsl" ]
+@@ -1968,7 +1968,7 @@ config("default_warnings") {
+         "-Wno-thread-safety-reference-return",
  
          # TODO(crbug.com/376641662): Fix and re-enable.
--        cflags += [ "-Wno-nontrivial-memcall" ]
-+        cflags += [ "-Wno-nontrivial-memaccess" ]
-       }
-     }
+-        "-Wno-nontrivial-memcall",
++        "-Wno-nontrivial-memaccess",
+       ]
  
+       cflags_cc += [

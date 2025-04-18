@@ -1,8 +1,8 @@
-diff --git a/chrome/browser/background/background_mode_manager.cc b/chrome/browser/background/background_mode_manager.cc
-index 305628ad9348f..7dd6c3d711a61 100644
---- a/chrome/browser/background/background_mode_manager.cc
-+++ b/chrome/browser/background/background_mode_manager.cc
-@@ -358,7 +358,7 @@ BackgroundModeManager::~BackgroundModeManager() {
+diff --git a/chrome/browser/background/extensions/background_mode_manager.cc b/chrome/browser/background/extensions/background_mode_manager.cc
+index c7de82b5ee393..ee63ed0637067 100644
+--- a/chrome/browser/background/extensions/background_mode_manager.cc
++++ b/chrome/browser/background/extensions/background_mode_manager.cc
+@@ -364,7 +364,7 @@ BackgroundModeManager::~BackgroundModeManager() {
  
  // static
  void BackgroundModeManager::RegisterPrefs(PrefRegistrySimple* registry) {

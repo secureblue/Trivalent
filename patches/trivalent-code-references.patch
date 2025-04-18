@@ -12,12 +12,12 @@ index 29a9515238937..420799f254862 100644
  }
  
 diff --git a/chrome/common/channel_info_posix.cc b/chrome/common/channel_info_posix.cc
-index 9bcf0cef8d857..1a93fbcc29bb4 100644
+index eb94a11e5c932..25c4e240eb919 100644
 --- a/chrome/common/channel_info_posix.cc
 +++ b/chrome/common/channel_info_posix.cc
-@@ -125,6 +125,7 @@ std::string GetChannelSuffixForExtraFlagsEnvVarName() {
- // of lacros-chrome is complete.
- #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
+@@ -122,6 +122,7 @@ std::string GetChannelSuffixForExtraFlagsEnvVarName() {
+ 
+ #if BUILDFLAG(IS_LINUX)
  std::string GetDesktopName(base::Environment* env) {
 +  return "trivalent.desktop";
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
