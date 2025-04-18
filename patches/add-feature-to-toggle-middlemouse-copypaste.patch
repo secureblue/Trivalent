@@ -101,7 +101,7 @@ index 8f129a1d5d..0ce49f8457 100644
 -  if (frame_ == focus_frame)
 +  if (frame_ == focus_frame &&
 +      !RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled() &&
-+      base::FeatureList::IsEnabled(ui::views::features::kMiddleClickCopyPaste))
++      base::FeatureList::IsEnabled(views::features::kMiddleClickCopyPaste))
      return frame_->GetEditor().ExecuteCommand("PasteGlobalSelection");
  
    return false;
