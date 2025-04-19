@@ -77,5 +77,6 @@ fi
 if [ "$USE_WAYLAND" == "true" ]; then
   BWRAP_ARGS+=" --unshare-ipc" # prevent IPC where it isn't needed (x11 performance depends on IPC)
 fi
+BWRAP_ARGS+=" --unshare-uts --hostname $CHROMIUM_NAME" # spoof hostname to reduce Singleton triggers
 
 exec /usr/bin/bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
