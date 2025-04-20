@@ -1,0 +1,60 @@
+diff --git a/components/search_engines/search_engine_countries-inc.cc b/components/search_engines/search_engine_countries-inc.cc
+index 02ae0fe7ff..9183312a8e 100644
+--- a/components/search_engines/search_engine_countries-inc.cc
++++ b/components/search_engines/search_engine_countries-inc.cc
+@@ -38,6 +38,7 @@ struct EngineAndTier {
+ 
+ // Default (for countries with no better engine set)
+ constexpr EngineAndTier engines_default[] = {
++    {SearchEngineTier::kTopEngines, &startpage},
+     {SearchEngineTier::kTopEngines, &google},
+     {SearchEngineTier::kTopEngines, &bing},
+     {SearchEngineTier::kTopEngines, &yahoo},
+@@ -192,6 +193,7 @@ constexpr EngineAndTier engines_BZ[] = {
+ 
+ // Canada
+ constexpr EngineAndTier engines_CA[] = {
++    {SearchEngineTier::kTopEngines, &startpage},
+     {SearchEngineTier::kTopEngines, &google},
+     {SearchEngineTier::kTopEngines, &bing},
+     {SearchEngineTier::kTopEngines, &yahoo_ca},
+@@ -270,6 +272,7 @@ constexpr EngineAndTier engines_CZ[] = {
+ 
+ // Germany
+ constexpr EngineAndTier engines_DE[] = {
++  {SearchEngineTier::kTopEngines, &startpage},
+   {SearchEngineTier::kTopEngines, &google},
+   {SearchEngineTier::kTopEngines, &duckduckgo},
+   {SearchEngineTier::kTopEngines, &ecosia},
+@@ -277,7 +280,6 @@ constexpr EngineAndTier engines_DE[] = {
+   {SearchEngineTier::kTopEngines, &bing},
+   {SearchEngineTier::kRemainingEngines, &yahoo_de},
+   {SearchEngineTier::kRemainingEngines, &qwant},
+-  {SearchEngineTier::kRemainingEngines, &startpage},
+ };
+ 
+ // Denmark
+@@ -387,6 +389,7 @@ constexpr EngineAndTier engines_FR[] = {
+ 
+ // United Kingdom
+ constexpr EngineAndTier engines_GB[] = {
++    {SearchEngineTier::kTopEngines, &startpage},
+     {SearchEngineTier::kTopEngines, &google},
+     {SearchEngineTier::kTopEngines, &bing},
+     {SearchEngineTier::kTopEngines, &yahoo_uk},
+@@ -753,6 +756,7 @@ constexpr EngineAndTier engines_NI[] = {
+ 
+ // Netherlands
+ constexpr EngineAndTier engines_NL[] = {
++  {SearchEngineTier::kTopEngines, &startpage},
+   {SearchEngineTier::kTopEngines, &google},
+   {SearchEngineTier::kTopEngines, &duckduckgo},
+   {SearchEngineTier::kTopEngines, &brave},
+@@ -1056,6 +1060,7 @@ constexpr EngineAndTier engines_UA[] = {
+ 
+ // United States
+ constexpr EngineAndTier engines_US[] = {
++    {SearchEngineTier::kTopEngines, &startpage},
+     {SearchEngineTier::kTopEngines, &google},
+     {SearchEngineTier::kTopEngines, &bing},
+     {SearchEngineTier::kTopEngines, &yahoo},
