@@ -9,7 +9,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ubuntu-latest
     container: 
-      image: fedora:41
+      image: fedora:42
     steps:
       - name: Build SRPM 
         shell: bash
@@ -67,7 +67,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ubuntu-latest
     container: 
-      image: fedora:41
+      image: fedora:42
     needs: buildrpm
     steps:
       - name: Retrieve RPM

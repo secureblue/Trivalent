@@ -1,7 +1,7 @@
-diff --git a/ui/views/selection_controller.cc b/ui/views/selection_controller.cc
-index b1a4514e7bdc4..d6c4abcbd7ca0 100644
---- a/ui/views/selection_controller.cc
-+++ b/ui/views/selection_controller.cc
+diff --git a/chrome/browser/ui/views/tabs/tab_strip.cc b/chrome/browser/ui/views/tabs/tab_strip.cc
+index 9b5b2834eb..40e7c7b6fa 100644
+--- a/chrome/browser/ui/views/tabs/tab_strip.cc
++++ b/chrome/browser/ui/views/tabs/tab_strip.cc
 @@ -2,6 +2,9 @@
  // Use of this source code is governed by a BSD-style license that can be
  // found in the LICENSE file.
@@ -9,23 +9,49 @@ index b1a4514e7bdc4..d6c4abcbd7ca0 100644
 +#include "ui/views/views_features.h"
 +#include "third_party/blink/public/common/features_generated.h"
 +
- #include "ui/views/selection_controller.h"
+ #include "chrome/browser/ui/views/tabs/tab_strip.h"
  
- #include <algorithm>
-@@ -87,7 +90,12 @@ bool SelectionController::OnMousePressed(
+ #include <stddef.h>
+@@ -2186,7 +2189,11 @@ void TabStrip::NewTabButtonPressed(const ui::Event& event) {
+     const ui::MouseEvent& mouse = static_cast<const ui::MouseEvent&>(event);
+     if (mouse.IsOnlyMiddleMouseButton()) {
+       if (ui::Clipboard::IsSupportedClipboardBuffer(
+-              ui::ClipboardBuffer::kSelection)) {
++              ui::ClipboardBuffer::kSelection) &&
++          !base::FeatureList::IsEnabled(
++                              blink::features::kMiddleClickAutoscroll) &&
++          base::FeatureList::IsEnabled(
++                             views::features::kMiddleClickCopyPaste)) {
+         ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+         CHECK(clipboard)
+             << "Clipboard instance is not available, cannot proceed with "
+diff --git a/ui/views/selection_controller.h b/ui/views/selection_controller.h
+index dcc4d40592932..f9a9b002bd956 100644
+--- a/ui/views/selection_controller.h
++++ b/ui/views/selection_controller.h
+@@ -5,6 +5,10 @@
+ #ifndef UI_VIEWS_SELECTION_CONTROLLER_H_
+ #define UI_VIEWS_SELECTION_CONTROLLER_H_
+ 
++// Needed features for middle click controls
++#include "ui/views/views_features.h"
++#include "third_party/blink/public/common/features_generated.h"
++
+ #include "base/memory/raw_ptr.h"
+ #include "base/time/time.h"
+ #include "base/timer/timer.h"
+@@ -61,7 +65,10 @@ class VIEWS_EXPORT SelectionController {
+   // Sets whether the SelectionController should update or paste the
+   // selection clipboard on middle-click. Default is false.
+   void set_handles_selection_clipboard(bool value) {
+-    handles_selection_clipboard_ = value;
++    handles_selection_clipboard_ = value &&
++          !base::FeatureList::IsEnabled(
++                              blink::features::kMiddleClickAutoscroll) &&
++          base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste);
    }
  
-   if (handles_selection_clipboard_ && event.IsOnlyMiddleMouseButton() &&
--      !delegate_->IsReadOnly()) {
-+      !delegate_->IsReadOnly() &&
-+      // MiddleClickAutoscroll can still paste without this check, so
-+      // these features are mutually exclusive in favor of autoscroll
-+      !base::FeatureList::IsEnabled(
-+                          blink::features::kMiddleClickAutoscroll) &&
-+      base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste)) {
-     delegate_->OnBeforePointerAction();
-     const bool selection_changed =
-         render_text->MoveCursorToPoint(event.location(), false);
+   // Offsets the double-clicked word's range. This is only used in the unusual
 diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
 index b6352269a2a8b..50365c274e3a3 100644
 --- a/ui/views/views_features.cc
@@ -55,3 +81,27 @@ index 0a86cbad6f271..24c504b18119a 100644
  }  // namespace views::features
  
  #endif  // UI_VIEWS_VIEWS_FEATURES_H_
+diff --git a/third_party/blink/renderer/core/editing/selection_controller.cc b/third_party/blink/renderer/core/editing/selection_controller.cc
+index 8f129a1d5d..0ce49f8457 100644
+--- a/third_party/blink/renderer/core/editing/selection_controller.cc
++++ b/third_party/blink/renderer/core/editing/selection_controller.cc
+@@ -63,6 +63,8 @@
+ #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
+ #include "ui/gfx/geometry/point_conversions.h"
+ 
++#include "ui/views/views_features.h"
++
+ namespace blink {
+ 
+ SelectionController::SelectionController(LocalFrame& frame)
+@@ -1260,7 +1262,9 @@ bool SelectionController::HandlePasteGlobalSelection(
+   Frame* focus_frame =
+       frame_->GetPage()->GetFocusController().FocusedOrMainFrame();
+   // Do not paste here if the focus was moved somewhere else.
+-  if (frame_ == focus_frame)
++  if (frame_ == focus_frame &&
++      !RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled() &&
++      base::FeatureList::IsEnabled(views::features::kMiddleClickCopyPaste))
+     return frame_->GetEditor().ExecuteCommand("PasteGlobalSelection");
+ 
+   return false;
