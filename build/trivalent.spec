@@ -453,7 +453,7 @@ CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
-#CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
+CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ld.lld: error: unable to find library -lffi_pic
 export CHROMIUM_GN_DEFINES
 
 sed -i 's|OFFICIAL_BUILD|GOOGLE_CHROME_BUILD|g' tools/generate_shim_headers/generate_shim_headers.py
