@@ -254,7 +254,7 @@ Provides: bundled(hunspell)
 # License: IJG
 Provides: bundled(iccjpeg)
 
-# License: Unicode-3.0third_party/rust-toolchain/bin/
+# License: Unicode-3.0
 Provides: bundled(icu)
 
 # License: MIT
