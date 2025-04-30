@@ -511,7 +511,6 @@ CHROMIUM_GN_DEFINES+=' is_cfi=true use_cfi_cast=true'
 CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
-CHROMIUM_GN_DEFINES+=" clang_version=\"$clang_version\""
 CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
 CHROMIUM_GN_DEFINES+=' use_lld=true'
 CHROMIUM_GN_DEFINES+=' rust_sysroot_absolute="%{_prefix}"'
