@@ -133,7 +133,7 @@ index b101a4795d..4e5a110caf 100644
    // <if expr="chrome_root_store_cert_management_ui">
    private enableCertManagementUIV2_: boolean;
    // </if>
-+  private webrtcHandlingPolicyOptions_: Array;
++  private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
    private showSecureDnsSetting_: boolean;
  
    // <if expr="is_chromeos">
