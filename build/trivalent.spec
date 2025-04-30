@@ -428,27 +428,20 @@ PATH="$PATH:$(pwd)/third_party/ninja/
 export PATH
 
 CHROMIUM_GN_DEFINES=''
-CHROMIUM_GN_DEFINES+=' enable_nacl=false'
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
-sed -i 's|OFFICIAL_BUILD|GOOGLE_CHROME_BUILD|g' tools/generate_shim_headers/generate_shim_headers.py
 CHROMIUM_GN_DEFINES+=' chrome_pgo_phase=0'
 CHROMIUM_GN_DEFINES+=' is_cfi=true use_cfi_cast=true'
 CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
 CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
-CHROMIUM_GN_DEFINES+=' use_lld=true'
 CHROMIUM_GN_DEFINES+=' use_sysroot=false'
-CHROMIUM_GN_DEFINES+=' icu_use_data_file=true'
 CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
-CHROMIUM_GN_DEFINES+=' enable_iterator_debugging=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
-CHROMIUM_GN_DEFINES+=' enable_arcore=false'
 CHROMIUM_GN_DEFINES+=' enable_openxr=false'
-CHROMIUM_GN_DEFINES+=' enable_cardboard=false'
 CHROMIUM_GN_DEFINES+=' build_dawn_tests=false enable_perfetto_unittests=false'
 CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
@@ -459,10 +452,11 @@ CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
-CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
-CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
+#CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
 export CHROMIUM_GN_DEFINES
+
+sed -i 's|OFFICIAL_BUILD|GOOGLE_CHROME_BUILD|g' tools/generate_shim_headers/generate_shim_headers.py
 
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
