@@ -107,12 +107,6 @@ Source20: %{chromium_name}256.png
 }
 
 BuildRequires: golang-github-evanw-esbuild
-#BuildRequires: clang
-#BuildRequires: clang-tools-extra
-#BuildRequires: llvm
-BuildRequires: lld
-#BuildRequires: rustc
-BuildRequires: bindgen-cli
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -128,7 +122,7 @@ BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Widgets)
 BuildRequires: pkgconfig(Qt6Core)
 BuildRequires: pkgconfig(Qt6Widgets)
-BuildRequires: compiler-rt
+#BuildRequires: compiler-rt
 BuildRequires: libatomic
 BuildRequires:	libcap-devel
 BuildRequires:	libcurl-devel
@@ -184,214 +178,144 @@ ExclusiveArch: x86_64
 
 # License: BSD-3-Clause
 Provides: bundled(angle)
-
 # License: MIT
 Provides: bundled(bintrees)
-
 # License: Apache-2.0
 Provides: bundled(boringssl)
-
 # License: MIT
 Provides: bundled(brotli)
-
 # License: BSD-2-Clause
 Provides: bundled(bspatch)
-
 # License: Apache-2.0
 Provides: bundled(cacheinvalidation)
-
 # License: BSD-3-Clause
 Provides: bundled(colorama)
-
 # License: Apache-2.0
 Provides: bundled(crashpad)
-
 # License: BSD-3-Clause
 Provides: bundled(crc32c)
-
 # License: BSD-2-Clause
 Provides: bundled(dav1d)
-
 # License: BSD-3-Clause
 Provides: bundled(double-conversion)
-
 # License: dtoa
 Provides: bundled(dmg_fp)
-
 # License: MIT
 Provides: bundled(expat)
-
 # License: SunPro
 Provides: bundled(fdmlibm)
-
 # License: LGPL-2.1-or-later 
 Provides: bundled(ffmpeg)
-
 # License: BSD-3-Clause
 Provides: bundled(flac)
-
 # License: BSD-3-Clause
 Provides: bundled(fips181)
-
 # License: MIT
 Provides: bundled(fontconfig)
-
 # License: FTL
 Provides: bundled(freetype)
-
 # License: BSD-3-Clause
 Provides: bundled(gperftools)
-
 # License: MIT
 Provides: bundled(harfbuzz-ng)
-
 # License: Apache-2.0
 Provides: bundled(highway)
-
 # License: MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only
 Provides: bundled(hunspell)
-
 # License: IJG
 Provides: bundled(iccjpeg)
-
 # License: Unicode-3.0
 Provides: bundled(icu)
-
 # License: MIT
 Provides: bundled(lcms2)
-
 # License: BSD-3-Clause
 Provides: bundled(leveldb)
-
 # License: Apache-2.0
 Provides: bundled(libaddressinput)
-
 # License: BSD-2-Clause
 Provides: bundled(libaom)
-
 # License: MIT
 Provides: bundled(libdrm)
-
 # License: BSD-3-Clause
 Provides: bundled(libevent)
-
 # License: BSD-3-Clause
 Provides: bundled(libjingle)
-
 # License: Zlib AND IJG and BSD-3-Clause
 Provides: bundled(libjpeg)
-
 # License: BSD-2-Clause
 Provides: bundled(libopenjpeg2)
-
 # License: Apache-2.0
 Provides: bundled(libphonenumber)
-
 # License: Libpng
 Provides: bundled(libpng)
-
 # License: LGPL-2.1
 Provides: bundled(libsecret)
-
 # License: BSD-3-Clause
 Provides: bundled(libsrtp)
-
 # License: libtiff
 Provides: bundled(libtiff)
-
 # License: BSD-2-Clause
 Provides: bundled(libudis86)
-
 # License: LGPL-2.1
 Provides: bundled(libusbx)
-
 # License: BSD-3-Clause
 Provides: bundled(libvpx)
-
 # License: BSD-3-Clause
 Provides: bundled(libwebp)
-
 # License: BSD-3-Clause
 Provides: bundled(libyuv)
-
 # License: MIT
 Provides: bundled(libxml)
-
 # License: MIT
 Provides: bundled(libxslt)
-
 # Public Domain
 Provides: bundled(lzma)
-
 # License: MIT
 Provides: bundled(mesa)
-
 # License: BSD-3-Clause
 Provides: bundled(mozc)
-
 # License: BSD-2-Clause
 Provides: bundled(openh264)
-
 # License: BSD-3-Clause
 Provides: bundled(opus)
-
 # License: BSD-3-Clause
 Provides: bundled(ots)
-
 # License: BSD-3-Clause
 Provides: bundled(protobuf)
-
 # License: MIT
 Provides: bundled(qcms)
-
 # License: BSD-3-Clause
 Provides: bundled(re2)
-
 # License: Apache-2.0
 Provides: bundled(sfntly)
-
 # License: BSD-3-Clause
 Provides: bundled(skia)
-
 # License: MIT
 Provides: bundled(SMHasher)
-
 # License: BSD-3-Clause
 Provides: bundled(snappy)
-
 # License: LGPL-2.1
 Provides: bundled(speech-dispatcher)
-
 # Public domain
 Provides: bundled(sqlite)
-
 # License: MIT
 Provides: bundled(superfasthash)
-
 # License: LGPL-3.0-or-later 
 Provides: bundled(talloc)
-
 # License: BSD-3-Clause
 Provides: bundled(usrsctp)
-
 # License: BSD-3-Clause
 Provides: bundled(v8)
-
 # License: BSD-3-Clause
 Provides: bundled(webrtc)
-
 # License: MIT
 Provides: bundled(woff2)
-
 # License: MIT
 Provides: bundled(xdg-mime)
-
 # License: MIT
 Provides: bundled(xdg-user-dirs)
-
 # License: Zlib 
 Provides: bundled(zlib)
-
 # License: BSD-3-Clause
 Provides: bundled(zstd)
 
@@ -462,7 +386,7 @@ find -type f \( -iname "*.py" \) -exec sed -i '1s=^#! */usr/bin/\(python\|env py
 
 # Get rid of the pre-built eu-strip binary, it is x86_64 and of mysterious origin
 rm -rf buildtools/third_party/eu-strip/bin/eu-strip
-  
+
 # Replace it with a symlink to the Fedora copy
 ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
 
@@ -495,17 +419,15 @@ export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
 
-# add internal clang for build
+# add internal clang to PATH for build
 PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
 
-# add internal rust utils for build
+# add internal rust utils to PATH for build
 PATH="$PATH:$(pwd)/third_party/rust-toolchain/bin"
 
 export PATH
 
 CHROMIUM_GN_DEFINES=''
-#CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
-#CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' enable_nacl=false'
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
