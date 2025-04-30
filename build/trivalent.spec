@@ -111,7 +111,7 @@ BuildRequires: clang
 BuildRequires: clang-tools-extra
 BuildRequires: llvm
 BuildRequires: lld
-BuildRequires: rustcclang --version | sed -n 's/clang version //p' | cut -d. -f1
+BuildRequires: rustc
 BuildRequires: bindgen-cli
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
@@ -134,7 +134,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libcurl-devel
 BuildRequires:	libgcrypt-devel
 BuildRequires:	libudev-devel
-BuildRequires:	libuuid-develclang --version | sed -n 's/clang version //p' | cut -d. -f1
+BuildRequires:	libuuid-devel
 BuildRequires:	libusb-compat-0.1-devel
 BuildRequires:	libutempter-devel
 BuildRequires:	libXdamage-devel
@@ -403,7 +403,7 @@ Requires(post): /usr/sbin/restorecon
 Trivalent is a security-focused browser built upon the Chromium web browser.
 
 %package common
-Summary: Files needed for Chromium--
+Summary: Files needed for Chromium
 %description common
 %{summary}.
 
