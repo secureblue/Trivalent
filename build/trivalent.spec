@@ -108,10 +108,10 @@ Source20: %{chromium_name}256.png
 
 BuildRequires: golang-github-evanw-esbuild
 #BuildRequires: clang
-BuildRequires: clang-tools-extra
-BuildRequires: llvm
+#BuildRequires: clang-tools-extra
+#BuildRequires: llvm
 BuildRequires: lld
-BuildRequires: rustc
+#BuildRequires: rustc
 BuildRequires: bindgen-cli
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
@@ -254,7 +254,7 @@ Provides: bundled(hunspell)
 # License: IJG
 Provides: bundled(iccjpeg)
 
-# License: Unicode-3.0
+# License: Unicode-3.0third_party/rust-toolchain/bin/
 Provides: bundled(icu)
 
 # License: MIT
@@ -494,15 +494,18 @@ export LDFLAGS
 export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
-rustc_version="$(rustc --version)"
 
 # add internal clang for build
-export PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
-export LIBCLANG_PATH="$(pwd)/third_party/rust-toolchain/lib"
+PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
+
+# add internal rust utils for build
+PATH="$PATH:$(pwd)/third_party/rust-toolchain/bin"
+
+export PATH
 
 CHROMIUM_GN_DEFINES=''
-CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
+#CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
+#CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
 CHROMIUM_GN_DEFINES+=' enable_nacl=false'
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
@@ -514,9 +517,6 @@ CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
 CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
 CHROMIUM_GN_DEFINES+=' use_lld=true'
-CHROMIUM_GN_DEFINES+=' rust_sysroot_absolute="%{_prefix}"'
-CHROMIUM_GN_DEFINES+=' rust_bindgen_root="%{_prefix}"'
-CHROMIUM_GN_DEFINES+=" rustc_version=\"$rustc_version\""
 CHROMIUM_GN_DEFINES+=' use_sysroot=false'
 CHROMIUM_GN_DEFINES+=' icu_use_data_file=true'
 CHROMIUM_GN_DEFINES+=' target_os="linux"'
