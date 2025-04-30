@@ -498,6 +498,7 @@ rustc_version="$(rustc --version)"
 
 # add internal clang for build
 export PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
+export LIBCLANG_PATH="$(pwd)/third_party/rust-toolchain/lib"
 
 CHROMIUM_GN_DEFINES=''
 CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
