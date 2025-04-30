@@ -48,7 +48,7 @@ jobs:
           sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm -y
           sudo dnf install mock rclone -y
           sudo usermod -aG mock $(whoami)
-          mock --resultdir=. -r fedora-41-x86_64 --rebuild trivalent-*.src.rpm
+          mock --resultdir=. -r fedora-42-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Prepare for upload
         shell: bash
