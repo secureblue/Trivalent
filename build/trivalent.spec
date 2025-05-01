@@ -198,7 +198,7 @@ Provides: bundled(dmg_fp)
 Provides: bundled(expat)
 # License: SunPro
 Provides: bundled(fdmlibm)
-# License: LGPL-2.1-or-later 
+# License: LGPL-2.1-or-later
 Provides: bundled(ffmpeg)
 # License: BSD-3-Clause
 Provides: bundled(flac)
@@ -294,7 +294,7 @@ Provides: bundled(speech-dispatcher)
 Provides: bundled(sqlite)
 # License: MIT
 Provides: bundled(superfasthash)
-# License: LGPL-3.0-or-later 
+# License: LGPL-3.0-or-later
 Provides: bundled(talloc)
 # License: BSD-3-Clause
 Provides: bundled(usrsctp)
@@ -308,7 +308,7 @@ Provides: bundled(woff2)
 Provides: bundled(xdg-mime)
 # License: MIT
 Provides: bundled(xdg-user-dirs)
-# License: Zlib 
+# License: Zlib
 Provides: bundled(zlib)
 # License: BSD-3-Clause
 Provides: bundled(zstd)
@@ -456,7 +456,7 @@ CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ld.lld: error: unable to find library -lffi_pic
 export CHROMIUM_GN_DEFINES
 
-sed -i 's|OFFICIAL_BUILD|GOOGLE_CHROME_BUILD|g' tools/generate_shim_headers/generate_shim_headers.py
+#sed -i 's|OFFICIAL_BUILD|GOOGLE_CHROME_BUILD|g' tools/generate_shim_headers/generate_shim_headers.py
 
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
