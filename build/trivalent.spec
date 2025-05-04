@@ -421,22 +421,20 @@ PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
 PATH="$PATH:$(pwd)/third_party/rust-toolchain/bin"
 
 # add internal nodejs to PATH for build
-PATH="$PATH:$(pwd)/third_party/node/linux/node-linux-x64/bin
+PATH="$PATH:$(pwd)/third_party/node/linux/node-linux-x64/bin"
 
 # add internal ninja to PATH for build
-PATH="$PATH:$(pwd)/third_party/ninja/
+PATH="$PATH:$(pwd)/third_party/ninja/"
 
 export PATH
 
 CHROMIUM_GN_DEFINES=''
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
-CHROMIUM_GN_DEFINES+=' chrome_pgo_phase=0'
 CHROMIUM_GN_DEFINES+=' is_cfi=true use_cfi_cast=true'
 CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
-CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
 CHROMIUM_GN_DEFINES+=' use_sysroot=false'
 CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
