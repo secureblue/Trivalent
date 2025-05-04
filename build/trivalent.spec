@@ -424,7 +424,7 @@ PATH="$PATH:$(pwd)/third_party/rust-toolchain/bin"
 PATH="$PATH:$(pwd)/third_party/node/linux/node-linux-x64/bin"
 
 # add internal ninja to PATH for build
-PATH="$PATH:$(pwd)/third_party/ninja/"
+PATH="$PATH:$(pwd)/third_party/ninja"
 
 export PATH
 
