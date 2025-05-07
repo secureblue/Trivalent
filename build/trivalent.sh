@@ -11,6 +11,40 @@ readonly LD_PROFILE=""
 # unify branding
 readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
+function determine_sandbox_args() {
+  readonly SANDBOX_PARAMS="$SANDBOX_PARAMS"
+
+  # Filesystem Limits
+  BWRAP_ARGS="--dev-bind / /" # Broad-full device access
+  BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
+  BWRAP_ARGS+=" --dev /dev" # create a fresh /dev directory
+  BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # grant access to graphics acceleration
+  BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # grant access to USB devices
+  if [ -f "/etc/ld.so.preload" ]; then
+    BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload (mainly for hardened_malloc, since it crashes chromium)
+  fi
+  if [ "$EPHEMERAL_PROFILE" == "true" ]; then
+    BWRAP_ARGS+=" --tmpfs $HOME" # mount user directories with as to prevent the persistent data
+    BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR" # mount xdg-run immutable to prevent potential persistence
+    BWRAP_ARGS+=" --tmpfs /tmp" # create a new /tmp
+  fi
+
+  # Privilege Reduction
+  BWRAP_ARGS+=" --cap-drop ALL"
+  BWRAP_ARGS+=" --new-session"
+  if [ "$USE_WAYLAND" == "true" ]; then
+    BWRAP_ARGS+=" --unshare-ipc"
+  fi
+  BWRAP_ARGS+=" --unshare-pid"
+  BWRAP_ARGS+=" --unshare-cgroup"
+  BWRAP_ARGS+=" --unshare-user"
+  BWRAP_ARGS+=" --unshare-uts"
+  BWRAP_ARGS+=" --hostname $TRIVALENT"
+  BWRAP_ARGS+=" -- "
+
+  echo "$BWRAP_ARGS" # return
+}
+
 # Let the wrapped binary know that it has been run through the wrapper.
 readonly CHROME_WRAPPER="`readlink -f "$0"`"
 readonly HERE="`dirname "$CHROME_WRAPPER"`"
@@ -64,18 +98,12 @@ else
   echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
+readonly BWRAP_ARGS="$( determine_sandbox_args )"
+
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
 # processes (http://crbug.com/376567).
 exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-BWRAP_ARGS="--dev-bind / /"
-if [ -f "/etc/ld.so.preload" ]; then
-  BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload"
-fi
-if [ "$USE_WAYLAND" == "true" ]; then
-  BWRAP_ARGS+=" --unshare-ipc" # prevent IPC where it isn't needed (x11 performance depends on IPC)
-fi
-
-exec /usr/bin/bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
+exec /usr/bin/bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" "$CHROMIUM_FLAGS" "$@"
