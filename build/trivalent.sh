@@ -35,7 +35,7 @@ function determine_sandbox_args() {
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR" # mount xdg-run immutable to prevent potential persistence
       BWRAP_ARGS+=" --tmpfs /tmp" # create a new /tmp
     elif param_present "protecthome"; then
-      BWRAP_ARGS+=" --ro-bind $HOME $HOME" # Prevent any writes to HOME, this includes downloads
+      BWRAP_ARGS+=" --ro-bind $HOME $HOME" # Prevent any writes to HOME, by default this doesn't include downloads
       BWRAP_ARGS+=" --bind $HOME/.config/trivalent $HOME/.config/trivalent" # Allow access to Trivalent's data directory
       ! param_present "protectdownloads" && BWRAP_ARGS+=" --bind $HOME/Downloads $HOME/Downloads" # Prevent downloads access if the user wants it
     fi
