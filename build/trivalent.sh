@@ -21,10 +21,10 @@ function determine_sandbox_args() {
   # Initial args, these are transparent and do nothing on their own
   BWRAP_ARGS="--dev-bind / /" # Broad-full device access
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
+  [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
   BWRAP_ARGS+=" --cap-drop ALL" # drop all capabilities, we always want to do this
   if ! param_present "nosandbox"; then
     # Filesystem Limits
-    [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
     if ! param_present "nohidedevices"; then
       BWRAP_ARGS+=" --dev /dev" # create a fresh /dev directory
       ! param_present "hidegpudevice" && BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # GPU device access
