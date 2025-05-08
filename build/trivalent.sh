@@ -14,36 +14,39 @@ readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 # Sandbox parameter parsing logic
 readonly SANDBOX_PARAMS="$SANDBOX_PARAMS"
 function param_present() {
-  echo "$SANDBOX_PARAMS" | tr "," '\n' | grep -F -x "$1"
+  echo "$SANDBOX_PARAMS" | tr "," '\n' | grep -F -x -q "$1"
 }
 function determine_sandbox_args() {
-  # Filesystem Limits
+  # Initial args, these are transparent and do nothing on their own
   BWRAP_ARGS="--dev-bind / /" # Broad-full device access
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
-  if [ ! param_present "nosandbox" ]; then
-    BWRAP_ARGS+=" --dev /dev" # create a fresh /dev directory
-    BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # grant access to graphics acceleration
-    BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # grant access to USB devices
-    if [ -f "/etc/ld.so.preload" ]; then
-      BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload (mainly for hardened_malloc, since it crashes chromium)
+
+  BWRAP_ARGS+=" --cap-drop ALL" # drop all capabilities, we always want to do this
+
+  if ! param_present "nosandbox"; then
+    # Filesystem Limits
+    [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
+    if ! param_present "nohidedev"; then
+      BWRAP_ARGS+=" --dev /dev" # create a fresh /dev directory
+      param_present "hidedevdri" && BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # USB device access
+      param_present "hideusb" && BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # USB device access
     fi
-    if [ param_present " ephemeralprofile" ]; then
+    if param_present " ephemeralprofile"; then
       BWRAP_ARGS+=" --tmpfs $HOME" # mount user directories with as to prevent the persistent data
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR" # mount xdg-run immutable to prevent potential persistence
       BWRAP_ARGS+=" --tmpfs /tmp" # create a new /tmp
     fi
-  
+
     # Privilege Reduction
-    BWRAP_ARGS+=" --cap-drop ALL"
-    BWRAP_ARGS+=" --new-session"
-    if [ "$USE_WAYLAND" == "true" ]; then
-      BWRAP_ARGS+=" --unshare-ipc"
+    param_present "attachtoterminal" && BWRAP_ARGS+=" --new-session"
+    param_present "unshareuser" && BWRAP_ARGS+=" --unshare-user"
+    param_present "unsharepid" && BWRAP_ARGS+=" --unshare-pid"
+    [[ "$USE_WAYLAND" == "true" ]] && BWRAP_ARGS+=" --unshare-ipc"
+    if ! param_present "shareuts"; then
+      BWRAP_ARGS+=" --unshare-uts"
+      BWRAP_ARGS+=" --hostname $CHROMIUM_NAME"
     fi
-    BWRAP_ARGS+=" --unshare-pid"
     BWRAP_ARGS+=" --unshare-cgroup"
-    BWRAP_ARGS+=" --unshare-user"
-    BWRAP_ARGS+=" --unshare-uts"
-    BWRAP_ARGS+=" --hostname $CHROMIUM_NAME"
   fi
   BWRAP_ARGS+=" -- "
 
