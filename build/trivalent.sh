@@ -2,6 +2,7 @@
 
 # Sanitize & protect risky variables
 readonly HOME="$HOME"
+readonly XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 readonly PATH="/usr/bin:/bin"
 readonly LD_PRELOAD=""
 readonly LD_LIBRARY_PATH=""
@@ -20,25 +21,22 @@ function determine_sandbox_args() {
   # Initial args, these are transparent and do nothing on their own
   BWRAP_ARGS="--dev-bind / /" # Broad-full device access
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
-
   BWRAP_ARGS+=" --cap-drop ALL" # drop all capabilities, we always want to do this
-
   if ! param_present "nosandbox"; then
     # Filesystem Limits
     [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
-    if ! param_present "nohidedev"; then
+    if ! param_present "nohidedevices"; then
       BWRAP_ARGS+=" --dev /dev" # create a fresh /dev directory
-      param_present "hidedevdri" && BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # USB device access
-      param_present "hideusb" && BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # USB device access
+      ! param_present "hidegpudevice" && BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # GPU device access
+      ! param_present "hideusbdevices" && BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # USB device access
     fi
-    if param_present " ephemeralprofile"; then
-      BWRAP_ARGS+=" --tmpfs $HOME" # mount user directories with as to prevent the persistent data
+    if param_present "ephemeralprofile"; then
+      BWRAP_ARGS+=" --tmpfs $HOME" # mount user directories as tmpfs to prevent persistent data
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR" # mount xdg-run immutable to prevent potential persistence
       BWRAP_ARGS+=" --tmpfs /tmp" # create a new /tmp
     fi
-
-    # Privilege Reduction
-    param_present "attachtoterminal" && BWRAP_ARGS+=" --new-session"
+    # Privilege Seperation
+    param_present "dettachfromterminal" && BWRAP_ARGS+=" --new-session"
     param_present "unshareuser" && BWRAP_ARGS+=" --unshare-user"
     param_present "unsharepid" && BWRAP_ARGS+=" --unshare-pid"
     [[ "$USE_WAYLAND" == "true" ]] && BWRAP_ARGS+=" --unshare-ipc"
