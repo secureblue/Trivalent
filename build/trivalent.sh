@@ -47,7 +47,6 @@ function determine_sandbox_args() {
     BWRAP_ARGS+=" --unshare-cgroup"
   fi
   BWRAP_ARGS+=" -- "
-
   echo "$BWRAP_ARGS" # return
 }
 
