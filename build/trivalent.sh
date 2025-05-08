@@ -16,7 +16,7 @@ readonly SANDBOX_PARAMS="$SANDBOX_PARAMS"
 function param_present() {
   echo "$SANDBOX_PARAMS" | tr "," '\n' | grep -F -x "$1"
 }
-function determine_sandbox_args() {
+function determine_sandbox_params() {
   # Filesystem Limits
   BWRAP_ARGS="--dev-bind / /" # Broad-full device access
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
