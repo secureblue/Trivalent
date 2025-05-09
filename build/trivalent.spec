@@ -107,12 +107,6 @@ Source20: %{chromium_name}256.png
 }
 
 BuildRequires: golang-github-evanw-esbuild
-BuildRequires: clang
-BuildRequires: clang-tools-extra
-BuildRequires: llvm
-BuildRequires: lld
-BuildRequires: rustc
-BuildRequires: bindgen-cli
 BuildRequires:	alsa-lib-devel
 BuildRequires:	atk-devel
 BuildRequires:	bison
@@ -128,7 +122,6 @@ BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Widgets)
 BuildRequires: pkgconfig(Qt6Core)
 BuildRequires: pkgconfig(Qt6Widgets)
-BuildRequires: compiler-rt
 BuildRequires: libatomic
 BuildRequires:	libcap-devel
 BuildRequires:	libcurl-devel
@@ -141,22 +134,17 @@ BuildRequires:	libXdamage-devel
 BuildRequires:	libXtst-devel
 BuildRequires:	xcb-proto
 BuildRequires:	mesa-libgbm-devel
-BuildRequires: nodejs
-BuildRequires: gn
 BuildRequires:	nss-devel >= 3.26
 BuildRequires:	pciutils-devel
 BuildRequires:	pulseaudio-libs-devel
 BuildRequires:	pipewire-devel
 BuildRequires: libappstream-glib
 
-# Fedora tries to use system libs whenever it can.
 BuildRequires:	bzip2-devel
 BuildRequires:	dbus-glib-devel
 # For eu-strip
 BuildRequires:	elfutils
 BuildRequires:	elfutils-libelf-devel
-# One of the python scripts invokes git to look for a hash. So helpful.
-BuildRequires:	/usr/bin/git
 BuildRequires:	hwdata
 BuildRequires:	kernel-headers
 BuildRequires:	libffi-devel
@@ -170,8 +158,9 @@ BuildRequires: python3-jinja2
 BuildRequires: yasm
 BuildRequires: zlib-devel
 BuildRequires:	systemd
-BuildRequires: ninja-build
 BuildRequires: libevdev-devel
+# One of the python scripts invokes git to look for a hash. So helpful.
+BuildRequires:	git-core
 
 Requires: nss%{_isa} >= 3.26
 Requires: nss-mdns%{_isa}
@@ -184,214 +173,144 @@ ExclusiveArch: x86_64
 
 # License: BSD-3-Clause
 Provides: bundled(angle)
-
 # License: MIT
 Provides: bundled(bintrees)
-
 # License: Apache-2.0
 Provides: bundled(boringssl)
-
 # License: MIT
 Provides: bundled(brotli)
-
 # License: BSD-2-Clause
 Provides: bundled(bspatch)
-
 # License: Apache-2.0
 Provides: bundled(cacheinvalidation)
-
 # License: BSD-3-Clause
 Provides: bundled(colorama)
-
 # License: Apache-2.0
 Provides: bundled(crashpad)
-
 # License: BSD-3-Clause
 Provides: bundled(crc32c)
-
 # License: BSD-2-Clause
 Provides: bundled(dav1d)
-
 # License: BSD-3-Clause
 Provides: bundled(double-conversion)
-
 # License: dtoa
 Provides: bundled(dmg_fp)
-
 # License: MIT
 Provides: bundled(expat)
-
 # License: SunPro
 Provides: bundled(fdmlibm)
-
-# License: LGPL-2.1-or-later 
+# License: LGPL-2.1-or-later
 Provides: bundled(ffmpeg)
-
 # License: BSD-3-Clause
 Provides: bundled(flac)
-
 # License: BSD-3-Clause
 Provides: bundled(fips181)
-
 # License: MIT
 Provides: bundled(fontconfig)
-
 # License: FTL
 Provides: bundled(freetype)
-
 # License: BSD-3-Clause
 Provides: bundled(gperftools)
-
 # License: MIT
 Provides: bundled(harfbuzz-ng)
-
 # License: Apache-2.0
 Provides: bundled(highway)
-
 # License: MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only
 Provides: bundled(hunspell)
-
 # License: IJG
 Provides: bundled(iccjpeg)
-
 # License: Unicode-3.0
 Provides: bundled(icu)
-
 # License: MIT
 Provides: bundled(lcms2)
-
 # License: BSD-3-Clause
 Provides: bundled(leveldb)
-
 # License: Apache-2.0
 Provides: bundled(libaddressinput)
-
 # License: BSD-2-Clause
 Provides: bundled(libaom)
-
 # License: MIT
 Provides: bundled(libdrm)
-
 # License: BSD-3-Clause
 Provides: bundled(libevent)
-
 # License: BSD-3-Clause
 Provides: bundled(libjingle)
-
 # License: Zlib AND IJG and BSD-3-Clause
 Provides: bundled(libjpeg)
-
 # License: BSD-2-Clause
 Provides: bundled(libopenjpeg2)
-
 # License: Apache-2.0
 Provides: bundled(libphonenumber)
-
 # License: Libpng
 Provides: bundled(libpng)
-
 # License: LGPL-2.1
 Provides: bundled(libsecret)
-
 # License: BSD-3-Clause
 Provides: bundled(libsrtp)
-
 # License: libtiff
 Provides: bundled(libtiff)
-
 # License: BSD-2-Clause
 Provides: bundled(libudis86)
-
 # License: LGPL-2.1
 Provides: bundled(libusbx)
-
 # License: BSD-3-Clause
 Provides: bundled(libvpx)
-
 # License: BSD-3-Clause
 Provides: bundled(libwebp)
-
 # License: BSD-3-Clause
 Provides: bundled(libyuv)
-
 # License: MIT
 Provides: bundled(libxml)
-
 # License: MIT
 Provides: bundled(libxslt)
-
 # Public Domain
 Provides: bundled(lzma)
-
 # License: MIT
 Provides: bundled(mesa)
-
 # License: BSD-3-Clause
 Provides: bundled(mozc)
-
 # License: BSD-2-Clause
 Provides: bundled(openh264)
-
 # License: BSD-3-Clause
 Provides: bundled(opus)
-
 # License: BSD-3-Clause
 Provides: bundled(ots)
-
 # License: BSD-3-Clause
 Provides: bundled(protobuf)
-
 # License: MIT
 Provides: bundled(qcms)
-
 # License: BSD-3-Clause
 Provides: bundled(re2)
-
 # License: Apache-2.0
 Provides: bundled(sfntly)
-
 # License: BSD-3-Clause
 Provides: bundled(skia)
-
 # License: MIT
 Provides: bundled(SMHasher)
-
 # License: BSD-3-Clause
 Provides: bundled(snappy)
-
 # License: LGPL-2.1
 Provides: bundled(speech-dispatcher)
-
 # Public domain
 Provides: bundled(sqlite)
-
 # License: MIT
 Provides: bundled(superfasthash)
-
-# License: LGPL-3.0-or-later 
+# License: LGPL-3.0-or-later
 Provides: bundled(talloc)
-
 # License: BSD-3-Clause
 Provides: bundled(usrsctp)
-
 # License: BSD-3-Clause
 Provides: bundled(v8)
-
 # License: BSD-3-Clause
 Provides: bundled(webrtc)
-
 # License: MIT
 Provides: bundled(woff2)
-
 # License: MIT
 Provides: bundled(xdg-mime)
-
 # License: MIT
 Provides: bundled(xdg-user-dirs)
-
-# License: Zlib 
+# License: Zlib
 Provides: bundled(zlib)
-
 # License: BSD-3-Clause
 Provides: bundled(zstd)
 
@@ -462,18 +381,14 @@ find -type f \( -iname "*.py" \) -exec sed -i '1s=^#! */usr/bin/\(python\|env py
 
 # Get rid of the pre-built eu-strip binary, it is x86_64 and of mysterious origin
 rm -rf buildtools/third_party/eu-strip/bin/eu-strip
-  
+
 # Replace it with a symlink to the Fedora copy
 ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
 
 # Hard code extra version
 sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
 
-# bz#2265957, add correct platform
-sed -i "s/Linux x86_64/Linux %{_arch}/" content/common/user_agent.cc
-
 %build
-
 # reduce warnings
 FLAGS=' -Wno-deprecated-declarations -Wno-unknown-warning-option -Wno-unused-command-line-argument'
 FLAGS+=' -Wno-unused-but-set-variable -Wno-unused-result -Wno-unused-function -Wno-unused-variable'
@@ -498,46 +413,34 @@ export LDFLAGS
 export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
-rustc_version="$(rustc --version)"
-rust_bindgen_root="%{_prefix}"
 
-# set clang version
-clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
-%if 0%{?fedora} > 41
-clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/.*##')"
-%else
-clang_base_path="$(clang --version | grep InstalledDir | cut -d' ' -f2 | sed 's#/bin##')"
-%endif
- 
-CHROMIUM_GN_DEFINES=""
-CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' enable_nacl=false'
+# add internal clang to PATH for build
+PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
+
+# add internal rust utils to PATH for build
+PATH="$PATH:$(pwd)/third_party/rust-toolchain/bin"
+
+# add internal nodejs to PATH for build
+PATH="$PATH:$(pwd)/third_party/node/linux/node-linux-x64/bin"
+
+# add internal ninja to PATH for build
+PATH="$PATH:$(pwd)/third_party/ninja"
+
+export PATH
+
+CHROMIUM_GN_DEFINES=''
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
-sed -i 's|OFFICIAL_BUILD|GOOGLE_CHROME_BUILD|g' tools/generate_shim_headers/generate_shim_headers.py
-CHROMIUM_GN_DEFINES+=' chrome_pgo_phase=0'
-CHROMIUM_GN_DEFINES+=' is_cfi=true use_thin_lto=true'
+CHROMIUM_GN_DEFINES+=' is_cfi=true use_cfi_cast=true'
 CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
-CHROMIUM_GN_DEFINES+=" clang_base_path=\"$clang_base_path\""
-CHROMIUM_GN_DEFINES+=" clang_version=\"$clang_version\""
-CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
-CHROMIUM_GN_DEFINES+=' use_lld=true'
-CHROMIUM_GN_DEFINES+=' rust_sysroot_absolute="%{_prefix}"'
-CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$rust_bindgen_root\""
-CHROMIUM_GN_DEFINES+=" rustc_version=\"$rustc_version\""
 CHROMIUM_GN_DEFINES+=' use_sysroot=false'
-CHROMIUM_GN_DEFINES+=' icu_use_data_file=true'
 CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
-CHROMIUM_GN_DEFINES+=' enable_iterator_debugging=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
-CHROMIUM_GN_DEFINES+=' enable_arcore=false'
 CHROMIUM_GN_DEFINES+=' enable_openxr=false'
-CHROMIUM_GN_DEFINES+=' enable_cardboard=false'
 CHROMIUM_GN_DEFINES+=' build_dawn_tests=false enable_perfetto_unittests=false'
 CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
@@ -548,9 +451,8 @@ CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
-CHROMIUM_GN_DEFINES+=' use_vaapi=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
-CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ffi_pic is not found
+CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ld.lld: error: unable to find library -lffi_pic
 export CHROMIUM_GN_DEFINES
 
 # Check that there is no system 'google' module, shadowing bundled ones:
@@ -559,7 +461,7 @@ if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
     exit 1 ; \
 fi
 
-mkdir -p %{chromebuilddir} && cp -a %{_bindir}/gn %{chromebuilddir}/
+mkdir -p %{chromebuilddir} && cp -a buildtools/linux64/gn %{chromebuilddir}/
 
 %{chromebuilddir}/gn --script-executable=%{chromium_pybin} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
 

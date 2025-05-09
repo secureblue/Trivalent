@@ -21,7 +21,7 @@ index 7d47622af880c..144760befee18 100644
                block-header="$i18n{siteSettingsJavascriptOptimizerBlockedExceptions}"
                search-filter="[[searchFilter_]]">
 diff --git a/chrome/browser/resources/settings/site_settings/constants.ts b/chrome/browser/resources/settings/site_settings/constants.ts
-index 4ed920a8aabf9..8436627f13298 100644
+index bae3e83d06..06adfc8b88 100644
 --- a/chrome/browser/resources/settings/site_settings/constants.ts
 +++ b/chrome/browser/resources/settings/site_settings/constants.ts
 @@ -34,7 +34,7 @@ export enum ContentSettingsTypes {
@@ -32,7 +32,7 @@ index 4ed920a8aabf9..8436627f13298 100644
 +  JAVASCRIPT_JIT = 'javascript-jit',
    KEYBOARD_LOCK = 'keyboard-lock',
    LOCAL_FONTS = 'local-fonts',
-   MIC = 'media-stream-mic',  // AKA Microphone.
+   LOCAL_NETWORK_ACCESS = 'local-network-access',
 diff --git a/chrome/browser/resources/settings/site_settings/settings_category_default_radio_group.ts b/chrome/browser/resources/settings/site_settings/settings_category_default_radio_group.ts
 index f41407671c3aa..dbd118d942f34 100644
 --- a/chrome/browser/resources/settings/site_settings/settings_category_default_radio_group.ts

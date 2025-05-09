@@ -1,45 +1,33 @@
 #!/bin/bash
 
-# Sanitize risky env variables
-export PATH="/usr/bin:/bin"
-export LD_PRELOAD=""
-export LD_LIBRARY_PATH=""
-export LD_AUDIT=""
-export LD_PROFILE=""
+# Sanitize & protect risky variables
+readonly HOME="$HOME"
+readonly PATH="/usr/bin:/bin"
+readonly LD_PRELOAD=""
+readonly LD_LIBRARY_PATH=""
+readonly LD_AUDIT=""
+readonly LD_PROFILE=""
 
 # unify branding
-export CHROMIUM_NAME="@@CHROMIUM_NAME@@"
+readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
 # Let the wrapped binary know that it has been run through the wrapper.
-export CHROME_WRAPPER="`readlink -f "$0"`"
+readonly CHROME_WRAPPER="`readlink -f "$0"`"
+readonly HERE="`dirname "$CHROME_WRAPPER"`"
 
-HERE="`dirname "$CHROME_WRAPPER"`"
-
-# We include some xdg utilities next to the binary, and we want to prefer them
-# over the system versions when we know the system versions are very old. We
-# detect whether the system xdg utilities are sufficiently new to be likely to
-# work for us by looking for xdg-settings. If we find it, we leave $PATH alone,
-# so that the system xdg utilities (including any distro patches) will be used.
-if ! which xdg-settings &> /dev/null; then
-  # Old xdg utilities. Prepend $HERE to $PATH to use ours instead.
-  export PATH="$HERE:$PATH"
-else
-  # Use system xdg utilities. But first create mimeapps.list if it doesn't
-  # exist; some systems have bugs in xdg-mime that make it fail without it.
-  xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
-  mkdir -p "$xdg_app_dir"
-  [ -f "$xdg_app_dir/mimeapps.list" ] || touch "$xdg_app_dir/mimeapps.list"
-fi
+# obtain chromium flags from system file
+[[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
+readonly CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
 
 export CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
 
 # We don't want bug-buddy intercepting our crashes. http://crbug.com/24120
 export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
-# Allow users to override command-line options and prefer user defined
-# CHROMIUM_USER_FLAGS from env over system wide CHROMIUM_FLAGS
-[[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
-CHROMIUM_FLAGS=${CHROMIUM_USER_FLAGS:-$CHROMIUM_FLAGS}
+# desktop integration
+xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
+mkdir -p "$xdg_app_dir"
+[ -f "$xdg_app_dir/mimeapps.list" ] || touch "$xdg_app_dir/mimeapps.list"
 
 # handle migration from the old directory
 # the migration file just tells this wrapper not to copy over data

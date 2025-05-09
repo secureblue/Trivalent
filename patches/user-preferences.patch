@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index 3ed0fd8d011f8..e842df8ef96f3 100644
+index 8db06cee98..d1c96333e9 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -174,6 +174,24 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -180,6 +180,24 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -28,10 +28,10 @@ index 3ed0fd8d011f8..e842df8ef96f3 100644
    (*s_allowlist)[::embedder_support::kAlternateErrorPagesEnabled] =
        settings_api::PrefType::kBoolean;
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index c24506a3294cb..29e4ac0aea997 100644
+index 0d6ab878ac..0f114a5f32 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-@@ -119,6 +119,11 @@
+@@ -117,6 +117,11 @@
              </template>
            </select>
          </div>
@@ -44,7 +44,7 @@ index c24506a3294cb..29e4ac0aea997 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index d5079082c7fc0..d75f6a430fd09 100644
+index d5079082c7..d75f6a430f 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -4,6 +4,10 @@
@@ -106,10 +106,18 @@ index d5079082c7fc0..d75f6a430fd09 100644
      <cr-link-row id="advanced-protection-program-link" class="hr"
          label="$i18n{advancedProtectionProgramTitle}"
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 625814a9c2a65..9102cb53ac617 100644
+index b101a4795d..83c8252dd3 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -111,6 +111,19 @@ export class SettingsSecurityPageElement extends
+@@ -28,6 +28,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+ 
+ import type {SettingsRadioGroupElement} from '../controls/settings_radio_group.js';
+ import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
++import type {DropdownMenuOptionList} from '../controls/settings_dropdown_menu.js';
+ import type {FocusConfig} from '../focus_config.js';
+ import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
+ import {loadTimeData} from '../i18n_setup.js';
+@@ -103,6 +104,19 @@ export class SettingsSecurityPageElement extends
        },
        // </if>
  
@@ -129,19 +137,26 @@ index 625814a9c2a65..9102cb53ac617 100644
        /**
         * Whether the secure DNS setting should be displayed.
         */
+@@ -250,6 +264,7 @@ export class SettingsSecurityPageElement extends
+   // <if expr="chrome_root_store_cert_management_ui">
+   private enableCertManagementUIV2_: boolean;
+   // </if>
++  private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
+   private showSecureDnsSetting_: boolean;
+ 
+   // <if expr="is_chromeos">
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
-index 348f170d65209..759c0dfd98dcd 100644
+index 348f170d65..419f557a4a 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
 +++ b/chrome/browser/resources/settings/system_page/system_page.html
-@@ -17,6 +17,14 @@
+@@ -17,6 +17,13 @@
        </template>
      </settings-toggle-button>
  
 +<if expr="enable_printing">
 +    <settings-toggle-button class="cr-row"
 +        pref="{{prefs.printing.enabled}}"
-+        label="Enable Printing"
-+        sub-label="Enables printing capabilities within the browser">
++        label="Enable Printing Capabilities">
 +    </settings-toggle-button>
 +</if>
 +

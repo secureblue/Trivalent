@@ -2,7 +2,7 @@ diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
 index 7613006656aaa..ee707f847ccba 100644
 --- a/chrome/browser/about_flags.cc
 +++ b/chrome/browser/about_flags.cc
-@@ -4343,6 +4343,59 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4343,6 +4343,55 @@ const FeatureEntry kFeatureEntries[] = {
  // //tools/flags/generate_unexpire_flags.py.
  #include "build/chromeos_buildflags.h"
  #include "chrome/browser/unexpire_flags_gen.inc"
@@ -33,10 +33,6 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "Enabled by default. This feature is exposed by Trivalent.",
 +     kOsAll,
 +     FEATURE_VALUE_TYPE(net::features::kCapReferrerToOriginOnCrossOrigin)},
-+    {"gtk-version-4", "GTK Version 4",
-+     "Enables Trivalent to use GTK 4 instead of GTK 3, useful for IME. "
-+     "This flag is exposed by Trivalent.", kOsAll,
-+     SINGLE_VALUE_TYPE_AND_VALUE("gtk-version", "4")},
 +    {"strict-popup-blocking", "Strict Popup Blocking",
 +     "Controls the strictness of the popup blocker. This switch is provided "
 +     "by Trivalent.", kOsAll,
