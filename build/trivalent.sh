@@ -43,21 +43,20 @@ function determine_sandbox_args() {
     fi
     BWRAP_ARGS+=" --tmpfs /run" # clear the run directory
     BWRAP_ARGS+=" --ro-bind /run/systemd/resolve /run/systemd/resolve" # needed for DNS resolution
+    BWRAP_ARGS+=" --ro-bind /run/dbus/system_bus_socket /run/dbus/system_bus_socket" # needed for dbus
     if ! param_present "exposexdgrun" || param_present "ephemeralprofile"; then
-      if [[ "$USE_WAYLAND" != "false" ]]; then
-        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/wayland-0 $XDG_RUNTIME_DIR/wayland-0" # wayland socket
-        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pipewire-0 $XDG_RUNTIME_DIR/pipewire-0" # pipewire socket
-      fi
-      if [[ "$USE_WAYLAND" != "true" ]]; then
-        BWRAP_ARGS+=" --ro-bind $XAUTHORITY $XAUTHORITY" # X11 socket
-        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" # pulseaudio socket
-      fi
+      BWRAP_ARGS+=" --tmpfs $XDG_RUNTIME_DIR" # clear xdg-run
+      BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/bus $XDG_RUNTIME_DIR/bus" # needed for dbus
+      ! param_present "hidekeyring" && BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/keyring $XDG_RUNTIME_DIR/keyring" # Keyring socket
+      [[ "$USE_WAYLAND" != "false" ]] && BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/wayland-0 $XDG_RUNTIME_DIR/wayland-0" # wayland socket
+      [[ "$USE_WAYLAND" != "true" ]] && BWRAP_ARGS+=" --ro-bind $XAUTHORITY $XAUTHORITY" # X11 socket
+      BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pipewire-0 $XDG_RUNTIME_DIR/pipewire-0" # pipewire socket
+      BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" # pulseaudio socket
       if param_present "ephemeralprofile"; then # chromium needs dconf
         BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/dconf $XDG_RUNTIME_DIR/dconf"
       else
         BWRAP_ARGS+=" --bind $XDG_RUNTIME_DIR/dconf $XDG_RUNTIME_DIR/dconf"
       fi
-      ! param_present "hidekeyring" && BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/keyring $XDG_RUNTIME_DIR/keyring" # Keyring socket
     else
       BWRAP_ARGS+=" --bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR"
     fi
@@ -75,7 +74,6 @@ function determine_sandbox_args() {
 
     # X11
     if [[ "$USE_WAYLAND" == "true" ]]; then # prevent X11 usage if X11 is not used
-      BWRAP_ARGS+=" --bind /dev/null $XAUTHORITY"
       BWRAP_ARGS+=" --unsetenv DISPLAY"
       BWRAP_ARGS+=" --unsetenv XAUTHORITY"
       BWRAP_ARGS+=" --unshare-ipc" # IPC is only needed for X11 performance on modern systems
