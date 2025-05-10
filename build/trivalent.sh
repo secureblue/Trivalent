@@ -3,6 +3,7 @@
 # Sanitize & protect risky variables
 readonly HOME="$HOME"
 readonly XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
+readonly XAUTHORITY="$XAUTHORITY"
 readonly PATH="/usr/bin:/bin"
 readonly LD_PRELOAD=""
 readonly LD_LIBRARY_PATH=""
@@ -13,44 +14,75 @@ readonly LD_PROFILE=""
 readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
 # Sandbox parameter parsing logic
-readonly SANDBOX_PARAMS="$SANDBOX_PARAMS"
 function param_present() {
   echo "$SANDBOX_PARAMS" | tr "," '\n' | grep -F -x -q "$1"
 }
 function determine_sandbox_args() {
+  readonly SANDBOX_PARAMS="$SANDBOX_PARAMS"
+
   # Initial args, these are transparent and do nothing on their own
   BWRAP_ARGS="--dev-bind / /" # Broad-full device access
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
   [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
   BWRAP_ARGS+=" --cap-drop ALL" # drop all capabilities, we always want to do this
+
   if ! param_present "nosandbox"; then
     # Filesystem Limits
     if ! param_present "nohidedevices"; then
-      BWRAP_ARGS+=" --dev /dev" # create a fresh /dev directory
+      BWRAP_ARGS+=" --dev /dev" # hide all devices
       ! param_present "hidegpudevice" && BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # GPU device access
       ! param_present "hideusbdevices" && BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # USB device access
     fi
     if param_present "ephemeralprofile"; then
       BWRAP_ARGS+=" --tmpfs $HOME" # mount user directories as tmpfs to prevent persistent data
-      BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR" # mount xdg-run immutable to prevent potential persistence
       BWRAP_ARGS+=" --tmpfs /tmp" # create a new /tmp
     elif param_present "protecthome"; then
       BWRAP_ARGS+=" --ro-bind $HOME $HOME" # Prevent any writes to HOME, by default this doesn't include downloads
       BWRAP_ARGS+=" --bind $HOME/.config/trivalent $HOME/.config/trivalent" # Allow access to Trivalent's data directory
-      ! param_present "protectdownloads" && BWRAP_ARGS+=" --bind $HOME/Downloads $HOME/Downloads" # Prevent downloads access if the user wants it
+      ! param_present "protectdownloads" && BWRAP_ARGS+=" --bind $HOME/Downloads $HOME/Downloads" # Prevent downloads write access if the user wants it
     fi
+    BWRAP_ARGS+=" --tmpfs /run" # clear the run directory
+    BWRAP_ARGS+=" --ro-bind /run/systemd/resolve /run/systemd/resolve" # needed for DNS resolution
+    if ! param_present "exposexdgrun" || param_present "ephemeralprofile"; then
+      if [[ "$USE_WAYLAND" != "false" ]]; then
+        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/wayland-0 $XDG_RUNTIME_DIR/wayland-0" # wayland socket
+        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pipewire-0 $XDG_RUNTIME_DIR/pipewire-0" # pipewire socket
+      fi
+      if [[ "$USE_WAYLAND" != "true" ]]; then
+        BWRAP_ARGS+=" --ro-bind $XAUTHORITY $XAUTHORITY" # X11 socket
+        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" # pulseaudio socket
+      fi
+      if param_present "ephemeralprofile"; then # chromium needs dconf
+        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/dconf $XDG_RUNTIME_DIR/dconf"
+      else
+        BWRAP_ARGS+=" --bind $XDG_RUNTIME_DIR/dconf $XDG_RUNTIME_DIR/dconf"
+      fi
+      ! param_present "hidekeyring" && BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/keyring $XDG_RUNTIME_DIR/keyring" # Keyring socket
+    else
+      BWRAP_ARGS+=" --bind $XDG_RUNTIME_DIR $XDG_RUNTIME_DIR"
+    fi
+
     # Privilege Seperation
-    param_present "dettachfromterminal" && BWRAP_ARGS+=" --new-session"
+    param_present "dettachfromterminal" && BWRAP_ARGS+=" --new-session" # prevent commandline injection should the browser process get hijacked
     param_present "unshareuser" && BWRAP_ARGS+=" --unshare-user"
-    param_present "unsharepid" && BWRAP_ARGS+=" --unshare-pid"
-    [[ "$USE_WAYLAND" == "true" ]] && BWRAP_ARGS+=" --unshare-ipc"
+    param_present "unsharepid" && BWRAP_ARGS+=" --unshare-pid" # isolate the process tree
     if ! param_present "shareuts"; then
       BWRAP_ARGS+=" --unshare-uts"
-      BWRAP_ARGS+=" --hostname $CHROMIUM_NAME"
+      BWRAP_ARGS+=" --hostname $CHROMIUM_NAME" # spoof the hostname, this can also reduce singleton triggers
     fi
+    param_present "offline" && BWRAP_ARGS+=" --unshare-net" # optionally disable internet, to essentially turn trivalent into a document viewer
     BWRAP_ARGS+=" --unshare-cgroup"
+
+    # X11
+    if [[ "$USE_WAYLAND" == "true" ]]; then # prevent X11 usage if X11 is not used
+      BWRAP_ARGS+=" --bind /dev/null $XAUTHORITY"
+      BWRAP_ARGS+=" --unsetenv DISPLAY"
+      BWRAP_ARGS+=" --unsetenv XAUTHORITY"
+      BWRAP_ARGS+=" --unshare-ipc" # IPC is only needed for X11 performance on modern systems
+    fi
   fi
   BWRAP_ARGS+=" -- "
+
   echo "$BWRAP_ARGS" # return
 }
 
