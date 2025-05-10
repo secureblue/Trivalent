@@ -69,12 +69,12 @@ function determine_sandbox_args() {
       if [[ "$USE_WAYLAND" != "true" ]]; then # X11 socket
         BWRAP_ARGS+=" --ro-bind $XAUTHORITY $XAUTHORITY"
         BWRAP_ARGS+=" --ro-bind /tmp/.X11-unix /tmp/.X11-unix"
+      else
+        BWRAP_ARGS+=" --tmpfs /tmp/.X11-unix"
       fi
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pipewire-0 $XDG_RUNTIME_DIR/pipewire-0" # pipewire socket
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" # pulseaudio socket
-      if param_present "ephemeralprofile"; then # chromium needs dconf
-        BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/dconf $XDG_RUNTIME_DIR/dconf"
-      else
+      if ! param_present "ephemeralprofile"; then # chromium needs dconf
         BWRAP_ARGS+=" --bind $XDG_RUNTIME_DIR/dconf $XDG_RUNTIME_DIR/dconf"
       fi
     else
