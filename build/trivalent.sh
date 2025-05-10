@@ -21,17 +21,28 @@ function determine_sandbox_args() {
   readonly SANDBOX_PARAMS="$SANDBOX_PARAMS"
 
   # Initial args, these are transparent and do nothing on their own
-  BWRAP_ARGS="--dev-bind / /" # Broad-full device access
-  BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
-  [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
+  #BWRAP_ARGS="--dev-bind / /" # Broad-full device access
   BWRAP_ARGS+=" --cap-drop ALL" # drop all capabilities, we always want to do this
-
-  if ! param_present "nosandbox"; then
+  [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload" # prevent system ld preload
+  BWRAP_ARGS+=" --ro-bind /bin /bin"
+  BWRAP_ARGS+=" --ro-bind /lib /lib"
+  BWRAP_ARGS+=" --ro-bind /lib64 /lib64"
+  BWRAP_ARGS+=" --ro-bind /etc /etc"
+  BWRAP_ARGS+=" --ro-bind /var /var"
+  BWRAP_ARGS+=" --ro-bind /sys /sys"
+  BWRAP_ARGS+=" --ro-bind /usr /usr"
+  BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
+  if param_present "nosandbox"; then
+    BWRAP_ARGS+=" --dev-bind /dev /dev"
+    BWRAP_ARGS+=" --bind $HOME $HOME"
+  else
     # Filesystem Limits
     if ! param_present "nohidedevices"; then
       BWRAP_ARGS+=" --dev /dev" # hide all devices
       ! param_present "hidegpudevice" && BWRAP_ARGS+=" --dev-bind /dev/dri /dev/dri" # GPU device access
       ! param_present "hideusbdevices" && BWRAP_ARGS+=" --dev-bind /dev/usb /dev/usb" # USB device access
+    else
+      BWRAP_ARGS+=" --dev-bind /dev /dev"
     fi
     if param_present "ephemeralprofile"; then
       BWRAP_ARGS+=" --tmpfs $HOME" # mount user directories as tmpfs to prevent persistent data
@@ -40,16 +51,25 @@ function determine_sandbox_args() {
       BWRAP_ARGS+=" --ro-bind $HOME $HOME" # Prevent any writes to HOME, by default this doesn't include downloads
       BWRAP_ARGS+=" --bind $HOME/.config/trivalent $HOME/.config/trivalent" # Allow access to Trivalent's data directory
       ! param_present "protectdownloads" && BWRAP_ARGS+=" --bind $HOME/Downloads $HOME/Downloads" # Prevent downloads write access if the user wants it
+    else
+      BWRAP_ARGS+=" --bind $HOME $HOME"
     fi
-    BWRAP_ARGS+=" --tmpfs /run" # clear the run directory
-    BWRAP_ARGS+=" --ro-bind /run/systemd/resolve /run/systemd/resolve" # needed for DNS resolution
-    BWRAP_ARGS+=" --ro-bind /run/dbus/system_bus_socket /run/dbus/system_bus_socket" # needed for dbus
+
+    # Sockets
+    if ! param_present "exposerun"; then
+      BWRAP_ARGS+=" --tmpfs /run" # clear the run directory
+      BWRAP_ARGS+=" --ro-bind /run/systemd/resolve /run/systemd/resolve" # needed for DNS resolution
+      BWRAP_ARGS+=" --ro-bind /run/dbus/system_bus_socket /run/dbus/system_bus_socket" # needed for dbus
+    fi
     if ! param_present "exposexdgrun" || param_present "ephemeralprofile"; then
       BWRAP_ARGS+=" --tmpfs $XDG_RUNTIME_DIR" # clear xdg-run
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/bus $XDG_RUNTIME_DIR/bus" # needed for dbus
       ! param_present "hidekeyring" && BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/keyring $XDG_RUNTIME_DIR/keyring" # Keyring socket
       [[ "$USE_WAYLAND" != "false" ]] && BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/wayland-0 $XDG_RUNTIME_DIR/wayland-0" # wayland socket
-      [[ "$USE_WAYLAND" != "true" ]] && BWRAP_ARGS+=" --ro-bind $XAUTHORITY $XAUTHORITY" # X11 socket
+      if [[ "$USE_WAYLAND" != "true" ]]; then # X11 socket
+        BWRAP_ARGS+=" --ro-bind $XAUTHORITY $XAUTHORITY"
+        BWRAP_ARGS+=" --ro-bind /tmp/.X11-unix /tmp/.X11-unix"
+      fi
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pipewire-0 $XDG_RUNTIME_DIR/pipewire-0" # pipewire socket
       BWRAP_ARGS+=" --ro-bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" # pulseaudio socket
       if param_present "ephemeralprofile"; then # chromium needs dconf
