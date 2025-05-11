@@ -37,6 +37,15 @@ function determine_sandbox_args() {
   BWRAP_ARGS+=" --bind /tmp /tmp"
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
   if ! param_present "nosandbox"; then
+    # X11
+    if [[ "$USE_WAYLAND" == "true" ]]; then # prevent X11 usage if X11 is not used
+      BWRAP_ARGS+=" --unsetenv DISPLAY"
+      BWRAP_ARGS+=" --unsetenv XAUTHORITY"
+      BWRAP_ARGS+=" --tmpfs /tmp/.X11-unix"
+    else
+      BWRAP_ARGS+=" --ro-bind /tmp/.X11-unix /tmp/.X11-unix"
+    fi
+
     # Filesystem Limits
     if ! param_present "nohidedevices"; then
       BWRAP_ARGS+=" --dev /dev" # hide all devices
@@ -75,22 +84,14 @@ function determine_sandbox_args() {
     param_present "dettachfromterminal" && BWRAP_ARGS+=" --new-session" # prevent commandline injection should the browser process get hijacked
     param_present "unshareuser" && BWRAP_ARGS+=" --unshare-user"
     param_present "unsharepid" && BWRAP_ARGS+=" --unshare-pid" # isolate the process tree
-    if ! param_present "shareuts"; then
+    if param_present "unshareuts"; then
       BWRAP_ARGS+=" --unshare-uts"
       BWRAP_ARGS+=" --hostname $CHROMIUM_NAME" # spoof the hostname, this can also reduce singleton triggers
     fi
     param_present "offline" && BWRAP_ARGS+=" --unshare-net" # optionally disable internet, to essentially turn trivalent into a document viewer
+    [[ "$USE_WAYLAND" == "true" ]] && BWRAP_ARGS+=" --unshare-ipc" # IPC is only needed for X11 performance on modern systems
     BWRAP_ARGS+=" --unshare-cgroup"
 
-    # X11
-    if [[ "$USE_WAYLAND" == "true" ]]; then # prevent X11 usage if X11 is not used
-      BWRAP_ARGS+=" --unsetenv DISPLAY"
-      BWRAP_ARGS+=" --unsetenv XAUTHORITY"
-      BWRAP_ARGS+=" --unshare-ipc" # IPC is only needed for X11 performance on modern systems
-      BWRAP_ARGS+=" --tmpfs /tmp/.X11-unix"
-    else
-      BWRAP_ARGS+=" --ro-bind /tmp/.X11-unix /tmp/.X11-unix"
-    fi
   fi
   BWRAP_ARGS+=" -- "
 
