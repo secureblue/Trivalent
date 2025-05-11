@@ -31,6 +31,7 @@ function determine_sandbox_args() {
   BWRAP_ARGS+=" --ro-bind /var /var"
   BWRAP_ARGS+=" --ro-bind /sys /sys"
   BWRAP_ARGS+=" --ro-bind /usr /usr"
+  BWRAP_ARGS+=" --bind /tmp /tmp"
   BWRAP_ARGS+=" --proc /proc" # procfs (for process management)
   if param_present "nosandbox"; then
     BWRAP_ARGS+=" --dev-bind /dev /dev"
