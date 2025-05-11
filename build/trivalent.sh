@@ -99,6 +99,8 @@ function determine_sandbox_args() {
       BWRAP_ARGS+=" --unshare-ipc" # IPC is only needed for X11 performance on modern systems
     fi
   fi
+  # always expose the subresource filter (read-only since the browser should not be updating this component)
+  BWRAP_ARGS+=" --ro-bind $HOME/.config/trivalent/Subresource\ Filter $HOME/.config/trivalent/Subresource\ Filter"
   BWRAP_ARGS+=" -- "
 
   echo "$BWRAP_ARGS" # return
