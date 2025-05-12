@@ -4,6 +4,7 @@
 readonly HOME="$HOME"
 readonly XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 readonly XAUTHORITY="$XAUTHORITY"
+readonly DISPLAY="$DISPLAY"
 readonly PATH="/usr/bin:/bin"
 readonly LD_PRELOAD=""
 readonly LD_LIBRARY_PATH=""
