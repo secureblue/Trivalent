@@ -82,12 +82,12 @@ function determine_sandbox_args() {
 
     # Privilege Seperation
     ! param_present "attachtoterminal" && BWRAP_ARGS+=" --new-session" # prevent commandline session injection
-    param_present "unshareuser" && BWRAP_ARGS+=" --unshare-user-try"
     param_present "unsharepid" && BWRAP_ARGS+=" --unshare-pid" # isolate the process tree
     param_present "unshareuts" && BWRAP_ARGS+=" --unshare-uts --hostname $CHROMIUM_NAME" # spoof the hostname, this can also reduce singleton triggers
     param_present "offline" && BWRAP_ARGS+=" --unshare-net" # optionally disable internet, to essentially turn trivalent into a document viewer
     [[ "$USE_WAYLAND" == "true" ]] && BWRAP_ARGS+=" --unshare-ipc" # IPC is only needed for X11 performance on modern systems
-    BWRAP_ARGS+=" --unshare-cgroup-try"
+    BWRAP_ARGS+=" --unshare-cgroup"
+    BWRAP_ARGS+=" --unshare-user"
   fi
   BWRAP_ARGS+=" -- "
 
