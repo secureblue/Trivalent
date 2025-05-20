@@ -11,8 +11,6 @@ readonly LD_PROFILE=""
 # unify branding
 readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
-readonly HERE="`dirname "$CHROME_WRAPPER"`"
-
 # obtain chromium flags from system file
 [[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
 readonly CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
@@ -64,6 +62,7 @@ export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Let the wrapped binary know that it has been run through the wrapper.
 export CHROME_WRAPPER="`readlink -f "$0"`"
+readonly HERE="`dirname "$CHROME_WRAPPER"`"
 
 BWRAP_ARGS="--dev-bind / /"
 if [ -f "/etc/ld.so.preload" ]; then
