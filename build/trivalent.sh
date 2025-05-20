@@ -11,18 +11,11 @@ readonly LD_PROFILE=""
 # unify branding
 readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
-# Let the wrapped binary know that it has been run through the wrapper.
-readonly CHROME_WRAPPER="`readlink -f "$0"`"
 readonly HERE="`dirname "$CHROME_WRAPPER"`"
 
 # obtain chromium flags from system file
 [[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
 readonly CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
-
-export CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
-
-# We don't want bug-buddy intercepting our crashes. http://crbug.com/24120
-export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # desktop integration
 xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
@@ -64,11 +57,13 @@ else
   echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
-# Sanitize std{in,out,err} because they'll be shared with untrusted child
-# processes (http://crbug.com/376567).
-exec < /dev/null
-exec > >(exec cat)
-exec 2> >(exec cat >&2)
+export CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
+
+# We don't want bug-buddy intercepting our crashes. http://crbug.com/24120
+export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
+
+# Let the wrapped binary know that it has been run through the wrapper.
+export CHROME_WRAPPER="`readlink -f "$0"`"
 
 BWRAP_ARGS="--dev-bind / /"
 if [ -f "/etc/ld.so.preload" ]; then
@@ -77,5 +72,11 @@ fi
 if [ "$USE_WAYLAND" == "true" ]; then
   BWRAP_ARGS+=" --unshare-ipc" # prevent IPC where it isn't needed (x11 performance depends on IPC)
 fi
+
+# Sanitize std{in,out,err} because they'll be shared with untrusted child
+# processes (http://crbug.com/376567).
+exec < /dev/null
+exec > >(exec cat)
+exec 2> >(exec cat >&2)
 
 exec /usr/bin/bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
