@@ -35,6 +35,7 @@ index a3523a9bbb1d7..460fdbe273da2 100644
 +constexpr char kBrowserDisplayName[] = "trivalent";
  #define PRODUCT_STRING "Chromium"
  #endif
+ 
 diff --git a/base/files/file_util_posix.cc b/base/files/file_util_posix.cc
 index 84e81affcb..13d5c0f601 100644
 --- a/base/files/file_util_posix.cc
