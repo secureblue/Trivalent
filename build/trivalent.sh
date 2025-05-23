@@ -12,7 +12,7 @@ declare -rx LD_AUDIT=""
 declare -rx LD_PROFILE=""
 
 # unify branding
-declare -rx CHROMIUM_NAME="@@CHROMIUM_NAME@@"
+declare -r CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
 declare -rx CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
 
@@ -21,11 +21,11 @@ declare -rx GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Let the wrapped binary know that it has been run through the wrapper.
 declare -rx CHROME_WRAPPER="`readlink -f "$0"`"
-declare -rx HERE="`dirname "$CHROME_WRAPPER"`"
+declare -r HERE="`dirname "$CHROME_WRAPPER"`"
 
 # obtain chromium flags from system file
 [[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
-declare -rx CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
+declare -r CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
 
 # desktop integration
 xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
