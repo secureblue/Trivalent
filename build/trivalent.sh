@@ -1,22 +1,31 @@
 #!/bin/bash
 
 # Sanitize & protect risky variables
-readonly PATH="/usr/bin:/bin"
-readonly HOME="$HOME"
-readonly XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
-readonly XAUTHORITY="$XAUTHORITY"
-readonly DISPLAY="$DISPLAY"
-readonly LD_PRELOAD=""
-readonly LD_LIBRARY_PATH=""
-readonly LD_AUDIT=""
-readonly LD_PROFILE=""
+declare -rx PATH="/usr/bin:/bin"
+declare -rx HOME="$HOME"
+declare -rx XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
+declare -rx XAUTHORITY="$XAUTHORITY"
+declare -rx DISPLAY="$DISPLAY"
+declare -rx LD_PRELOAD=""
+declare -rx LD_LIBRARY_PATH=""
+declare -rx LD_AUDIT=""
+declare -rx LD_PROFILE=""
 
 # unify branding
-readonly CHROMIUM_NAME="@@CHROMIUM_NAME@@"
+declare -rx CHROMIUM_NAME="@@CHROMIUM_NAME@@"
+
+declare -rx CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
+
+# We don't want bug-buddy intercepting our crashes. http://crbug.com/24120
+declare -rx GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
+
+# Let the wrapped binary know that it has been run through the wrapper.
+declare -rx CHROME_WRAPPER="`readlink -f "$0"`"
+declare -rx HERE="`dirname "$CHROME_WRAPPER"`"
 
 # obtain chromium flags from system file
 [[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
-readonly CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
+declare -rx CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
 
 # desktop integration
 xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
@@ -40,14 +49,6 @@ else
   echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
-export CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
-
-# We don't want bug-buddy intercepting our crashes. http://crbug.com/24120
-export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
-
-# Let the wrapped binary know that it has been run through the wrapper.
-export CHROME_WRAPPER="`readlink -f "$0"`"
-readonly HERE="`dirname "$CHROME_WRAPPER"`"
 
 BWRAP_ARGS="--dev-bind / /"
 [[ -f "/etc/ld.so.preload" ]] && BWRAP_ARGS+=" --ro-bind /dev/null /etc/ld.so.preload"
