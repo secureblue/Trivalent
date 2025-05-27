@@ -18,11 +18,13 @@ index ca7dc52..8690877 100644
          "&google",
          "&duckduckgo",
          "&ecosia",
-@@ -255,7 +257,6 @@
+@@ -254,8 +256,7 @@
+         "&bing",
  
          "&yahoo_de",
-         "&qwant",
+-        "&qwant",
 -        "&startpage"
++        "&qwant"
        ]
      },
      "DK": {
