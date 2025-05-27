@@ -1,63 +1,62 @@
-diff --git a/third_party/search_engines_data/resources/definitions/regional_settings.json b/third_party/search_engines_data/resources/definitions/regional_settings.json
-index de88432..a41d407 100644
+diff --git a/definitions/regional_settings.json b/definitions/regional_settings.json
+index ca7dc52..8690877 100644
 --- a/third_party/search_engines_data/resources/definitions/regional_settings.json
 +++ b/third_party/search_engines_data/resources/definitions/regional_settings.json
-@@ -151,6 +151,7 @@
-     "CA": {  // Canada
+@@ -165,6 +165,7 @@
+     "CA": {
+       // Canada
        "search_engines": [
- 
-+          "&startpage",
-           "&google",
-           "&bing",
-           "&yahoo_ca",
-@@ -249,6 +250,7 @@
-     "DE": {  // Germany
++        "&startpage",
+         "&google",
+         "&bing",
+         "&yahoo_ca",
+@@ -247,6 +248,7 @@
+     "DE": {
+       // Germany
        "search_engines": [
++        "&startpage",
+         "&google",
+         "&duckduckgo",
+         "&ecosia",
+@@ -255,7 +257,6 @@
  
-+          "&startpage",
-           "&google",
-           "&duckduckgo",
-           "&ecosia",
-@@ -257,9 +259,7 @@
- ,
- 
-           "&yahoo_de",
--          "&qwant",
--          "&startpage"
--
-+          "&qwant"
+         "&yahoo_de",
+         "&qwant",
+-        "&startpage"
        ]
      },
-     "DK": {  // Denmark
-@@ -400,6 +400,7 @@
-     "GB": {  // United Kingdom
+     "DK": {
+@@ -381,6 +382,7 @@
+     "GB": {
+       // United Kingdom
        "search_engines": [
- 
-+          "&startpage",
-           "&google",
-           "&bing",
-           "&yahoo_uk",
-@@ -862,6 +863,7 @@
-     "NL": {  // Netherlands
++        "&startpage",
+         "&google",
+         "&bing",
+         "&yahoo_uk",
+@@ -777,6 +779,7 @@
+     "NL": {
+       // Netherlands
        "search_engines": [
- 
-+          "&startpage",
-           "&google",
-           "&duckduckgo",
-           "&brave",
-@@ -1243,6 +1245,7 @@
-     "US": {  // United States
++        "&startpage",
+         "&google",
+         "&duckduckgo",
+         "&brave",
+@@ -1113,6 +1116,7 @@
+     "US": {
+       // United States
        "search_engines": [
- 
-+          "&startpage",
-           "&google",
-           "&bing",
-           "&yahoo",
-@@ -1323,6 +1326,7 @@
++        "&startpage",
+         "&google",
+         "&bing",
+         "&yahoo",
+@@ -1174,7 +1178,7 @@
      // See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#ZZ
-     "ZZ": {  // Default
-       "search_engines": [
-+          "&startpage",
-           "&google",
-           "&bing",
-           "&yahoo"
+     "ZZ": {
+       // Default
+-      "search_engines": ["&google", "&bing", "&yahoo"]
++      "search_engines": ["&startpage", "&google", "&bing", "&yahoo"]
+     }
+   },
+ 
+

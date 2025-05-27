@@ -37,3 +37,29 @@ index 305df14ead0ff..eb8b1b25f1ea3 100644
  }
  
  void RegisterLegacyUsagePrefsForMigration(PrefRegistrySimple* registry) {
+diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browser_prefs.cc
+index 9a00400829..91a9b429e3 100644
+--- a/chrome/browser/prefs/browser_prefs.cc
++++ b/chrome/browser/prefs/browser_prefs.cc
+@@ -2319,7 +2319,7 @@ void RegisterScreenshotPrefs(PrefRegistrySimple* registry) {
+ }
+ 
+ void RegisterGeminiSettingsPrefs(user_prefs::PrefRegistrySyncable* registry) {
+-  registry->RegisterIntegerPref(prefs::kGeminiSettings, 0);
++  registry->RegisterIntegerPref(prefs::kGeminiSettings, 1);
+ }
+ 
+ #if BUILDFLAG(IS_CHROMEOS)
+diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
+index 3ebb85bbe3..1193f35958 100644
+--- a/chrome/browser/chrome_content_browser_client.cc
++++ b/chrome/browser/chrome_content_browser_client.cc
+@@ -1666,7 +1666,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+       prefs::kServiceWorkerToControlSrcdocIframeEnabled, true);
+   registry->RegisterBooleanPref(prefs::kReduceAcceptLanguageEnabled, true);
+   registry->RegisterBooleanPref(policy::policy_prefs::kBuiltInAIAPIsEnabled,
+-                                true);
++                                false);
+ }
+ 
+ // static

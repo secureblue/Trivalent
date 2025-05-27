@@ -106,7 +106,7 @@ index d5079082c7..d75f6a430f 100644
      <cr-link-row id="advanced-protection-program-link" class="hr"
          label="$i18n{advancedProtectionProgramTitle}"
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index b101a4795d..83c8252dd3 100644
+index 4d0a52b65b..b904b24461 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
 @@ -28,6 +28,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
@@ -137,14 +137,15 @@ index b101a4795d..83c8252dd3 100644
        /**
         * Whether the secure DNS setting should be displayed.
         */
-@@ -250,6 +264,7 @@ export class SettingsSecurityPageElement extends
+@@ -235,6 +249,7 @@ export class SettingsSecurityPageElement extends
    // <if expr="chrome_root_store_cert_management_ui">
-   private enableCertManagementUIV2_: boolean;
+   declare private enableCertManagementUIV2_: boolean;
    // </if>
-+  private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
-   private showSecureDnsSetting_: boolean;
++  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
+   declare private showSecureDnsSetting_: boolean;
  
    // <if expr="is_chromeos">
+
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
 index 348f170d65..419f557a4a 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html

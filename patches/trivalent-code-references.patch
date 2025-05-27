@@ -36,3 +36,29 @@ index a3523a9bbb1d7..460fdbe273da2 100644
  #define PRODUCT_STRING "Chromium"
  #endif
  
+diff --git a/base/files/file_util_posix.cc b/base/files/file_util_posix.cc
+index 84e81affcb..13d5c0f601 100644
+--- a/base/files/file_util_posix.cc
++++ b/base/files/file_util_posix.cc
+@@ -870,7 +870,7 @@ FilePath FormatTemporaryFileName(FilePath::StringViewType identifier) {
+ #elif BUILDFLAG(GOOGLE_CHROME_BRANDING)
+   std::string_view prefix = "com.google.Chrome";
+ #else
+-  std::string_view prefix = "org.chromium.Chromium";
++  std::string_view prefix = "dev.secureblue.Trivalent";
+ #endif
+   return FilePath(StrCat({".", prefix, ".", identifier}));
+ }
+diff --git a/components/dbus/xdg/systemd.cc b/components/dbus/xdg/systemd.cc
+index 88a595c3eb..ac7f3cb675 100644
+--- a/components/dbus/xdg/systemd.cc
++++ b/components/dbus/xdg/systemd.cc
+@@ -55,7 +55,7 @@ constexpr char kChannelEnvVar[] = "CHROME_VERSION_EXTRA";
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ constexpr char kAppNamePrefix[] = "com.google.Chrome";
+ #else
+-constexpr char kAppNamePrefix[] = "org.chromium.Chromium";
++constexpr char kAppNamePrefix[] = "dev.secureblue.Trivalent";
+ #endif
+ 
+ const char* GetAppNameSuffix(const std::string& channel) {

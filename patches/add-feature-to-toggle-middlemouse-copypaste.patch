@@ -53,11 +53,11 @@ index dcc4d40592932..f9a9b002bd956 100644
  
    // Offsets the double-clicked word's range. This is only used in the unusual
 diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
-index b6352269a2a8b..50365c274e3a3 100644
+index 4c6ae8ff79..e6f160160b 100644
 --- a/ui/views/views_features.cc
 +++ b/ui/views/views_features.cc
-@@ -43,4 +43,11 @@ BASE_FEATURE(kMacWindowFollowsColorProviderColorMode,
-              "MacWindowFollowsColorProviderColorMode",
+@@ -44,4 +44,11 @@ BASE_FEATURE(kKeyboardAccessibleTooltipInViews,
+              "KeyboardAccessibleTooltipInViews",
               base::FEATURE_ENABLED_BY_DEFAULT);
  
 +// Controls the behavior of middle-mouse copy and pasting.
@@ -69,12 +69,12 @@ index b6352269a2a8b..50365c274e3a3 100644
 +
  }  // namespace views::features
 diff --git a/ui/views/views_features.h b/ui/views/views_features.h
-index 0a86cbad6f271..24c504b18119a 100644
+index d586436498..55ac42ee4a 100644
 --- a/ui/views/views_features.h
 +++ b/ui/views/views_features.h
 @@ -18,6 +18,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTransparentHwndEnlargement);
  VIEWS_EXPORT BASE_DECLARE_FEATURE(kKeyboardAccessibleTooltipInViews);
- VIEWS_EXPORT BASE_DECLARE_FEATURE(kMacWindowFollowsColorProviderColorMode);
  
 +VIEWS_EXPORT BASE_DECLARE_FEATURE(kMiddleClickCopyPaste);
 +

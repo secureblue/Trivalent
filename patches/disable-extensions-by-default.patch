@@ -1,13 +1,13 @@
 diff --git a/chrome/browser/profiles/profile.cc b/chrome/browser/profiles/profile.cc
-index 89254771117da..411ef3dfa5908 100644
+index 363a7c4ac5..56ae736a88 100644
 --- a/chrome/browser/profiles/profile.cc
 +++ b/chrome/browser/profiles/profile.cc
-@@ -321,7 +321,7 @@ void Profile::RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -331,7 +331,7 @@ void Profile::RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
    registry->RegisterIntegerPref(prefs::kContextualSearchPromoCardShownCount, 0);
  #endif  // BUILDFLAG(IS_ANDROID)
    registry->RegisterStringPref(prefs::kSessionExitType, std::string());
 -  registry->RegisterBooleanPref(prefs::kDisableExtensions, false);
 +  registry->RegisterBooleanPref(prefs::kDisableExtensions, true);
- #if BUILDFLAG(ENABLE_EXTENSIONS)
+ #if BUILDFLAG(ENABLE_EXTENSIONS_CORE)
    registry->RegisterBooleanPref(extensions::pref_names::kAlertsInitialized,
                                  false);

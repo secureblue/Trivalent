@@ -1,8 +1,8 @@
 diff --git a/ui/base/ui_base_features.cc b/ui/base/ui_base_features.cc
-index ed801f34141da..055cd74c52660 100644
+index fbaea143b6..3184d5bc05 100644
 --- a/ui/base/ui_base_features.cc
 +++ b/ui/base/ui_base_features.cc
-@@ -163,7 +163,7 @@ BASE_FEATURE(kWaylandPerSurfaceScale,
+@@ -149,7 +149,7 @@ BASE_FEATURE(kWaylandSessionManagement,
  COMPONENT_EXPORT(UI_BASE_FEATURES)
  BASE_FEATURE(kOverrideDefaultOzonePlatformHintToAuto,
               "OverrideDefaultOzonePlatformHintToAuto",
@@ -10,4 +10,4 @@ index ed801f34141da..055cd74c52660 100644
 +             base::FEATURE_ENABLED_BY_DEFAULT);
  #endif  // BUILDFLAG(IS_LINUX)
  
- // Update of the virtual keyboard settings UI as described in
+ // Chrome for Linux should eventually use XInput2 key events.
