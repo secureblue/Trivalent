@@ -41,8 +41,7 @@ echo $PROCESSES | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/nu
 IS_BROWSER_RUNNING=$?
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
-if [[ $IS_BROWSER_RUNNING -ne 0 ]] && [[ -f "$HOME/.config/$CHROMIUM_NAME/SingletonLock" ||
-      -f "$HOME/.config/$CHROMIUM_NAME/SingletonCookie" || -f "$HOME/.config/$CHROMIUM_NAME/SingletonSocket" ]]; then
+if [[ $IS_BROWSER_RUNNING -ne 0 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
   echo "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
