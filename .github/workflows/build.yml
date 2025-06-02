@@ -27,6 +27,7 @@ jobs:
         with:
           name: srpm-artifact
           path: "*.rpm"
+          compression-level: 0 
           retention-days: 30
 
   buildrpm:
@@ -60,6 +61,7 @@ jobs:
         with:
           name: rpm-artifact
           path: "*.rpm"
+          compression-level: 0 
           retention-days: 7
 
   pushrpm:
