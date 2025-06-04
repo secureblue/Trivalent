@@ -69,9 +69,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec bwrap $BWRAP_ARGS $HERE/$CHROMIUM_NAME $CHROMIUM_FLAGS "$@"
-
-
-while [ true ]; do
-  echo "test"
-done
+exec bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
