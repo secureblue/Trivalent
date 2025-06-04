@@ -32,7 +32,7 @@ get_remote_vanadium_patches() {
 	cd vanadium-patches-tmp/
 	retry=0
 	while true; do
-		git clone $vanadium_git_url
+		git clone "$vanadium_git_url"
 		if [ ! -d Vanadium/patches/ ]; then
 			rm -rf Vanadium/
 			echo "ERROR! git operation failed!"
@@ -111,7 +111,7 @@ update_vanadium_patches() {
 
 update_fedora_patches() {
 	cd fedora-patches-tmp
-	git clone $fedora_git_url
+	git clone "$fedora_git_url"
 	cd chromium
 	remote_fedora_patches=(*.patch)
 	cd "$repo_directory/$fedora_patches_path"
