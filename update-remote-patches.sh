@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# Copyright 2025 The Trivalent Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the License is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and limitations under the License.
+
+set -oue pipefail
+
 repo_directory=$(pwd)
 
 readonly vanadium_patches_path="./vanadium_patches/"
@@ -17,7 +31,7 @@ remote_fedora_patches=()
 get_remote_vanadium_patches() {
 	cd vanadium-patches-tmp/
 	retry=0
-	while [ true ]; do
+	while true; do
 		git clone $vanadium_git_url
 		if [ ! -d Vanadium/patches/ ]; then
 			rm -rf Vanadium/
@@ -58,7 +72,7 @@ update_vanadium_patches() {
 	cd "$vanadium_patches_path"
 	current_vanadium_patches=(*.patch)
 	for ((i=0; i<${#current_vanadium_patches[@]}; i++)); do
-		truncated_vanadium_patches[$i]="${current_vanadium_patches[$i]:4}"
+		truncated_vanadium_patches[i]="${current_vanadium_patches[$i]:4}"
 	done
 	updated_counter=0
 	removed_counter=0
@@ -116,7 +130,7 @@ update_fedora_patches() {
 				patch_not_found_counter=$((patch_not_found_counter+1))
 			fi
 		done
-		if [[ $patch_not_found_counter == ${#remote_fedora_patches[@]} ]]; then
+		if [[ $patch_not_found_counter == "${#remote_fedora_patches[@]}" ]]; then
 			echo "Deleting removed patch ${current_fedora_patches[i]}"
 			rm "${current_fedora_patches[$i]}"
 			removed_counter=$((removed_counter+1))
