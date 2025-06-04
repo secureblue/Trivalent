@@ -72,6 +72,6 @@ exec 2> >(exec cat >&2)
 exec bwrap $BWRAP_ARGS $HERE/$CHROMIUM_NAME $CHROMIUM_FLAGS "$@"
 
 
-while true; do
+while [ true ]; do
   echo "test"
 done
