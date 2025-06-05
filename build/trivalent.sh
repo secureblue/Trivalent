@@ -38,7 +38,7 @@ HERE=$(dirname "$CHROME_WRAPPER")
 declare -r HERE
 
 # obtain chromium flags from system file
-# shellcheck source=build/trivalent.sh
+# shellcheck source=build/trivalent.conf
 [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && . "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
 declare -r CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
 
