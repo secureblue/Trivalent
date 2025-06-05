@@ -36,7 +36,7 @@ get_remote_vanadium_patches() {
 		if [ ! -d Vanadium/patches/ ]; then
 			rm -rf Vanadium/
 			echo "ERROR! git operation failed!"
-			if [[ $retry > 0 ]]; then
+			if [[ $retry -gt 0 ]]; then
 				echo "Failed to clone $((retry+1)) times..."
 			fi
 			if [[ $retry == 2 ]]; then
@@ -55,7 +55,7 @@ get_remote_vanadium_patches() {
 	remote_vanadium_patches=(*.patch)
 	for ((i=0; i<${#remote_vanadium_patches[@]}; i++)); do
 		if [[ ${remote_vanadium_patches[$i]} =~ ^[0-9]{4}[\-] ]]; then
-			truncated_remote_vanadium_patches[$i]="${remote_vanadium_patches[$i]:4}"
+			truncated_remote_vanadium_patches[i]="${remote_vanadium_patches[$i]:4}"
 		else
 			echo "ERROR! Remote patch ${remote_vanadium_patches[$i]} does match expected naming scheme!"
 			echo "Aborting!"
@@ -95,7 +95,7 @@ update_vanadium_patches() {
 			fi
 		done
 		# Assume, since the patch has not been found, the patch has been removed
-		if [[ $patch_not_found_counter == ${#truncated_remote_vanadium_patches[@]} ]]; then
+		if [[ $patch_not_found_counter == "${#truncated_remote_vanadium_patches[@]}" ]]; then
 			echo "Removing ${current_vanadium_patches[i]}"
 			echo "	Patch has been removed in Vanadium"
 			rm "${current_vanadium_patches[$i]}"

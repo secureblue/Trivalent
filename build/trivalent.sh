@@ -32,11 +32,14 @@ declare -rx CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
 declare -rx GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Let the wrapped binary know that it has been run through the wrapper.
-declare -rx CHROME_WRAPPER="`readlink -f "$0"`"
-declare -r HERE="`dirname "$CHROME_WRAPPER"`"
+CHROME_WRAPPER=$(readlink -f "$0")
+declare -rx CHROME_WRAPPER
+HERE=$(dirname "$CHROME_WRAPPER")
+declare -r HERE
 
 # obtain chromium flags from system file
-[[ -f /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf ]] && . /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf
+# shellcheck source=build/trivalent.sh
+[[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && . "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
 declare -r CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
 
 # desktop integration
@@ -69,4 +72,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec bwrap $BWRAP_ARGS "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
+exec bwrap "$BWRAP_ARGS" "$HERE/$CHROMIUM_NAME" "$CHROMIUM_FLAGS" "$@"

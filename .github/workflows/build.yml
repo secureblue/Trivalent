@@ -3,11 +3,13 @@ on:
   
 name: Create RPM Release
 
+permissions: read-all    
+
 jobs:
   buildsrpm:
     name: Build SRPM
     if: github.triggering_actor == 'royaloughtness'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: 
       image: fedora:42
     steps:
