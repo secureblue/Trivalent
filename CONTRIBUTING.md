@@ -17,7 +17,6 @@ This project and everyone participating in it is governed by the
 By participating, you are expected to uphold this code. Please report unacceptable behavior
 to <secureblueadmin@proton.me>.
 
-
 ## I Have a Question
 
 Before you ask a question, it is best to search for existing [Issues](https://github.com/secureblue/Trivalent/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
