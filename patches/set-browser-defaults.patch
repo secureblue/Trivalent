@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/ui/browser_ui_prefs.cc b/chrome/browser/ui/browser_ui_prefs.cc
-index ee2364fc09eb4..f3f9300e3484a 100644
+index 951f5c5f9aaa8..9ddbf549e23ee 100644
 --- a/chrome/browser/ui/browser_ui_prefs.cc
 +++ b/chrome/browser/ui/browser_ui_prefs.cc
 @@ -97,10 +97,10 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
@@ -30,8 +30,9 @@ index ee2364fc09eb4..f3f9300e3484a 100644
  
    // We need to register the type of these preferences in order to query
    // them even though they're only typically controlled via policy.
-   registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, false);
+-  registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, false);
 -  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, true);
++  registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, true);
 +  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, false);
  
  #if BUILDFLAG(ENABLE_CLICK_TO_CALL)
