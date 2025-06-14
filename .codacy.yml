@@ -1,0 +1,11 @@
+---
+include_paths:
+  - "**/*"
+  - "**/**"
+  - "build/**"
+  - ".github/workflows/**"
+  - ".github/**"
+  - "vanadium_patches/**"
+  - "fedora_patches/**"
+  - "patches/**"
+  - "*"

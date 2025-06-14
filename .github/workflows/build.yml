@@ -3,11 +3,13 @@ on:
   
 name: Create RPM Release
 
+permissions: read-all    
+
 jobs:
   buildsrpm:
     name: Build SRPM
     if: github.triggering_actor == 'royaloughtness'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: 
       image: fedora:42
     steps:
@@ -27,6 +29,7 @@ jobs:
         with:
           name: srpm-artifact
           path: "*.rpm"
+          compression-level: 0 
           retention-days: 30
 
   buildrpm:
@@ -37,7 +40,7 @@ jobs:
     needs: buildsrpm
     steps:      
       - name: Retrieve SRPM
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: srpm-artifact
       - name: Build RPM 
@@ -60,6 +63,7 @@ jobs:
         with:
           name: rpm-artifact
           path: "*.rpm"
+          compression-level: 0 
           retention-days: 7
 
   pushrpm:
@@ -71,7 +75,7 @@ jobs:
     needs: buildrpm
     steps:
       - name: Retrieve RPM
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: rpm-artifact
 
