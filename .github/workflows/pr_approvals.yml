@@ -2,8 +2,8 @@ name: PR Approvals
 
 on:
   pull_request:
-
-permissions: read-all    
+    
+permissions: {} 
 
 jobs:
   pr-approvals:

@@ -3,7 +3,7 @@ on:
   
 name: Create RPM Release
 
-permissions: read-all    
+permissions: {} 
 
 jobs:
   buildsrpm:
