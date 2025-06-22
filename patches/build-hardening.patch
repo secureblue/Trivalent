@@ -62,8 +62,8 @@ index e579cc9a9d..8d0450303f 100644
 -    assert(target_cpu == "x64")
 -    ldflags = [ "/CETCOMPAT" ]
 +  if (enable_cet_shadow_stack) {
++    assert(target_cpu == "x64")
 +    if (is_win) {
-+      assert(target_cpu == "x64")
 +      ldflags = [ "/CETCOMPAT" ]
 +    } else if (is_linux) {
 +      cflags = [ "-fcf-protection=return" ]
