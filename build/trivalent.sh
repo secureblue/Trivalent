@@ -23,6 +23,9 @@ declare -rx XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 declare -rx XAUTHORITY="$XAUTHORITY"
 declare -rx DISPLAY="$DISPLAY"
 
+# enable hardware CFI feature
+declare -rx GLIBC_TUNABLES="glibc.cpu.x86_shstk=on:glibc.cpu.x86_ibt=on"
+
 # unify branding
 declare -r CHROMIUM_NAME="@@CHROMIUM_NAME@@"
 
