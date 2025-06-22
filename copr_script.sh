@@ -35,7 +35,7 @@ for ((i=0; i<${#patches[@]}; i++)); do
 done
 cd ..
 
-# copy hardened-chromium patches to the build dir
+# copy Trivalent patches to the build dir
 cd patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
