@@ -1,0 +1,13 @@
+diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browser_prefs.cc
+index bab4996a00..804cec796f 100644
+--- a/chrome/browser/prefs/browser_prefs.cc
++++ b/chrome/browser/prefs/browser_prefs.cc
+@@ -2303,7 +2303,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
+ 
+   // TODO(crbug.com/400455013): Add LNA support on Android
+   registry->RegisterBooleanPref(
+-      prefs::kManagedLocalNetworkAccessRestrictionsEnabled, false);
++      prefs::kManagedLocalNetworkAccessRestrictionsEnabled, true);
+ #endif  // !BUILDFLAG(IS_ANDROID)
+ 
+ #if BUILDFLAG(IS_ANDROID)
