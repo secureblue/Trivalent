@@ -38,8 +38,8 @@ index e579cc9a9d..8d0450303f 100644
 +
 +    if (enable_cet_ibt) {
 +      cflags += [ "-fcf-protection=branch" ]
-+      ldflags += [ "-fcf-protection=branch", "-Wl,z,force-ibt" ]
-+      #rustflags += [ "-Zcf-protection=branch" ]
++      ldflags += [ "-fcf-protection=branch", "-Wl,-z,force-ibt" ]
++      rustflags += [ "-Zcf-protection=branch" ]
 +    }
 +
      if (use_lld) {
