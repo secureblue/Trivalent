@@ -51,15 +51,15 @@ index 9a00400829..91a9b429e3 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 3ebb85bbe3..1193f35958 100644
+index e856d9cf62..d41a8b15a2 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -1666,7 +1666,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+@@ -1505,7 +1505,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
        prefs::kServiceWorkerToControlSrcdocIframeEnabled, true);
    registry->RegisterBooleanPref(prefs::kReduceAcceptLanguageEnabled, true);
    registry->RegisterBooleanPref(policy::policy_prefs::kBuiltInAIAPIsEnabled,
 -                                true);
 +                                false);
- }
- 
- // static
+   registry->RegisterBooleanPref(
+       prefs::kClearWindowNameForNewBrowsingContextGroup, true);
+   registry->RegisterBooleanPref(prefs::kPrefetchWithServiceWorkerEnabled, true);
