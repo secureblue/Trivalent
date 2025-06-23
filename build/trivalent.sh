@@ -24,7 +24,9 @@ declare -rx XAUTHORITY="$XAUTHORITY"
 declare -rx DISPLAY="$DISPLAY"
 
 # enable hardware CFI feature
-declare -rx GLIBC_TUNABLES="glibc.cpu.x86_shstk=on:glibc.cpu.x86_ibt=on"
+if [[ "$(arch)" -eq "x86_64" ]]; then
+  declare -rx GLIBC_TUNABLES="glibc.cpu.x86_shstk=on:glibc.cpu.x86_ibt=on"
+fi
 
 # unify branding
 declare -r CHROMIUM_NAME="@@CHROMIUM_NAME@@"
