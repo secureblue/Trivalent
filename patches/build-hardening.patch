@@ -1,8 +1,8 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index e579cc9a9d..8d0450303f 100644
+index 59942a3cf6..a929cc080a 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -361,14 +361,23 @@ config("compiler") {
+@@ -373,14 +373,23 @@ config("compiler") {
        # On Aarch64, SCS requires the x18 register to be unused because it will hold
        # a pointer to the shadow stack. For Android we know that Clang doesn't use
        # x18 by default. On other OSs adding "-ffixed-x18" might be required.
@@ -28,7 +28,7 @@ index e579cc9a9d..8d0450303f 100644
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
-@@ -388,6 +397,16 @@ config("compiler") {
+@@ -400,6 +409,16 @@ config("compiler") {
        }
      }
  
@@ -38,14 +38,14 @@ index e579cc9a9d..8d0450303f 100644
 +
 +    if (enable_cet_ibt) {
 +      cflags += [ "-fcf-protection=branch" ]
-+      ldflags += [ "-fcf-protection=branch" ]
++      ldflags += [ "-fcf-protection=branch", "-Wl,-z,force-ibt" ]
 +      rustflags += [ "-Zcf-protection=branch" ]
 +    }
 +
      if (use_lld) {
        ldflags += [ "-fuse-ld=lld" ]
        if (lld_path != "") {
-@@ -2199,7 +2218,7 @@ config("chromium_code") {
+@@ -2282,7 +2301,7 @@ config("chromium_code") {
        # Non-chromium code is not guaranteed to compile cleanly with
        # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
        # disabled, so only do that for Release build.
@@ -54,18 +54,17 @@ index e579cc9a9d..8d0450303f 100644
  
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3265,8 +3284,14 @@ buildflag_header("compiler_buildflags") {
+@@ -3363,8 +3382,14 @@ buildflag_header("compiler_buildflags") {
  }
  
  config("cet_shadow_stack") {
 -  if (enable_cet_shadow_stack && is_win) {
--    assert(target_cpu == "x64")
--    ldflags = [ "/CETCOMPAT" ]
 +  if (enable_cet_shadow_stack) {
-+    assert(target_cpu == "x64")
+     assert(target_cpu == "x64")
+-    ldflags = [ "/CETCOMPAT" ]
 +    if (is_win) {
 +      ldflags = [ "/CETCOMPAT" ]
-+    } else if (is_linux) {
++    } else if (false && is_linux) {
 +      cflags = [ "-fcf-protection=return" ]
 +      ldflags = [ "-fcf-protection=return", "-Wl,-z,shstk" ]
 +      rustflags = [ "-Zcf-protection=return" ]
@@ -88,7 +87,7 @@ index a47aa1cf4f..4ae1e1ac55 100644
    # enables the ML inliner when targeting Android.
    # Currently the ML inliner is only supported on linux hosts
 diff --git a/build/config/linux/BUILD.gn b/build/config/linux/BUILD.gn
-index 131bb71d1d..e871d9a5fe 100644
+index 131bb71d1d..b584e8d547 100644
 --- a/build/config/linux/BUILD.gn
 +++ b/build/config/linux/BUILD.gn
 @@ -20,11 +20,13 @@ config("compiler") {
@@ -109,3 +108,23 @@ index 131bb71d1d..e871d9a5fe 100644
      }
    }
  }
+diff --git a/build/config/sanitizers/BUILD.gn b/build/config/sanitizers/BUILD.gn
+index 66b993426a..2036bb8992 100644
+--- a/build/config/sanitizers/BUILD.gn
++++ b/build/config/sanitizers/BUILD.gn
+@@ -374,10 +374,11 @@ config("cfi_flags") {
+ 
+     if (use_cfi_icall) {
+       cflags += [ "-fsanitize=cfi-icall" ]
+-      # TODO(crbug.com/40266913): Add cflags += [
+-      # "-fsanitize-cfi-icall-experimental-normalize-integers" ]
+-      # TODO(crbug.com/40266913): Add rustflags += [
+-      # "-Zsanitizer-cfi-normalize-integers" ].
++      cflags += [ "-fsanitize-cfi-icall-experimental-normalize-integers" ]
++      if (toolchain_supports_rust_thin_lto) {
++        rustflags += [ "-Zsanitizer=cfi ]
++        rustflags += [ "-Zsanitizer-cfi-normalize-integers" ]
++      }
+     }
+ 
+     if (use_cfi_diag) {
