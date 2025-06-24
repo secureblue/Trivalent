@@ -25,7 +25,7 @@ declare -rx DISPLAY="$DISPLAY"
 
 # enable hardware CFI feature
 if [[ "$(arch)" == "x86_64" ]]; then
-  declare -rx GLIBC_TUNABLES="glibc.cpu.x86_shstk=on:glibc.cpu.x86_ibt=on"
+  declare -rx GLIBC_TUNABLES="glibc.cpu.x86_ibt=on:glibc.cpu.x86_shstk=permissive"
 fi
 
 # unify branding
