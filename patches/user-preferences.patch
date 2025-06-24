@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index 8db06cee98..d1c96333e9 100644
+index 77e42b69e48a1..a43ae010d2d69 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
 @@ -180,6 +180,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
@@ -26,7 +26,7 @@ index 8db06cee98..d1c96333e9 100644
    (*s_allowlist)[::embedder_support::kAlternateErrorPagesEnabled] =
        settings_api::PrefType::kBoolean;
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index 0d6ab878ac..0f114a5f32 100644
+index 0d6ab878ac33d..0f114a5f32cb5 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
 @@ -117,6 +117,11 @@
@@ -42,7 +42,7 @@ index 0d6ab878ac..0f114a5f32 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index d5079082c7..d75f6a430f 100644
+index 1f5aff963f2a4..84856e864176a 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -4,6 +4,10 @@
@@ -56,9 +56,9 @@ index d5079082c7..d75f6a430f 100644
        .bullet-line {
          align-items: center;
          display: flex;
-@@ -385,6 +389,41 @@
-           on-click="onChromeCertificatesClick_">
-       </cr-link-row>
+@@ -291,6 +295,41 @@
+         </cr-link-row>
+     </template>
  </if>
 +    <div id="hardeningSection">
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
@@ -96,10 +96,10 @@ index d5079082c7..d75f6a430f 100644
 +      </settings-toggle-button>
 +    </div>
  
-     <cr-link-row id="advanced-protection-program-link" class="hr"
-         label="$i18n{advancedProtectionProgramTitle}"
+     <cr-link-row id="manageCertificatesLinkRow" class="hr"
+         role-description="$i18n{subpageArrowRoleDescription}"
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 4d0a52b65b..b904b24461 100644
+index 4e79876ab6845..536522e66a99c 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
 @@ -28,6 +28,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
@@ -110,7 +110,7 @@ index 4d0a52b65b..b904b24461 100644
  import type {FocusConfig} from '../focus_config.js';
  import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
  import {loadTimeData} from '../i18n_setup.js';
-@@ -103,6 +104,19 @@ export class SettingsSecurityPageElement extends
+@@ -114,6 +115,19 @@ export class SettingsSecurityPageElement extends
        },
        // </if>
  
@@ -128,19 +128,18 @@ index 4d0a52b65b..b904b24461 100644
 +      },
 +
        /**
-        * Whether the secure DNS setting should be displayed.
+        * Valid safe browsing states.
         */
-@@ -235,6 +249,7 @@ export class SettingsSecurityPageElement extends
-   // <if expr="chrome_root_store_cert_management_ui">
-   declare private enableCertManagementUIV2_: boolean;
-   // </if>
+@@ -219,6 +233,7 @@ export class SettingsSecurityPageElement extends
+       },
+     };
+   }
 +  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
    declare private showSecureDnsSetting_: boolean;
  
    // <if expr="is_chromeos">
-
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
-index 348f170d65..419f557a4a 100644
+index 348f170d65209..419f557a4a9e7 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
 +++ b/chrome/browser/resources/settings/system_page/system_page.html
 @@ -17,6 +17,13 @@
