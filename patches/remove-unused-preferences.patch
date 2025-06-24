@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
-index 2ac18f2965e7d..682f29a54437a 100644
+index 06914746fb87c..a67593cc18ecc 100644
 --- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 +++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 @@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
@@ -48,10 +48,10 @@ index b038bf5b739c4..c8ce8d033c500 100644
 -  </div>
 -</cr-collapse>
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index b6d8feb09ef9f..e56555789b93a 100644
+index e539d035c0cb2..24eb53112e8a2 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -33,7 +33,7 @@
+@@ -27,7 +27,7 @@
            </settings-reset-profile-banner>
          </template>
          <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
@@ -78,7 +78,7 @@ index b6d8feb09ef9f..e56555789b93a 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.privacy)]]"
              restamp>
            <settings-section page-title="$i18n{privacyPageTitle}"
-@@ -237,13 +226,6 @@
+@@ -210,13 +199,6 @@
                  </settings-spell-check-page>
                </settings-section>
              </template>
@@ -108,7 +108,7 @@ index ad9a348aca868..4ba2509c855b5 100644
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 72f101f47a2e4..11ad14df2949c 100644
+index 5a308271fa23e..6d377f952d80f 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
 @@ -122,12 +122,6 @@ shown on non-ChromeOS platforms -->
@@ -117,18 +117,18 @@ index 72f101f47a2e4..11ad14df2949c 100644
  
 -        <cr-link-row id="sync-setup"
 -            label="$i18n{syncAndNonPersonalizedServices}"
--            sub-label="[[getSyncAndGoogleServicesSubtext_(syncStatus)]]"
 -            on-click="onSyncClick_"
 -            role-description="$i18n{subpageArrowRoleDescription}">
 -        </cr-link-row>
- 
+-
  <if expr="not chromeos_ash">
          <template is="dom-if" if="[[signinAllowed_]]">
+           <cr-link-row id="manage-google-account"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 7f98d8ac8d2f3..3f62a0e059a11 100644
+index 159316198e7f3..9d716a7ac65c4 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -76,8 +76,8 @@
+@@ -95,8 +95,8 @@
            </cr-link-row>
          </template>
          <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
@@ -139,7 +139,7 @@ index 7f98d8ac8d2f3..3f62a0e059a11 100644
              on-click="onSecurityPageClick_"
              role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
          <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -180,7 +180,7 @@
+@@ -176,7 +176,7 @@
        </template>
  
        <template is="dom-if" route-path="/security">
@@ -147,12 +147,12 @@ index 7f98d8ac8d2f3..3f62a0e059a11 100644
 +        <settings-subpage id="security" page-title="$i18n{privacyPageTitle}"
              associated-control="[[$$('#securityLinkRow')]]"
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
-           <settings-security-page prefs="{{prefs}}"
+           <template is="dom-if" if="[[!enableBundledSecuritySettings_]]">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index 2e5d4330a63fd..feec23cd1f499 100644
+index 091f7a093cea0..45cbd302aa140 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-@@ -316,7 +316,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -296,7 +296,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
        shouldShowSafetyHub_: {
          type: Boolean,
          value() {
@@ -161,7 +161,7 @@ index 2e5d4330a63fd..feec23cd1f499 100644
          },
        },
  
-@@ -629,8 +629,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -543,8 +543,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
  
    private shouldShowAdPrivacy_(): boolean {
@@ -169,10 +169,10 @@ index 2e5d4330a63fd..feec23cd1f499 100644
 -        this.isPrivacySandboxRestrictedNoticeEnabled_;
 +    return false;
    }
+ }
  
-   private shouldShowComposeProactiveNudge_(): boolean {
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index c804cdffe2..a86dcc349a 100644
+index 1f5aff963f2a4..246913fa0ddc5 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -71,126 +71,6 @@
@@ -319,11 +319,10 @@ index c804cdffe2..a86dcc349a 100644
      <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
        <settings-toggle-button id="httpsOnlyModeToggle"
            pref="{{prefs.generated.https_first_mode_enabled}}"
-@@ -348,18 +221,3 @@
-           on-click="onChromeCertificatesClick_">
-       </cr-link-row>
- </if>
--
+@@ -299,17 +172,3 @@
+         on-click="onManageCertificatesClick_" external>
+     </cr-link-row>
+ 
 -    <cr-link-row id="advanced-protection-program-link" class="hr"
 -        label="$i18n{advancedProtectionProgramTitle}"
 -        sub-label="$i18n{advancedProtectionProgramDesc}"
@@ -339,10 +338,10 @@ index c804cdffe2..a86dcc349a 100644
 -      </settings-simple-confirmation-dialog>
 -    </template>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 625814a9c2a65..d42cde0441bcc 100644
+index 4e79876ab6845..570a39fb54bb9 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -341,10 +341,6 @@ export class SettingsSecurityPageElement extends
+@@ -294,10 +294,6 @@ export class SettingsSecurityPageElement extends
        }
      });
  
@@ -354,10 +353,10 @@ index 625814a9c2a65..d42cde0441bcc 100644
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
    }
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index 001852c43411e..0f545ec860847 100644
+index 452cfb49fed4f..7ab46ad3386ac 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -183,7 +183,7 @@ function createRoutes(): SettingsRoutes {
+@@ -181,7 +181,7 @@ function createRoutes(): SettingsRoutes {
  
    if (!loadTimeData.getBoolean('isGuest')) {
      r.PEOPLE = r.BASIC.createSection(
@@ -367,7 +366,7 @@ index 001852c43411e..0f545ec860847 100644
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
      r.SIGN_OUT.isNavigableDialog = true;
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 20e21e770d21f..897469dece88a 100644
+index 80c5ee1b69093..df602f15b83d3 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -54,7 +54,7 @@
@@ -380,10 +379,10 @@ index 20e21e770d21f..897469dece88a 100644
          </a>
          <a role="menuitem" id="autofill" href="/autofill"
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 62a3181e6699c..e5a32573efa05 100644
+index cc944eb87b8ba..6f3fae8d60dca 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -351,10 +351,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+@@ -337,10 +337,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
    html_source->AddBoolean("isOSSettings", false);
  #endif  // BUILDFLAG(IS_CHROMEOS)
  
@@ -396,10 +395,10 @@ index 62a3181e6699c..e5a32573efa05 100644
    html_source->AddBoolean("enableHandTrackingContentSetting",
  #if BUILDFLAG(ENABLE_VR)
 diff --git a/chrome/common/chrome_features.cc b/chrome/common/chrome_features.cc
-index 61d4ba0277e5e..362256b840257 100644
+index 456447d6c37cc..161cb892b1890 100644
 --- a/chrome/common/chrome_features.cc
 +++ b/chrome/common/chrome_features.cc
-@@ -990,7 +990,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
+@@ -1166,7 +1166,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
  #endif
  
  // Enables Safety Hub feature.
@@ -409,10 +408,10 @@ index 61d4ba0277e5e..362256b840257 100644
  BASE_FEATURE(kSafetyHubThreeDotDetails,
               "SafetyHubThreeDotDetails",
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
-index 69992131be6df..9f7e15f55bc0a 100644
+index 2d453febf6ecf..b4ef0632ad5c3 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
 +++ b/components/security_interstitials/core/browser/resources/interstitial_large.js
-@@ -298,8 +298,6 @@ function setupEvents() {
+@@ -297,8 +297,6 @@ function setupEvents() {
    }
  
    preventDefaultOnPoundLinkClicks();

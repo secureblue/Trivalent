@@ -1,13 +1,13 @@
 diff --git a/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc b/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc
-index c98ecc3600..e4a772c18a 100644
+index b6985bd63a..c8f0e2e960 100644
 --- a/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc
 +++ b/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc
-@@ -23,7 +23,7 @@ namespace {
+@@ -25,7 +25,7 @@ namespace {
  #if BUILDFLAG(IS_LINUX) && BUILDFLAG(USE_DBUS)
  BASE_FEATURE(kGlobalShortcutsPortal,
               "GlobalShortcutsPortal",
 -             base::FEATURE_ENABLED_BY_DEFAULT);
 +             base::FEATURE_DISABLED_BY_DEFAULT);
- #endif
- }  // namespace
+ constexpr char kChannelEnvVar[] = "CHROME_VERSION_EXTRA";
  
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)

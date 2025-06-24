@@ -51,15 +51,31 @@ index 9a00400829..91a9b429e3 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 3ebb85bbe3..1193f35958 100644
+index e856d9cf62..d41a8b15a2 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -1666,7 +1666,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+@@ -1505,7 +1505,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
        prefs::kServiceWorkerToControlSrcdocIframeEnabled, true);
    registry->RegisterBooleanPref(prefs::kReduceAcceptLanguageEnabled, true);
    registry->RegisterBooleanPref(policy::policy_prefs::kBuiltInAIAPIsEnabled,
 -                                true);
 +                                false);
+   registry->RegisterBooleanPref(
+       prefs::kClearWindowNameForNewBrowsingContextGroup, true);
+   registry->RegisterBooleanPref(prefs::kPrefetchWithServiceWorkerEnabled, true);
+diff --git a/components/omnibox/browser/omnibox_prefs.cc b/components/omnibox/browser/omnibox_prefs.cc
+index b7126a3b53..f1f7b6bec0 100644
+--- a/components/omnibox/browser/omnibox_prefs.cc
++++ b/components/omnibox/browser/omnibox_prefs.cc
+@@ -50,8 +50,8 @@ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
+   // TODO(crbug.com/422744656): Remove `kAIModeSearchSuggestSettings` pref once
+   // `kAIModeSettings` is implemented.
+   registry->RegisterIntegerPref(omnibox::kAIModeSearchSuggestSettings,
+-                                kAIModeSearchSuggestAllowed);
+-  registry->RegisterIntegerPref(omnibox::kAIModeSettings, kAIModeAllowed);
++                                1);
++  registry->RegisterIntegerPref(omnibox::kAIModeSettings, 1);
  }
  
- // static
+ void SetUserPreferenceForZeroSuggestCachedResponse(
+

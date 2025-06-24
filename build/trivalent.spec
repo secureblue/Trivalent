@@ -169,7 +169,7 @@ Requires: u2f-hidraw-policy
 Requires: bubblewrap
 Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
 
-ExclusiveArch: x86_64
+ExclusiveArch: x86_64 aarch64
 
 # License: BSD-3-Clause
 Provides: bundled(angle)
@@ -429,6 +429,10 @@ PATH="$PATH:$(pwd)/third_party/ninja"
 export PATH
 
 CHROMIUM_GN_DEFINES=''
+%ifarch aarch64
+CHROMIUM_GN_DEFINES+=' target_cpu="arm64"'
+CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
+%endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
 CHROMIUM_GN_DEFINES+=' is_cfi=true use_cfi_cast=true'
