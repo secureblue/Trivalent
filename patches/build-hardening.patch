@@ -107,7 +107,7 @@ index 66b993426a..2036bb8992 100644
 -      # "-Zsanitizer-cfi-normalize-integers" ].
 +      if (toolchain_supports_rust_thin_lto) {
 +        cflags += [ "-fsanitize-cfi-icall-experimental-normalize-integers" ]
-+        rustflags += [ "-Zsanitizer=cfi", "-Zsanitizer-cfi-normalize-integers" ]
++        rustflags += [ "-Zbuild-std", "-Zsanitizer=cfi", "-Zsanitizer-cfi-normalize-integers" ]
 +      }
      }
  
