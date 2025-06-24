@@ -112,18 +112,17 @@ diff --git a/build/config/sanitizers/BUILD.gn b/build/config/sanitizers/BUILD.gn
 index 66b993426a..2036bb8992 100644
 --- a/build/config/sanitizers/BUILD.gn
 +++ b/build/config/sanitizers/BUILD.gn
-@@ -374,10 +374,11 @@ config("cfi_flags") {
+@@ -374,10 +374,9 @@ config("cfi_flags") {
  
      if (use_cfi_icall) {
-       cflags += [ "-fsanitize=cfi-icall" ]
+-      cflags += [ "-fsanitize=cfi-icall" ]
 -      # TODO(crbug.com/40266913): Add cflags += [
 -      # "-fsanitize-cfi-icall-experimental-normalize-integers" ]
 -      # TODO(crbug.com/40266913): Add rustflags += [
 -      # "-Zsanitizer-cfi-normalize-integers" ].
-+      cflags += [ "-fsanitize-cfi-icall-experimental-normalize-integers" ]
++      cflags += [ "-fsanitize=cfi-icall", "-fsanitize-cfi-icall-experimental-normalize-integers" ]
 +      if (toolchain_supports_rust_thin_lto) {
-+        rustflags += [ "-Zsanitizer=cfi ]
-+        rustflags += [ "-Zsanitizer-cfi-normalize-integers" ]
++        rustflags += [ "-Zsanitizer=cfi", "-Zsanitizer-cfi-normalize-integers" ]
 +      }
      }
  
