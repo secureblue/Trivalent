@@ -21,8 +21,12 @@ index 59942a3cf6..172b6cfcaf 100644
 +        scs_paramaters += [ "-ffixed-x18" ]
 +        rs_scs_params += [ "-Zfixed-x18" ]
 +      }
-[user@fedora src]$ nano build/config/compiler/BUILD.gn
-[user@fedora src]$ git diff
+       cflags += scs_parameters
+       ldflags += scs_parameters
++      rustflags += rs_scs_params
+     } else {
+       if (is_apple) {
+         # The strong variant of the stack protector significantly increases
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
 index 59942a3cf6..06ae018422 100644
 --- a/build/config/compiler/BUILD.gn
