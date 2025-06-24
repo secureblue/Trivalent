@@ -1,33 +1,4 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 59942a3cf6..172b6cfcaf 100644
---- a/build/config/compiler/BUILD.gn
-+++ b/build/config/compiler/BUILD.gn
-@@ -373,14 +373,23 @@ config("compiler") {
-       # On Aarch64, SCS requires the x18 register to be unused because it will hold
-       # a pointer to the shadow stack. For Android we know that Clang doesn't use
-       # x18 by default. On other OSs adding "-ffixed-x18" might be required.
--      assert(is_android)
-+      assert(is_android || is_linux)
- 
-       scs_parameters = [
-         "-fsanitize=shadow-call-stack",
--        "-fno-stack-protector",
-+        "-fstack-protector-strong",
-       ]
-+      rs_scs_params = [ "-Zsanitize=shadow-call-stack" ]
-+
-+      # fixed-x18 may be required for ShadowCallStack
-+      if (is_linux) {
-+        scs_paramaters += [ "-ffixed-x18" ]
-+        rs_scs_params += [ "-Zfixed-x18" ]
-+      }
-       cflags += scs_parameters
-       ldflags += scs_parameters
-+      rustflags += rs_scs_params
-     } else {
-       if (is_apple) {
-         # The strong variant of the stack protector significantly increases
-diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
 index 59942a3cf6..06ae018422 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
