@@ -1,5 +1,5 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 59942a3cf6..06ae018422 100644
+index 59942a3cf6..8275023da0 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
 @@ -373,14 +373,23 @@ config("compiler") {
@@ -28,7 +28,7 @@ index 59942a3cf6..06ae018422 100644
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
-@@ -400,6 +409,13 @@ config("compiler") {
+@@ -400,6 +409,11 @@ config("compiler") {
        }
      }
  
@@ -40,7 +40,7 @@ index 59942a3cf6..06ae018422 100644
      if (use_lld) {
        ldflags += [ "-fuse-ld=lld" ]
        if (lld_path != "") {
-@@ -2280,7 +2296,7 @@ config("chromium_code") {
+@@ -2282,7 +2296,7 @@ config("chromium_code") {
        # Non-chromium code is not guaranteed to compile cleanly with
        # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
        # disabled, so only do that for Release build.
@@ -49,7 +49,7 @@ index 59942a3cf6..06ae018422 100644
  
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3361,8 +3377,14 @@ buildflag_header("compiler_buildflags") {
+@@ -3363,8 +3377,14 @@ buildflag_header("compiler_buildflags") {
  }
  
  config("cet_shadow_stack") {
@@ -89,7 +89,7 @@ index 131bb71d1d..b584e8d547 100644
    }
  }
 diff --git a/build/config/sanitizers/BUILD.gn b/build/config/sanitizers/BUILD.gn
-index 66b993426a..987e6c80f9 100644
+index 66b993426a..8cc5ffe7b6 100644
 --- a/build/config/sanitizers/BUILD.gn
 +++ b/build/config/sanitizers/BUILD.gn
 @@ -374,10 +374,10 @@ config("cfi_flags") {
