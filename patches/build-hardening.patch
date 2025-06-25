@@ -36,7 +36,7 @@ index 59942a3cf6..06ae018422 100644
 +      cflags += [ "-fstack-clash-protection" ]
 +
 +      cflags += [ "-mharden-sls=all" ]
-+      #rustflags += [ "-Ctarget-feature=+harden-sls-ijmp", "-Ctarget-feature=+harden-sls-ret" ]
++      rustflags += [ "-Ctarget-feature=+harden-sls-ijmp", "-Ctarget-feature=+harden-sls-ret" ]
 +    }
 +
      if (use_lld) {
