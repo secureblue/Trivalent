@@ -457,7 +457,6 @@ CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ld.lld: error: unable to find library -lffi_pic
-CHROMIUM_GN_DEFINES+=' v8_enable_cet_shadow_stack=true v8_enable_cet_ibt=true'
 export CHROMIUM_GN_DEFINES
 
 # Check that there is no system 'google' module, shadowing bundled ones:
