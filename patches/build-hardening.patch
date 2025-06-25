@@ -64,7 +64,7 @@ index 59942a3cf6..06ae018422 100644
 +    } else if (is_linux) {
 +      cflags = [ "-fcf-protection=full" ]
 +      ldflags = [ "-fcf-protection=full", "-Wl,-z,shstk" ]
-+      #rustflags = [ "-Zcf-protection=full" ]
++      rustflags = [ "-Zcf-protection=full" ]
 +    }
    }
  }
@@ -102,7 +102,7 @@ index 66b993426a..987e6c80f9 100644
 -      # "-fsanitize-cfi-icall-experimental-normalize-integers" ]
 -      # TODO(crbug.com/40266913): Add rustflags += [
 -      # "-Zsanitizer-cfi-normalize-integers" ].
-+      if (false && toolchain_supports_rust_thin_lto) {
++      if (toolchain_supports_rust_thin_lto) {
 +        cflags += [ "-fsanitize-cfi-icall-experimental-normalize-integers" ]
 +        rustflags += [ "-Zsanitizer=cfi", "-Zsanitizer-cfi-normalize-integers" ]
 +      }
