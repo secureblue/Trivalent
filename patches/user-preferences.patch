@@ -42,7 +42,7 @@ index 0d6ab878ac33d..0f114a5f32cb5 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 1f5aff963f2a4..84856e864176a 100644
+index 1f5aff963f2a4..b7a1a5ea17f76 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -4,6 +4,10 @@
@@ -56,10 +56,10 @@ index 1f5aff963f2a4..84856e864176a 100644
        .bullet-line {
          align-items: center;
          display: flex;
-@@ -291,6 +295,41 @@
-         </cr-link-row>
-     </template>
- </if>
+@@ -298,6 +302,41 @@
+         sub-label="$i18n{manageCertificatesDescription}"
+         on-click="onManageCertificatesClick_" external>
+     </cr-link-row>
 +    <div id="hardeningSection">
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
 +      <settings-toggle-button class="cr-row first"
@@ -96,8 +96,8 @@ index 1f5aff963f2a4..84856e864176a 100644
 +      </settings-toggle-button>
 +    </div>
  
-     <cr-link-row id="manageCertificatesLinkRow" class="hr"
-         role-description="$i18n{subpageArrowRoleDescription}"
+     <cr-link-row id="advanced-protection-program-link" class="hr"
+         label="$i18n{advancedProtectionProgramTitle}"
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
 index 4e79876ab6845..536522e66a99c 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
