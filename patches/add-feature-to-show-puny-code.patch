@@ -22,7 +22,7 @@ index 63b6e1583a837..a0b8b8c588161 100644
    // on a per-component basis.
    std::u16string out16;
 diff --git a/url/url_features.cc b/url/url_features.cc
-index 584e93ac72bd1..b89fea48914d6 100644
+index 89884ac867..ff2f72cf7c 100644
 --- a/url/url_features.cc
 +++ b/url/url_features.cc
 @@ -7,6 +7,10 @@
@@ -33,9 +33,9 @@ index 584e93ac72bd1..b89fea48914d6 100644
 +             "ShowPunycodeDomains",
 +             base::FEATURE_DISABLED_BY_DEFAULT);
 +
- BASE_FEATURE(kUseIDNA2008NonTransitional,
-              "UseIDNA2008NonTransitional",
-              base::FEATURE_ENABLED_BY_DEFAULT);
+ // Kill switch for crbug.com/1416006.
+ BASE_FEATURE(kStandardCompliantNonSpecialSchemeURLParsing,
+              "StandardCompliantNonSpecialSchemeURLParsing",
 diff --git a/url/url_features.h b/url/url_features.h
 index fa4493a12e9c1..70c5d811122fe 100644
 --- a/url/url_features.h
