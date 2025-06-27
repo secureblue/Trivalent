@@ -76,5 +76,6 @@ if [[ -r "/etc/ld.so.preload" ]]; then
   # shellcheck disable=SC2086
   exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
 else
+  # shellcheck disable=SC2086
   exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
 fi
