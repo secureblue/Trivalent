@@ -24,6 +24,7 @@ declare -rx XAUTHORITY="$XAUTHORITY"
 declare -rx DISPLAY="$DISPLAY"
 
 # enable hardware CFI feature
+# https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
 if [[ "$(arch)" == "x86_64" ]]; then
   declare -rx GLIBC_TUNABLES="glibc.cpu.x86_ibt=on:glibc.cpu.x86_shstk=permissive"
 fi
