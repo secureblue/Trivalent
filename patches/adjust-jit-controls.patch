@@ -10,7 +10,7 @@ index e856d9cf62..c2fd27d0ca 100644
 -  if (!site_url.SchemeIsHTTPOrHTTPS()) {
 -    return false;
 -  }
-+  // Disable JIT & WASM for non-web schemes.
++  // Disable JIT & WASM for non-(web|file|extension) schemes.
 +  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
 +      && !site_url.SchemeIs("chrome-extension"))
 +    return true;
@@ -31,18 +31,6 @@ index e856d9cf62..c2fd27d0ca 100644
    Profile* profile = Profile::FromBrowserContext(browser_context);
    auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
    // Special case to determine if any policy is set.
-@@ -7619,6 +7612,11 @@ bool ChromeContentBrowserClient::AreV8OptimizationsDisabledForSite(
-            CONTENT_SETTING_BLOCK;
-   }
- 
-+  // Disable JIT for non-web schemes.
-+  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
-+      && !site_url.SchemeIs("chrome-extension"))
-+    return true;
-+
-   return (map &&
-           map->GetContentSetting(site_url, site_url,
-                                  ContentSettingsType::JAVASCRIPT_OPTIMIZER) ==
 diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
 index 67cdf0f30f..3e8e47834b 100644
 --- a/content/browser/renderer_host/render_process_host_impl.cc
