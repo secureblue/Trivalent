@@ -38,7 +38,7 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "by Trivalent.", kOsAll,
 +     SINGLE_DISABLE_VALUE_TYPE("disable-strict-popup-blocking")},
 +    {"hide-profile-icon", "Hide profile icon in toolbar",
-+     "Hides the profile icon in the toolbar in regular profiles. Enabled "
++     "Hides the profile icon in the toolbar in regular profiles. Disabled "
 +     "by default. This feature is provided by Trivalent." , kOsAll,
 +     FEATURE_VALUE_TYPE(features::kHideProfileIcon)},
 +    {"gssapi-support", "GSSAPI Authentication",
