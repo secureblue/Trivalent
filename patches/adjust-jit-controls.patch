@@ -40,9 +40,9 @@ index 67cdf0f30f..3fa91706cd 100644
    }
  
 -  if (IsJitDisabled()) {
-+  if (IsJitDisabled() || (AreVOptimizationsDisabled() &&
++  if (IsJitDisabled() || (AreV8OptimizationsDisabled() &&
 +                      !base::CommandLine::
-+                           ForCurrentProcess()->HasSwitch("enable-drumbrake")) {
++                           ForCurrentProcess()->HasSwitch("enable-drumbrake"))) {
      command_line->AppendSwitchASCII(blink::switches::kJavaScriptFlags,
                                      "--jitless");
    } else if (AreV8OptimizationsDisabled()) {
