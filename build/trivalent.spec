@@ -322,17 +322,12 @@ Requires(post): /usr/sbin/restorecon
 %description
 %{chromium_name_branding} is a security-focused browser built upon the Chromium web browser.
 
-%package common
-Summary: Files needed for Chromium
-%description common
-%{summary}.
-
 %package qt6-ui
-Summary: Qt6 UI built from Chromium
+Summary: Qt6 UI built from %{chromium_name_branding}
 Requires: %{chromium_name}%{_isa} = %{version}-%{release}
 
 %description qt6-ui
-Qt6 UI for chromium.
+Qt6 UI for %{chromium_name_branding}.
 
 %prep
 %setup -q -n chromium-%{version}
