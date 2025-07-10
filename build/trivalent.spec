@@ -558,7 +558,7 @@ fi
 %files
 %doc AUTHORS
 %license LICENSE
-%{_mandir}/man1/%{chromium_name}.1
+%{_mandir}/man1/%{chromium_name}.*
 # Binary and Libs
 %{_bindir}/%{chromium_name}
 %dir %{chromium_path}/
