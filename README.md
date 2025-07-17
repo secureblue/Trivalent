@@ -6,7 +6,7 @@
 
 <h1 align="center">Trivalent</h1>
 
-A hardened chromium for desktop Linux inspired by [Vanadium](https://github.com/GrapheneOS/Vanadium), using [Fedora's Chromium](https://src.fedoraproject.org/rpms/chromium) as a base. Intended for use in [secureblue](https://github.com/secureblue/secureblue).
+A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadium](https://github.com/GrapheneOS/Vanadium). Intended for use in [secureblue](https://github.com/secureblue/secureblue).
 
 ## Scope
 
