@@ -28,6 +28,8 @@ readonly fedora_git_url="https://src.fedoraproject.org/rpms/chromium.git"
 current_fedora_patches=()
 remote_fedora_patches=()
 
+excluded_patch="reset-unused-jit-content-settings.patch"
+
 get_remote_vanadium_patches() {
 	cd vanadium-patches-tmp/
 	retry=0
@@ -52,7 +54,12 @@ get_remote_vanadium_patches() {
 		fi
 	done
 	cd Vanadium/patches/
-	remote_vanadium_patches=(*.patch)
+	remote_vanadium_patches=()
+	for patch in *.patch; do
+		if [[ "$patch" != "$excluded_patch" ]]; then
+			remote_vanadium_patches+=("$patch")
+		fi
+	done
 	for ((i=0; i<${#remote_vanadium_patches[@]}; i++)); do
 		if [[ ${remote_vanadium_patches[$i]} =~ ^[0-9]{4}[\-] ]]; then
 			truncated_remote_vanadium_patches[i]="${remote_vanadium_patches[$i]:4}"
@@ -70,7 +77,12 @@ get_remote_vanadium_patches() {
 update_vanadium_patches() {
 	get_remote_vanadium_patches
 	cd "$vanadium_patches_path"
-	current_vanadium_patches=(*.patch)
+	current_vanadium_patches=()
+	for patch in *.patch; do
+		if [[ "$patch" != "$excluded_patch" ]]; then
+			current_vanadium_patches+=("$patch")
+		fi
+	done
 	for ((i=0; i<${#current_vanadium_patches[@]}; i++)); do
 		truncated_vanadium_patches[i]="${current_vanadium_patches[$i]:4}"
 	done
