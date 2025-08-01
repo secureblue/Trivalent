@@ -76,18 +76,15 @@ index e856d9cf62..d41a8b15a2 100644
        prefs::kClearWindowNameForNewBrowsingContextGroup, true);
    registry->RegisterBooleanPref(prefs::kPrefetchWithServiceWorkerEnabled, true);
 diff --git a/components/omnibox/browser/omnibox_prefs.cc b/components/omnibox/browser/omnibox_prefs.cc
-index b7126a3b53..f1f7b6bec0 100644
+index b4497bcdd3..f523305174 100644
 --- a/components/omnibox/browser/omnibox_prefs.cc
 +++ b/components/omnibox/browser/omnibox_prefs.cc
-@@ -50,8 +50,8 @@ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
-   // TODO(crbug.com/422744656): Remove `kAIModeSearchSuggestSettings` pref once
-   // `kAIModeSettings` is implemented.
-   registry->RegisterIntegerPref(omnibox::kAIModeSearchSuggestSettings,
--                                kAIModeSearchSuggestAllowed);
+@@ -51,7 +51,7 @@ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
+   registry->RegisterIntegerPref(kShownCountHistoryScopePromo, 0);
+   registry->RegisterIntegerPref(kShownCountHistoryEmbeddingsScopePromo, 0);
+   registry->RegisterIntegerPref(kFocusedSrpWebCount, 0);
 -  registry->RegisterIntegerPref(omnibox::kAIModeSettings, kAIModeAllowed);
-+                                1);
 +  registry->RegisterIntegerPref(omnibox::kAIModeSettings, 1);
  }
  
  void SetUserPreferenceForZeroSuggestCachedResponse(
-
