@@ -60,26 +60,26 @@ index b038bf5b739c4..c8ce8d033c500 100644
 -  </div>
 -</cr-collapse>
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index e539d035c0cb2..24eb53112e8a2 100644
+index 3e5e2c80b8..c1201524e5 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
 @@ -27,7 +27,7 @@
            </settings-reset-profile-banner>
          </template>
-         <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
+         <template is="dom-if" if="[[showPage_(pageVisibility_.people)]]" restamp>
 -          <settings-section page-title="$i18n{peoplePageTitle}"
 +          <settings-section page-title="$i18n{editPerson}"
                section="people">
-             <settings-people-page prefs="{{prefs}}"
-                 page-visibility="[[pageVisibility]]">
-@@ -67,17 +67,6 @@
+             <settings-people-page prefs="{{prefs}}"></settings-people-page>
+           </settings-section>
+@@ -65,17 +65,6 @@
                prefs="{{prefs}}">
            </settings-privacy-guide-promo>
          </settings-section>
 -        <!--  TODO(crbug.com/40267370): Add a test to basic_page_test.ts
 -        to check that settings-safety-hub-entry-point is not visible
 -        in the guest mode. -->
--        <template is="dom-if" if="[[showPage_(pageVisibility.safetyHub)]]"
+-        <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]"
 -            restamp>
 -          <settings-section page-title="$i18n{safetyHub}"
 -              section="safetyHubEntryPoint" nest-under-section="privacy"
@@ -87,22 +87,22 @@ index e539d035c0cb2..24eb53112e8a2 100644
 -            <settings-safety-hub-entry-point></settings-safety-hub-entry-point>
 -          </settings-section>
 -        </template>
-         <template is="dom-if" if="[[showPage_(pageVisibility.privacy)]]"
+         <template is="dom-if" if="[[showPage_(pageVisibility_.privacy)]]"
              restamp>
            <settings-section page-title="$i18n{privacyPageTitle}"
-@@ -210,13 +199,6 @@
+@@ -206,13 +195,6 @@
                  </settings-spell-check-page>
                </settings-section>
              </template>
 -            <settings-section page-title="$i18n{translatePageTitle}"
 -                section="translate" nest-under-section="languages">
 -              <settings-translate-page prefs="{{prefs}}"
--                  languages="{{languages}}"
--                  language-helper="{{languageHelper}}">
+-                  languages="[[languages]]"
+-                  language-helper="[[languageHelper]]">
 -              </settings-translate-page>
 -            </settings-section>
  </if>
-             <template is="dom-if" if="[[showPage_(pageVisibility.downloads)]]"
+             <template is="dom-if" if="[[showPage_(pageVisibility_.downloads)]]"
                  restamp>
 diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html b/chrome/browser/resources/settings/languages_page/translate_page.html
 index ad9a348aca868..4ba2509c855b5 100644
@@ -161,10 +161,10 @@ index 159316198e7f3..9d716a7ac65c4 100644
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
            <template is="dom-if" if="[[!enableBundledSecuritySettings_]]">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index 091f7a093cea0..45cbd302aa140 100644
+index 30b89ed907..d71ee60f62 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-@@ -296,7 +296,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -291,7 +291,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
        shouldShowSafetyHub_: {
          type: Boolean,
          value() {
@@ -173,7 +173,7 @@ index 091f7a093cea0..45cbd302aa140 100644
          },
        },
  
-@@ -543,8 +543,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -546,8 +546,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
  
    private shouldShowAdPrivacy_(): boolean {
@@ -181,10 +181,10 @@ index 091f7a093cea0..45cbd302aa140 100644
 -        this.isPrivacySandboxRestrictedNoticeEnabled_;
 +    return false;
    }
- }
  
+   private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 1f5aff963f2a4..246913fa0ddc5 100644
+index ae93043d94..4d5f34f447 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -71,126 +71,6 @@
@@ -331,11 +331,12 @@ index 1f5aff963f2a4..246913fa0ddc5 100644
      <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
        <settings-toggle-button id="httpsOnlyModeToggle"
            pref="{{prefs.generated.https_first_mode_enabled}}"
-@@ -299,17 +172,3 @@
+@@ -289,18 +162,3 @@
+         sub-label="$i18n{manageCertificatesDescription}"
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
- 
--    <cr-link-row id="advanced-protection-program-link" class="hr"
+-
+-    <cr-link-row id="advancedProtectionProgramLink" class="hr"
 -        label="$i18n{advancedProtectionProgramTitle}"
 -        sub-label="$i18n{advancedProtectionProgramDesc}"
 -        on-click="onAdvancedProtectionProgramLinkClick_"
@@ -350,10 +351,10 @@ index 1f5aff963f2a4..246913fa0ddc5 100644
 -      </settings-simple-confirmation-dialog>
 -    </template>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 4e79876ab6845..570a39fb54bb9 100644
+index 1ca971d44f..b11656efa0 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -294,10 +294,6 @@ export class SettingsSecurityPageElement extends
+@@ -290,10 +290,6 @@ export class SettingsSecurityPageElement extends
        }
      });
  
@@ -363,7 +364,7 @@ index 4e79876ab6845..570a39fb54bb9 100644
 -
      // Initialize the last focus time on page load.
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
-   }
+ 
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
 index 452cfb49fed4f..7ab46ad3386ac 100644
 --- a/chrome/browser/resources/settings/route.ts
