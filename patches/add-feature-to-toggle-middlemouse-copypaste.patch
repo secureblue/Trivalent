@@ -77,11 +77,11 @@ index 4c6ae8ff79..e6f160160b 100644
 +
  }  // namespace views::features
 diff --git a/ui/views/views_features.h b/ui/views/views_features.h
-index d586436498..55ac42ee4a 100644
+index 58063f2452..3adbb7a5fb 100644
 --- a/ui/views/views_features.h
 +++ b/ui/views/views_features.h
-@@ -18,6 +18,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
- VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTransparentHwndEnlargement);
+@@ -17,6 +17,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnablePlatformHighContrastInkDrop);
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
  VIEWS_EXPORT BASE_DECLARE_FEATURE(kKeyboardAccessibleTooltipInViews);
  
 +VIEWS_EXPORT BASE_DECLARE_FEATURE(kMiddleClickCopyPaste);
