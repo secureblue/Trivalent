@@ -21,7 +21,7 @@ It's inspired by PaX MPROTECT restrictions.
  2 files changed, 73 insertions(+)
 
 diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-index 4c3bd57aef455..70fc1354be413 100644
+index bdb1f4071f2ed..c1c693530c782 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 +++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 @@ -15,6 +15,7 @@
@@ -32,7 +32,7 @@ index 4c3bd57aef455..70fc1354be413 100644
  #include <sys/socket.h>
  #include <sys/stat.h>
  #include <sys/time.h>
-@@ -246,6 +247,31 @@ ResultExpr RestrictMmapFlags() {
+@@ -247,6 +248,31 @@ ResultExpr RestrictMmapFlags() {
    return If((flags & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
@@ -64,7 +64,7 @@ index 4c3bd57aef455..70fc1354be413 100644
  ResultExpr RestrictMprotectFlags() {
    // The flags you see are actually the allowed ones, and the variable is a
    // "denied" mask because of the negation operator.
-@@ -264,6 +290,24 @@ ResultExpr RestrictMprotectFlags() {
+@@ -265,6 +291,24 @@ ResultExpr RestrictMprotectFlags() {
    return If((prot & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
@@ -89,7 +89,7 @@ index 4c3bd57aef455..70fc1354be413 100644
  ResultExpr RestrictFcntlCommands() {
    // We also restrict the flags in F_SETFL. We don't want to permit flags with
    // a history of trouble such as O_DIRECT. The flags you see are actually the
-@@ -306,6 +350,17 @@ ResultExpr RestrictFcntlCommands() {
+@@ -307,6 +351,17 @@ ResultExpr RestrictFcntlCommands() {
    // clang-format on
  }
  

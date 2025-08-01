@@ -8,7 +8,7 @@ Subject: [PATCH] enable partitioning connections by default
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/base/features.cc b/net/base/features.cc
-index f1533f65b0c33..09492207c3f98 100644
+index 786555b3b4102..ae38161ee59e5 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
 @@ -142,7 +142,7 @@ BASE_FEATURE(kSplitCodeCacheByNetworkIsolationKey,

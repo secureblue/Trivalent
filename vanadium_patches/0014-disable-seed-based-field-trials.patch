@@ -9,10 +9,10 @@ Subject: [PATCH] disable seed-based field trials
  2 files changed, 12 insertions(+)
 
 diff --git a/components/variations/service/variations_field_trial_creator_base.cc b/components/variations/service/variations_field_trial_creator_base.cc
-index 4d71cf267b23a..22f8a0b6b77fb 100644
+index 8e7106ac16fe0..7ceef14b44642 100644
 --- a/components/variations/service/variations_field_trial_creator_base.cc
 +++ b/components/variations/service/variations_field_trial_creator_base.cc
-@@ -268,8 +268,14 @@ bool VariationsFieldTrialCreatorBase::SetUpFieldTrials(
+@@ -251,8 +251,14 @@ bool VariationsFieldTrialCreatorBase::SetUpFieldTrials(
    }
    // Force the variation ids selected in chrome://flags and/or specified using
    // the command-line flag.
@@ -27,20 +27,20 @@ index 4d71cf267b23a..22f8a0b6b77fb 100644
  
    switch (result) {
      case VariationsIdsProvider::ForceIdsResult::INVALID_SWITCH_ENTRY:
-@@ -334,13 +340,17 @@ bool VariationsFieldTrialCreatorBase::SetUpFieldTrials(
+@@ -317,13 +323,17 @@ bool VariationsFieldTrialCreatorBase::SetUpFieldTrials(
  
-   bool used_seed = false;
+   CreateTrialsResult create_trials_result = {.applied_seed = false};
    if (!used_testing_config && client_filterable_state) {
 +#if defined(FIELDTRIAL_SEED_ENABLED)
-     used_seed = CreateTrialsFromSeed(
+     create_trials_result = CreateTrialsFromSeed(
          entropy_providers, feature_list.get(), safe_seed_manager,
-         synthetic_trial_registry, std::move(client_filterable_state));
+         std::move(client_filterable_state));
 +#endif
    }
  
 +#if defined(FIELDTRIAL_SEED_ENABLED)
    platform_field_trials->SetUpClientSideFieldTrials(
-       used_seed, entropy_providers, feature_list.get());
+       create_trials_result.applied_seed, entropy_providers, feature_list.get());
 +#endif
  
    platform_field_trials->RegisterFeatureOverrides(feature_list.get());

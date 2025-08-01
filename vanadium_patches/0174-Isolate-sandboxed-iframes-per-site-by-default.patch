@@ -8,10 +8,10 @@ Subject: [PATCH] Isolate sandboxed iframes per site by default
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/third_party/blink/common/features.cc b/third_party/blink/common/features.cc
-index ab582b6238c82..9b65b75a6a98b 100644
+index 3132400d9f6b4..50d31f9035928 100644
 --- a/third_party/blink/common/features.cc
 +++ b/third_party/blink/common/features.cc
-@@ -1244,7 +1244,7 @@ BASE_FEATURE_ENUM_PARAM(IsolateSandboxedIframesGrouping,
+@@ -1239,7 +1239,7 @@ BASE_FEATURE_ENUM_PARAM(IsolateSandboxedIframesGrouping,
                          kIsolateSandboxedIframesGroupingParam,
                          &kIsolateSandboxedIframes,
                          "grouping",
@@ -19,4 +19,4 @@ index ab582b6238c82..9b65b75a6a98b 100644
 +                        IsolateSandboxedIframesGrouping::kPerSite,
                          &isolated_sandboxed_iframes_grouping_types);
  
- // Serves as killswitch for migrating CanvasRenderingContext2D::IsPaintable()
+ BASE_FEATURE(kKalmanDirectionCutOff,

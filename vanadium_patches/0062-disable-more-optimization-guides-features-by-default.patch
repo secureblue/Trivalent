@@ -4,23 +4,14 @@ Date: Mon, 25 Apr 2022 06:19:32 -0400
 Subject: [PATCH] disable more optimization guides features by default
 
 ---
- .../core/optimization_guide_features.cc                   | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../optimization_guide/core/optimization_guide_features.cc  | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/components/optimization_guide/core/optimization_guide_features.cc b/components/optimization_guide/core/optimization_guide_features.cc
-index b25ef94e83e61..ad18fccb59c58 100644
+index 38289cb01a01c..c8e1930a722ce 100644
 --- a/components/optimization_guide/core/optimization_guide_features.cc
 +++ b/components/optimization_guide/core/optimization_guide_features.cc
-@@ -59,7 +59,7 @@ BASE_FEATURE(kRemoteOptimizationGuideFetching,
- 
- BASE_FEATURE(kRemoteOptimizationGuideFetchingAnonymousDataConsent,
-              "OptimizationHintsFetchingAnonymousDataConsent",
--             base::FEATURE_ENABLED_BY_DEFAULT);
-+             base::FEATURE_DISABLED_BY_DEFAULT);
- 
- // Enables the prediction of optimization targets.
- BASE_FEATURE(kOptimizationTargetPrediction,
-@@ -70,7 +70,7 @@ BASE_FEATURE(kOptimizationTargetPrediction,
+@@ -66,7 +66,7 @@ BASE_FEATURE(kOptimizationTargetPrediction,
  BASE_FEATURE(kOptimizationGuideModelDownloading,
               "OptimizationGuideModelDownloading",
  #if BUILDFLAG(BUILD_WITH_TFLITE_LIB)
@@ -29,8 +20,8 @@ index b25ef94e83e61..ad18fccb59c58 100644
  #else   // BUILD_WITH_TFLITE_LIB
               base::FEATURE_DISABLED_BY_DEFAULT
  #endif  // !BUILD_WITH_TFLITE_LIB
-@@ -118,7 +118,7 @@ BASE_FEATURE(kModelQualityLogging,
- // Enables fetching personalized metadata from Optimization Guide Service.
+@@ -115,7 +115,7 @@ BASE_FEATURE(kModelQualityLogging,
+ // (on-demand fetching).
  BASE_FEATURE(kOptimizationGuidePersonalizedFetching,
               "OptimizationPersonalizedHintsFetching",
 -             base::FEATURE_ENABLED_BY_DEFAULT);
@@ -38,7 +29,7 @@ index b25ef94e83e61..ad18fccb59c58 100644
  
  // An emergency kill switch feature to stop serving certain model versions per
  // optimization target. This is useful in exceptional situations when a bad
-@@ -157,7 +157,7 @@ BASE_FEATURE(kLogOnDeviceMetricsOnStartup,
+@@ -154,7 +154,7 @@ BASE_FEATURE(kLogOnDeviceMetricsOnStartup,
  // Whether to download the text safety classifier model.
  BASE_FEATURE(kTextSafetyClassifier,
               "TextSafetyClassifier",

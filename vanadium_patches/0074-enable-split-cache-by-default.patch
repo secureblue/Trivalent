@@ -8,7 +8,7 @@ Subject: [PATCH] enable split cache by default
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/net/base/features.cc b/net/base/features.cc
-index 268fbe0435dcf..f1533f65b0c33 100644
+index fe35c6362b97e..786555b3b4102 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
 @@ -123,11 +123,11 @@ const base::FeatureParam<base::TimeDelta>

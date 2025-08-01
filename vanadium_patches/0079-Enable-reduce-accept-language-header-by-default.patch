@@ -8,7 +8,7 @@ Subject: [PATCH] Enable reduce accept language header by default
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/services/network/public/cpp/features.cc b/services/network/public/cpp/features.cc
-index 4fde55c96b8bd..f591823cebff3 100644
+index 75143b47e7a4f..7c9e44cfa8caa 100644
 --- a/services/network/public/cpp/features.cc
 +++ b/services/network/public/cpp/features.cc
 @@ -182,7 +182,7 @@ BASE_FEATURE(kOmitCorsClientCert,
