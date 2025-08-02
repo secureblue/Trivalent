@@ -12,6 +12,7 @@
 %global debug_package %{nil}
 %global debug_level 0
 %global chromium_name trivalent
+%global chromium_name_branding Trivalent
 %global chromium_path %{_libdir}/%{chromium_name}
 
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
@@ -167,7 +168,6 @@ Requires: nss-mdns%{_isa}
 Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
 Requires: bubblewrap
-Requires: %{chromium_name}-common%{_isa} = %{version}-%{release}
 
 ExclusiveArch: x86_64 aarch64
 
@@ -319,19 +319,14 @@ Requires(post): /usr/sbin/semanage
 Requires(post): /usr/sbin/restorecon
 
 %description
-Trivalent is a security-focused browser built upon the Chromium web browser.
-
-%package common
-Summary: Files needed for Chromium
-%description common
-%{summary}.
+%{chromium_name_branding} is a security-focused browser built upon the Chromium web browser.
 
 %package qt6-ui
-Summary: Qt6 UI built from Chromium
+Summary: Qt6 UI built from %{chromium_name_branding}
 Requires: %{chromium_name}%{_isa} = %{version}-%{release}
 
 %description qt6-ui
-Qt6 UI for chromium.
+Qt6 UI for %{chromium_name_branding}.
 
 %prep
 %setup -q -n chromium-%{version}
@@ -356,7 +351,7 @@ find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
         -e 's/\bGoogle Chrome\b/REMOVE_PLACEHOLDER_GOOGLE_CHROME/g' \
         -e 's/\Chrome Web Store\b/REMOVE_PLACEHOLDER_CHROME_WEB_STORE/g' \
         -e 's/\bThe Chromium Authors\b/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/g' \
-        -e 's/\bChrom\(e\|ium\)\b/Trivalent/g' \
+        -e 's/\bChrom\(e\|ium\)\b/%{chromium_name_branding}/g' \
         -e 's/REMOVE_PLACEHOLDER_GOOGLE_CHROME/Google Chrome/g' \
         -e 's/REMOVE_PLACEHOLDER_CHROME_WEB_STORE/Chrome Web Store/g' \
         -e 's/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/The Chromium Authors/g' \
@@ -445,6 +440,7 @@ CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
 CHROMIUM_GN_DEFINES+=' enable_openxr=false'
+CHROMIUM_GN_DEFINES+=' enable_swiftshader=false' # build without swiftshader (it is actively being deprecated anyway)
 CHROMIUM_GN_DEFINES+=' build_dawn_tests=false enable_perfetto_unittests=false'
 CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
@@ -471,7 +467,6 @@ mkdir -p %{chromebuilddir} && cp -a buildtools/linux64/gn %{chromebuilddir}/
 %{chromebuilddir}/gn --script-executable=%{chromium_pybin} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
 
 %build_target %{chromebuilddir} chrome
-%build_target %{chromebuilddir} policy_templates
 
 %install
 rm -rf %{buildroot}
@@ -499,9 +494,7 @@ pushd %{chromebuilddir}
 	cp -a icudtl.dat %{buildroot}%{chromium_path}
 	cp -a chrom*.pak resources.pak %{buildroot}%{chromium_path}
 	cp -a locales/*.pak %{buildroot}%{chromium_path}/locales/
-  cp -a libvk_swiftshader.so %{buildroot}%{chromium_path}
   cp -a libvulkan.so.1 %{buildroot}%{chromium_path}
-  cp -a vk_swiftshader_icd.json %{buildroot}%{chromium_path}
 	cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
 	cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
 	cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
@@ -526,9 +519,6 @@ popd
 # Add directories for policy management
 mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/managed
 mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/recommended
-
-cp -a out/Release/gen/chrome/app/policy/common/html/en-US/*.html .
-cp -a out/Release/gen/chrome/app/policy/linux/examples/chrome.json .
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
 cp -a %{SOURCE20} %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
@@ -562,39 +552,44 @@ if selinuxenabled; then
 	restorecon -R -v %{chromium_path}/%{chromium_name} &>/dev/null || :
 fi
 
-%files
-%doc AUTHORS
-%doc chrome_policy_list.html *.json
-%license LICENSE
-%config(noreplace) %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
-%config %{_sysconfdir}/%{chromium_name}/master_preferences
-%config %{_sysconfdir}/%{chromium_name}/policies/
-%{_bindir}/%{chromium_name}
-%{chromium_path}/*.bin
-%{chromium_path}/chrome_*.pak
-%{chromium_path}/chrome_crashpad_handler
-%{chromium_path}/resources.pak
-%{chromium_path}/%{chromium_name}
-%{chromium_path}/%{chromium_name}.sh
-%{_mandir}/man1/%{chromium_name}.*
-%{_datadir}/icons/hicolor/*/apps/%{chromium_name}.png
-%{_datadir}/applications/*.desktop
-%{_datadir}/metainfo/*.appdata.xml
-%{_datadir}/gnome-control-center/default-apps/%{chromium_name}.xml
-
-
 %files qt6-ui
 %{chromium_path}/libqt6_shim.so
 
-%files common
-%{chromium_path}/libvk_swiftshader.so*
-%{chromium_path}/libvulkan.so*
-%{chromium_path}/vk_swiftshader_icd.json
-%{chromium_path}/libEGL.so*
-%{chromium_path}/libGLESv2.so*
-%{chromium_path}/icudtl.dat
+%files
+%doc AUTHORS
+%license LICENSE
+%{_mandir}/man1/%{chromium_name}.*
+# Binary and Libs
+%{_bindir}/%{chromium_name}
 %dir %{chromium_path}/
+%{chromium_path}/%{chromium_name}
+%{chromium_path}/%{chromium_name}.sh
+%{chromium_path}/chrome_crashpad_handler
+%{chromium_path}/icudtl.dat
+%{chromium_path}/v8_context_snapshot.bin
+%{chromium_path}/libvulkan.so.1
+%{chromium_path}/libEGL.so
+%{chromium_path}/libGLESv2.so
+# Config
+%config(noreplace) %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
+%config %{_sysconfdir}/%{chromium_name}/master_preferences
+%config %{_sysconfdir}/%{chromium_name}/policies/
+# System entries
+%{_datadir}/applications/%{chromium_name}.desktop
+%{_datadir}/metainfo/%{chromium_name}.appdata.xml
+%{_datadir}/gnome-control-center/default-apps/%{chromium_name}.xml
+%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
+# Locale and Language
+%{chromium_path}/resources.pak
+%{chromium_path}/chrome_100_percent.pak
+%{chromium_path}/chrome_200_percent.pak
 %dir %{chromium_path}/locales/
+# Chromium _ALWAYS_ needs en-US.pak as a fallback
+%{chromium_path}/locales/en-US.pak
 %lang(af) %{chromium_path}/locales/af.pak
 %lang(am) %{chromium_path}/locales/am.pak
 %lang(ar) %{chromium_path}/locales/ar.pak
@@ -606,10 +601,6 @@ fi
 %lang(de) %{chromium_path}/locales/de.pak
 %lang(el) %{chromium_path}/locales/el.pak
 %lang(en_GB) %{chromium_path}/locales/en-GB.pak
-# Chromium _ALWAYS_ needs en-US.pak as a fallback
-# This means we cannot apply the lang code here.
-# Otherwise, it is filtered out on install.
-%{chromium_path}/locales/en-US.pak
 %lang(es) %{chromium_path}/locales/es.pak
 %lang(es) %{chromium_path}/locales/es-419.pak
 %lang(et) %{chromium_path}/locales/et.pak

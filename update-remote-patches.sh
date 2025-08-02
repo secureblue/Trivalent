@@ -70,7 +70,9 @@ get_remote_vanadium_patches() {
 update_vanadium_patches() {
 	get_remote_vanadium_patches
 	cd "$vanadium_patches_path"
+	GLOBIGNORE="modified-*"
 	current_vanadium_patches=(*.patch)
+ 	unset GLOBIGNORE
 	for ((i=0; i<${#current_vanadium_patches[@]}; i++)); do
 		truncated_vanadium_patches[i]="${current_vanadium_patches[$i]:4}"
 	done
