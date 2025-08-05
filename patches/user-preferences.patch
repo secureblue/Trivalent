@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index 77e42b69e48a1..a43ae010d2d69 100644
+index 0c84accfb1531..1a3cba225982c 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -180,6 +180,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -181,6 +181,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -54,7 +54,7 @@ index 0d6ab878ac33d..0f114a5f32cb5 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index ae93043d94..d015b734d6 100644
+index 4d5f34f4478e7..8ca80c9fe0e92 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -4,6 +4,10 @@
@@ -68,11 +68,10 @@ index ae93043d94..d015b734d6 100644
        .bullet-line {
          align-items: center;
          display: flex;
-@@ -304,3 +308,39 @@
-           on-close="onDisableSafebrowsingDialogClose_">
-       </settings-simple-confirmation-dialog>
-     </template>
-+
+@@ -162,3 +166,38 @@
+         sub-label="$i18n{manageCertificatesDescription}"
+         on-click="onManageCertificatesClick_" external>
+     </cr-link-row>
 +    <div id="hardeningSection">
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
 +      <settings-toggle-button class="cr-row first"
@@ -109,10 +108,10 @@ index ae93043d94..d015b734d6 100644
 +      </settings-toggle-button>
 +    </div>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 4e79876ab6845..536522e66a99c 100644
+index b11656efa0493..96814a1a031f8 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -28,6 +28,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+@@ -29,6 +29,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
  
  import type {SettingsRadioGroupElement} from '../controls/settings_radio_group.js';
  import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
@@ -120,7 +119,7 @@ index 4e79876ab6845..536522e66a99c 100644
  import type {FocusConfig} from '../focus_config.js';
  import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
  import {loadTimeData} from '../i18n_setup.js';
-@@ -114,6 +115,19 @@ export class SettingsSecurityPageElement extends
+@@ -119,6 +120,19 @@ export class SettingsSecurityPageElement extends
        },
        // </if>
  
@@ -140,7 +139,7 @@ index 4e79876ab6845..536522e66a99c 100644
        /**
         * Valid safe browsing states.
         */
-@@ -219,6 +233,7 @@ export class SettingsSecurityPageElement extends
+@@ -215,6 +229,7 @@ export class SettingsSecurityPageElement extends
        },
      };
    }
