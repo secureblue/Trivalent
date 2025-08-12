@@ -20,6 +20,10 @@
 %global __provides_exclude_from ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
 %global __requires_exclude ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
 
+### Build configuration ###
+# This allows for hardware accelerated video and WebDRM (for things like Netflix)
+%global enable_proprietary_codecs 1
+
 Source69: chromium-version.txt
 
 Name:	%{chromium_name}
@@ -428,6 +432,9 @@ CHROMIUM_GN_DEFINES=''
 CHROMIUM_GN_DEFINES+=' target_cpu="arm64"'
 CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
 %endif
+%if %{enable_proprietary_codecs}
+CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_widevine=true'
+%endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
 CHROMIUM_GN_DEFINES+=' is_cfi=true use_cfi_cast=true'
@@ -446,11 +453,9 @@ CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
 CHROMIUM_GN_DEFINES+=' angle_has_histograms=false'
 CHROMIUM_GN_DEFINES+=' safe_browsing_use_unrar=false'
-CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true'
 CHROMIUM_GN_DEFINES+=' use_kerberos=true'
 CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
-CHROMIUM_GN_DEFINES+=' enable_widevine=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 CHROMIUM_GN_DEFINES+=' use_system_libffi=true' # ld.lld: error: unable to find library -lffi_pic
 CHROMIUM_GN_DEFINES+=' v8_enable_drumbrake=false' # flip to true once it actually works

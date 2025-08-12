@@ -10,8 +10,35 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
+index 0c84accfb1..1a3cba2259 100644
+--- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
++++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
+@@ -181,6 +181,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+   }
+   s_allowlist = new PrefsUtil::TypedPrefMap();
+ 
++  // Trivalent
++  (*s_allowlist)[::prefs::kWebRTCIPHandlingPolicy] =
++      settings_api::PrefType::kString;
++  (*s_allowlist)[::prefs::kPrintingEnabled] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kDisable3DAPIs] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kWebKitForceDarkModeEnabled] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kDisableExtensions] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kNetworkServiceSandboxEnabled] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kIncognitoLaunch] =
++      settings_api::PrefType::kBoolean;
++
+   // Miscellaneous
+   (*s_allowlist)[::embedder_support::kAlternateErrorPagesEnabled] =
+       settings_api::PrefType::kBoolean;
 diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
-index 06914746fb87c..a67593cc18ecc 100644
+index 06914746fb..a67593cc18 100644
 --- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 +++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 @@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
@@ -28,7 +55,7 @@ index 06914746fb87c..a67593cc18ecc 100644
      <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
      <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
 diff --git a/chrome/browser/resources/settings/a11y_page/live_translate_section.html b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
-index b038bf5b739c4..c8ce8d033c500 100644
+index b038bf5b73..c8ce8d033c 100644
 --- a/chrome/browser/resources/settings/a11y_page/live_translate_section.html
 +++ b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
 @@ -25,27 +25,3 @@
@@ -59,6 +86,22 @@ index b038bf5b739c4..c8ce8d033c500 100644
 -    </settings-dropdown-menu>
 -  </div>
 -</cr-collapse>
+diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
+index 0d6ab878ac..0f114a5f32 100644
+--- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
++++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
+@@ -117,6 +117,11 @@
+             </template>
+           </select>
+         </div>
++        <div class="hr"></div>
++        <settings-toggle-button
++            pref="{{prefs.webkit.webprefs.force_dark_mode_enabled}}"
++            label="Website Dark Mode">
++        </settings-toggle-button>
+         <div
+             class="hr"
+             hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
 index 3e5e2c80b8..c1201524e5 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
@@ -105,7 +148,7 @@ index 3e5e2c80b8..c1201524e5 100644
              <template is="dom-if" if="[[showPage_(pageVisibility_.downloads)]]"
                  restamp>
 diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html b/chrome/browser/resources/settings/languages_page/translate_page.html
-index ad9a348aca868..4ba2509c855b5 100644
+index 8fd684ffe2..afc674e790 100644
 --- a/chrome/browser/resources/settings/languages_page/translate_page.html
 +++ b/chrome/browser/resources/settings/languages_page/translate_page.html
 @@ -1,10 +1,4 @@
@@ -120,7 +163,7 @@ index ad9a348aca868..4ba2509c855b5 100644
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 5a308271fa23e..6d377f952d80f 100644
+index 6a1aa09edd..24c8e89fef 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
 @@ -122,12 +122,6 @@ shown on non-ChromeOS platforms -->
@@ -137,10 +180,10 @@ index 5a308271fa23e..6d377f952d80f 100644
          <template is="dom-if" if="[[signinAllowed_]]">
            <cr-link-row id="manage-google-account"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 159316198e7f3..9d716a7ac65c4 100644
+index fe9dbe975e..00bd87c2c3 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -95,8 +95,8 @@
+@@ -96,8 +96,8 @@
            </cr-link-row>
          </template>
          <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
@@ -151,7 +194,7 @@ index 159316198e7f3..9d716a7ac65c4 100644
              on-click="onSecurityPageClick_"
              role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
          <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -176,7 +176,7 @@
+@@ -168,7 +168,7 @@
        </template>
  
        <template is="dom-if" route-path="/security">
@@ -184,10 +227,21 @@ index 30b89ed907..d71ee60f62 100644
  
    private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index ae93043d94..4d5f34f447 100644
+index ae93043d94..8cc340e397 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
-@@ -71,126 +71,6 @@
+@@ -3,6 +3,10 @@
+       #safeBrowsingSection {
+         padding: 0 var(--cr-section-padding);
+       }
++
++      #webrtcLabel {
++        flex: 1;
++      }
+ 
+       .bullet-line {
+         align-items: center;
+@@ -71,126 +75,6 @@
          pointer-events: auto;
        }
      </style>
@@ -314,7 +368,7 @@ index ae93043d94..4d5f34f447 100644
      <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
        <div id="secureConnectionsSection">
          <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
-@@ -231,15 +111,8 @@
+@@ -231,15 +115,8 @@
        </div>
      </template>
      <div class="cr-row first">
@@ -331,11 +385,10 @@ index ae93043d94..4d5f34f447 100644
      <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
        <settings-toggle-button id="httpsOnlyModeToggle"
            pref="{{prefs.generated.https_first_mode_enabled}}"
-@@ -289,18 +162,3 @@
-         sub-label="$i18n{manageCertificatesDescription}"
+@@ -290,17 +167,38 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
--
+ 
 -    <cr-link-row id="advancedProtectionProgramLink" class="hr"
 -        label="$i18n{advancedProtectionProgramTitle}"
 -        sub-label="$i18n{advancedProtectionProgramDesc}"
@@ -350,11 +403,82 @@ index ae93043d94..4d5f34f447 100644
 -          on-close="onDisableSafebrowsingDialogClose_">
 -      </settings-simple-confirmation-dialog>
 -    </template>
++    <div id="hardeningSection">
++      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
++      <settings-toggle-button class="cr-row first"
++        pref="{{prefs.incognito.launch_mode}}"
++        label="Incognito Launch"
++        sub-label="Opens new sessions and external links in Incognito tabs">
++      </settings-toggle-button>
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.disable_3d_apis}}"
++        label="Disable 3D APIs"
++        sub-label="Disable features like WebGL and Pepper 3D">
++      </settings-toggle-button>
++      <div class="cr-row">
++        <div id="webrtcLabel" class="flex cr-padded-text" aria-hidden="true">
++          WebRTC Handling Policy
++        </div>
++        <settings-dropdown-menu
++          label="WebRTC Handling Policy"
++          pref="{{prefs.webrtc.ip_handling_policy}}"
++          menu-options="[[webrtcHandlingPolicyOptions_]]">
++        </settings-dropdown-menu>
++      </div>
++<if expr="is_linux or is_win">
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.net.network_service_sandbox}}"
++        label="Network Service Sandbox"
++        sub-label="Disabling may fix issues with data persistence, requires a restart">
++      </settings-toggle-button>
++</if>
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.extensions.disabled}}"
++        label="Disable Extensions"
++        sub-label="Changes to this setting requires a restart">
++      </settings-toggle-button>
++    </div>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 1ca971d44f..b11656efa0 100644
+index 1ca971d44f..96814a1a03 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -290,10 +290,6 @@ export class SettingsSecurityPageElement extends
+@@ -29,6 +29,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+ 
+ import type {SettingsRadioGroupElement} from '../controls/settings_radio_group.js';
+ import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
++import type {DropdownMenuOptionList} from '../controls/settings_dropdown_menu.js';
+ import type {FocusConfig} from '../focus_config.js';
+ import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
+ import {loadTimeData} from '../i18n_setup.js';
+@@ -119,6 +120,19 @@ export class SettingsSecurityPageElement extends
+       },
+       // </if>
+ 
++      webrtcHandlingPolicyOptions_: {
++        readOnly: true,
++        type: Array,
++        value() {
++          return [
++            {value: "default", name: "Default"},
++            {value: "default_public_and_private_interfaces", name: "Default Public and Private Interfaces"},
++            {value: "default_public_interface_only", name: "Default Public Interface Only"},
++            {value: "disable_non_proxied_udp", name: "Disable Non-Proxied UDP"},
++          ];
++        },
++      },
++
+       /**
+        * Valid safe browsing states.
+        */
+@@ -215,6 +229,7 @@ export class SettingsSecurityPageElement extends
+       },
+     };
+   }
++  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
+   declare private showSecureDnsSetting_: boolean;
+ 
+   // <if expr="is_chromeos">
+@@ -290,10 +305,6 @@ export class SettingsSecurityPageElement extends
        }
      });
  
@@ -366,10 +490,10 @@ index 1ca971d44f..b11656efa0 100644
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
  
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index 452cfb49fed4f..7ab46ad3386ac 100644
+index 35c69da2b3..7ffd077cbb 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -181,7 +181,7 @@ function createRoutes(): SettingsRoutes {
+@@ -173,7 +173,7 @@ function createRoutes(): SettingsRoutes {
  
    if (!loadTimeData.getBoolean('isGuest')) {
      r.PEOPLE = r.BASIC.createSection(
@@ -379,7 +503,7 @@ index 452cfb49fed4f..7ab46ad3386ac 100644
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
      r.SIGN_OUT.isNavigableDialog = true;
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 80c5ee1b69093..df602f15b83d3 100644
+index acbddcdb9b..81e0a6de2a 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -54,7 +54,7 @@
@@ -391,11 +515,29 @@ index 80c5ee1b69093..df602f15b83d3 100644
            <cr-ripple></cr-ripple>
          </a>
          <a role="menuitem" id="autofill" href="/autofill"
+diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
+index 348f170d65..601d7830ab 100644
+--- a/chrome/browser/resources/settings/system_page/system_page.html
++++ b/chrome/browser/resources/settings/system_page/system_page.html
+@@ -16,6 +16,13 @@
+         </cr-button>
+       </template>
+     </settings-toggle-button>
++
++<if expr="enable_printing">
++    <settings-toggle-button class="cr-row"
++        pref="{{prefs.printing.enabled}}"
++        label="Enable Printing Capabilities">
++    </settings-toggle-button>
++</if>
+ 
+     <!-- <if expr="_google_chrome and is_win"> -->
+       <template is="dom-if" if="[[showFeatureNotificationsSetting_]]">
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index cc944eb87b8ba..6f3fae8d60dca 100644
+index 13146851a1..1c250da96f 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -337,10 +337,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+@@ -326,10 +326,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
    html_source->AddBoolean("isOSSettings", false);
  #endif  // BUILDFLAG(IS_CHROMEOS)
  
@@ -408,10 +550,10 @@ index cc944eb87b8ba..6f3fae8d60dca 100644
    html_source->AddBoolean("enableHandTrackingContentSetting",
  #if BUILDFLAG(ENABLE_VR)
 diff --git a/chrome/common/chrome_features.cc b/chrome/common/chrome_features.cc
-index 456447d6c37cc..161cb892b1890 100644
+index 9d1502cefa..87e3b53363 100644
 --- a/chrome/common/chrome_features.cc
 +++ b/chrome/common/chrome_features.cc
-@@ -1166,7 +1166,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
+@@ -1247,7 +1247,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
  #endif
  
  // Enables Safety Hub feature.
@@ -421,7 +563,7 @@ index 456447d6c37cc..161cb892b1890 100644
  BASE_FEATURE(kSafetyHubThreeDotDetails,
               "SafetyHubThreeDotDetails",
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
-index 2d453febf6ecf..b4ef0632ad5c3 100644
+index 2d453febf6..b4ef0632ad 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
 +++ b/components/security_interstitials/core/browser/resources/interstitial_large.js
 @@ -297,8 +297,6 @@ function setupEvents() {

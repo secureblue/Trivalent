@@ -10,6 +10,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/chrome/browser/extensions/chrome_content_verifier_delegate.cc b/chrome/browser/extensions/chrome_content_verifier_delegate.cc
+index 33c74c40b02fe..bdc4f9b9e2305 100644
+--- a/chrome/browser/extensions/chrome_content_verifier_delegate.cc
++++ b/chrome/browser/extensions/chrome_content_verifier_delegate.cc
+@@ -130,7 +130,7 @@ ChromeContentVerifierDelegate::GetDefaultMode() {
+       experiment_value = VerifyInfo::Mode::ENFORCE_STRICT;
+   }
+ 
+-  VerifyInfo::Mode cmdline_value = VerifyInfo::Mode::NONE;
++  VerifyInfo::Mode cmdline_value = VerifyInfo::Mode::ENFORCE_STRICT;
+   if (command_line->HasSwitch(::switches::kExtensionContentVerification)) {
+     std::string switch_value = command_line->GetSwitchValueASCII(
+         ::switches::kExtensionContentVerification);
 diff --git a/chrome/browser/extensions/install_verifier.cc b/chrome/browser/extensions/install_verifier.cc
 index 47af320d9cbf9..ee9c64d398ec9 100644
 --- a/chrome/browser/extensions/install_verifier.cc
