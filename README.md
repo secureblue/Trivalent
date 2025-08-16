@@ -44,7 +44,7 @@ Other flags are also provided for compatibility should you experience an issue r
 
 Trivalent comes by default with content filtering enabled using chromium's internal subresource filter. The lists used for content filtering can be found [here](https://github.com/secureblue/trivalent-subresource-filter/blob/live/copr_script.sh#L19).
 \
-If you want to contribute to the subresource filter, example suggesting a new list, visit [here](https://github.com/secureblue/trivalent-subresource-filter). 
+If you want to contribute to the subresource filter, example suggesting a new list, visit [here](https://github.com/secureblue/trivalent-subresource-filter).
 
 ## Contributing
 
