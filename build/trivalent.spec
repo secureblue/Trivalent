@@ -2,12 +2,6 @@
 %global _default_patch_fuzz 2
 %global numjobs %{_smp_build_ncpus}
 
-# Fancy build status
-%global build_target() \
-	export NINJA_STATUS="[%2:%f/%t] " ; \
-	ninja -j %{numjobs} -C '%1' '%2'
-
-%global chromium_pybin %{__python3}
 %global chromebuilddir out/Release
 %global debug_package %{nil}
 %global debug_level 0
@@ -157,7 +151,7 @@ BuildRequires:	libudev-devel
 BuildRequires:	libva-devel
 BuildRequires:	libxshmfence-devel
 BuildRequires:	mesa-libGL-devel
-BuildRequires: %{chromium_pybin}
+BuildRequires: %{__python3}
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires: python3-jinja2
 BuildRequires: yasm
@@ -376,7 +370,7 @@ cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_nam
 
 # Change shebang in all relevant files in this directory and all subdirectories
 # See `man find` for how the `-exec command {} +` syntax works
-find -type f \( -iname "*.py" \) -exec sed -i '1s=^#! */usr/bin/\(python\|env python\)[23]\?=#!%{chromium_pybin}=' {} +
+find -type f \( -iname "*.py" \) -exec sed -i '1s=^#! */usr/bin/\(python\|env python\)[23]\?=#!%{__python3}=' {} +
 
 # Get rid of the pre-built eu-strip binary, it is x86_64 and of mysterious origin
 rm -rf buildtools/third_party/eu-strip/bin/eu-strip
@@ -413,17 +407,16 @@ export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
 
+declare -r SOURCE_DIR="$(pwd)/third_party"
+
 # add internal clang to PATH for build
-PATH="$PATH:$(pwd)/third_party/llvm-build/Release+Asserts/bin"
+PATH="$PATH:$SOURCE_DIR/llvm-build/Release+Asserts/bin"
 
 # add internal rust utils to PATH for build
-PATH="$PATH:$(pwd)/third_party/rust-toolchain/bin"
+PATH="$PATH:$SOURCE_DIR/rust-toolchain/bin"
 
 # add internal nodejs to PATH for build
-PATH="$PATH:$(pwd)/third_party/node/linux/node-linux-x64/bin"
-
-# add internal ninja to PATH for build
-PATH="$PATH:$(pwd)/third_party/ninja"
+PATH="$PATH:$SOURCE_DIR/node/linux/node-linux-x64/bin"
 
 export PATH
 
@@ -469,9 +462,9 @@ fi
 
 mkdir -p %{chromebuilddir} && cp -a buildtools/linux64/gn %{chromebuilddir}/
 
-%{chromebuilddir}/gn --script-executable=%{chromium_pybin} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
+%{chromebuilddir}/gn --script-executable=%{__python3} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
 
-%build_target %{chromebuilddir} chrome
+%{__python3} $SOURCE_DIR/depot_tools/autoninja.py %{chromebuilddir} chrome
 
 %install
 rm -rf %{buildroot}
