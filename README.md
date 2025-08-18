@@ -40,6 +40,12 @@ Additionally, the following flags are available that provide extra hardening but
 
 Other flags are also provided for compatibility should you experience an issue related to some of the hardening enabled by default. For example, the default pop-up blocker is very strict, it may optionally be disabled `chrome://flags/#strict-popup-blocking` to improve usability.
 
+## Content Blocking
+
+Trivalent comes by default with content filtering enabled using chromium's internal subresource filter. The lists used for content filtering can be found [here](https://github.com/secureblue/trivalent-subresource-filter/blob/live/copr_script.sh#L19).
+\
+If you want to contribute to the subresource filter, example suggesting a new list, visit [here](https://github.com/secureblue/trivalent-subresource-filter).
+
 ## Contributing
 
 Follow the [contributing documentation](CONTRIBUTING.md), and make sure to respect the [CoC](CODE_OF_CONDUCT.md).
