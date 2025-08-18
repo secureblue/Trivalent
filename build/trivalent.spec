@@ -464,7 +464,7 @@ mkdir -p %{chromebuilddir} && cp -a buildtools/linux64/gn %{chromebuilddir}/
 
 %{chromebuilddir}/gn --script-executable=%{__python3} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
 
-%{__python3} $SOURCE_DIR/depot_tools/autoninja.py %{chromebuilddir} chrome
+%{__python3} $SOURCE_DIR/depot_tools/autoninja.py -C %{chromebuilddir} chrome
 
 %install
 rm -rf %{buildroot}
