@@ -20,9 +20,13 @@ jobs:
           dnf copr enable secureblue/trivalent -y
           dnf update -y
           dnf install git wget rpmbuild yum-utils rpm-sign trivalent-chromium-clean-source -y
+          SOURCE_CACHE_HASH=$(sha256sum /usr/src/chromium/chromium-*.xz)
+          echo "SOURCE_CACHE_HASH: ${SOURCE_CACHE_HASH}"
           git clone https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
+          SRPM_HASH=$(sha256sum *.rpm)
+          echo "SRPM_HASH: ${SRPM_HASH}"
           
       - name: Save SRPM
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -47,6 +51,8 @@ jobs:
         shell: bash
         id: rpm_build
         run: |
+          SRPM_HASH=$(sha256sum *.rpm)
+          echo "SRPM_HASH: ${SRPM_HASH}"
           sudo dnf config-manager --set-enabled crb -y
           sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm -y
           sudo dnf install mock rclone -y
