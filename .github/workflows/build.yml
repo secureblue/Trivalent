@@ -53,10 +53,6 @@ jobs:
         run: |
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
-          sudo dnf config-manager --set-enabled crb -y
-          sudo dnf install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm -y
-          sudo dnf install mock rclone -y
-          sudo usermod -aG mock $(whoami)
           mock --resultdir=. -r fedora-42-x86_64 --rebuild trivalent-*.src.rpm
 
       - name: Prepare for upload
