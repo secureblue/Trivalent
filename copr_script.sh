@@ -14,8 +14,7 @@
 
 set -oue pipefail
 
-echo "139.0.7258.127" > chromium-version.json
-grep \"version\" chromium-version.json | grep -oh "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" > chromium-version.txt
+echo "139.0.7258.127" > chromium-version.txt
 
 cd Trivalent
 
