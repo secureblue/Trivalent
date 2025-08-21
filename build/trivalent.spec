@@ -434,7 +434,11 @@ export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
 
-%if ! %{use_system_toolchain}
+%if %{use_system_toolchain}
+v_clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
+v_clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/.*##')"
+v_rust_bindgen_root="$(which bindgen | sed 's#/s\?bin/.*##')"
+%else
 declare -r SOURCE_DIR="$(pwd)/third_party"
 # add internal clang to PATH for build
 PATH="$PATH:$SOURCE_DIR/llvm-build/Release+Asserts/bin"
@@ -443,10 +447,6 @@ PATH="$PATH:$SOURCE_DIR/rust-toolchain/bin"
 # add internal nodejs to PATH for build
 PATH="$PATH:$SOURCE_DIR/node/linux/node-linux-x64/bin"
 export PATH
-%else
-v_clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
-v_clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/.*##')"
-v_rust_bindgen_root="$(which bindgen | sed 's#/s\?bin/.*##')"
 %endif
 
 CHROMIUM_GN_DEFINES=''
