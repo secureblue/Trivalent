@@ -43,6 +43,14 @@ for ((i=0; i<${#patches[@]}; i++)); do
 done
 cd ..
 
+# copy toolchain patches to the build dir
+cd patches/
+patches=(*.patch)
+for ((i=0; i<${#patches[@]}; i++)); do
+	cp "${patches[i]}" "../build/toolchain-$((i+4000)).patch"
+done
+cd ..
+
 # Move all the source files into the parent directory for the COPR build system to find them
 cp /usr/src/chromium/chromium-*-clean.tar.xz ../
 mv ./build/* ../
