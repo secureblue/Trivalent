@@ -176,6 +176,7 @@ BuildRequires:	git-core
 %if %{use_system_toolchain}
 BuildRequires: clang
 BuildRequires: clang-tools-extra
+BuildRequires: compiler-rt
 BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
