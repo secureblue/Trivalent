@@ -458,14 +458,14 @@ CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
 CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_widevine=true'
 %endif
 %if %{use_system_toolchain}
-CHROMIUM_GN_DEFINES+=' custom_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' host_toolchain="//build/toolchain/linux/unbundle:default"'
-CHROMIUM_GN_DEFINES+=' clang_base_path="$v_clang_base_path"'
-CHROMIUM_GN_DEFINES+=' clang_version="$v_clang_version"'
-CHROMIUM_GN_DEFINES+=' clang_use_chrome_plugins=false'
-CHROMIUM_GN_DEFINES+=' rust_sysroot_absolute="$(rustc --print sysroot)"'
-CHROMIUM_GN_DEFINES+=' rust_bindgen_root="$v_rust_bindgen_root"'
-CHROMIUM_GN_DEFINES+=' rustc_version="$(rustc --version)"'
+CHROMIUM_GN_DEFINES+=" custom_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_GN_DEFINES+=" host_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_GN_DEFINES+=" clang_base_path=\"$v_clang_base_path\""
+CHROMIUM_GN_DEFINES+=" clang_version=\"$v_clang_version\""
+CHROMIUM_GN_DEFINES+=" clang_use_chrome_plugins=false"
+CHROMIUM_GN_DEFINES+=" rust_sysroot_absolute=\"$(rustc --print sysroot)\""
+CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$v_rust_bindgen_root\""
+CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version)\""
 %endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
