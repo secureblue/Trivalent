@@ -479,7 +479,7 @@ CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_w
 CHROMIUM_GN_DEFINES+=" custom_toolchain=\"//build/toolchain/linux/unbundle:default\""
 CHROMIUM_GN_DEFINES+=" host_toolchain=\"//build/toolchain/linux/unbundle:default\""
 CHROMIUM_GN_DEFINES+=" clang_base_path=\"$clang_base_path\""
-CHROMIUM_GN_DEFINES+=" clang_version=\"$clang_version\""
+CHROMIUM_GN_DEFINES+=" clang_version=$clang_version"
 CHROMIUM_GN_DEFINES+=" clang_use_chrome_plugins=false"
 CHROMIUM_GN_DEFINES+=" rust_sysroot_absolute=\"$(rustc --print sysroot)\""
 CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$rust_bindgen_root\""
