@@ -45,9 +45,9 @@ cd ..
 
 # copy toolchain patches to the build dir
 cd toolchain_patches/
-ls
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
+	echo "${patches[i]}"
 	cp "${patches[i]}" "../build/toolchain-$((i+4000)).patch"
 done
 cd ..
