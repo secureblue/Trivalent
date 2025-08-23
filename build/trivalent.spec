@@ -82,17 +82,18 @@ Source20: %{chromium_name}256.png
     local count = 0
     local printPatch = ""
 
-	if macros['use_system_toolchain'] == 1 then
-	 	count = 1000
-	    for p in ipairs(fpatches) do
-	        os.execute("echo 'Patching in "..fpatches[p].."'")
-	        printPatch = "Patch"..count..": fedora-"..count..".patch"
-	        rpm.execute("echo", printPatch)
-	        print(printPatch.."\n")
-	        count = count + 1
-	    end
-	    rpm.define("_fedoraPatchCount "..count-1)
-	end
+    if macros['use_system_toolchain'] == "1" then
+        count = 1000
+        printPatch = ""
+        for p in ipairs(fpatches) do
+            os.execute("echo 'Patching in "..fpatches[p].."'")
+            printPatch = "Patch"..count..": fedora-"..count..".patch"
+            rpm.execute("echo", printPatch)
+            print(printPatch.."\n")
+            count = count + 1
+        end
+        rpm.define("_fedoraPatchCount "..count-1)
+    end
 
     count = 2000
     printPatch = ""
@@ -116,7 +117,7 @@ Source20: %{chromium_name}256.png
     end
     rpm.define("_trivalentPatchCount "..count-1)
 
-	if macros['use_system_toolchain'] == 1 then
+	if macros['use_system_toolchain'] == "1" then
     	os.execute("echo 'Autopatch F: "..macros['_fedoraPatchCount'].."'")
 	end
     os.execute("echo 'Autopatch V: "..macros['_vanadiumPatchCount'].."'")
