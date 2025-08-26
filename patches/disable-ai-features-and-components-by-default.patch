@@ -88,3 +88,21 @@ index b4497bcdd3..f523305174 100644
  }
  
  void SetUserPreferenceForZeroSuggestCachedResponse(
+diff --git a/chrome/browser/component_updater/screen_ai_component_installer.cc b/chrome/browser/component_updater/screen_ai_component_installer.cc
+index 8ea949d4f3..1a08b76cbb 100644
+--- a/chrome/browser/component_updater/screen_ai_component_installer.cc
++++ b/chrome/browser/component_updater/screen_ai_component_installer.cc
+@@ -119,12 +119,7 @@ void ScreenAIComponentInstallerPolicy::DeleteComponent() {
+ 
+ void ManageScreenAIComponentRegistration(ComponentUpdateService* cus,
+                                          PrefService* local_state) {
+-  if (screen_ai::ScreenAIInstallState::ShouldInstall(local_state)) {
+-    RegisterScreenAIComponent(cus);
+-    return;
+-  }
+-
+-  // Clean up.
++  // We don't want the screen AI component
+   if (base::PathExists(screen_ai::GetComponentDir())) {
+     ScreenAIComponentInstallerPolicy::DeleteComponent();
+   }

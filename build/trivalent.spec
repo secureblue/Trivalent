@@ -14,9 +14,22 @@
 %global __provides_exclude_from ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
 %global __requires_exclude ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
 
-### Build configuration ###
+
+### Build configurations ###
+
 # This allows for hardware accelerated video and WebDRM (for things like Netflix)
+# But, disabling this builds the browser without support for patent-encumbered codecs
+# And prevents downloading proprietary libraries at runtime (Widevine)
 %global enable_proprietary_codecs 1
+
+# The system toolchain is more out-of-date compared to chromium's
+# It also loses out on some performance optimisations that chromium's toolchain can provide (like siso)
+# This is needed for non-x64 arches since the chromium toolchain doesn't support anything but x64
+%ifarch x86_64
+%global use_system_toolchain 0
+%else
+%global use_system_toolchain 1
+%endif
 
 Source69: chromium-version.txt
 
@@ -60,23 +73,28 @@ Source20: %{chromium_name}256.png
     if posix.getenv("HOME") == "/builddir" then
         fpatches = rpm.glob('/builddir/build/SOURCES/fedora-*.patch')
         vpatches = rpm.glob('/builddir/build/SOURCES/vanadium-*.patch')
-        hpatches = rpm.glob('/builddir/build/SOURCES/'..macros['chromium_name']..'-*.patch')
+        tpatches = rpm.glob('/builddir/build/SOURCES/'..macros['chromium_name']..'-*.patch')
     else
         fpatches = rpm.glob(macros['_sourcedir']..'/fedora-*.patch')
         vpatches = rpm.glob(macros['_sourcedir']..'/vanadium-*.patch')
-        hpatches = rpm.glob(macros['_sourcedir']..'/'..macros['chromium_name']..'-*.patch')
+        tpatches = rpm.glob(macros['_sourcedir']..'/'..macros['chromium_name']..'-*.patch')
     end
 
-    local count = 1000
+    local count = 0
     local printPatch = ""
-    for p in ipairs(fpatches) do
-        os.execute("echo 'Patching in "..fpatches[p].."'")
-        printPatch = "Patch"..count..": fedora-"..count..".patch"
-        rpm.execute("echo", printPatch)
-        print(printPatch.."\n")
-        count = count + 1
+
+    if macros['use_system_toolchain'] == "1" then
+        count = 1000
+        printPatch = ""
+        for p in ipairs(fpatches) do
+            os.execute("echo 'Patching in "..fpatches[p].."'")
+            printPatch = "Patch"..count..": fedora-"..count..".patch"
+            rpm.execute("echo", printPatch)
+            print(printPatch.."\n")
+            count = count + 1
+        end
+        rpm.define("_fedoraPatchCount "..count-1)
     end
-    rpm.define("_fedoraPatchCount "..count-1)
 
     count = 2000
     printPatch = ""
@@ -91,18 +109,20 @@ Source20: %{chromium_name}256.png
 
     count = 3000
     printPatch = ""
-    for p in ipairs(hpatches) do
-        os.execute("echo 'Patching in "..hpatches[p].."'")
+    for p in ipairs(tpatches) do
+        os.execute("echo 'Patching in "..tpatches[p].."'")
         printPatch = "Patch"..count..": "..macros['chromium_name'].."-"..count..".patch"
         rpm.execute("echo", printPatch)
         print(printPatch.."\n")
         count = count + 1
     end
-    rpm.define("_hardeningPatchCount "..count-1)
+    rpm.define("_trivalentPatchCount "..count-1)
 
-    os.execute("echo 'Autopatch F: "..macros['_fedoraPatchCount'].."'")
+	if macros['use_system_toolchain'] == "1" then
+    	os.execute("echo 'Autopatch F: "..macros['_fedoraPatchCount'].."'")
+	end
     os.execute("echo 'Autopatch V: "..macros['_vanadiumPatchCount'].."'")
-    os.execute("echo 'Autopatch H: "..macros['_hardeningPatchCount'].."'")
+    os.execute("echo 'Autopatch T: "..macros['_trivalentPatchCount'].."'")
 }
 
 BuildRequires: golang-github-evanw-esbuild
@@ -160,6 +180,22 @@ BuildRequires:	systemd
 BuildRequires: libevdev-devel
 # One of the python scripts invokes git to look for a hash. So helpful.
 BuildRequires:	git-core
+
+%if %{use_system_toolchain}
+BuildRequires: clang
+BuildRequires: clang-tools-extra
+BuildRequires: compiler-rt
+BuildRequires: llvm
+BuildRequires: lld
+BuildRequires: rustc
+BuildRequires: bindgen-cli
+BuildRequires: ninja-build
+BuildRequires: gn
+BuildRequires: nodejs
+%global build_target() \
+	export NINJA_STATUS="[%2:%f/%t] " ; \
+	ninja -j %{numjobs} -C '%1' '%2'
+%endif
 
 Requires: nss%{_isa} >= 3.26
 Requires: nss-mdns%{_isa}
@@ -330,9 +366,14 @@ Qt6 UI for %{chromium_name_branding}.
 %setup -q -n chromium-%{version}
 
 ### Patches ###
+%if %{use_system_toolchain}
+# License: MIT
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
+%endif
+# License: GPL-2.0-Only
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}
-%autopatch -p1 -m 3000 -M %{_hardeningPatchCount}
+# License: Apache-2.0
+%autopatch -p1 -m 3000 -M %{_trivalentPatchCount}
 
 ### String Branding ###
 find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
@@ -407,18 +448,22 @@ export RUSTFLAGS
 
 export RUSTC_BOOTSTRAP=1
 
-declare -r SOURCE_DIR="$(pwd)/third_party"
-
+%if %{use_system_toolchain}
+declare -r clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
+declare -r clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/.*##')"
+declare -r rust_bindgen_root="$(which bindgen | sed 's#/s\?bin/.*##')"
+%else
+declare -r SOURCE_DIR="$PWD/third_party"
 # add internal clang to PATH for build
 PATH="$PATH:$SOURCE_DIR/llvm-build/Release+Asserts/bin"
-
 # add internal rust utils to PATH for build
 PATH="$PATH:$SOURCE_DIR/rust-toolchain/bin"
-
 # add internal nodejs to PATH for build
 PATH="$PATH:$SOURCE_DIR/node/linux/node-linux-x64/bin"
-
+# add internal gn to PATH for build
+PATH="$PATH:$PWD/buildtools/linux64"
 export PATH
+%endif
 
 CHROMIUM_GN_DEFINES=''
 %ifarch aarch64
@@ -427,6 +472,16 @@ CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
 %endif
 %if %{enable_proprietary_codecs}
 CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_widevine=true'
+%endif
+%if %{use_system_toolchain}
+CHROMIUM_GN_DEFINES+=" custom_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_GN_DEFINES+=" host_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_GN_DEFINES+=" clang_base_path=\"$clang_base_path\""
+CHROMIUM_GN_DEFINES+=" clang_version=$clang_version"
+CHROMIUM_GN_DEFINES+=" clang_use_chrome_plugins=false"
+CHROMIUM_GN_DEFINES+=" rust_sysroot_absolute=\"$(rustc --print sysroot)\""
+CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$rust_bindgen_root\""
+CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version)\""
 %endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
@@ -439,7 +494,6 @@ CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
-CHROMIUM_GN_DEFINES+=' enable_openxr=false'
 CHROMIUM_GN_DEFINES+=' enable_swiftshader=false' # build without swiftshader (it is actively being deprecated anyway)
 CHROMIUM_GN_DEFINES+=' build_dawn_tests=false enable_perfetto_unittests=false'
 CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
@@ -460,11 +514,15 @@ if python3 -c 'import google ; print google.__path__' 2> /dev/null ; then \
     exit 1 ; \
 fi
 
-mkdir -p %{chromebuilddir} && cp -a buildtools/linux64/gn %{chromebuilddir}/
+mkdir -p %{chromebuilddir}
 
-%{chromebuilddir}/gn --script-executable=%{__python3} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
+gn --script-executable=%{__python3} gen --args="$CHROMIUM_GN_DEFINES" %{chromebuilddir}
 
+%if %{use_system_toolchain}
+%build_target %{chromebuilddir} chrome
+%else
 %{__python3} $SOURCE_DIR/depot_tools/autoninja.py -C %{chromebuilddir} chrome
+%endif
 
 %install
 rm -rf %{buildroot}
