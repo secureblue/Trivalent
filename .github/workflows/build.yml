@@ -36,7 +36,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: fedora:42
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:6a37e3a598b288118f513ee5ed5ddcfb1a5661f26ae5eed7246ffd87c588e98f' || 'fedora:42@sha256:93378e55d45e65950e326516f91bf3bd61b3c508d40bd2c347144c0d444f2274' }}
     steps:
       - name: Build SRPM 
         shell: bash
@@ -75,10 +75,12 @@ jobs:
       - name: Build RPM 
         shell: bash
         id: rpm_build
+        env:
+          ARCH: ${{inputs.arch}}
         run: |
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
-          mock --resultdir=. -r "fedora-42-${{inputs.arch}}" --rebuild trivalent-*.src.rpm
+          mock --resultdir=. -r "fedora-42-${ARCH}" --rebuild trivalent-*.src.rpm
 
       - name: Prepare for upload
         shell: bash
@@ -98,7 +100,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: fedora:42
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:6a37e3a598b288118f513ee5ed5ddcfb1a5661f26ae5eed7246ffd87c588e98f' || 'fedora:42@sha256:93378e55d45e65950e326516f91bf3bd61b3c508d40bd2c347144c0d444f2274' }}
     needs: buildrpm
     steps:
       - name: Retrieve RPM
