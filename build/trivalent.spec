@@ -454,12 +454,6 @@ declare -r clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/
 declare -r rust_bindgen_root="$(which bindgen | sed 's#/s\?bin/.*##')"
 %else
 declare -r SOURCE_DIR="$PWD/third_party"
-# add internal clang to PATH for build
-PATH="$PATH:$SOURCE_DIR/llvm-build/Release+Asserts/bin"
-# add internal rust utils to PATH for build
-PATH="$PATH:$SOURCE_DIR/rust-toolchain/bin"
-# add internal nodejs to PATH for build
-PATH="$PATH:$SOURCE_DIR/node/linux/node-linux-x64/bin"
 # add internal gn to PATH for build
 PATH="$PATH:$PWD/buildtools/linux64"
 export PATH
