@@ -74,12 +74,14 @@ index 59942a3cf6..c80eadf2c0 100644
    }
  }
 diff --git a/build/config/linux/BUILD.gn b/build/config/linux/BUILD.gn
-index 131bb71d1d..b584e8d547 100644
+index 131bb71d1d..9c20a89eec 100644
 --- a/build/config/linux/BUILD.gn
 +++ b/build/config/linux/BUILD.gn
-@@ -20,11 +20,13 @@ config("compiler") {
+@@ -19,12 +19,15 @@ config("compiler") {
+     import("//build/config/arm.gni")
      cflags = []
      asmflags = []
++    rustflags = []
      if (arm_control_flow_integrity == "standard") {
 -      cflags += [ "-mbranch-protection=standard" ]
 -      asmflags += [ "-mbranch-protection=standard" ]
