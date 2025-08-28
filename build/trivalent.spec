@@ -452,6 +452,8 @@ export RUSTC_BOOTSTRAP=1
 declare -r clang_version="$(clang --version | sed -n 's/clang version //p' | cut -d. -f1)"
 declare -r clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/.*##')"
 declare -r rust_bindgen_root="$(which bindgen | sed 's#/s\?bin/.*##')"
+mkdir -p third_party/node/linux/node-linux-x64/bin
+ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 %else
 declare -r SOURCE_DIR="$PWD/third_party"
 # add internal gn to PATH for build
