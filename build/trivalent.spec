@@ -423,7 +423,7 @@ ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
 %if %{use_system_toolchain}
 mkdir -p third_party/node/linux/node-linux-x64/bin
 ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
-%end
+%endif
 
 # Hard code extra version
 sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
