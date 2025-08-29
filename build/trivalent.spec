@@ -422,6 +422,7 @@ ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
 # Use system nodejs if desired
 %if %{use_system_toolchain}
 mkdir -p third_party/node/linux/node-linux-x64/bin
+rm third_party/node/linux/node-linux-x64/bin/node
 ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 %endif
 
