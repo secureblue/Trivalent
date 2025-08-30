@@ -25,6 +25,15 @@ index 2e53794fa3..11201c5c8f 100644
    return true;
  #else
    return false;
+@@ -86,7 +86,7 @@ inline bool UseV4L2Codec(
+ static const char kMaliConfPath[] = "/etc/mali_platform.conf";
+ #endif
+ 
+-#if BUILDFLAG(IS_CHROMEOS) && defined(__aarch64__)
++#if defined(__aarch64__)
+ static const char kLibGlesPath[] = "/usr/lib64/libGLESv2.so.2";
+ static const char kLibEglPath[] = "/usr/lib64/libEGL.so.1";
+ static const char kLibMaliPath[] = "/usr/lib64/libmali.so";
 @@ -100,7 +100,7 @@ static const char kLibTegraPath[] = "/usr/lib/libtegrav4l2.so";
  
  constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE;
