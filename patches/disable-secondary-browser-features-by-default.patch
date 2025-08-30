@@ -49,3 +49,16 @@ index a85534a986fc8..be4d151f7be66 100644
  
  BASE_FEATURE(kJourneysImages,
               "JourneysImages",
+diff --git a/components/collaboration/public/pref_names.cc b/components/collaboration/public/pref_names.cc
+index 701b1adf50..af25f314c4 100644
+--- a/components/collaboration/public/pref_names.cc
++++ b/components/collaboration/public/pref_names.cc
+@@ -13,7 +13,7 @@ const char kSharedTabGroupsManagedAccountSetting[] =
+ 
+ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
+   registry->RegisterIntegerPref(kSharedTabGroupsManagedAccountSetting,
+-                                0 /* Allowed */);
++                                1);
+ }
+ 
+ }  // namespace collaboration::prefs
