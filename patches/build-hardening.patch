@@ -99,7 +99,7 @@ index 66b993426a..6beaaac994 100644
        # TODO(crbug.com/40266913): Add -Zsanitize=cfi instead.
        rustflags += [
 -        "-Zsplit-lto-unit",
-+        "-Zsanitize=cfi",
++        "-Zsanitizer=cfi",
          "-Clinker-plugin-lto=yes",
        ]
      } else {
