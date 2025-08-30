@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/components/variations/service/variations_service.cc b/components/variations/service/variations_service.cc
-index e4279de7ed..134a65a0e7 100644
+index 765a8ccf29..347303664d 100644
 --- a/components/variations/service/variations_service.cc
 +++ b/components/variations/service/variations_service.cc
-@@ -224,22 +224,7 @@ bool GetInstanceManipulations(const net::HttpResponseHeaders* headers,
+@@ -223,22 +223,7 @@ bool GetInstanceManipulations(const net::HttpResponseHeaders* headers,
  // Variations seed fetching is only enabled in official Chrome builds, if a URL
  // is specified on the command line, and for testing.
  bool IsFetchingEnabled() {
@@ -38,7 +38,7 @@ index e4279de7ed..134a65a0e7 100644
  }
  
  // Returns the already downloaded first run seed, and clear the seed from the
-@@ -566,10 +551,10 @@ void VariationsService::RegisterPrefs(PrefRegistrySimple* registry) {
+@@ -557,10 +542,10 @@ void VariationsService::RegisterPrefs(PrefRegistrySimple* registry) {
  
    registry->RegisterIntegerPref(
        prefs::kDeviceVariationsRestrictionsByPolicy,
@@ -48,10 +48,10 @@ index e4279de7ed..134a65a0e7 100644
        prefs::kVariationsGoogleGroups,
 -      static_cast<int>(RestrictionPolicy::NO_RESTRICTIONS));
 +      static_cast<int>(RestrictionPolicy::ALL));
-   // This preference keeps track of the country code used to filter
-   // permanent-consistency studies.
-   registry->RegisterListPref(prefs::kVariationsPermanentConsistencyCountry);
-@@ -581,7 +566,7 @@ void VariationsService::RegisterPrefs(PrefRegistrySimple* registry) {
+   // This preference is used to override the variations country code which is
+   // consistent across different chrome version.
+   registry->RegisterStringPref(prefs::kVariationsPermanentOverriddenCountry,
+@@ -569,7 +554,7 @@ void VariationsService::RegisterPrefs(PrefRegistrySimple* registry) {
    // allows the admin to restrict the set of variations applied.
    registry->RegisterIntegerPref(
        prefs::kVariationsRestrictionsByPolicy,
