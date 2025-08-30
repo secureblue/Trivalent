@@ -27,18 +27,17 @@ index 0c04c90368..75e2814d69 100644
 +        "-fstack-protector-strong",
        ]
 +
-+      rs_scs_params = [
++      rustflags = [
 +        "-Zsanitizer=shadow-call-stack",
 +        "-Zstack-protector=strong",
 +      ]
 +
 +      if (is_linux) {
 +        scs_paramaters += [ "-ffixed-x18" ]
-+        rs_scs_params += [ "-Zfixed-x18" ]
++        rustflags += [ "-Zfixed-x18" ]
 +      }
        cflags += scs_parameters
        ldflags += scs_parameters
-+      rustflags += rs_scs_params
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
@@ -109,33 +108,3 @@ index 131bb71d1d..55f8590d24 100644
      }
    }
  }
-diff --git a/build/config/sanitizers/BUILD.gn b/build/config/sanitizers/BUILD.gn
-index 66b993426a..570baafa2e 100644
---- a/build/config/sanitizers/BUILD.gn
-+++ b/build/config/sanitizers/BUILD.gn
-@@ -357,7 +357,7 @@ config("cfi_flags") {
-       # or it rejects the Zsplit-lto-unit flag.
-       # TODO(crbug.com/40266913): Add -Zsanitize=cfi instead.
-       rustflags += [
--        "-Zsplit-lto-unit",
-+        "-Zsanitizer=cfi",
-         "-Clinker-plugin-lto=yes",
-       ]
-     } else {
-@@ -373,11 +373,11 @@ config("cfi_flags") {
-     }
- 
-     if (use_cfi_icall) {
--      cflags += [ "-fsanitize=cfi-icall" ]
--      # TODO(crbug.com/40266913): Add cflags += [
--      # "-fsanitize-cfi-icall-experimental-normalize-integers" ]
--      # TODO(crbug.com/40266913): Add rustflags += [
--      # "-Zsanitizer-cfi-normalize-integers" ].
-+      cflags += [
-+        "-fsanitize=cfi-icall",
-+        "-fsanitize-cfi-icall-experimental-normalize-integers",
-+      ]
-+      rustflags += [ "-Zsanitizer-cfi-normalize-integers" ]
-     }
- 
-     if (use_cfi_diag) {
