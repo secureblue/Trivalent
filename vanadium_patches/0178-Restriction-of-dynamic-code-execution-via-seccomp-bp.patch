@@ -72,10 +72,10 @@ index c7def9142f594..952ad402036cd 100644
      starter.set_policy(
          std::make_unique<sandbox::BaselinePolicyAndroid>(options));
 diff --git a/sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc b/sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
-index 314e53906a2c9..bdc2cbed0a636 100644
+index 56ba083eb81f8..2057bba81de3e 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
 +++ b/sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
-@@ -260,18 +260,18 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
+@@ -261,18 +261,18 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
  #if defined(__i386__) || defined(__x86_64__) || defined(__mips__) || \
      defined(__aarch64__)
    if (sysno == __NR_mmap)
@@ -237,19 +237,19 @@ index 0f33163d6a87f..48626cb8111fa 100644
  
  }  // namespace policy
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-index b673ffea2afa6..1893fdee845d0 100644
+index 90fdecdb76638..9f3bb3194e272 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 +++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-@@ -17,6 +17,8 @@
- #include "base/command_line.h"
+@@ -18,6 +18,8 @@
  #include "base/feature_list.h"
  #include "base/notreached.h"
+ #include "build/build_config.h"
 +#include "base/strings/string_split.h"
 +#include "gin/gin_features.h"
- #include "build/build_config.h"
- #include "media/gpu/buildflags.h"
- #include "ppapi/buildflags/buildflags.h"
-@@ -55,6 +57,7 @@
+ #include "sandbox/linux/bpf_dsl/bpf_dsl.h"
+ #include "sandbox/linux/bpf_dsl/trap_registry.h"
+ #include "sandbox/policy/mojom/sandbox.mojom.h"
+@@ -52,6 +54,7 @@
  #include "sandbox/policy/linux/bpf_service_policy_linux.h"
  #include "sandbox/policy/linux/bpf_speech_recognition_policy_linux.h"
  #include "sandbox/policy/linux/bpf_utility_policy_linux.h"
@@ -257,10 +257,10 @@ index b673ffea2afa6..1893fdee845d0 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
  #include "chromeos/ash/components/assistant/buildflags.h"
-@@ -186,8 +189,26 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
+@@ -188,8 +191,26 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
    switch (sandbox_type) {
      case sandbox::mojom::Sandbox::kGpu:
-       return GetGpuProcessSandbox(options);
+       return GetGpuProcessSandbox(options, MremapPolicy::kBlock);
 -    case sandbox::mojom::Sandbox::kRenderer:
 -      return std::make_unique<RendererProcessPolicy>();
 +    case sandbox::mojom::Sandbox::kRenderer: {
@@ -283,10 +283,10 @@ index b673ffea2afa6..1893fdee845d0 100644
 +      }
 +      return std::make_unique<RendererProcessPolicy>(dynamic_code_can_be_disabled);
 +    }
- #if BUILDFLAG(ENABLE_PPAPI)
-     case sandbox::mojom::Sandbox::kPpapi:
-       return std::make_unique<PpapiProcessPolicy>();
-@@ -207,9 +228,27 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
+     case sandbox::mojom::Sandbox::kOnDeviceModelExecution:
+       return GetGpuProcessSandbox(options, MremapPolicy::kAllow);
+     case sandbox::mojom::Sandbox::kUtility:
+@@ -205,9 +226,27 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
      case sandbox::mojom::Sandbox::kAudio:
        return std::make_unique<AudioProcessPolicy>();
      case sandbox::mojom::Sandbox::kService:
@@ -317,12 +317,12 @@ index b673ffea2afa6..1893fdee845d0 100644
      case sandbox::mojom::Sandbox::kSpeechRecognition:
        return std::make_unique<SpeechRecognitionProcessPolicy>();
  #if BUILDFLAG(IS_LINUX)
-@@ -222,7 +261,7 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
- #endif
+@@ -235,7 +274,7 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
+ #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
  #if BUILDFLAG(IS_LINUX)
      case sandbox::mojom::Sandbox::kVideoEffects:
 -      return std::make_unique<ServiceProcessPolicy>();
 +      return std::make_unique<ServiceProcessPolicy>(true);
  #endif  // BUILDFLAG(IS_LINUX)
- #if BUILDFLAG(USE_LINUX_VIDEO_ACCELERATION)
-     case sandbox::mojom::Sandbox::kHardwareVideoDecoding:
+ #if BUILDFLAG(IS_CHROMEOS)
+     case sandbox::mojom::Sandbox::kIme:

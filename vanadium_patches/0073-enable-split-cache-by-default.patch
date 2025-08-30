@@ -8,10 +8,10 @@ Subject: [PATCH] enable split cache by default
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/net/base/features.cc b/net/base/features.cc
-index fe35c6362b97e..786555b3b4102 100644
+index 91a1e8fbe44bb..cd47588f1629b 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
-@@ -123,11 +123,11 @@ const base::FeatureParam<base::TimeDelta>
+@@ -124,11 +124,11 @@ const base::FeatureParam<base::TimeDelta>
  
  BASE_FEATURE(kSplitCacheByIncludeCredentials,
               "SplitCacheByIncludeCredentials",
@@ -25,7 +25,7 @@ index fe35c6362b97e..786555b3b4102 100644
  
  // Note: Use of this feature is gated on the HTTP cache itself being
  // partitioned, which is controlled by the kSplitCacheByNetworkIsolationKey
-@@ -138,7 +138,7 @@ BASE_FEATURE(kSplitCacheByCrossSiteMainFrameNavigationBoolean,
+@@ -139,7 +139,7 @@ BASE_FEATURE(kSplitCacheByCrossSiteMainFrameNavigationBoolean,
  
  BASE_FEATURE(kSplitCodeCacheByNetworkIsolationKey,
               "SplitCodeCacheByNetworkIsolationKey",

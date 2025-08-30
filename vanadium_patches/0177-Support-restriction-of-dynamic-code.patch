@@ -21,7 +21,7 @@ It's inspired by PaX MPROTECT restrictions.
  2 files changed, 73 insertions(+)
 
 diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-index bdb1f4071f2ed..c1c693530c782 100644
+index de2f86931e435..365f3996ea274 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 +++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 @@ -15,6 +15,7 @@
@@ -32,7 +32,7 @@ index bdb1f4071f2ed..c1c693530c782 100644
  #include <sys/socket.h>
  #include <sys/stat.h>
  #include <sys/time.h>
-@@ -247,6 +248,31 @@ ResultExpr RestrictMmapFlags() {
+@@ -254,6 +255,31 @@ SANDBOX_EXPORT ResultExpr RestrictMremapFlagsForODML() {
    return If((flags & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
@@ -64,7 +64,7 @@ index bdb1f4071f2ed..c1c693530c782 100644
  ResultExpr RestrictMprotectFlags() {
    // The flags you see are actually the allowed ones, and the variable is a
    // "denied" mask because of the negation operator.
-@@ -265,6 +291,24 @@ ResultExpr RestrictMprotectFlags() {
+@@ -272,6 +298,24 @@ ResultExpr RestrictMprotectFlags() {
    return If((prot & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
@@ -89,7 +89,7 @@ index bdb1f4071f2ed..c1c693530c782 100644
  ResultExpr RestrictFcntlCommands() {
    // We also restrict the flags in F_SETFL. We don't want to permit flags with
    // a history of trouble such as O_DIRECT. The flags you see are actually the
-@@ -307,6 +351,17 @@ ResultExpr RestrictFcntlCommands() {
+@@ -314,6 +358,17 @@ ResultExpr RestrictFcntlCommands() {
    // clang-format on
  }
  
@@ -108,10 +108,10 @@ index bdb1f4071f2ed..c1c693530c782 100644
  ResultExpr RestrictSocketcallCommand() {
    // Unfortunately, we are unable to restrict the first parameter to
 diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
-index 88d45fd5090da..4d67810938d87 100644
+index b17b4e040753c..215d8b3e7ed27 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
 +++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
-@@ -40,11 +40,25 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictIoctl();
+@@ -40,6 +40,15 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictIoctl();
  // Crash if any other flag is used.
  SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMmapFlags();
  
@@ -124,8 +124,10 @@ index 88d45fd5090da..4d67810938d87 100644
 +// PROT_BTI | PROT_MTE is additionally allowed on 64-bit Arm.
 +SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMmapFlagsNoWX();
 +
- // Restrict the prot argument in mprotect(2).
- // Only allow: PROT_READ | PROT_WRITE | PROT_EXEC.
+ // Restrict the flags argument in mremap(2).
+ // Crash if any flags are used.
+ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMremapFlagsForODML();
+@@ -49,6 +58,11 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMremapFlagsForODML();
  // PROT_BTI | PROT_MTE is additionally allowed on 64-bit Arm.
  SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMprotectFlags();
  
@@ -137,7 +139,7 @@ index 88d45fd5090da..4d67810938d87 100644
  // Restrict fcntl(2) cmd argument to:
  // We allow F_GETFL, F_SETFL, F_GETFD, F_SETFD, F_DUPFD, F_DUPFD_CLOEXEC,
  // F_SETLK, F_SETLKW and F_GETLK.
-@@ -52,6 +66,10 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMprotectFlags();
+@@ -56,6 +70,10 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMprotectFlags();
  // O_NONBLOCK | O_SYNC | O_LARGEFILE | O_CLOEXEC | O_NOATIME.
  SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictFcntlCommands();
  
