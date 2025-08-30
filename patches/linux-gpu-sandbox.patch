@@ -134,10 +134,10 @@ index 97f7221cb1..f159190d33 100644
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-index 6879a82ad4..4b823561e9 100644
+index 90fdecdb76..f852c64078 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 +++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-@@ -96,8 +96,8 @@ namespace {
+@@ -98,8 +98,8 @@ namespace {
  // nacl_helper needs to be tiny and includes only part of content/
  // in its dependencies. Make sure to not link things that are not needed.
  #if !defined(IN_NACL_HELPER)
@@ -148,12 +148,12 @@ index 6879a82ad4..4b823561e9 100644
    return true;
  #else
    return false;
-@@ -122,7 +122,7 @@ inline bool IsArchitectureArm() {
- 
+@@ -125,7 +125,7 @@ inline bool IsArchitectureArm() {
  std::unique_ptr<BPFBasePolicy> GetGpuProcessSandbox(
-     const SandboxSeccompBPF::Options& options) {
+     const SandboxSeccompBPF::Options& options,
+     MremapPolicy mremap_policy) {
 -  if (IsChromeOS() || UseChromecastSandboxAllowlist()) {
 +  if (IsLinux() || UseChromecastSandboxAllowlist()) {
      if (IsArchitectureArm()) {
        return std::make_unique<CrosArmGpuProcessPolicy>(
-           base::CommandLine::ForCurrentProcess()->HasSwitch(
+           mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
