@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 97f7221cb1..f159190d33 100644
+index 2e53794fa3..11201c5c8f 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -48,8 +48,8 @@ using sandbox::syscall_broker::BrokerProcess;
@@ -25,15 +25,6 @@ index 97f7221cb1..f159190d33 100644
    return true;
  #else
    return false;
-@@ -86,7 +86,7 @@ inline bool UseV4L2Codec(
- static const char kMaliConfPath[] = "/etc/mali_platform.conf";
- #endif
- 
--#if BUILDFLAG(IS_CHROMEOS) && defined(__aarch64__)
-+#if defined(__aarch64__)
- static const char kLibGlesPath[] = "/usr/lib64/libGLESv2.so.2";
- static const char kLibEglPath[] = "/usr/lib64/libEGL.so.1";
- static const char kLibMaliPath[] = "/usr/lib64/libmali.so";
 @@ -100,7 +100,7 @@ static const char kLibTegraPath[] = "/usr/lib/libtegrav4l2.so";
  
  constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE;
@@ -90,23 +81,12 @@ index 97f7221cb1..f159190d33 100644
        // If kms_swrast_dri is not usable, swrast_dri is used instead.
        "/usr/lib64/dri/swrast_dri.so",
        "/usr/lib64/dri/kms_swrast_dri.so",
-@@ -498,9 +517,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
- 
-   AddVulkanICDPermissions(&permissions);
- 
--  if (IsChromeOS()) {
-+  if (IsLinux()) {
-     // Permissions are additive, there can be multiple GPUs in the system.
--    AddStandardChromeOsPermissions(&permissions);
-+    AddStandardLinuxPermissions(&permissions);
-     if (UseV4L2Codec(options))
-       AddV4L2GpuPermissions(&permissions, options);
-     if (IsArchitectureArm()) {
-@@ -600,10 +619,12 @@ void LoadArmGpuLibraries() {
+@@ -548,11 +567,13 @@ void LoadArmGpuLibraries() {
+ }
  
  bool LoadAmdGpuLibraries() {
++#if BUILDFLAG(IS_CHROME)
    // Preload the amdgpu-dependent libraries.
-+#if BUILDFLAG(IS_CHROMEOS)
    if (nullptr == dlopen("libglapi.so", dlopen_flag)) {
      LOG(ERROR) << "dlopen(libglapi.so) failed with error: " << dlerror();
      return false;
@@ -115,16 +95,7 @@ index 97f7221cb1..f159190d33 100644
  
    const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
  #if defined(DRI_DRIVER_DIR)
-@@ -658,7 +679,7 @@ bool LoadLibrariesForGpu(
-   if (IsArchitectureArm()) {
-     LoadArmGpuLibraries();
-   }
--  if (IsChromeOS()) {
-+  if (IsLinux()) {
-     if (options.use_amd_specific_policies) {
-       if (!LoadAmdGpuLibraries())
-         return false;
-@@ -681,7 +702,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+@@ -609,7 +630,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
    command_set.set(sandbox::syscall_broker::COMMAND_ACCESS);
    command_set.set(sandbox::syscall_broker::COMMAND_OPEN);
    command_set.set(sandbox::syscall_broker::COMMAND_STAT);
@@ -133,6 +104,27 @@ index 97f7221cb1..f159190d33 100644
        (options.use_amd_specific_policies ||
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
+@@ -628,9 +649,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+ 
+   AddVulkanICDPermissions(&permissions);
+ 
+-  if (IsChromeOS()) {
++  if (IsLinux()) {
+     // Permissions are additive, there can be multiple GPUs in the system.
+-    AddStandardChromeOsPermissions(&permissions);
++    AddStandardLinuxPermissions(&permissions);
+     if (UseV4L2Codec(options)) {
+       AddV4L2GpuPermissions(&permissions, options);
+     }
+@@ -678,7 +699,7 @@ bool LoadLibrariesForGpu(
+   if (IsArchitectureArm()) {
+     LoadArmGpuLibraries();
+   }
+-  if (IsChromeOS()) {
++  if (IsLinux()) {
+     if (options.use_amd_specific_policies) {
+       if (!LoadAmdGpuLibraries())
+         return false;
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 index 90fdecdb76..f852c64078 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
