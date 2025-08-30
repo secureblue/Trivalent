@@ -26,18 +26,16 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
 diff --git a/components/regional_capabilities/regional_capabilities_utils.cc b/components/regional_capabilities/regional_capabilities_utils.cc
-index cbdceda6674e2..be04a19262c35 100644
+index 3888ea8ab9..f352228bb8 100644
 --- a/components/regional_capabilities/regional_capabilities_utils.cc
 +++ b/components/regional_capabilities/regional_capabilities_utils.cc
-@@ -21,9 +21,8 @@ bool IsEeaCountry(int country_id) {
-   // the current profile country.
-   // TODO(crbug.com/328040066): Move this check to
-   // `RegionalCapabilitiesService::IsInEeaCountry()`.
--  return HasSearchEngineCountryListOverride()
--             ? true
--             : kEeaChoiceCountriesIds.contains(country_id);
-+  // We want the search choice screen no matter what
+@@ -55,7 +55,7 @@ void ShufflePrepopulatedEngines(std::vector<const PrepopulatedEngine*>& engines,
+ }  // namespace
+ 
+ bool IsEeaCountry(country_codes::CountryId country_id) {
+-  return kEeaChoiceCountriesIds.contains(country_id);
 +  return true;
  }
  
  std::optional<SearchEngineCountryOverride> GetSearchEngineCountryOverride() {
+
