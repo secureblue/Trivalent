@@ -37,10 +37,10 @@ index 2e0e1e41c3c58..d4b7b33d8830d 100644
    registry->RegisterDictionaryPref(kChromeLabsNewBadgeDictAshChrome);
  #endif
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index 7579ada331de3..abe60e0839fd8 100644
+index 647b359c32..9d85fc2829 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -206,11 +206,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
+@@ -203,11 +203,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
  // https://crbug.com/928954
  BASE_FEATURE(kTabHoverCardImages,
               "TabHoverCardImages",
@@ -51,7 +51,7 @@ index 7579ada331de3..abe60e0839fd8 100644
 -#endif
  );
  
- const char kTabHoverCardImagesNotReadyDelayParameterName[] =
+ BASE_FEATURE(kTabModalUsesDesktopWidget,
 diff --git a/components/history_clusters/core/features.cc b/components/history_clusters/core/features.cc
 index a85534a986fc8..be4d151f7be66 100644
 --- a/components/history_clusters/core/features.cc
