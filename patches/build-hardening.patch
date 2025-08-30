@@ -27,17 +27,18 @@ index 0c04c90368..75e2814d69 100644
 +        "-fstack-protector-strong",
        ]
 +
-+      rustflags = [
++      rs_scs_params = [
 +        "-Zsanitizer=shadow-call-stack",
 +        "-Zstack-protector=strong",
 +      ]
 +
 +      if (is_linux) {
 +        scs_paramaters += [ "-ffixed-x18" ]
-+        rustflags += [ "-Zfixed-x18" ]
++        rs_scs_params += [ "-Zfixed-x18" ]
 +      }
        cflags += scs_parameters
        ldflags += scs_parameters
++      rustflags += rs_scs_params
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
