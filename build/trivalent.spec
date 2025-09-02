@@ -413,12 +413,6 @@ cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_nam
 # See `man find` for how the `-exec command {} +` syntax works
 find -type f \( -iname "*.py" \) -exec sed -i '1s=^#! */usr/bin/\(python\|env python\)[23]\?=#!%{__python3}=' {} +
 
-# Get rid of the pre-built eu-strip binary, it is x86_64 and of mysterious origin
-rm -rf buildtools/third_party/eu-strip/bin/eu-strip
-
-# Replace it with a symlink to the Fedora copy
-ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
-
 # Use system nodejs if desired
 %if %{use_system_toolchain}
 mkdir -p third_party/node/linux/node-linux-x64/bin
