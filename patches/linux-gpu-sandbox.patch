@@ -94,7 +94,7 @@ index 2e53794fa3..11201c5c8f 100644
  }
  
  bool LoadAmdGpuLibraries() {
-+#if BUILDFLAG(IS_CHROME)
++#if BUILDFLAG(IS_CHROMEOS)
    // Preload the amdgpu-dependent libraries.
    if (nullptr == dlopen("libglapi.so", dlopen_flag)) {
      LOG(ERROR) << "dlopen(libglapi.so) failed with error: " << dlerror();
