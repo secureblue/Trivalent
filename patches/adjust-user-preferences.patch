@@ -55,10 +55,10 @@ index 06914746fb..a67593cc18 100644
      <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
      <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
 diff --git a/chrome/browser/resources/settings/a11y_page/live_translate_section.html b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
-index b038bf5b73..c8ce8d033c 100644
+index 3fce5bc069..c8ce8d033c 100644
 --- a/chrome/browser/resources/settings/a11y_page/live_translate_section.html
 +++ b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
-@@ -25,27 +25,3 @@
+@@ -25,28 +25,3 @@
      width: 100%;
    }
  </style>
@@ -82,7 +82,8 @@ index b038bf5b73..c8ce8d033c 100644
 -    <settings-dropdown-menu id="targetLanguageDropdown"
 -        class="language-dropdown"
 -        pref="{{prefs.accessibility.captions.live_translate_target_language}}"
--        menu-options="[[translatableLanguages_]]">
+-        menu-options="[[translatableLanguages_]]"
+-        label="$i18n{captionsLiveTranslateTargetLanguage}">
 -    </settings-dropdown-menu>
 -  </div>
 -</cr-collapse>
@@ -102,57 +103,13 @@ index 0d6ab878ac..0f114a5f32 100644
          <div
              class="hr"
              hidden="[[!showHr_(
-diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index 3e5e2c80b8..c1201524e5 100644
---- a/chrome/browser/resources/settings/basic_page/basic_page.html
-+++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -27,7 +27,7 @@
-           </settings-reset-profile-banner>
-         </template>
-         <template is="dom-if" if="[[showPage_(pageVisibility_.people)]]" restamp>
--          <settings-section page-title="$i18n{peoplePageTitle}"
-+          <settings-section page-title="$i18n{editPerson}"
-               section="people">
-             <settings-people-page prefs="{{prefs}}"></settings-people-page>
-           </settings-section>
-@@ -65,17 +65,6 @@
-               prefs="{{prefs}}">
-           </settings-privacy-guide-promo>
-         </settings-section>
--        <!--  TODO(crbug.com/40267370): Add a test to basic_page_test.ts
--        to check that settings-safety-hub-entry-point is not visible
--        in the guest mode. -->
--        <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]"
--            restamp>
--          <settings-section page-title="$i18n{safetyHub}"
--              section="safetyHubEntryPoint" nest-under-section="privacy"
--              id="safetyHubEntryPointSection">
--            <settings-safety-hub-entry-point></settings-safety-hub-entry-point>
--          </settings-section>
--        </template>
-         <template is="dom-if" if="[[showPage_(pageVisibility_.privacy)]]"
-             restamp>
-           <settings-section page-title="$i18n{privacyPageTitle}"
-@@ -206,13 +195,6 @@
-                 </settings-spell-check-page>
-               </settings-section>
-             </template>
--            <settings-section page-title="$i18n{translatePageTitle}"
--                section="translate" nest-under-section="languages">
--              <settings-translate-page prefs="{{prefs}}"
--                  languages="[[languages]]"
--                  language-helper="[[languageHelper]]">
--              </settings-translate-page>
--            </settings-section>
- </if>
-             <template is="dom-if" if="[[showPage_(pageVisibility_.downloads)]]"
-                 restamp>
 diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html b/chrome/browser/resources/settings/languages_page/translate_page.html
-index 8fd684ffe2..afc674e790 100644
+index 47ee2c73fc..575caacdb6 100644
 --- a/chrome/browser/resources/settings/languages_page/translate_page.html
 +++ b/chrome/browser/resources/settings/languages_page/translate_page.html
-@@ -1,10 +1,4 @@
+@@ -1,11 +1,4 @@
  <style include="cr-shared-style settings-shared md-select"></style>
+-<settings-section page-title="$i18n{translatePageTitle}">
 -<settings-toggle-button id="offerTranslateOtherLanguages"
 -    pref="{{prefs.translate.enabled}}"
 -    label="$i18n{offerToEnableTranslate}"
@@ -163,22 +120,51 @@ index 8fd684ffe2..afc674e790 100644
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 6a1aa09edd..24c8e89fef 100644
+index d72db96468..93a63bd89b 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
-@@ -122,12 +122,6 @@ shown on non-ChromeOS platforms -->
-           </div>
+@@ -65,7 +65,7 @@
+         }
+       }
+     </style>
+-    <settings-section page-title="$i18n{peoplePageTitle}">
++    <settings-section page-title="$i18n{editPerson}">
+       <div>
+ 
+ <if expr="not is_chromeos">
+@@ -124,32 +124,6 @@
+           </template>
          </template> <!-- if="[[!shouldShowSyncAccountControl_()]]" -->
  
 -        <cr-link-row id="sync-setup"
 -            label="$i18n{syncAndNonPersonalizedServices}"
 -            on-click="onSyncClick_"
--            role-description="$i18n{subpageArrowRoleDescription}">
+-            role-description="$i18n{subpageArrowRoleDescription}"
+-            hidden="[[shouldHideSyncSetupLinkRow_(syncStatus)]]">
 -        </cr-link-row>
+-        <template is="dom-if" if="[[shouldHideSyncSetupLinkRow_(syncStatus)]]"
+-            restamp>
+-          <cr-link-row id="google-services"
+-              label="$i18n{googleServicesPageTitle}"
+-              on-click="onGoogleServicesClick_"
+-              role-description="$i18n{subpageArrowRoleDescription}">
+-          </cr-link-row>
+-        </template>
 -
- <if expr="not chromeos_ash">
-         <template is="dom-if" if="[[signinAllowed_]]">
-           <cr-link-row id="manage-google-account"
+-        <template is="dom-if" if="[[signinAllowed_]]">
+-          <cr-link-row id="manage-google-account"
+-              label="$i18n{manageGoogleAccount}"
+-              hidden="[[!shouldShowGoogleAccount_]]"
+-              on-click="openGoogleAccount_" external></cr-link-row>
+-
+-          <cr-link-row id="edit-profile"
+-              label="$i18n{profileNameAndPicture}"
+-              on-click="onProfileClick_" ></cr-link-row>
+-        </template>
+-
+         <cr-link-row id="importDataDialogTrigger"
+             label="$i18n{importTitle}"
+             on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 index fe9dbe975e..00bd87c2c3 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
@@ -226,6 +212,27 @@ index 30b89ed907..d71ee60f62 100644
    }
  
    private onBrowsingDataDeleted_(
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
+index 7e056817e5..762e67c8e8 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
+@@ -22,16 +22,6 @@
+     </settings-section>
+   </template>
+ 
+-  <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
+-    <template is="dom-if" if="[[renderView_(
+-        routes_.PRIVACY, currentRoute, inSearchMode)]]">
+-      <settings-section slot="view" id="safetyHubEntryPoint"
+-          page-title="$i18n{safetyHub}">
+-        <settings-safety-hub-entry-point></settings-safety-hub-entry-point>
+-      </settings-section>
+-    </template>
+-  </template>
+-
+   <template is="dom-if" if="[[renderOldView_(currentRoute, inSearchMode)]]">
+     <!-- TODO(crbug.com/424223101): Remove <settings-basic-page> once all UIs
+         have been migrated to standalone views. -->
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
 index ae93043d94..8cc340e397 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
@@ -490,18 +497,18 @@ index 1ca971d44f..96814a1a03 100644
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
  
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index 35c69da2b3..7ffd077cbb 100644
+index b60cf718bf..bc6dabdeaf 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -173,7 +173,7 @@ function createRoutes(): SettingsRoutes {
+@@ -182,7 +182,7 @@ function createRoutes(): SettingsRoutes {
  
-   if (!loadTimeData.getBoolean('isGuest')) {
+   if (visibility.people !== false) {
      r.PEOPLE = r.BASIC.createSection(
 -        '/people', 'people', loadTimeData.getString('peoplePageTitle'));
 +        '/people', 'people', loadTimeData.getString('editPerson'));
-     // <if expr="not chromeos_ash">
+     r.PEOPLE.hasMigratedToPlugin = true;
+     // <if expr="not is_chromeos">
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
-     r.SIGN_OUT.isNavigableDialog = true;
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 index acbddcdb9b..81e0a6de2a 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html

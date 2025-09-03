@@ -1,5 +1,30 @@
+# Copyright 2025 The Trivalent Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the License is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and limitations under the License.
+
 on:
-    workflow_dispatch: 
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+    secrets:
+      RPM_SIGNING_KEY:
+        required: true
+      R2_ACCESS_KEY_ID:
+        required: true
+      R2_SECRET_ACCESS_KEY:
+        required: true
+      R2_ENDPOINT:
+        required: true
   
 name: Create RPM Release
 
@@ -9,9 +34,9 @@ jobs:
   buildsrpm:
     name: Build SRPM
     if: github.triggering_actor == 'royaloughtness'
-    runs-on: ubuntu-24.04
+    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: fedora:42@sha256:af97cb7bcca6cbcc42ef41e7c917580c46a237f6e171f51425e8c6080d8d8859
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:6a37e3a598b288118f513ee5ed5ddcfb1a5661f26ae5eed7246ffd87c588e98f' || 'fedora:42@sha256:93378e55d45e65950e326516f91bf3bd61b3c508d40bd2c347144c0d444f2274' }}
     steps:
       - name: Build SRPM 
         shell: bash
@@ -50,10 +75,12 @@ jobs:
       - name: Build RPM 
         shell: bash
         id: rpm_build
+        env:
+          ARCH: ${{inputs.arch}}
         run: |
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
-          mock --resultdir=. -r fedora-42-x86_64 --rebuild trivalent-*.src.rpm
+          mock --resultdir=. -r "fedora-42-${ARCH}" --rebuild trivalent-*.src.rpm
 
       - name: Prepare for upload
         shell: bash
@@ -71,9 +98,9 @@ jobs:
   pushrpm:
     name: Push RPM
     if: github.triggering_actor == 'royaloughtness'
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: fedora:42@sha256:af97cb7bcca6cbcc42ef41e7c917580c46a237f6e171f51425e8c6080d8d8859
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:6a37e3a598b288118f513ee5ed5ddcfb1a5661f26ae5eed7246ffd87c588e98f' || 'fedora:42@sha256:93378e55d45e65950e326516f91bf3bd61b3c508d40bd2c347144c0d444f2274' }}
     needs: buildrpm
     steps:
       - name: Retrieve RPM

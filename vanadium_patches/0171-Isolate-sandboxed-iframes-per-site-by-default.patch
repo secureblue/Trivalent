@@ -8,10 +8,10 @@ Subject: [PATCH] Isolate sandboxed iframes per site by default
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/third_party/blink/common/features.cc b/third_party/blink/common/features.cc
-index 3132400d9f6b4..50d31f9035928 100644
+index 7f4650c89f751..feb52d4b8a1ca 100644
 --- a/third_party/blink/common/features.cc
 +++ b/third_party/blink/common/features.cc
-@@ -1239,7 +1239,7 @@ BASE_FEATURE_ENUM_PARAM(IsolateSandboxedIframesGrouping,
+@@ -1259,7 +1259,7 @@ BASE_FEATURE_ENUM_PARAM(IsolateSandboxedIframesGrouping,
                          kIsolateSandboxedIframesGroupingParam,
                          &kIsolateSandboxedIframes,
                          "grouping",

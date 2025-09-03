@@ -413,11 +413,12 @@ cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_nam
 # See `man find` for how the `-exec command {} +` syntax works
 find -type f \( -iname "*.py" \) -exec sed -i '1s=^#! */usr/bin/\(python\|env python\)[23]\?=#!%{__python3}=' {} +
 
-# Get rid of the pre-built eu-strip binary, it is x86_64 and of mysterious origin
-rm -rf buildtools/third_party/eu-strip/bin/eu-strip
-
-# Replace it with a symlink to the Fedora copy
-ln -s %{_bindir}/eu-strip buildtools/third_party/eu-strip/bin/eu-strip
+# Use system nodejs if desired
+%if %{use_system_toolchain}
+mkdir -p third_party/node/linux/node-linux-x64/bin
+rm third_party/node/linux/node-linux-x64/bin/node
+ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
+%endif
 
 # Hard code extra version
 sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
@@ -454,12 +455,6 @@ declare -r clang_base_path="$(PATH=/usr/bin:/usr/sbin which clang | sed 's#/bin/
 declare -r rust_bindgen_root="$(which bindgen | sed 's#/s\?bin/.*##')"
 %else
 declare -r SOURCE_DIR="$PWD/third_party"
-# add internal clang to PATH for build
-PATH="$PATH:$SOURCE_DIR/llvm-build/Release+Asserts/bin"
-# add internal rust utils to PATH for build
-PATH="$PATH:$SOURCE_DIR/rust-toolchain/bin"
-# add internal nodejs to PATH for build
-PATH="$PATH:$SOURCE_DIR/node/linux/node-linux-x64/bin"
 # add internal gn to PATH for build
 PATH="$PATH:$PWD/buildtools/linux64"
 export PATH
@@ -469,6 +464,7 @@ CHROMIUM_GN_DEFINES=''
 %ifarch aarch64
 CHROMIUM_GN_DEFINES+=' target_cpu="arm64"'
 CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
+CHROMIUM_GN_DEFINES+=' enable_shadow_call_stack=true'
 %endif
 %if %{enable_proprietary_codecs}
 CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_widevine=true'
@@ -644,59 +640,4 @@ fi
 %{chromium_path}/chrome_100_percent.pak
 %{chromium_path}/chrome_200_percent.pak
 %dir %{chromium_path}/locales/
-# Chromium _ALWAYS_ needs en-US.pak as a fallback
-%{chromium_path}/locales/en-US.pak
-%lang(af) %{chromium_path}/locales/af.pak
-%lang(am) %{chromium_path}/locales/am.pak
-%lang(ar) %{chromium_path}/locales/ar.pak
-%lang(bg) %{chromium_path}/locales/bg.pak
-%lang(bn) %{chromium_path}/locales/bn.pak
-%lang(ca) %{chromium_path}/locales/ca.pak
-%lang(cs) %{chromium_path}/locales/cs.pak
-%lang(da) %{chromium_path}/locales/da.pak
-%lang(de) %{chromium_path}/locales/de.pak
-%lang(el) %{chromium_path}/locales/el.pak
-%lang(en_GB) %{chromium_path}/locales/en-GB.pak
-%lang(es) %{chromium_path}/locales/es.pak
-%lang(es) %{chromium_path}/locales/es-419.pak
-%lang(et) %{chromium_path}/locales/et.pak
-%lang(fa) %{chromium_path}/locales/fa.pak
-%lang(fi) %{chromium_path}/locales/fi.pak
-%lang(fil) %{chromium_path}/locales/fil.pak
-%lang(fr) %{chromium_path}/locales/fr.pak
-%lang(gu) %{chromium_path}/locales/gu.pak
-%lang(he) %{chromium_path}/locales/he.pak
-%lang(hi) %{chromium_path}/locales/hi.pak
-%lang(hr) %{chromium_path}/locales/hr.pak
-%lang(hu) %{chromium_path}/locales/hu.pak
-%lang(id) %{chromium_path}/locales/id.pak
-%lang(it) %{chromium_path}/locales/it.pak
-%lang(ja) %{chromium_path}/locales/ja.pak
-%lang(kn) %{chromium_path}/locales/kn.pak
-%lang(ko) %{chromium_path}/locales/ko.pak
-%lang(lt) %{chromium_path}/locales/lt.pak
-%lang(lv) %{chromium_path}/locales/lv.pak
-%lang(ml) %{chromium_path}/locales/ml.pak
-%lang(mr) %{chromium_path}/locales/mr.pak
-%lang(ms) %{chromium_path}/locales/ms.pak
-%lang(nb) %{chromium_path}/locales/nb.pak
-%lang(nl) %{chromium_path}/locales/nl.pak
-%lang(pl) %{chromium_path}/locales/pl.pak
-%lang(pt_BR) %{chromium_path}/locales/pt-BR.pak
-%lang(pt_PT) %{chromium_path}/locales/pt-PT.pak
-%lang(ro) %{chromium_path}/locales/ro.pak
-%lang(ru) %{chromium_path}/locales/ru.pak
-%lang(sk) %{chromium_path}/locales/sk.pak
-%lang(sl) %{chromium_path}/locales/sl.pak
-%lang(sr) %{chromium_path}/locales/sr.pak
-%lang(sv) %{chromium_path}/locales/sv.pak
-%lang(sw) %{chromium_path}/locales/sw.pak
-%lang(ta) %{chromium_path}/locales/ta.pak
-%lang(te) %{chromium_path}/locales/te.pak
-%lang(th) %{chromium_path}/locales/th.pak
-%lang(tr) %{chromium_path}/locales/tr.pak
-%lang(uk) %{chromium_path}/locales/uk.pak
-%lang(ur) %{chromium_path}/locales/ur.pak
-%lang(vi) %{chromium_path}/locales/vi.pak
-%lang(zh_CN) %{chromium_path}/locales/zh-CN.pak
-%lang(zh_TW) %{chromium_path}/locales/zh-TW.pak
+%{chromium_path}/locales/*.pak
