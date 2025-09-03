@@ -212,27 +212,6 @@ index 30b89ed907..d71ee60f62 100644
    }
  
    private onBrowsingDataDeleted_(
-diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index 7e056817e5..762e67c8e8 100644
---- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-+++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-@@ -22,16 +22,6 @@
-     </settings-section>
-   </template>
- 
--  <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
--    <template is="dom-if" if="[[renderView_(
--        routes_.PRIVACY, currentRoute, inSearchMode)]]">
--      <settings-section slot="view" id="safetyHubEntryPoint"
--          page-title="$i18n{safetyHub}">
--        <settings-safety-hub-entry-point></settings-safety-hub-entry-point>
--      </settings-section>
--    </template>
--  </template>
--
-   <template is="dom-if" if="[[renderOldView_(currentRoute, inSearchMode)]]">
-     <!-- TODO(crbug.com/424223101): Remove <settings-basic-page> once all UIs
-         have been migrated to standalone views. -->
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
 index ae93043d94..8cc340e397 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
