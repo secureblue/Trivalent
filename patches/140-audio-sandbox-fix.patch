@@ -18,7 +18,7 @@ index de2f86931e..8c1dcf2478 100644
        .Else(CrashSIGSYS());
  }
  
-+SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMemfdCreateAudioService() {
++ResultExpr RestrictMemfdCreateAudioService() {
 +  const Arg<int> flags(1);
 +  return If((flags & ~(MFD_NOEXEC_SEAL), Allow()).Else(CrashSIGSYS());
 +}
