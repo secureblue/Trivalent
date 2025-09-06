@@ -22,7 +22,7 @@ index e1716b97e8..2a876c7894 100644
  
  #include "sandbox/linux/bpf_dsl/bpf_dsl.h"
  #include "sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h"
-@@ -118,6 +119,12 @@ ResultExpr AudioProcessPolicy::EvaluateSyscall(int system_call_number) const {
+@@ -118,6 +119,14 @@ ResultExpr AudioProcessPolicy::EvaluateSyscall(int system_call_number) const {
        const Arg<int> domain(0);
        return If(domain == AF_UNIX, Allow()).Else(Error(EPERM));
      }
@@ -30,7 +30,9 @@ index e1716b97e8..2a876c7894 100644
 +#if defined(__NR_memfd_create)
 +    case __NR_memfd_create: {
 +      const Arg<int> flags(1);
-+      return If((flags & ~(MFD_NOEXEC_SEAL), Allow()).Else(CrashSIGSYS());
++      if (flags & ~(MFD_NOEXEC_SEAL))
++        return Allow();
++      return CrashSIGSYS();
 +    }
  #endif
      default:
