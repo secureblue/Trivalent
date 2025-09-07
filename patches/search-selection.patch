@@ -10,25 +10,21 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-iff --git a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
-index 7e4f4b9ce2..969d3f7dc2 100644
+diff --git a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
+index e4d2eacf3f316..0dfdd8c0d365d 100644
 --- a/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
 +++ b/chrome/browser/search_engine_choice/search_engine_choice_dialog_service_factory.cc
-@@ -32,12 +32,8 @@ namespace {
- using search_engines::SearchEngineChoiceScreenConditions;
+@@ -129,10 +129,6 @@ SearchEngineChoiceDialogServiceFactory::BuildServiceInstanceForBrowserContext(
  
- // Stores whether this is a Google Chrome-branded build.
--bool g_is_chrome_build =
--#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
--    true;
--#else
--    false;
--#endif
-+// But we always want the selection screen.
-+bool g_is_chrome_build = true;
+   base::CommandLine* const command_line =
+       base::CommandLine::ForCurrentProcess();
+-  if (!g_is_chrome_build &&
+-      !command_line->HasSwitch(switches::kForceSearchEngineChoiceScreen)) {
+-    return nullptr;
+-  }
  
- bool IsSupportedProfileType(Profile& profile) {
- #if BUILDFLAG(IS_CHROMEOS)
+   if (command_line->HasSwitch(switches::kNoFirstRun) &&
+       !command_line->HasSwitch(
 diff --git a/components/regional_capabilities/program_settings.cc b/components/regional_capabilities/program_settings.cc
 index ecc8e14de3..3e03bffa9d 100644
 --- a/components/regional_capabilities/program_settings.cc
