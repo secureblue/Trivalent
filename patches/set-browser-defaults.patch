@@ -32,7 +32,7 @@ index 6e3fe359e3..ffee57d55c 100644
  #endif
    registry->RegisterStringPref(prefs::kWebRTCIPHandlingPolicy,
 -                               blink::kWebRTCIPHandlingDefault);
-+                               blink::kWebRTCIPHandlingDisableNonProxiedUDP);
++                               blink::kWebRTCIPHandlingDisableNonProxiedUdp);
    registry->RegisterListPref(prefs::kWebRTCIPHandlingUrl, base::Value::List());
    registry->RegisterBooleanPref(prefs::kWebRTCPostQuantumKeyAgreement, false);
    registry->RegisterStringPref(prefs::kWebRTCUDPPortRange, std::string());
