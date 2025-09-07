@@ -14,7 +14,8 @@
 
 set -oue pipefail
 
-readonly repo_directory="$(pwd)"
+repo_directory="$(pwd)"
+readonly repo_directory
 remote_vanadium_patches=()
 truncated_remote_vanadium_patches=()
 
