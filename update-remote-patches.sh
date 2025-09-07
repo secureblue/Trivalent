@@ -14,20 +14,15 @@
 
 set -oue pipefail
 
-declare -r repo_directory=$(pwd)
-
-declare -r vanadium_patches_path="./vanadium_patches/"
-declare -r vanadium_git_url="https://github.com/GrapheneOS/Vanadium.git"
-declare current_vanadium_patches=()
-declare truncated_vanadium_patches=()
-declare remote_vanadium_patches=()
-declare truncated_remote_vanadium_patches=()
+readonly repo_directory="$(pwd)"
+remote_vanadium_patches=()
+truncated_remote_vanadium_patches=()
 
 get_remote_vanadium_patches() {
 	cd vanadium-patches-tmp/
 	local retry=0
 	while true; do
-		git clone "$vanadium_git_url"
+		git clone "https://github.com/GrapheneOS/Vanadium.git"
 		if [ ! -d Vanadium/patches/ ]; then
 			rm -rf Vanadium/
 			echo "ERROR! git operation failed!"
@@ -64,10 +59,11 @@ get_remote_vanadium_patches() {
 
 update_vanadium_patches() {
 	get_remote_vanadium_patches
-	cd "$vanadium_patches_path"
+	cd "./vanadium_patches/"
 	GLOBIGNORE="modified-*"
-	current_vanadium_patches=(*.patch)
+	local current_vanadium_patches=(*.patch)
  	unset GLOBIGNORE
+    local truncated_vanadium_patches=()
 	for ((i=0; i<${#current_vanadium_patches[@]}; i++)); do
 		truncated_vanadium_patches[i]="${current_vanadium_patches[$i]:4}"
 	done
