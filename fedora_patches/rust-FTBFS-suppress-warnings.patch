@@ -1,0 +1,14 @@
+diff --git a/build/rust/cargo_crate.gni b/build/rust/cargo_crate.gni
+index cb0220af07f12..0ca49fcd7cd8a 100644
+--- a/build/rust/cargo_crate.gni
++++ b/build/rust/cargo_crate.gni
+@@ -313,6 +313,9 @@ template("cargo_crate") {
+       }
+       configs += [ "//build/rust/gni_impl:allow_all_warnings" ]
+ 
++      rustflags +=
++          [ "--cap-lints=warn" ] # Suppress other warnings, causes FTBFS in Fedora build rhbz#2387446
++
+       if (!defined(build_native_rust_unit_tests)) {
+         build_native_rust_unit_tests = _crate_type != "proc-macro"
+       }
