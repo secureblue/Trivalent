@@ -25,17 +25,16 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
  
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
-diff --git a/components/regional_capabilities/regional_capabilities_utils.cc b/components/regional_capabilities/regional_capabilities_utils.cc
-index 3888ea8ab9..f352228bb8 100644
---- a/components/regional_capabilities/regional_capabilities_utils.cc
-+++ b/components/regional_capabilities/regional_capabilities_utils.cc
-@@ -55,7 +55,7 @@ void ShufflePrepopulatedEngines(std::vector<const PrepopulatedEngine*>& engines,
- }  // namespace
+diff --git a/components/regional_capabilities/program_settings.cc b/components/regional_capabilities/program_settings.cc
+index ecc8e14de3..3e03bffa9d 100644
+--- a/components/regional_capabilities/program_settings.cc
++++ b/components/regional_capabilities/program_settings.cc
+@@ -30,7 +30,7 @@ const ProgramSettings kTaiyakiSettings{
+ const ProgramSettings kDefaultSettings{
+     .program = Program::kDefault,
+     .search_engine_list_type = SearchEngineListType::kTopFive,
+-    .can_show_search_engine_choice_screen = false,
++    .can_show_search_engine_choice_screen = true,
+ };
  
- bool IsEeaCountry(country_codes::CountryId country_id) {
--  return kEeaChoiceCountriesIds.contains(country_id);
-+  return true;
- }
- 
- std::optional<SearchEngineCountryOverride> GetSearchEngineCountryOverride() {
-
+ bool IsInProgramRegion(Program program, country_codes::CountryId country_id) {
