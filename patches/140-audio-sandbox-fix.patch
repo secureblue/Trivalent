@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/sandbox/policy/linux/bpf_audio_policy_linux.cc b/sandbox/policy/linux/bpf_audio_policy_linux.cc
-index e1716b97e8..2a876c7894 100644
+index 3c24c69d02134..ca2b3b4d746e8 100644
 --- a/sandbox/policy/linux/bpf_audio_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_audio_policy_linux.cc
 @@ -5,6 +5,7 @@
@@ -22,7 +22,18 @@ index e1716b97e8..2a876c7894 100644
  
  #include "sandbox/linux/bpf_dsl/bpf_dsl.h"
  #include "sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h"
-@@ -118,6 +119,13 @@ ResultExpr AudioProcessPolicy::EvaluateSyscall(int system_call_number) const {
+@@ -60,10 +61,6 @@ ResultExpr AudioProcessPolicy::EvaluateSyscall(int system_call_number) const {
+ #if defined(__NR_ioctl)
+     case __NR_ioctl:
+ #endif
+-#if defined(__NR_memfd_create)
+-    case __NR_memfd_create:
+-      // TODO(crbug.com/442771181): temporary allowance for crasher.
+-#endif
+ #if defined(__NR_pwrite)
+     case __NR_pwrite:
+ #endif
+@@ -122,6 +119,13 @@ ResultExpr AudioProcessPolicy::EvaluateSyscall(int system_call_number) const {
        const Arg<int> domain(0);
        return If(domain == AF_UNIX, Allow()).Else(Error(EPERM));
      }
