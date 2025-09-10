@@ -10,63 +10,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/chrome/browser/devtools/devtools_window.cc b/chrome/browser/devtools/devtools_window.cc
-index 9b388234f3dfe..5122dcfc5ea77 100644
---- a/chrome/browser/devtools/devtools_window.cc
-+++ b/chrome/browser/devtools/devtools_window.cc
-@@ -533,7 +533,7 @@ void DevToolsWindow::RegisterProfilePrefs(
-       prefs::kDevToolsSyncedPreferencesSyncDisabled);
-   registry->RegisterIntegerPref(
-       prefs::kDevToolsGenAiSettings,
--      static_cast<int>(DevToolsGenAiEnterprisePolicyValue::kAllow));
-+      static_cast<int>(DevToolsGenAiEnterprisePolicyValue::kDisable));
- }
- 
- // static
-diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
-index e5d92f8730357..31c60742976d5 100644
---- a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
-+++ b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
-@@ -52,7 +52,7 @@ void EnterprisePolicyRegistry::RegisterProfilePrefs(
-     registry->RegisterIntegerPref(
-         policy.name(),
-         static_cast<int>(model_execution::prefs::
--                             ModelExecutionEnterprisePolicyValue::kAllow),
-+                             ModelExecutionEnterprisePolicyValue::kDisable),
-         PrefRegistry::LOSSY_PREF);
-   }
-   // From that point on, it's too late to modify the registry as the prefs
-diff --git a/components/optimization_guide/core/model_execution/model_execution_prefs.cc b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-index 305df14ead0ff..eb8b1b25f1ea3 100644
---- a/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-+++ b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-@@ -130,7 +130,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
-   registry->RegisterInt64Pref(localstate::kModelQualityLoggingClientId, 0,
-                               PrefRegistry::LOSSY_PREF);
-   registry->RegisterIntegerPref(
--      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 0);
-+      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 1);
- }
- 
- void RegisterLegacyUsagePrefsForMigration(PrefRegistrySimple* registry) {
-diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browser_prefs.cc
-index 9a00400829..91a9b429e3 100644
---- a/chrome/browser/prefs/browser_prefs.cc
-+++ b/chrome/browser/prefs/browser_prefs.cc
-@@ -2319,7 +2319,7 @@ void RegisterScreenshotPrefs(PrefRegistrySimple* registry) {
- }
- 
- void RegisterGeminiSettingsPrefs(user_prefs::PrefRegistrySyncable* registry) {
--  registry->RegisterIntegerPref(prefs::kGeminiSettings, 0);
-+  registry->RegisterIntegerPref(prefs::kGeminiSettings, 1);
- }
- 
- #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index e856d9cf62..d41a8b15a2 100644
+index a582e4069416d..b4bc940c8a8c7 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -1505,7 +1505,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+@@ -1515,7 +1515,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
        prefs::kServiceWorkerToControlSrcdocIframeEnabled, true);
    registry->RegisterBooleanPref(prefs::kReduceAcceptLanguageEnabled, true);
    registry->RegisterBooleanPref(policy::policy_prefs::kBuiltInAIAPIsEnabled,
@@ -75,21 +23,8 @@ index e856d9cf62..d41a8b15a2 100644
    registry->RegisterBooleanPref(
        prefs::kClearWindowNameForNewBrowsingContextGroup, true);
    registry->RegisterBooleanPref(prefs::kPrefetchWithServiceWorkerEnabled, true);
-diff --git a/components/omnibox/browser/omnibox_prefs.cc b/components/omnibox/browser/omnibox_prefs.cc
-index b4497bcdd3..f523305174 100644
---- a/components/omnibox/browser/omnibox_prefs.cc
-+++ b/components/omnibox/browser/omnibox_prefs.cc
-@@ -51,7 +51,7 @@ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
-   registry->RegisterIntegerPref(kShownCountHistoryScopePromo, 0);
-   registry->RegisterIntegerPref(kShownCountHistoryEmbeddingsScopePromo, 0);
-   registry->RegisterIntegerPref(kFocusedSrpWebCount, 0);
--  registry->RegisterIntegerPref(omnibox::kAIModeSettings, kAIModeAllowed);
-+  registry->RegisterIntegerPref(omnibox::kAIModeSettings, 1);
- }
- 
- void SetUserPreferenceForZeroSuggestCachedResponse(
 diff --git a/chrome/browser/component_updater/screen_ai_component_installer.cc b/chrome/browser/component_updater/screen_ai_component_installer.cc
-index 8ea949d4f3..1a08b76cbb 100644
+index 8ea949d4f3ff4..1a08b76cbb9e7 100644
 --- a/chrome/browser/component_updater/screen_ai_component_installer.cc
 +++ b/chrome/browser/component_updater/screen_ai_component_installer.cc
 @@ -119,12 +119,7 @@ void ScreenAIComponentInstallerPolicy::DeleteComponent() {
@@ -106,3 +41,68 @@ index 8ea949d4f3..1a08b76cbb 100644
    if (base::PathExists(screen_ai::GetComponentDir())) {
      ScreenAIComponentInstallerPolicy::DeleteComponent();
    }
+diff --git a/chrome/browser/devtools/devtools_window.cc b/chrome/browser/devtools/devtools_window.cc
+index b65d877234044..694deb92f080f 100644
+--- a/chrome/browser/devtools/devtools_window.cc
++++ b/chrome/browser/devtools/devtools_window.cc
+@@ -555,7 +555,7 @@ void DevToolsWindow::RegisterProfilePrefs(
+       prefs::kDevToolsSyncedPreferencesSyncDisabled);
+   registry->RegisterIntegerPref(
+       prefs::kDevToolsGenAiSettings,
+-      static_cast<int>(DevToolsGenAiEnterprisePolicyValue::kAllow));
++      static_cast<int>(DevToolsGenAiEnterprisePolicyValue::kDisable));
+ }
+ 
+ // static
+diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browser_prefs.cc
+index d016286d9cb7a..89ac48fb06cd8 100644
+--- a/chrome/browser/prefs/browser_prefs.cc
++++ b/chrome/browser/prefs/browser_prefs.cc
+@@ -2351,7 +2351,7 @@ void RegisterScreenshotPrefs(PrefRegistrySimple* registry) {
+ }
+ 
+ void RegisterGeminiSettingsPrefs(user_prefs::PrefRegistrySyncable* registry) {
+-  registry->RegisterIntegerPref(prefs::kGeminiSettings, 0);
++  registry->RegisterIntegerPref(prefs::kGeminiSettings, 1);
+ }
+ 
+ #if BUILDFLAG(IS_CHROMEOS)
+diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
+index 88bf166cbcff5..f10dcacc03f70 100644
+--- a/components/omnibox/browser/aim_eligibility_service.cc
++++ b/components/omnibox/browser/aim_eligibility_service.cc
+@@ -62,7 +62,7 @@ static constexpr char kRequestPath[] = "/async/folae";
+ static constexpr char kRequestQuery[] = "async=_fmt:pb";
+ 
+ // The default value for the AIM policy pref; 0 = allowed, 1 = disallowed.
+-constexpr int kAIModeAllowedDefault = 0;
++constexpr int kAIModeAllowedDefault = 1;
+ 
+ // Returns the request URL or an empty GURL if a valid URL cannot be created;
+ // e.g., Google is not the default search provider.
+diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
+index d2163e7eef014..8090c19e5ab09 100644
+--- a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
++++ b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
+@@ -53,7 +53,7 @@ void EnterprisePolicyRegistry::RegisterProfilePrefs(
+     registry->RegisterIntegerPref(
+         policy.name(),
+         static_cast<int>(model_execution::prefs::
+-                             ModelExecutionEnterprisePolicyValue::kAllow),
++                             ModelExecutionEnterprisePolicyValue::kDisable),
+         PrefRegistry::LOSSY_PREF);
+   }
+   // From that point on, it's too late to modify the registry as the prefs
+diff --git a/components/optimization_guide/core/model_execution/model_execution_prefs.cc b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
+index 54c084ffb1f38..856ddba84b1c8 100644
+--- a/components/optimization_guide/core/model_execution/model_execution_prefs.cc
++++ b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
+@@ -131,7 +131,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
+   registry->RegisterInt64Pref(localstate::kModelQualityLoggingClientId, 0,
+                               PrefRegistry::LOSSY_PREF);
+   registry->RegisterIntegerPref(
+-      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 0);
++      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 1);
+ }
+ 
+ void RegisterLegacyUsagePrefsForMigration(PrefRegistrySimple* registry) {
