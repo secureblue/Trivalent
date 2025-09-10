@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/sandbox/policy/linux/bpf_audio_policy_linux.cc b/sandbox/policy/linux/bpf_audio_policy_linux.cc
-index 3c24c69d02134..4ad2b30f5cee4 100644
+index 3c24c69d02134..b5bab0e7f9938 100644
 --- a/sandbox/policy/linux/bpf_audio_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_audio_policy_linux.cc
 @@ -5,6 +5,7 @@
@@ -31,7 +31,7 @@ index 3c24c69d02134..4ad2b30f5cee4 100644
 +    case __NR_memfd_create: {
 +      const Arg<int> flags(1);
 +      return If((flags & ~(MFD_NOEXEC_SEAL | MFD_CLOEXEC | MFD_ALLOW_SEALING)) == 0, Allow())
-+             .Else(CrashSIGSYS());			    
++             .Else(CrashSIGSYS());
 +    }
  #endif
  #if defined(__NR_pwrite)
