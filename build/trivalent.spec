@@ -464,7 +464,7 @@ CHROMIUM_GN_DEFINES=''
 %ifarch aarch64
 CHROMIUM_GN_DEFINES+=' target_cpu="arm64"'
 CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
-CHROMIUM_GN_DEFINES+=' enable_shadow_call_stack=true'
+# CHROMIUM_GN_DEFINES+=' enable_shadow_call_stack=true'
 %endif
 %if %{enable_proprietary_codecs}
 CHROMIUM_GN_DEFINES+=' ffmpeg_branding="Chrome" proprietary_codecs=true enable_widevine=true'
