@@ -33,7 +33,7 @@ index 0c04c90368..75e2814d69 100644
 +      ]
 +
 +      if (is_linux) {
-+        scs_paramaters += [ "-ffixed-x18" ]
++        scs_parameters += [ "-ffixed-x18" ]
 +        rs_scs_params += [ "-Zfixed-x18" ]
 +      }
        cflags += scs_parameters
