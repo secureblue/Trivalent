@@ -1,0 +1,62 @@
+Copyright 2024-2025 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/chrome/browser/ui/content_settings/content_setting_image_model.cc b/chrome/browser/ui/content_settings/content_setting_image_model.cc
+index 67786bb905..f49a5bb28c 100644
+--- a/chrome/browser/ui/content_settings/content_setting_image_model.cc
++++ b/chrome/browser/ui/content_settings/content_setting_image_model.cc
+@@ -308,8 +308,7 @@ constexpr ContentSettingsImageDetails kImageDetails[] = {
+     {ContentSettingsType::MIXEDSCRIPT, IDS_BLOCKED_DISPLAYING_INSECURE_CONTENT,
+      0, 0},
+     {ContentSettingsType::SOUND, IDS_BLOCKED_SOUND_TITLE, 0, 0},
+-    {ContentSettingsType::ADS, IDS_BLOCKED_ADS_PROMPT_TOOLTIP,
+-     IDS_BLOCKED_ADS_PROMPT_TITLE, 0},
++    {ContentSettingsType::ADS, IDS_BLOCKED_ADS_PROMPT_TOOLTIP, 0, 0},
+ };
+ 
+ const ContentSettingsImageDetails* GetImageDetails(ContentSettingsType type) {
+diff --git a/chrome/browser/ui/views/user_education/browser_user_education_service.cc b/chrome/browser/ui/views/user_education/browser_user_education_service.cc
+index b6ba9e11cd..ae83b7fd5e 100644
+--- a/chrome/browser/ui/views/user_education/browser_user_education_service.cc
++++ b/chrome/browser/ui/views/user_education/browser_user_education_service.cc
+@@ -201,6 +201,7 @@ user_education::HelpBubbleDelegate* GetHelpBubbleDelegate() {
+ 
+ void RegisterChromeHelpBubbleFactories(
+     user_education::HelpBubbleFactoryRegistry& registry) {
++  return; // Disable help bubbles
+   const user_education::HelpBubbleDelegate* const delegate =
+       GetHelpBubbleDelegate();
+ #if BUILDFLAG(IS_CHROMEOS)
+@@ -225,6 +226,7 @@ void RegisterChromeHelpBubbleFactories(
+ void MaybeRegisterChromeFeaturePromos(
+     user_education::FeaturePromoRegistry& registry,
+     Profile* profile) {
++  return; // Disable feature promos
+   using user_education::FeaturePromoSpecification;
+   using user_education::HelpBubbleArrow;
+   using user_education::Metadata;
+@@ -1455,6 +1457,7 @@ void MaybeRegisterChromeFeaturePromos(
+ 
+ void MaybeRegisterChromeTutorials(
+     user_education::TutorialRegistry& tutorial_registry) {
++  return; // Disable tutorials
+   using user_education::HelpBubbleArrow;
+   using user_education::TutorialDescription;
+   using BubbleStep = user_education::TutorialDescription::BubbleStep;
+@@ -1697,6 +1700,7 @@ void MaybeRegisterChromeTutorials(
+ //    longer that necessary just to keep a "New" Badge around.
+ //
+ void MaybeRegisterChromeNewBadges(user_education::NewBadgeRegistry& registry) {
++  return; // Disable badges
+   if (registry.IsFeatureRegistered(
+           user_education::features::kNewBadgeTestFeature)) {
+     return;
