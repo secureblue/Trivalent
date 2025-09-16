@@ -14,7 +14,7 @@ diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
 index 7613006656aaa..ee707f847ccba 100644
 --- a/chrome/browser/about_flags.cc
 +++ b/chrome/browser/about_flags.cc
-@@ -4343,6 +4343,55 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4343,6 +4343,61 @@ const FeatureEntry kFeatureEntries[] = {
  // //tools/flags/generate_unexpire_flags.py.
  #include "build/chromeos_buildflags.h"
  #include "chrome/browser/unexpire_flags_gen.inc"
@@ -67,6 +67,12 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "https://github.com/secureblue/trivalent. This flag is exposed by "
 +     "Trivalent.", kOsLinux,
 +     SINGLE_VALUE_TYPE(switches::kGpuSandboxStartEarly)},
++#if V8_ENABLE_DRUMBRAKE
++    {"jitless-wasm", "Enable JITless WASM Interpreter",
++     "Enables Drumbrake, the V8 WebAssembly interpreter. Disabled by
++     default. This feature is provided by Trivalent.", kOsAll,
++     FEATURE_VALUE_TYPE(features::kEnableDrumbrake);
++#endif
      {variations::switches::kEnableBenchmarking,
       flag_descriptions::kEnableBenchmarkingName,
       flag_descriptions::kEnableBenchmarkingDescription, kOsAll,
