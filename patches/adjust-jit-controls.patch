@@ -107,3 +107,33 @@ index 34478026bd..be37022a43 100644
  // All features in alphabetical order. The features should be documented
  // alongside the definition of their values in the .cc file.
  CONTENT_EXPORT BASE_DECLARE_FEATURE(kAdditionalOpaqueOriginEnforcements);
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+index 8dda88f8..e08a4de7 100644
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -960,6 +960,7 @@ external_v8_defines = [
+   "V8_COMPRESS_POINTERS_IN_SHARED_CAGE",
+   "V8_31BIT_SMIS_ON_64BIT_ARCH",
+   "V8_COMPRESS_ZONES",
++  "V8_ENABLE_DRUMBRAKE",
+   "V8_ENABLE_SANDBOX",
+   "V8_DEPRECATION_WARNINGS",
+   "V8_IMMINENT_DEPRECATION_WARNINGS",
+@@ -1000,6 +1001,9 @@ if (v8_enable_pointer_compression) {
+ if (v8_enable_pointer_compression || v8_enable_31bit_smis_on_64bit_arch) {
+   enabled_external_v8_defines += [ "V8_31BIT_SMIS_ON_64BIT_ARCH" ]
+ }
++if (v8_enable_drumbrake) {
++  enabled_external_v8_defines += [ "V8_ENABLE_DRUMBRAKE" ]
++}
+ if (v8_enable_sandbox) {
+   enabled_external_v8_defines += [ "V8_ENABLE_SANDBOX" ]
+ }
+@@ -1370,7 +1374,6 @@ config("features") {
+     defines += [ "V8_ADVANCED_BIGINT_ALGORITHMS" ]
+   }
+   if (v8_enable_drumbrake) {
+-    defines += [ "V8_ENABLE_DRUMBRAKE" ]
+     if (v8_enable_drumbrake_tracing) {
+       defines += [ "V8_ENABLE_DRUMBRAKE_TRACING" ]
+     }
