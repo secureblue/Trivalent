@@ -54,7 +54,7 @@ index 2e5e7c71a5..228d8795f8 100644
 +    std::string jsflags;
 +    bool enable_jitless_wasm =
 +#if V8_ENABLE_DRUMBRAKE
-+         base::FeatureList::IsEnabled(kEnableDrumbrake);
++         base::FeatureList::IsEnabled(features::kEnableDrumbrake);
 +#else
 +         false;
 +#endif // V8_ENABLE_DRUMBRAKE
