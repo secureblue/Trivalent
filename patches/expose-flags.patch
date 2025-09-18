@@ -68,10 +68,10 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "Trivalent.", kOsLinux,
 +     SINGLE_VALUE_TYPE(switches::kGpuSandboxStartEarly)},
 +#if V8_ENABLE_DRUMBRAKE
-+    {"jitless-wasm", "Enable JITless WASM Interpreter",
-+     "Enables Drumbrake, the V8 WebAssembly interpreter. Disabled by "
-+     "default. This feature is provided by Trivalent.", kOsAll,
-+     FEATURE_VALUE_TYPE(features::kEnableDrumbrake)},
++    {"jitless-wasm", "Enable JITless WASM Interpreter For Testing",
++     "WARNING: Experimental! Enables Drumbrake, the V8 WebAssembly "
++     "interpreter. Disabled by default. This feature is provided by "
++     "Trivalent.", kOsAll, FEATURE_VALUE_TYPE(features::kEnableDrumbrake)},
 +#endif
      {variations::switches::kEnableBenchmarking,
       flag_descriptions::kEnableBenchmarkingName,
