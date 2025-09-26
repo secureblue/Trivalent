@@ -80,7 +80,7 @@ index cb7c7263bd..fad9831c58 100644
  
 +BASE_FEATURE(kEnableDrumbrake,
 +             "JitlessWasmInterpreter",
-+             base::FEATURE_DISABLED_BY_DEFAULT);
++             base::FEATURE_ENABLED_BY_DEFAULT);
 +
  // Kill switch to guard additional security checks performed by the browser
  // process on opaque origins, such as when verifying source origins for
