@@ -11,32 +11,31 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/net/base/features.cc b/net/base/features.cc
-index 302f1a22d7d7e..4821492c651e1 100644
+index 58aa8a22e7..4d4d1689d7 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
-@@ -19,9 +19,13 @@ BASE_FEATURE(kAvoidH2Reprioritization,
-              "AvoidH2Reprioritization",
+@@ -24,9 +24,12 @@ BASE_FEATURE(AlpsForHttp2, base::FEATURE_ENABLED_BY_DEFAULT);
+
+ BASE_FEATURE(AvoidH2Reprioritization, base::FEATURE_DISABLED_BY_DEFAULT);
+
+-BASE_FEATURE(CapReferrerToOriginOnCrossOrigin,
++BASE_FEATURE(DisableCrossOriginReferrers,
               base::FEATURE_DISABLED_BY_DEFAULT);
- 
-+BASE_FEATURE(kDisableCrossOriginReferrers,
-+             "DisableCrossOriginReferrers",
-+             base::FEATURE_DISABLED_BY_DEFAULT);
-+
- BASE_FEATURE(kCapReferrerToOriginOnCrossOrigin,
-              "CapReferrerToOriginOnCrossOrigin",
--             base::FEATURE_DISABLED_BY_DEFAULT);
+
++BASE_FEATURE(CapReferrerToOriginOnCrossOrigin,
 +             base::FEATURE_ENABLED_BY_DEFAULT);
- 
- BASE_FEATURE(kAsyncDns,
-              "AsyncDns",
++
+ BASE_FEATURE(AsyncDns,
+ #if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_ANDROID) || \
+     BUILDFLAG(IS_WIN) || BUILDFLAG(IS_LINUX)
 diff --git a/net/base/features.h b/net/base/features.h
-index ffa3f6ced770b..d1f430814ca7e 100644
+index 8d1d6e3beb..fed8be738f 100644
 --- a/net/base/features.h
 +++ b/net/base/features.h
-@@ -26,6 +26,9 @@ NET_EXPORT BASE_DECLARE_FEATURE(kAlpsForHttp2);
+@@ -29,6 +29,9 @@ NET_EXPORT BASE_DECLARE_FEATURE(kAlpsForHttp2);
  // Disable H2 reprioritization, in order to measure its impact.
  NET_EXPORT BASE_DECLARE_FEATURE(kAvoidH2Reprioritization);
- 
+
 +// Disables referrers when navigating across origins.
 +NET_EXPORT BASE_DECLARE_FEATURE(kDisableCrossOriginReferrers);
 +
