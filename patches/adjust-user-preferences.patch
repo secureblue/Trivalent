@@ -190,41 +190,32 @@ index 0496c9046b553..f8113cc56c33c 100644
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
            <template is="dom-if" if="[[!enableBundledSecuritySettings_]]">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index 218a1933cd5e7..75ae2f8376369 100644
+index b45a26e611..a7218cfa6d 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-@@ -290,7 +290,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
-       shouldShowSafetyHub_: {
-         type: Boolean,
-         value() {
--          return !loadTimeData.getBoolean('isGuest');
-+          return false;
-         },
-       },
- 
-@@ -561,8 +561,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
+@@ -483,8 +483,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
- 
+
    private shouldShowAdPrivacy_(): boolean {
 -    return !this.isPrivacySandboxRestricted_ ||
 -        this.isPrivacySandboxRestrictedNoticeEnabled_;
 +    return false;
    }
- 
+
    private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index 7e056817e5a11..f136baedcd768 100644
+index fb981e1f71..7443b4508e 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-@@ -25,7 +25,7 @@
-   <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
+@@ -22,7 +22,7 @@
+     </settings-section>
+   </template>
+
+-  <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
++  <template style="display:none" is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
      <template is="dom-if" if="[[renderView_(
          routes_.PRIVACY, currentRoute, inSearchMode)]]">
--      <settings-section slot="view" id="safetyHubEntryPoint"
-+      <settings-section style="display:none" slot="view" id="safetyHubEntryPoint"
-           page-title="$i18n{safetyHub}">
-         <settings-safety-hub-entry-point></settings-safety-hub-entry-point>
-       </settings-section>
+       <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
 index ae93043d94ddc..4b87309d91176 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
