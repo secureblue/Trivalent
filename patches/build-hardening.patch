@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 516f7d85fc..32ccf98faf 100644
+index 516f7d85fc..60afef1891 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -413,14 +413,26 @@ config("compiler") {
+@@ -413,14 +413,23 @@ config("compiler") {
        # On Aarch64, SCS requires the x18 register to be unused because it will hold
        # a pointer to the shadow stack. For Android we know that Clang doesn't use
        # x18 by default. On other OSs adding "-ffixed-x18" might be required.
@@ -26,24 +26,21 @@ index 516f7d85fc..32ccf98faf 100644
 -        "-fno-stack-protector",
 +        "-fstack-protector-strong",
        ]
-+
 +      rs_scs_params = [
 +        #"-Zsanitizer=shadow-call-stack",
 +        "-Zstack-protector=strong",
 +      ]
-+
-+      if (is_linux) {
++      if (!is_android) {
 +        scs_parameters += [ "-ffixed-x18" ]
 +        #rs_scs_params += [ "-Zfixed-x18" ]
 +      }
-+
        cflags += scs_parameters
        ldflags += scs_parameters
 +      rustflags += rs_scs_params
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
-@@ -435,11 +447,19 @@ config("compiler") {
+@@ -435,11 +444,19 @@ config("compiler") {
        } else if (is_posix || is_fuchsia) {
          if (current_os != "aix") {
            # Not available on aix.
@@ -64,7 +61,7 @@ index 516f7d85fc..32ccf98faf 100644
      if (use_lld) {
        ldflags += [ "-fuse-ld=lld" ]
        if (lld_path != "") {
-@@ -2305,7 +2325,7 @@ config("chromium_code") {
+@@ -2305,7 +2322,7 @@ config("chromium_code") {
        # Non-chromium code is not guaranteed to compile cleanly with
        # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
        # disabled, so only do that for Release build.
@@ -73,7 +70,7 @@ index 516f7d85fc..32ccf98faf 100644
 
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3331,7 +3351,14 @@ buildflag_header("compiler_buildflags") {
+@@ -3331,8 +3348,14 @@ buildflag_header("compiler_buildflags") {
  }
 
  config("cet_shadow_stack") {
