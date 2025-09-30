@@ -1,5 +1,5 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: fgei <fgei@gmail.com>
+From: quh4gko8 <88831734+quh4gko8@users.noreply.github.com>
 Date: Tue, 8 Feb 2022 03:04:20 +0000
 Subject: [PATCH] Disable detailed language settings by default
 
@@ -8,7 +8,7 @@ Subject: [PATCH] Disable detailed language settings by default
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/components/language/core/common/language_experiments.cc b/components/language/core/common/language_experiments.cc
-index 6c563b6083905..0f5855ee98760 100644
+index 6aead5f64107a..6c7ce5a2d6933 100644
 --- a/components/language/core/common/language_experiments.cc
 +++ b/components/language/core/common/language_experiments.cc
 @@ -13,7 +13,7 @@ namespace language {
