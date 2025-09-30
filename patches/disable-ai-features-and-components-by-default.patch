@@ -68,18 +68,18 @@ index d016286d9cb7a..89ac48fb06cd8 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
-index 88bf166cbcff5..f10dcacc03f70 100644
+index ffedbe6af7..990c311482 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
 +++ b/components/omnibox/browser/aim_eligibility_service.cc
-@@ -62,7 +62,7 @@ static constexpr char kRequestPath[] = "/async/folae";
- static constexpr char kRequestQuery[] = "async=_fmt:pb";
- 
- // The default value for the AIM policy pref; 0 = allowed, 1 = disallowed.
--constexpr int kAIModeAllowedDefault = 0;
-+constexpr int kAIModeAllowedDefault = 1;
- 
- // Returns the request URL or an empty GURL if a valid URL cannot be created;
- // e.g., Google is not the default search provider.
+@@ -59,7 +59,7 @@ static constexpr char kRequestQuery[] = "async=_fmt:pb";
+ // `GenAiDefaultSettings` policy if `AIModeSettings` isn't set, or the default
+ // pref value (0) if neither policy is set. Do not change this value without
+ // migrating the existing prefs and the policy's prefs mapping.
+-constexpr int kAiModeAllowedDefault = 0;
++constexpr int kAiModeAllowedDefault = 1;
+
+ // The pref name used for storing the eligibility response proto.
+ constexpr char kResponsePrefName[] =
 diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
 index d2163e7eef014..8090c19e5ab09 100644
 --- a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
