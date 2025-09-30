@@ -26,15 +26,20 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
 diff --git a/components/regional_capabilities/program_settings.cc b/components/regional_capabilities/program_settings.cc
-index ecc8e14de3..3e03bffa9d 100644
+index ad23174e4b..4dc197eccc 100644
 --- a/components/regional_capabilities/program_settings.cc
 +++ b/components/regional_capabilities/program_settings.cc
-@@ -30,7 +30,7 @@ const ProgramSettings kTaiyakiSettings{
- const ProgramSettings kDefaultSettings{
+@@ -48,7 +48,12 @@ constexpr ProgramSettings kDefaultSettings{
      .program = Program::kDefault,
-     .search_engine_list_type = SearchEngineListType::kTopFive,
--    .can_show_search_engine_choice_screen = false,
-+    .can_show_search_engine_choice_screen = true,
+     .associated_countries = base::raw_span<const country_codes::CountryId>(),
+     .search_engine_list_type = SearchEngineListType::kTopN,
+-    .choice_screen_eligibility_config = std::nullopt,
++    .choice_screen_eligibility_config =
++        ChoiceScreenEligibilityConfig{
++            .should_preserve_non_prepopulated_dse = false,
++            .should_preserve_imported_choice = false,
++            .should_preserve_non_google_dse = false,
++        },
  };
- 
- bool IsInProgramRegion(Program program, country_codes::CountryId country_id) {
+
+ // "Fake" program used for baseline checks. Announces itself as Taiyaki, but
