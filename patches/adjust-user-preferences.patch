@@ -548,19 +548,6 @@ index 1c28609bdd978..2cc609c23786c 100644
  
    html_source->AddBoolean("enableHandTrackingContentSetting",
  #if BUILDFLAG(ENABLE_VR)
-diff --git a/chrome/common/chrome_features.cc b/chrome/common/chrome_features.cc
-index c01a0881828c8..4d19ddc95b79c 100644
---- a/chrome/common/chrome_features.cc
-+++ b/chrome/common/chrome_features.cc
-@@ -1336,7 +1336,7 @@ BASE_FEATURE(kSafetyHubExtensionsOffStoreTrigger,
- #endif
- 
- // Enables Safety Hub feature.
--BASE_FEATURE(kSafetyHub, "SafetyHub", base::FEATURE_ENABLED_BY_DEFAULT);
-+BASE_FEATURE(kSafetyHub, "SafetyHub", base::FEATURE_DISABLED_BY_DEFAULT);
- 
- BASE_FEATURE(kSafetyHubThreeDotDetails,
-              "SafetyHubThreeDotDetails",
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
 index 2d453febf6ecf..b4ef0632ad5c3 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
