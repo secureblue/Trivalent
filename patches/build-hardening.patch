@@ -73,7 +73,7 @@ index 516f7d85fc..32ccf98faf 100644
 
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3331,8 +3351,15 @@ buildflag_header("compiler_buildflags") {
+@@ -3331,7 +3351,14 @@ buildflag_header("compiler_buildflags") {
  }
 
  config("cet_shadow_stack") {
