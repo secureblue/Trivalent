@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/components/autofill/core/common/autofill_prefs.cc b/components/autofill/core/common/autofill_prefs.cc
-index 08699c4ee2..dbbb017115 100644
+index 9919d52a43..3f0b8a4d9f 100644
 --- a/components/autofill/core/common/autofill_prefs.cc
 +++ b/components/autofill/core/common/autofill_prefs.cc
-@@ -29,7 +29,7 @@ constexpr char kAutofillRanQuasiDuplicateExtraDeduplication[] =
+@@ -31,7 +31,7 @@ constexpr char kAutofillRanQuasiDuplicateExtraDeduplication[] =
  void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
    // Synced prefs. Used for cross-device choices, e.g., credit card Autofill.
    registry->RegisterBooleanPref(
@@ -23,7 +23,7 @@ index 08699c4ee2..dbbb017115 100644
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
    registry->RegisterIntegerPref(
        kAutofillLastVersionDeduped, 0,
-@@ -38,13 +38,13 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -40,13 +40,13 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
        kAutofillHasSeenIban, false,
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
    registry->RegisterBooleanPref(
@@ -38,5 +38,5 @@ index 08699c4ee2..dbbb017115 100644
 -      kAutofillPaymentCardBenefits, true,
 +      kAutofillPaymentCardBenefits, false,
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
- 
-   // Non-synced prefs. Used for per-device choices, e.g., signin promo.
+
+   registry->RegisterStringPref(kAutofillNameAndEmailProfileSignature, "",
