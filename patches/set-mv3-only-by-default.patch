@@ -22,3 +22,4 @@ index f2557c1673..4b046535ee 100644
 +BASE_FEATURE(ExtensionsManifestV3Only, base::FEATURE_ENABLED_BY_DEFAULT);
 
  BASE_FEATURE(ExtensionsMenuAccessControl, base::FEATURE_DISABLED_BY_DEFAULT);
+ 
