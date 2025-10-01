@@ -486,7 +486,6 @@ CHROMIUM_GN_DEFINES+=' enable_reporting=false'
 CHROMIUM_GN_DEFINES+=' enable_remoting=false'
 CHROMIUM_GN_DEFINES+=' is_clang=true'
 CHROMIUM_GN_DEFINES+=' use_sysroot=false'
-CHROMIUM_GN_DEFINES+=' use_libcxx_modules=false' # require sysroot which we physically remove to save space
 CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
