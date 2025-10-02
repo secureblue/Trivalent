@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index ecefced855ae4..43eff9017d42e 100644
+index ab19b6cb94e9d..b9f99abf97a1c 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -181,6 +181,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -182,6 +182,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -38,7 +38,7 @@ index ecefced855ae4..43eff9017d42e 100644
    (*s_allowlist)[::embedder_support::kAlternateErrorPagesEnabled] =
        settings_api::PrefType::kBoolean;
 diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
-index 06914746fb87c..a67593cc18ecc 100644
+index 87b28c196eb30..5d3a56f226044 100644
 --- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 +++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
 @@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
@@ -88,7 +88,7 @@ index 3fce5bc069911..c8ce8d033c500 100644
 -  </div>
 -</cr-collapse>
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index d3b9a39082f59..19fe0537dbfde 100644
+index f4534420339a7..49393040e0741 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
 @@ -118,6 +118,11 @@
@@ -120,7 +120,7 @@ index 47ee2c73fc844..575caacdb6afe 100644
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index d72db96468cfd..93a63bd89bbdc 100644
+index 1020cf880cddc..ac40bc90e9ea3 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
 @@ -65,7 +65,7 @@
@@ -166,10 +166,10 @@ index d72db96468cfd..93a63bd89bbdc 100644
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 0496c9046b553..f8113cc56c33c 100644
+index ad81cf875bbba..6885fd10175de 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -96,8 +96,8 @@
+@@ -83,8 +83,8 @@
            </cr-link-row>
          </template>
          <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
@@ -180,7 +180,7 @@ index 0496c9046b553..f8113cc56c33c 100644
              on-click="onSecurityPageClick_"
              role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
          <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -171,7 +171,7 @@
+@@ -125,7 +125,7 @@
        </template>
  
        <template is="dom-if" route-path="/security">
@@ -190,32 +190,40 @@ index 0496c9046b553..f8113cc56c33c 100644
              learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
            <template is="dom-if" if="[[!enableBundledSecuritySettings_]]">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index b45a26e611..a7218cfa6d 100644
+index b45a26e61192b..a7218cfa6db8f 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 @@ -483,8 +483,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
    }
-
+ 
    private shouldShowAdPrivacy_(): boolean {
 -    return !this.isPrivacySandboxRestricted_ ||
 -        this.isPrivacySandboxRestrictedNoticeEnabled_;
 +    return false;
    }
-
+ 
    private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index fb981e1f71..7443b4508e 100644
+index fb981e1f7162e..d6d89b267466c 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-@@ -22,7 +22,7 @@
-     </settings-section>
-   </template>
-
--  <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
-+  <template style="display:none" is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
+@@ -25,14 +25,14 @@
+   <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
      <template is="dom-if" if="[[renderView_(
          routes_.PRIVACY, currentRoute, inSearchMode)]]">
-       <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
+-      <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
++      <settings-safety-hub-entry-point style="display:none" slot="view" id="safetyHubEntryPoint">
+       </settings-safety-hub-entry-point>
+     </template>
+ 
+     <template is="dom-if" if="[[renderView_(
+         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]">
+       <!-- TODO(crbug.com/40267370): Make the page searchable.-->
+-      <settings-safety-hub-page slot="view" id="safetyHub" no-search
++      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
+           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}">
+       </settings-safety-hub-page>
+     </template>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
 index ae93043d94ddc..4b87309d91176 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
@@ -429,7 +437,7 @@ index ae93043d94ddc..4b87309d91176 100644
 +      </settings-toggle-button>
 +    </div>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 1ca971d44f7da..96814a1a031f8 100644
+index b65040b690c5e..e9d93bcf10769 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
 @@ -29,6 +29,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
@@ -468,7 +476,7 @@ index 1ca971d44f7da..96814a1a031f8 100644
    declare private showSecureDnsSetting_: boolean;
  
    // <if expr="is_chromeos">
-@@ -290,10 +305,6 @@ export class SettingsSecurityPageElement extends
+@@ -281,10 +296,6 @@ export class SettingsSecurityPageElement extends
        }
      });
  
@@ -480,10 +488,10 @@ index 1ca971d44f7da..96814a1a031f8 100644
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
  
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index b60cf718bf1b9..bc6dabdeaff33 100644
+index 41b2a7bf2cb79..637fd4d16e6e3 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -182,7 +182,7 @@ function createRoutes(): SettingsRoutes {
+@@ -201,7 +201,7 @@ function createRoutes(): SettingsRoutes {
  
    if (visibility.people !== false) {
      r.PEOPLE = r.BASIC.createSection(
@@ -492,6 +500,18 @@ index b60cf718bf1b9..bc6dabdeaff33 100644
      r.PEOPLE.hasMigratedToPlugin = true;
      // <if expr="not is_chromeos">
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
+diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
+index d989c90598e38..985a47c20c397 100644
+--- a/chrome/browser/resources/settings/settings_main/settings_main.html
++++ b/chrome/browser/resources/settings/settings_main/settings_main.html
+@@ -35,7 +35,6 @@
+ </style>
+ <div id="noSearchResults" hidden$="[[!showNoResultsFound_]]">
+   <div>$i18n{searchNoResults}</div>
+-  <div>$i18nRaw{searchNoResultsHelp}</div>
+ </div>
+ <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
+     restamp>
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 index 2134fb026dbe6..bf85825d82a12 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
@@ -524,7 +544,7 @@ index 4c518c19856c7..e73df1f31e651 100644
        <template is="dom-if" if="[[showFeatureNotificationsSetting_]]">
          <div class="hr"></div>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 1c28609bdd978..2cc609c23786c 100644
+index 662d7bd4acb69..82f82be24716a 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
 @@ -325,10 +325,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
@@ -540,10 +560,10 @@ index 1c28609bdd978..2cc609c23786c 100644
    html_source->AddBoolean("enableHandTrackingContentSetting",
  #if BUILDFLAG(ENABLE_VR)
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
-index 2d453febf6ecf..b4ef0632ad5c3 100644
+index 42fce93fa9125..2e41a1c3fcf44 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
 +++ b/components/security_interstitials/core/browser/resources/interstitial_large.js
-@@ -297,8 +297,6 @@ function setupEvents() {
+@@ -315,8 +315,6 @@ function setupEvents() {
    }
  
    preventDefaultOnPoundLinkClicks();
@@ -552,15 +572,3 @@ index 2d453febf6ecf..b4ef0632ad5c3 100644
    setupSSLDebuggingInfo();
    document.addEventListener('keypress', handleKeypress);
  
-diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
-index d989c90598..985a47c20c 100644
---- a/chrome/browser/resources/settings/settings_main/settings_main.html
-+++ b/chrome/browser/resources/settings/settings_main/settings_main.html
-@@ -35,7 +35,6 @@
- </style>
- <div id="noSearchResults" hidden$="[[!showNoResultsFound_]]">
-   <div>$i18n{searchNoResults}</div>
--  <div>$i18nRaw{searchNoResultsHelp}</div>
- </div>
- <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
-     restamp>
