@@ -26,20 +26,29 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
 diff --git a/components/regional_capabilities/program_settings.cc b/components/regional_capabilities/program_settings.cc
-index ad23174e4b..4dc197eccc 100644
+index ad23174e4b..48867e9824 100644
 --- a/components/regional_capabilities/program_settings.cc
 +++ b/components/regional_capabilities/program_settings.cc
-@@ -48,7 +48,12 @@ constexpr ProgramSettings kDefaultSettings{
-     .program = Program::kDefault,
-     .associated_countries = base::raw_span<const country_codes::CountryId>(),
-     .search_engine_list_type = SearchEngineListType::kTopN,
--    .choice_screen_eligibility_config = std::nullopt,
-+    .choice_screen_eligibility_config =
-+        ChoiceScreenEligibilityConfig{
-+            .should_preserve_non_prepopulated_dse = false,
-+            .should_preserve_imported_choice = false,
-+            .should_preserve_non_google_dse = false,
-+        },
- };
+@@ -80,8 +80,7 @@ bool IsValidSerializedProgram(int serialized_program) {
 
- // "Fake" program used for baseline checks. Announces itself as Taiyaki, but
+ bool IsInProgramRegion(Program program,
+                        const country_codes::CountryId& country_id) {
+-  return base::Contains(GetSettingsForProgram(program).associated_countries,
+-                        country_id);
++  return true;
+ }
+
+ bool IsClientCompatibleWithProgram(Program program) {
+diff --git a/components/regional_capabilities/regional_capabilities_service.cc b/components/regional_capabilities/regional_capabilities_service.cc
+index 4f95ae3d04..7f4d4953ec 100644
+--- a/components/regional_capabilities/regional_capabilities_service.cc
++++ b/components/regional_capabilities/regional_capabilities_service.cc
+@@ -169,7 +169,7 @@ Program CountryIdToProgram(const CountryId& country_id) {
+   static constexpr Program kCountryDerivedPrograms[] = {
+ #if BUILDFLAG(IS_IOS)
+       // Only iOS can derive Taiyaki scope directly from the country.
+-      Program::kTaiyaki,
++      //Program::kTaiyaki,
+ #endif
+
+       Program::kWaffle,
