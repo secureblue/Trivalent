@@ -36,7 +36,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:6a37e3a598b288118f513ee5ed5ddcfb1a5661f26ae5eed7246ffd87c588e98f' || 'fedora:42@sha256:93378e55d45e65950e326516f91bf3bd61b3c508d40bd2c347144c0d444f2274' }}
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
     steps:
       - name: Build SRPM 
         shell: bash
@@ -64,9 +64,11 @@ jobs:
   buildrpm:
     name: Build RPM
     if: github.triggering_actor == 'royaloughtness'
-    runs-on: self-hosted
     timeout-minutes: 1800
-    needs: buildsrpm
+    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04-64core' || 'ubuntu-24.04-arm-64core' }}
+    container: 
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
+      options: --privileged
     steps:      
       - name: Retrieve SRPM
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -78,6 +80,8 @@ jobs:
         env:
           ARCH: ${{inputs.arch}}
         run: |
+          dnf update -y
+          dnf install rpm-build mock -y
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
           mock --resultdir=. -r "fedora-42-${ARCH}" --rebuild trivalent-*.src.rpm
@@ -100,7 +104,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:6a37e3a598b288118f513ee5ed5ddcfb1a5661f26ae5eed7246ffd87c588e98f' || 'fedora:42@sha256:93378e55d45e65950e326516f91bf3bd61b3c508d40bd2c347144c0d444f2274' }}
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
     needs: buildrpm
     steps:
       - name: Retrieve RPM
