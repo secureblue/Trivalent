@@ -65,6 +65,7 @@ jobs:
     name: Build RPM
     if: github.triggering_actor == 'royaloughtness'
     timeout-minutes: 1800
+    needs: buildsrpm
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04-64core' || 'ubuntu-24.04-arm-64core' }}
     container: 
       image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
