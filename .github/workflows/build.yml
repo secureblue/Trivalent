@@ -121,6 +121,8 @@ jobs:
     container: 
       image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
     needs: buildrpm
+    outputs:
+      hashes: ${{ steps.hash.outputs.hashes }}
     steps:
       - name: Retrieve RPM
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -151,6 +153,12 @@ jobs:
           rm -rf repodata
           createrepo .
           gpg --detach-sign --local-user 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41 --armor repodata/repomd.xml
+          
+      - name: Generate subject
+        id: hash
+        run: |
+          set -euo pipefail
+          echo "hashes=$(sha256sum ./secureblue/trivalent-1*.rpm | base64 -w0)" >> "$GITHUB_OUTPUT"
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
@@ -165,3 +173,14 @@ jobs:
         run: |
           rclone copy ./secureblue/ R2:/ 
 
+  provenance:
+    needs: [pushrpm]
+    permissions:
+      actions: read # To read the workflow path.
+      id-token: write # To sign the provenance.
+      contents: write # To add assets to a release.
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
+    with:
+      base64-subjects: ${{ needs.pushrpm.outputs.hashes }}
+      upload-assets: true
+  
