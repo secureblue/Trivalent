@@ -75,6 +75,7 @@ jobs:
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: srpm-artifact
+          
       - name: Build RPM 
         shell: bash
         id: rpm_build
@@ -86,7 +87,12 @@ jobs:
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
           mock --resultdir=. -r "fedora-42-${ARCH}" --rebuild trivalent-*.src.rpm
-
+            
+      - name: Surface build log
+        if: always()
+        run: |
+          cat build.log || echo "build.log not found"
+          
       - name: Prepare for upload
         shell: bash
         run: |
