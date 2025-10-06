@@ -27,6 +27,10 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       arch: 'aarch64'
+    permissions:
+      actions: read # To read the workflow path.
+      id-token: write # To sign the provenance.
+      contents: write # To add assets to a release.
     secrets:
       RPM_SIGNING_KEY: ${{ secrets.RPM_SIGNING_KEY }}
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
