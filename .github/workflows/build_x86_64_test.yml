@@ -19,7 +19,7 @@ on:
 
 
 jobs:
-  build-x86_64:
+  build-x86_64-test:
     name: Build x86_64 test
     if: github.triggering_actor == 'royaloughtness'
     strategy:

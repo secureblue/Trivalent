@@ -19,7 +19,7 @@ on:
 
 
 jobs:
-  build-aarch64:
+  build-aarch64-test:
     name: Build aarch64 test
     if: github.triggering_actor == 'royaloughtness'
     strategy:
