@@ -156,11 +156,11 @@ index cc568a7b4e..7a302d4fbe 100644
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
 +  // Make sure the hardware used is supported
 +  // Not all hardware works well (*cough* Nvidia)
-+  bool sandbox_supports_gpu = (angle::IsAMD(gpu_info.active_gpu().vendor_id)
-+              //|| angle::IsVirtIO(gpu_info.active_gpu().vendor_id)
-+              //|| angle::IsNVIDIA(gpu_info.active_gpu().vendor_id)
-+              || angle::IsIntel(gpu_info.active_gpu().vendor_id));
-+  for (const auto& gpu : gpu_info.secondary_gpus) {
++  bool sandbox_supports_gpu = (angle::IsAMD(gpu_info_.active_gpu().vendor_id)
++              //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
++              //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
++              || angle::IsIntel(gpu_info_.active_gpu().vendor_id));
++  for (const auto& gpu : gpu_info_.secondary_gpus) {
 +    if (angle::IsAMD(gpu.vendor_id) || angle::IsIntel(gpu.vendor_id))
 +      sandbox_supports_gpu = true;
 +    else if (angle::IsVirtIO(gpu.vendor_id) || angle::IsNVIDIA(gpu.vendor_id))
