@@ -162,7 +162,10 @@ jobs:
         id: hash
         run: |
           set -euo pipefail
-          echo "hashes=$(sha256sum ./secureblue/trivalent-1*.rpm | base64 -w0)" >> "$GITHUB_OUTPUT"
+
+          trivalent_rpm_file=$(find ./secureblue -name "trivalent-*.rpm" ! -name "trivalent-qt6-ui-*.rpm")
+          hashes=$(sha256sum "${trivalent_rpm_file}" | base64 -w0)
+          echo "hashes=${hashes}" >> "$GITHUB_OUTPUT"
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
