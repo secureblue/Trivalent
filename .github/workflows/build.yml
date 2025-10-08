@@ -149,7 +149,6 @@ jobs:
 
       - name: Sign
         shell: bash
-        id: sign
         run: |
           trivalent_rpm_file=$(ls | grep -E '^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.x86_64\.rpm$')
           if [[ -z "$trivalent_rpm_file" ]]; then
