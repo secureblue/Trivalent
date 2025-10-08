@@ -149,7 +149,17 @@ jobs:
 
       - name: Sign
         shell: bash
+        id: sign
         run: |
+          trivalent_rpm_file=$(ls | grep -E '^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.x86_64\.rpm$')
+          if [[ -z "$trivalent_rpm_file" ]]; then
+            echo "Trivalent RPM not found"
+            exit 1
+          fi
+          
+          rpm_hash=$(sha256sum "${trivalent_rpm_file}" | base64 -w0)
+          echo "hashes=${rpm_hash}" >> "$GITHUB_OUTPUT"
+
           rpm --addsign *.rpm
           reposync --repo secureblue -y
           mv *.rpm secureblue/Packages
@@ -157,15 +167,6 @@ jobs:
           rm -rf repodata
           createrepo .
           gpg --detach-sign --local-user 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41 --armor repodata/repomd.xml
-          
-      - name: Generate subject
-        id: hash
-        run: |
-          set -euo pipefail
-
-          trivalent_rpm_file=$(find ./secureblue -name "trivalent-*.rpm" ! -name "trivalent-qt6-ui-*.rpm")
-          hashes=$(sha256sum "${trivalent_rpm_file}" | base64 -w0)
-          echo "hashes=${hashes}" >> "$GITHUB_OUTPUT"
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
         shell: bash
