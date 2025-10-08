@@ -1,0 +1,25 @@
+runners:
+  x86_64-runner:
+    cpu: [64, 72, 96, 128, 192]
+    ram: [128, 144, 192, 256, 384, 512]
+    family: ["c5d", "c5ad", "c6id", "m6id", "m5ad"]
+    spot: lowest-price
+    image: rhel_x86_64
+    ssh: false
+
+  arm64-runner:
+    cpu: [64, 72, 96, 128, 192]
+    ram: [128, 144, 192, 256, 384, 512]
+    family: ["c6gd", "c7gd", "c8gd", "g4dn", "m6gd", "m7gd", "r6gd", "r7gd"]
+    spot: lowest-price
+    image: rhel_arm64
+    ssh: false
+
+images:
+  rhel_x86_64:
+    ami: "ami-0fd3ac4abb734302a" # RHEL 10 x86_64, https://console.aws.amazon.com/ec2/home?region=us-east-1#ImageDetails:imageId=ami-0fd3ac4abb734302a
+    owner: 309956199498 # Official amazon owner id
+
+  rhel_arm64:
+    ami: "ami-0f8a907b7d1fbd468" # RHEL 10 arm64, https://console.aws.amazon.com/ec2/home?region=us-east-1#ImageDetails:imageId=ami-0f8a907b7d1fbd468
+    owner: 309956199498 # Official amazon owner id
