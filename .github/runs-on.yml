@@ -17,9 +17,9 @@ runners:
 
 images:
   rhel_x86_64:
-    ami: "ami-0fd3ac4abb734302a" # RHEL 10 x86_64, https://console.aws.amazon.com/ec2/home?region=us-east-1#ImageDetails:imageId=ami-0fd3ac4abb734302a
+    ami: "ami-0ccdd739f0fa3566c" # RHEL 10 x86_64, https://console.aws.amazon.com/ec2/home?region=us-west-2#ImageDetails:imageId=ami-0ccdd739f0fa3566c
     owner: 309956199498 # Official amazon owner id
 
   rhel_arm64:
-    ami: "ami-0f8a907b7d1fbd468" # RHEL 10 arm64, https://console.aws.amazon.com/ec2/home?region=us-east-1#ImageDetails:imageId=ami-0f8a907b7d1fbd468
+    ami: "ami-063f0dbde022fe835" # RHEL 10 arm64, https://console.aws.amazon.com/ec2/home?region=us-west-2#ImageDetails:imageId=ami-063f0dbde022fe835
     owner: 309956199498 # Official amazon owner id
