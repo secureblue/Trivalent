@@ -2,16 +2,18 @@ runners:
   x86_64-runner:
     cpu: [64, 72, 96, 128, 192]
     ram: [128, 144, 192, 256, 384, 512]
-    family: ["c5d", "c5ad", "c6id", "m6id", "m5ad"]
+    family: ["c5", "c6", "c7", "c8", "m5", "m6", "m7", "m8", "r6", "r7", "r8", "g4", "g5"]
     spot: price-capacity-optimized
+    disk: large
     image: rhel_x86_64
     ssh: false
 
   arm64-runner:
     cpu: [64, 72, 96, 128, 192]
     ram: [128, 144, 192, 256, 384, 512]
-    family: ["c6gd", "c7gd", "c8gd", "g4dn", "m6gd", "m7gd", "r6gd", "r7gd"]
+    family: ["c5", "c6", "c7", "c8", "m5", "m6", "m7", "m8", "r6", "r7", "r8", "g4", "g5"]
     spot: price-capacity-optimized
+    disk: large
     image: rhel_arm64
     ssh: false
 
