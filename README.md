@@ -6,6 +6,8 @@
 
 <h1 align="center">Trivalent</h1>
 
+[![Runners by - runs-on.com](https://img.shields.io/badge/Runners_by-runs--on.com-blue?style=for-the-badge)](https://runs-on.com/)
+
 A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadium](https://github.com/GrapheneOS/Vanadium). Intended for use in [secureblue](https://github.com/secureblue/secureblue).
 
 ## Scope
