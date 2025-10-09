@@ -84,6 +84,8 @@ jobs:
           ARCH: ${{inputs.arch}}
         run: |
           sudo dnf update -y
+          sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms
+          sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
           sudo dnf install rpm-build mock -y
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
