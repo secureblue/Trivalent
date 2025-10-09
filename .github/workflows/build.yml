@@ -126,7 +126,7 @@ jobs:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
     needs: buildrpm
     outputs:
-      hashes: ${{ steps.hash.outputs.hashes }}
+      hashes: ${{ steps.sign.outputs.hashes }}
     steps:
       - name: Retrieve RPM
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -149,6 +149,7 @@ jobs:
 
       - name: Sign
         shell: bash
+        id: sign
         run: |
           trivalent_rpm_file=$(ls | grep -E '^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.x86_64\.rpm$')
           if [[ -z "$trivalent_rpm_file" ]]; then
