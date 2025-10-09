@@ -3,7 +3,7 @@ runners:
     cpu: [64, 72, 96, 128, 192]
     ram: [128, 144, 192, 256, 384, 512]
     family: ["c5d", "c5ad", "c6id", "m6id", "m5ad"]
-    spot: lowest-price
+    spot: price-capacity-optimized
     image: rhel_x86_64
     ssh: false
 
@@ -11,7 +11,7 @@ runners:
     cpu: [64, 72, 96, 128, 192]
     ram: [128, 144, 192, 256, 384, 512]
     family: ["c6gd", "c7gd", "c8gd", "g4dn", "m6gd", "m7gd", "r6gd", "r7gd"]
-    spot: lowest-price
+    spot: price-capacity-optimized
     image: rhel_arm64
     ssh: false
 
