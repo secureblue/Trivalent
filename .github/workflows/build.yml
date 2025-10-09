@@ -70,7 +70,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     timeout-minutes: 180
     needs: buildsrpm
-    runs-on: ${{ inputs.arch == 'x86_64' && 'x86_64-runner' || 'arm64-runner' }}
+    runs-on: ${{ inputs.arch == 'x86_64' && 'runs-on=${{ github.run_id }}/runner=x86_64-runner' || 'runs-on=${{ github.run_id }}/runner=arm64-runner' }}
     steps:      
       - name: Retrieve SRPM
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
