@@ -87,6 +87,7 @@ jobs:
           sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms
           sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm -y
           sudo dnf install rpm-build mock -y
+          sudo usermod -aG mock "$(whoami)"
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
           mock --resultdir=. -r "fedora-42-${ARCH}" --rebuild trivalent-*.src.rpm
