@@ -152,14 +152,14 @@ index 65dea86a65..f72f534b0b 100644
 +#if !BUILDFLAG(IS_LINUX)
 +  return false; // This only considers Linux, other platforms are not affected
 +#else
-+  if (!command_line->HasSwitch("enable-gpu-sandbox-linux")
++  if (!command_line->HasSwitch("enable-gpu-sandbox-linux"))
 +    return false; // Use an enable flag for now, eventually will be default-on
 +  if ("wayland" != command_line->GetSwitchValueASCII(switches::kOzonePlatform))
 +    return false; // The sandbox only does well under Wayland
-+  if (IsUsingVulkan())
++  if (features::IsUsingVulkan())
 +    return false; // Vulkan is not supported in the GPU sandbox currently
 +
-+  GPUInfo* gpu_info;
++  gpu::GPUInfo* gpu_info;
 +  if (!CollectContextGraphicsInfo(gpu_info))
 +    return false;
 +
@@ -169,13 +169,13 @@ index 65dea86a65..f72f534b0b 100644
 +  * will likely only gain proper support once all ARM, AMD, Intel, and NVIDIA
 +  * are fully supported.
 +  */
-+  bool sandbox_gpu_support = (angle::IsAMD(gpu_info.active_gpu().vendor_id)
-+                //|| angle::IsVirtIO(gpu_info.active_gpu().vendor_id)
-+                //|| angle::IsARM(gpu_info.active_gpu().vendor_id)
-+                //|| angle::IsNVIDIA(gpu_info.active_gpu().vendor_id)
-+                || angle::IsIntel(gpu_info.active_gpu().vendor_id));
++  bool sandbox_gpu_support = (angle::IsAMD(gpu_info->active_gpu().vendor_id)
++                //|| angle::IsARM(gpu_info->active_gpu().vendor_id)
++                //|| angle::IsVirtIO(gpu_info->active_gpu().vendor_id)
++                //|| angle::IsNVIDIA(gpu_info->active_gpu().vendor_id)
++                || angle::IsIntel(gpu_info->active_gpu().vendor_id));
 +  if (sandbox_gpu_support) {
-+    for (const auto& gpu : gpu_info.secondary_gpus) {
++    for (const auto& gpu : gpu_info->secondary_gpus) {
 +      if (!angle::IsAMD(gpu.vendor_id) && !angle::IsIntel(gpu.vendor_id)) {
 +        sandbox_gpu_support = false;
 +        break;
