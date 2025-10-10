@@ -133,48 +133,67 @@ index 2e53794fa3..0ae94f67a4 100644
        if (!LoadAmdGpuLibraries())
          return false;
 diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
-index 65dea86a65..0b87ad7652 100644
+index 65dea86a65..f72f534b0b 100644
 --- a/content/public/browser/gpu_utils.cc
 +++ b/content/public/browser/gpu_utils.cc
-@@ -25,9 +25,11 @@
- #include "media/base/media_switches.h"
- #include "media/gpu/buildflags.h"
- #include "media/media_buildflags.h"
-+#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
- #include "third_party/blink/public/common/features.h"
+@@ -29,8 +29,52 @@
  #include "ui/gfx/switches.h"
  #include "ui/gl/gl_features.h"
-+#include "ui/ozone/public/ozone_switches.h"
 
++#if BUILDFLAG(IS_LINUX)
++#include "gpu/config/gpu_info_collector.h"
++#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
++#include "ui/ozone/public/ozone_switches.h"
++#endif
++
  namespace {
 
-@@ -79,7 +81,29 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
-       command_line->HasSwitch(switches::kSingleProcess) ||
-       command_line->HasSwitch(switches::kInProcessGPU);
-
-+  bool is_wayland = false;
-+  bool sandbox_supports_gpu = false;
-+#if BUILDFLAG(IS_LINUX)
-+  if (command_line->HasSwitch("enable-gpu-sandbox-linux")) {
-+    sandbox_supports_gpu = (angle::IsAMD(gpu_info_.active_gpu().vendor_id)
-+                      //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
-+                      //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
-+                      || angle::IsIntel(gpu_info_.active_gpu().vendor_id));
-+    if (sandbox_supports_gpu) {
-+      for (const auto& gpu : gpu_info_.secondary_gpus) {
-+        if (!angle::IsAMD(gpu.vendor_id) && !angle::IsIntel(gpu.vendor_id)) {
-+          sandbox_supports_gpu = false;
-+          break;
-+        }
++bool CanAutoEnableGPUSandbox(const base::CommandLine* command_line) {
++#if !BUILDFLAG(IS_LINUX)
++  return false; // This only considers Linux, other platforms are not affected
++#else
++  if (!command_line->HasSwitch("enable-gpu-sandbox-linux")
++    return false; // Use an enable flag for now, eventually will be default-on
++  if ("wayland" != command_line->GetSwitchValueASCII(switches::kOzonePlatform))
++    return false; // The sandbox only does well under Wayland
++  if (IsUsingVulkan())
++    return false; // Vulkan is not supported in the GPU sandbox currently
++
++  GPUInfo* gpu_info;
++  if (!CollectContextGraphicsInfo(gpu_info))
++    return false;
++
++  /*
++  * Currently the sandbox only works properly on AMD GPUs, Intel is stable
++  * sometimes but still iffy. VirtIO depends on the underlying hardware so it
++  * will likely only gain proper support once all ARM, AMD, Intel, and NVIDIA
++  * are fully supported.
++  */
++  bool sandbox_gpu_support = (angle::IsAMD(gpu_info.active_gpu().vendor_id)
++                //|| angle::IsVirtIO(gpu_info.active_gpu().vendor_id)
++                //|| angle::IsARM(gpu_info.active_gpu().vendor_id)
++                //|| angle::IsNVIDIA(gpu_info.active_gpu().vendor_id)
++                || angle::IsIntel(gpu_info.active_gpu().vendor_id));
++  if (sandbox_gpu_support) {
++    for (const auto& gpu : gpu_info.secondary_gpus) {
++      if (!angle::IsAMD(gpu.vendor_id) && !angle::IsIntel(gpu.vendor_id)) {
++        sandbox_gpu_support = false;
++        break;
 +      }
 +    }
-+    if (command_line->HasSwitch(switches::kOzonePlatform)
-+      is_wayland = "wayland" == command_line->GetSwitchValueASCII(
-+                                                      switches::kOzonePlatform);
 +  }
-+#endif
++  return sandbox_gpu_support;
++#endif // !BUILDFLAG(IS_LINUX)
++}
++
+ void KillGpuProcessImpl(content::GpuProcessHost* host) {
+   if (host) {
+     host->ForceShutdown();
+@@ -80,6 +124,7 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
+       command_line->HasSwitch(switches::kInProcessGPU);
+
    gpu_preferences.gpu_sandbox_start_early =
-+      (sandbox_supports_gpu && is_wayland) ||
++      CanAutoEnableGPUSandbox(command_line) ||
        command_line->HasSwitch(switches::kGpuSandboxStartEarly);
 
    gpu_preferences.enable_vulkan_protected_memory =
