@@ -155,12 +155,13 @@ jobs:
           if [[ -z "$trivalent_rpm_file" ]]; then
             echo "Trivalent RPM not found"
             exit 1
+          else
+            echo "Trivalent RPM found: ${trivalent_rpm_file}"
           fi
           
+          rpm --addsign *.rpm
           rpm_hash=$(sha256sum "${trivalent_rpm_file}" | base64 -w0)
           echo "hashes=${rpm_hash}" >> "$GITHUB_OUTPUT"
-
-          rpm --addsign *.rpm
           reposync --repo secureblue -y
           mv *.rpm secureblue/Packages
           cd secureblue
