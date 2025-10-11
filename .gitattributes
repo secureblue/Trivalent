@@ -14,3 +14,5 @@
 
 *.patch linguist-detectable=true
 *.patch linguist-language=diff
+
+*.spec linguist-detectable linguist-language=RPM-Spec
