@@ -68,7 +68,8 @@ else
   echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
-# Check for --no-sandbox flag in arguments and exit with warning if present
+# Check If trying to disable sandbox.
+# https://chromium.googlesource.com/chromium/src/+/main/sandbox/policy/switches.cc
 for arg in "$@"; do
   if [[ "$arg" == "--no-sandbox" || "$arg" == "--disable-gpu-sandbox" || "$arg" == "--disable-namespace-sandbox" || "$arg" == "--disable-seccomp-filter-sandbox" ]]; then
     echo "ERROR: The argument '${arg}' disables one or more critical sandboxing protections."
