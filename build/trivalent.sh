@@ -24,7 +24,7 @@ declare -rx DISPLAY="$DISPLAY"
 
 # enable hardware CFI feature
 # https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
-if [[ "$(arch)" == "x86_64" ]]; then
+if [[ "$(uname -m)" == "x86_64" ]]; then
   declare -rx GLIBC_TUNABLES="glibc.cpu.x86_ibt=on:glibc.cpu.x86_shstk=permissive"
 fi
 
@@ -67,6 +67,16 @@ if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/S
 else
   echo "A process is already open in this directory or Singleton process files are not present."
 fi
+
+# Check for --no-sandbox flag in arguments and exit with warning if present
+for arg in "$@"; do
+  if [[ "$arg" == "--no-sandbox" || "$arg" == "--disable-gpu-sandbox" || "$arg" == "--disable-namespace-sandbox" || "$arg" == "--disable-seccomp-filter-sandbox" ]]; then
+    echo "ERROR: The argument '${arg}' disables one or more critical sandboxing protections."
+    echo "This is a severe security risk: running '${CHROMIUM_NAME}' without sandboxing exposes your system to potentially malicious code and may compromise your system."
+    echo "For your protection, '${CHROMIUM_NAME}' will not start with sandbox disabled."
+    exit 1
+  fi
+done
 
 # Do this at the end so that everything else still gets hardened_malloc
 declare -rx LD_PRELOAD=""
