@@ -80,7 +80,7 @@ index 93c29179eab48..fa7abf849365e 100644
    if (ShouldAddClientHint(data, WebClientHintsType::kDeviceMemory_DEPRECATED)) {
      AddDeviceMemoryHeader(headers, /*use_deprecated_version*/ true);
 diff --git a/third_party/blink/common/features.cc b/third_party/blink/common/features.cc
-index f64b9fd802513..11fbec08248dc 100644
+index a17e8d01ccf9e..47379bd7aac42 100644
 --- a/third_party/blink/common/features.cc
 +++ b/third_party/blink/common/features.cc
 @@ -359,6 +359,14 @@ BASE_FEATURE(CaptureJSExecutionLocation, base::FEATURE_ENABLED_BY_DEFAULT);
@@ -99,7 +99,7 @@ index f64b9fd802513..11fbec08248dc 100644
               base::FEATURE_ENABLED_BY_DEFAULT);
  
 diff --git a/third_party/blink/public/common/features.h b/third_party/blink/public/common/features.h
-index cf2874e216bfb..44c9c40783f05 100644
+index 0738a9957350d..285a89d5a9f18 100644
 --- a/third_party/blink/public/common/features.h
 +++ b/third_party/blink/public/common/features.h
 @@ -230,6 +230,9 @@ BLINK_COMMON_EXPORT BASE_DECLARE_FEATURE(kCaptureJSExecutionLocation);
