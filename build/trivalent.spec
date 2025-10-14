@@ -202,6 +202,7 @@ Requires: nss-mdns%{_isa}
 Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
 Requires: bubblewrap
+Requires: procps-ng
 
 ExclusiveArch: x86_64 aarch64
 

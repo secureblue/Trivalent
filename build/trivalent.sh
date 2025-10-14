@@ -39,7 +39,7 @@ declare -rx GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 # Let the wrapped binary know that it has been run through the wrapper.
 CHROME_WRAPPER=$(readlink -f "$0")
 declare -rx CHROME_WRAPPER
-HERE=$(dirname "$CHROME_WRAPPER")
+HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
 # obtain chromium flags from system file
@@ -56,8 +56,7 @@ mkdir -p "$xdg_app_dir"
 # if so runs the installer
 [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] && /bin/bash /usr/lib64/trivalent/install_filter.sh
 
-PROCESSES=$(ps aux)
-echo "$PROCESSES" | grep "$CHROMIUM_NAME --type=zygote" | grep -v "grep" > /dev/null
+pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote"
 IS_BROWSER_RUNNING=$?
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
