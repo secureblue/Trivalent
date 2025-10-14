@@ -132,71 +132,6 @@ index 2e53794fa3..0ae94f67a4 100644
      if (options.use_amd_specific_policies) {
        if (!LoadAmdGpuLibraries())
          return false;
-diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
-index 65dea86a65..f72f534b0b 100644
---- a/content/public/browser/gpu_utils.cc
-+++ b/content/public/browser/gpu_utils.cc
-@@ -29,8 +29,52 @@
- #include "ui/gfx/switches.h"
- #include "ui/gl/gl_features.h"
-
-+#if BUILDFLAG(IS_LINUX)
-+#include "gpu/config/gpu_info_collector.h"
-+#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
-+#include "ui/ozone/public/ozone_switches.h"
-+#endif
-+
- namespace {
-
-+bool CanAutoEnableGPUSandbox(const base::CommandLine* command_line) {
-+#if !BUILDFLAG(IS_LINUX)
-+  return false; // This only considers Linux, other platforms are not affected
-+#else
-+  if (!command_line->HasSwitch("enable-gpu-sandbox-linux"))
-+    return false; // Use an enable flag for now, eventually will be default-on
-+  if ("wayland" != command_line->GetSwitchValueASCII(switches::kOzonePlatform))
-+    return false; // The sandbox only does well under Wayland
-+  if (features::IsUsingVulkan())
-+    return false; // Vulkan is not supported in the GPU sandbox currently
-+
-+  gpu::GPUInfo* gpu_info;
-+  if (!CollectContextGraphicsInfo(gpu_info))
-+    return false;
-+
-+  /*
-+  * Currently the sandbox only works properly on AMD GPUs, Intel is stable
-+  * sometimes but still iffy. VirtIO depends on the underlying hardware so it
-+  * will likely only gain proper support once all ARM, AMD, Intel, and NVIDIA
-+  * are fully supported.
-+  */
-+  bool sandbox_gpu_support = (angle::IsAMD(gpu_info->active_gpu().vendor_id)
-+                //|| angle::IsARM(gpu_info->active_gpu().vendor_id)
-+                //|| angle::IsVirtIO(gpu_info->active_gpu().vendor_id)
-+                //|| angle::IsNVIDIA(gpu_info->active_gpu().vendor_id)
-+                || angle::IsIntel(gpu_info->active_gpu().vendor_id));
-+  if (sandbox_gpu_support) {
-+    for (const auto& gpu : gpu_info->secondary_gpus) {
-+      if (!angle::IsAMD(gpu.vendor_id) && !angle::IsIntel(gpu.vendor_id)) {
-+        sandbox_gpu_support = false;
-+        break;
-+      }
-+    }
-+  }
-+  return sandbox_gpu_support;
-+#endif // !BUILDFLAG(IS_LINUX)
-+}
-+
- void KillGpuProcessImpl(content::GpuProcessHost* host) {
-   if (host) {
-     host->ForceShutdown();
-@@ -80,6 +124,7 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
-       command_line->HasSwitch(switches::kInProcessGPU);
-
-   gpu_preferences.gpu_sandbox_start_early =
-+      CanAutoEnableGPUSandbox(command_line) ||
-       command_line->HasSwitch(switches::kGpuSandboxStartEarly);
-
-   gpu_preferences.enable_vulkan_protected_memory =
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 index 90fdecdb76..f852c64078 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
@@ -221,3 +156,108 @@ index 90fdecdb76..f852c64078 100644
      if (IsArchitectureArm()) {
        return std::make_unique<CrosArmGpuProcessPolicy>(
            mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
+diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
+index 65dea86a65..21f09fa99b 100644
+--- a/content/public/browser/gpu_utils.cc
++++ b/content/public/browser/gpu_utils.cc
+@@ -79,6 +79,16 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
+       command_line->HasSwitch(switches::kSingleProcess) ||
+       command_line->HasSwitch(switches::kInProcessGPU);
+
++  gpu_preferences.enable_gpu_sandbox_linux =
++#if BUILDFLAG(IS_LINUX)
++      command_line->HasSwitch("enable-gpu-sandbox-linux") &&
++      // Make sure we are using wayland
++      command_line->HasSwitch("ozone-platform") &&
++      command_line->GetSwitchValueASCII("ozone-platform") == "wayland";
++#else
++      false;
++#endif
++
+   gpu_preferences.gpu_sandbox_start_early =
+       command_line->HasSwitch(switches::kGpuSandboxStartEarly);
+
+diff --git a/gpu/config/gpu_preferences.h b/gpu/config/gpu_preferences.h
+index 7da57a4b42..6a9a493b61 100644
+--- a/gpu/config/gpu_preferences.h
++++ b/gpu/config/gpu_preferences.h
+@@ -131,6 +131,9 @@ struct GPU_CONFIG_EXPORT GpuPreferences {
+   // messages.
+   bool disable_gpu_watchdog = false;
+
++  // Enable the GPU sandbox on Linux where it supported
++  bool enable_gpu_sandbox_linux = false;
++
+   // Starts the GPU sandbox before creating a GL context.
+   bool gpu_sandbox_start_early = false;
+
+diff --git a/gpu/ipc/common/gpu_preferences_mojom_traits.h b/gpu/ipc/common/gpu_preferences_mojom_traits.h
+index 28d9ac5174..14d8f43336 100644
+--- a/gpu/ipc/common/gpu_preferences_mojom_traits.h
++++ b/gpu/ipc/common/gpu_preferences_mojom_traits.h
+@@ -220,6 +220,7 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+         prefs.disable_accelerated_video_encode();
+     out->gpu_startup_dialog = prefs.gpu_startup_dialog();
+     out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
++    out->enable_gpu_sandbox_linux = prefs.enable_gpu_sandbox_linux();
+     out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
+     out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
+     out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
+@@ -322,6 +323,9 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+   static bool disable_gpu_watchdog(const gpu::GpuPreferences& prefs) {
+     return prefs.disable_gpu_watchdog;
+   }
++  static bool enable_gpu_sandbox_linux(const gpu::GpuPreferences& prefs) {
++    return prefs.enable_gpu_sandbox_linux;
++  }
+   static bool gpu_sandbox_start_early(const gpu::GpuPreferences& prefs) {
+     return prefs.gpu_sandbox_start_early;
+   }
+diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
+index cc568a7b4e..d222d07311 100644
+--- a/gpu/ipc/service/gpu_init.cc
++++ b/gpu/ipc/service/gpu_init.cc
+@@ -53,6 +53,10 @@
+ #include <GLES2/gl2.h>
+ #endif
+
++#if BUILDFLAG(IS_LINUX)
++#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
++#endif
++
+ #if BUILDFLAG(IS_OZONE)
+ #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
+ #include "ui/ozone/public/drm_modifiers_filter.h"
+@@ -418,7 +422,22 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+ #endif
+
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+-  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
++  bool enable_gpu_sandbox_linux = gpu_preferences_.enable_gpu_sandbox_linux;
++  if (enable_gpu_sandbox_linux) {
++    // Make sure we are using a supported config
++    enable_gpu_sandbox_linux = (angle::IsAMD(gpu_info_.active_gpu().vendor_id)
++                //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
++                //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
++                || angle::IsIntel(gpu_info_.active_gpu().vendor_id));
++    for (const auto& gpu : gpu_info_.secondary_gpus) {
++      if (!angle::IsAMD(gpu.vendor_id) && !angle::IsIntel(gpu.vendor_id)) {
++        enable_gpu_sandbox_linux = false;
++        break;
++      }
++    }
++  }
++  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early ||
++      (enable_gpu_sandbox_linux && !features::IsUsingVulkan());
+ #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
+   // For some reasons MacOSX's VideoToolbox might crash when called after
+   // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
+@@ -459,7 +478,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+   // On Chrome OS ARM Mali, GPU driver userspace creates threads when
+   // initializing a GL context, so start the sandbox early.
+   // TODO(zmo): Need to collect OS version before this.
+-  if (gpu_preferences_.gpu_sandbox_start_early) {
++  if (gpu_sandbox_start_early) {
+     gpu_info_.sandboxed = sandbox_helper_->EnsureSandboxInitialized(
+         watchdog_thread_.get(), &gpu_info_, gpu_preferences_);
+     attempted_startsandbox = true;
