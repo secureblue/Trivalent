@@ -189,30 +189,8 @@ index 7da57a4b42..6a9a493b61 100644
 +  bool enable_gpu_sandbox_linux = false;
 +
    // Starts the GPU sandbox before creating a GL context.
-   bool gpu_sandbox_start_early = false;
-
-diff --git a/gpu/ipc/common/gpu_preferences_mojom_traits.h b/gpu/ipc/common/gpu_preferences_mojom_traits.h
-index 28d9ac5174..14d8f43336 100644
---- a/gpu/ipc/common/gpu_preferences_mojom_traits.h
-+++ b/gpu/ipc/common/gpu_preferences_mojom_traits.h
-@@ -220,6 +220,7 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
-         prefs.disable_accelerated_video_encode();
-     out->gpu_startup_dialog = prefs.gpu_startup_dialog();
-     out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
-+    out->enable_gpu_sandbox_linux = prefs.enable_gpu_sandbox_linux();
-     out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
-     out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
-     out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
-@@ -322,6 +323,9 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
-   static bool disable_gpu_watchdog(const gpu::GpuPreferences& prefs) {
-     return prefs.disable_gpu_watchdog;
-   }
-+  static bool enable_gpu_sandbox_linux(const gpu::GpuPreferences& prefs) {
-+    return prefs.enable_gpu_sandbox_linux;
-+  }
-   static bool gpu_sandbox_start_early(const gpu::GpuPreferences& prefs) {
-     return prefs.gpu_sandbox_start_early;
-   }
+   bool gpu_sandbox_start_early = false;\
+ 
 diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
 index cc568a7b4e..d222d07311 100644
 --- a/gpu/ipc/service/gpu_init.cc
