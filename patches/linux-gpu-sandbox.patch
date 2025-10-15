@@ -156,3 +156,107 @@ index 90fdecdb76..f852c64078 100644
      if (IsArchitectureArm()) {
        return std::make_unique<CrosArmGpuProcessPolicy>(
            mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
+diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
+index 65dea86a65..1c875d46dd 100644
+--- a/content/public/browser/gpu_utils.cc
++++ b/content/public/browser/gpu_utils.cc
+@@ -82,6 +82,15 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
+   gpu_preferences.gpu_sandbox_start_early =
+       command_line->HasSwitch(switches::kGpuSandboxStartEarly);
+
++  gpu_preferences.gpu_sandbox_linux =
++#if BUILDFLAG(IS_LINUX)
++      command_line->HasSwitch("enable-gpu-sandbox-linux") &&
++      command_line->HasSwitch("ozone-platform") &&
++      command_line->GetSwitchValueASCII("ozone-platform") == "wayland";
++#else
++      false;
++#endif
++
+   gpu_preferences.enable_vulkan_protected_memory =
+       command_line->HasSwitch(switches::kEnableVulkanProtectedMemory);
+   gpu_preferences.disable_vulkan_fallback_to_gl_for_testing =
+diff --git a/gpu/config/gpu_preferences.h b/gpu/config/gpu_preferences.h
+index 7da57a4b42..02be997c1d 100644
+--- a/gpu/config/gpu_preferences.h
++++ b/gpu/config/gpu_preferences.h
+@@ -134,6 +134,9 @@ struct GPU_CONFIG_EXPORT GpuPreferences {
+   // Starts the GPU sandbox before creating a GL context.
+   bool gpu_sandbox_start_early = false;
+
++  // Enable the GPU sandbox on Linux, implies gpu_sandbox_start_early
++  bool gpu_sandbox_linux = false;
++
+   // Enables using CODECAPI_AVLowLatencyMode. Windows only.
+   bool enable_low_latency_dxva = true;
+
+diff --git a/gpu/ipc/common/gpu_preferences.mojom b/gpu/ipc/common/gpu_preferences.mojom
+index 9cc16eaa45..39fc10f9f8 100644
+--- a/gpu/ipc/common/gpu_preferences.mojom
++++ b/gpu/ipc/common/gpu_preferences.mojom
+@@ -59,6 +59,7 @@ struct GpuPreferences {
+   bool gpu_startup_dialog;
+   bool disable_gpu_watchdog;
+   bool gpu_sandbox_start_early;
++  bool gpu_sandbox_linux;
+
+   // TODO(http://crbug.com/676224) Support preprocessing of mojoms. Following
+   // variables should be used on Windows only.
+diff --git a/gpu/ipc/common/gpu_preferences_mojom_traits.h b/gpu/ipc/common/gpu_preferences_mojom_traits.h
+index 28d9ac5174..84cf63972b 100644
+--- a/gpu/ipc/common/gpu_preferences_mojom_traits.h
++++ b/gpu/ipc/common/gpu_preferences_mojom_traits.h
+@@ -221,6 +221,7 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+     out->gpu_startup_dialog = prefs.gpu_startup_dialog();
+     out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
+     out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
++    out->gpu_sandbox_linux = prefs.gpu_sandbox_linux();
+     out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
+     out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
+     out->enable_nv12_dxgi_video = prefs.enable_nv12_dxgi_video();
+@@ -325,6 +326,9 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+   static bool gpu_sandbox_start_early(const gpu::GpuPreferences& prefs) {
+     return prefs.gpu_sandbox_start_early;
+   }
++  static bool gpu_sandbox_linux(const gpu::GpuPreferences& prefs) {
++    return prefs.gpu_sandbox_linux;
++  }
+   static bool enable_low_latency_dxva(const gpu::GpuPreferences& prefs) {
+     return prefs.enable_low_latency_dxva;
+   }
+diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
+index cc568a7b4e..c850ab2058 100644
+--- a/gpu/ipc/service/gpu_init.cc
++++ b/gpu/ipc/service/gpu_init.cc
+@@ -53,6 +53,10 @@
+ #include <GLES2/gl2.h>
+ #endif
+
++#if BUILDFLAG(IS_LINUX)
++#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
++#endif
++
+ #if BUILDFLAG(IS_OZONE)
+ #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
+ #include "ui/ozone/public/drm_modifiers_filter.h"
+@@ -417,8 +421,10 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+   enable_watchdog = false;
+ #endif
+
++  bool gpu_sandbox_linux = gpu_preferences_.gpu_sandbox_linux;
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+-  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
++  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early ||
++      (gpu_sandbox_linux && !features::IsUsingVulkan());
+ #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
+   // For some reasons MacOSX's VideoToolbox might crash when called after
+   // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
+@@ -459,7 +465,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+   // On Chrome OS ARM Mali, GPU driver userspace creates threads when
+   // initializing a GL context, so start the sandbox early.
+   // TODO(zmo): Need to collect OS version before this.
+-  if (gpu_preferences_.gpu_sandbox_start_early) {
++  if (gpu_sandbox_start_early) {
+     gpu_info_.sandboxed = sandbox_helper_->EnsureSandboxInitialized(
+         watchdog_thread_.get(), &gpu_info_, gpu_preferences_);
+     attempted_startsandbox = true;
