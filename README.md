@@ -8,8 +8,8 @@
 
 [![build-x86_64](https://github.com/secureblue/Trivalent/actions/workflows/build_x86_64.yml/badge.svg)](https://github.com/secureblue/Trivalent/actions/workflows/build_x86_64.yml)
 [![build-aarch64](https://github.com/secureblue/Trivalent/actions/workflows/build_aarch64.yml/badge.svg)](https://github.com/secureblue/Trivalent/actions/workflows/build_aarch64.yml)
-[![Runners by - runs-on.com](https://img.shields.io/badge/Runners-runs--on.com-blue?style=flat)](https://runs-on.com/)
-[![Egress auditing by - stepsecurity.io](https://img.shields.io/badge/Egress_auditing-stepsecurity.io-7037f5)](https://stepsecurity.io)
+[![Runners by - runs-on.com](https://img.shields.io/badge/runners-runs--on.com-blue?style=flat)](https://runs-on.com/)
+[![Egress auditing by - stepsecurity.io](https://img.shields.io/badge/egress_auditing-stepsecurity.io-7037f5)](https://stepsecurity.io)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/secureblue/Trivalent/badge)](https://scorecard.dev/viewer/?uri=github.com/secureblue/Trivalent)
 
 A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadium](https://github.com/GrapheneOS/Vanadium). Intended for use in [secureblue](https://github.com/secureblue/secureblue).
