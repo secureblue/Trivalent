@@ -224,7 +224,7 @@ index 28d9ac5174..84cf63972b 100644
    static bool enable_low_latency_dxva(const gpu::GpuPreferences& prefs) {
      return prefs.enable_low_latency_dxva;
    }
-iff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
+diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
 index cc568a7b4e..26328a9f11 100644
 --- a/gpu/ipc/service/gpu_init.cc
 +++ b/gpu/ipc/service/gpu_init.cc
