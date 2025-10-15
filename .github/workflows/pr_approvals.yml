@@ -24,6 +24,11 @@ jobs:
     env:
       approvers:
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+
       - uses: secureblue/approvals-action@cf33051e1d3a2137da849e42cfd8a7d3609d3b30 # v0.2.5
         id: approvers
         with:
