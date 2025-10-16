@@ -239,7 +239,7 @@ index cc568a7b4e..579582d235 100644
  #if BUILDFLAG(IS_OZONE)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
  #include "ui/ozone/public/drm_modifiers_filter.h"
-@@ -417,8 +421,19 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -417,8 +421,18 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif
 
@@ -259,7 +259,7 @@ index cc568a7b4e..579582d235 100644
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -459,7 +474,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -459,7 +473,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.
