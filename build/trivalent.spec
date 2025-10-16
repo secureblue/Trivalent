@@ -203,6 +203,8 @@ Requires: libcanberra-gtk3%{_isa}
 Requires: u2f-hidraw-policy
 Requires: bubblewrap
 Requires: procps-ng
+Requires: policycoreutils-python-utils
+Requires: policycoreutils
 
 ExclusiveArch: x86_64 aarch64
 
@@ -348,10 +350,6 @@ Provides: bundled(xdg-user-dirs)
 Provides: bundled(zlib)
 # License: BSD-3-Clause
 Provides: bundled(zstd)
-
-# For selinux scriptlet
-Requires(post): /usr/sbin/semanage
-Requires(post): /usr/sbin/restorecon
 
 %description
 %{chromium_name_branding} is a security-focused browser built upon the Chromium web browser.
