@@ -225,7 +225,7 @@ index 28d9ac5174..84cf63972b 100644
      return prefs.enable_low_latency_dxva;
    }
 diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
-index cc568a7b4e..26328a9f11 100644
+index cc568a7b4e..579582d235 100644
 --- a/gpu/ipc/service/gpu_init.cc
 +++ b/gpu/ipc/service/gpu_init.cc
 @@ -53,6 +53,10 @@
@@ -239,7 +239,7 @@ index cc568a7b4e..26328a9f11 100644
  #if BUILDFLAG(IS_OZONE)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
  #include "ui/ozone/public/drm_modifiers_filter.h"
-@@ -417,8 +421,18 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -417,8 +421,27 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif
 
@@ -248,10 +248,19 @@ index cc568a7b4e..26328a9f11 100644
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
 +  if (gpu_sandbox_linux) {
 +    // Only enable on platforms where the sandbox works
-+    gpu_sandbox_linux = (angle::IsAMD(gpu_info_.active_gpu().vendor_id)
++    gpu_sandbox_linux = angle::IsAMD(gpu_info_.active_gpu().vendor_id)
++                   //|| andle::IsARM(gpu_info_.active_gpu().vendor_id)
 +                   //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
 +                   //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
-+                   || angle::IsIntel(gpu_info_.active_gpu().vendor_id));
++                   || angle::IsIntel(gpu_info_.active_gpu().vendor_id);
++    if (gpu_sandbox_linux) {
++      for (const auto& gpu : gpu_info_.secondary_gpus) {
++        if (!angle::IsAMD(gpu.vendor_id) && !angle::IsIntel(gpu.vendor_id)) {
++          sandbox_supports_gpu = false;
++          break;
++        }
++      }
++    }
 +  }
 +  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early ||
 +      // The sandbox does not work with Vulkan currently
@@ -259,7 +268,7 @@ index cc568a7b4e..26328a9f11 100644
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -459,7 +473,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -459,7 +482,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.
