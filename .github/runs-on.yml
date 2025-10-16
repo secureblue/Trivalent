@@ -5,7 +5,7 @@ runners:
     family: ["c5", "c6", "c7", "c8", "m5", "m6", "m7", "m8", "r6", "r7", "r8", "g4", "g5"]
     spot: price-capacity-optimized
     disk: large
-    image: rhel_x86_64
+    image: ubuntu24-stepsecurity-x64
     ssh: false
 
   arm64-runner:
@@ -14,14 +14,5 @@ runners:
     family: ["c5", "c6", "c7", "c8", "m5", "m6", "m7", "m8", "r6", "r7", "r8", "g4", "g5"]
     spot: price-capacity-optimized
     disk: large
-    image: rhel_arm64
+    image: ubuntu24-stepsecurity-arm64
     ssh: false
-
-images:
-  rhel_x86_64:
-    ami: "ami-0ccdd739f0fa3566c" # RHEL 10 x86_64, https://console.aws.amazon.com/ec2/home?region=us-west-2#ImageDetails:imageId=ami-0ccdd739f0fa3566c
-    owner: 309956199498 # Official amazon owner id
-
-  rhel_arm64:
-    ami: "ami-063f0dbde022fe835" # RHEL 10 arm64, https://console.aws.amazon.com/ec2/home?region=us-west-2#ImageDetails:imageId=ami-063f0dbde022fe835
-    owner: 309956199498 # Official amazon owner id
