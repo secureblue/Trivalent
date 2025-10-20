@@ -246,7 +246,7 @@ index cc568a7b4e..579582d235 100644
 +  bool gpu_sandbox_linux = gpu_preferences_.gpu_sandbox_linux;
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
-+  if (gpu_sandbox_linux) {
++  if (gpu_sandbox_linux)
 +    // Only enable on platforms where the sandbox works
 +    gpu_sandbox_linux = angle::IsAMD(gpu_info_.active_gpu().vendor_id);
 +                   //|| angle::IsIntel(gpu_info_.active_gpu().vendor_id)
