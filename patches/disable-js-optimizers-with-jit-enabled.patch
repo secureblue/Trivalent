@@ -1,0 +1,106 @@
+Copyright 2024-2025 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/v8/src/compiler/turboshaft/pipelines.h b/v8/src/compiler/turboshaft/pipelines.h
+index 31c1ac85..6269f77c 100644
+--- a/v8/src/compiler/turboshaft/pipelines.h
++++ b/v8/src/compiler/turboshaft/pipelines.h
+@@ -153,7 +153,7 @@ class V8_EXPORT_PRIVATE Pipeline {
+
+   bool CreateGraphFromTurbofan(compiler::TFPipelineData* turbofan_data,
+                                Linkage* linkage) {
+-    CHECK_IMPLIES(!v8_flags.disable_optimizing_compilers, v8_flags.turboshaft);
++    CHECK_IMPLIES(v8_flags.enable_optimizing_compilers, v8_flags.turboshaft);
+
+     UnparkedScopeIfNeeded scope(data_->broker(),
+                                 v8_flags.turboshaft_trace_reduction ||
+diff --git a/v8/src/flags/flag-definitions.h b/v8/src/flags/flag-definitions.h
+index 63c2a766..23ed19ca 100644
+--- a/v8/src/flags/flag-definitions.h
++++ b/v8/src/flags/flag-definitions.h
+@@ -747,7 +747,7 @@ DEFINE_BOOL(additive_safe_int_feedback, true,
+             "Enable the use of AdditiveSafeInteger feedback")
+ // Additive safe ints are only used by TurboFan.
+ DEFINE_NEG_IMPLICATION(jitless, additive_safe_int_feedback)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, additive_safe_int_feedback)
++DEFINE_IMPLICATION(enable_optimizing_compilers, additive_safe_int_feedback)
+ #else
+ DEFINE_BOOL_READONLY(additive_safe_int_feedback, false,
+                      "Enable the use of AdditiveSafeInteger feedback")
+@@ -880,25 +880,25 @@ DEFINE_NEG_IMPLICATION(jitless, maglev)
+ DEFINE_NEG_IMPLICATION(jitless, interpreted_frames_native_stack)
+
+ DEFINE_BOOL(
+-    disable_optimizing_compilers, false,
+-    "Disable all optimizing compilers while leaving baseline compilers enabled")
++    enable_optimizing_compilers, false,
++    "Enable all optimizing compilers, otherwise leave baseline compilers enabled")
+ // Disable all optimizing JavaScript compilers.
+ // JavaScript code can execute either in Ignition or Sparkplug.
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turbofan)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turboshaft)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, maglev)
++DEFINE_IMPLICATION(enable_optimizing_compilers, turbofan)
++DEFINE_IMPLICATION(enable_optimizing_compilers, turboshaft)
++DEFINE_IMPLICATION(enable_optimizing_compilers, maglev)
+ #if V8_ENABLE_WEBASSEMBLY
+ // Disable optimizing Wasm compilers. Wasm code must execute with Liftoff.
+-DEFINE_IMPLICATION(disable_optimizing_compilers, liftoff)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, wasm_tier_up)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, wasm_dynamic_tiering)
++DEFINE_NEG_IMPLICATION(enable_optimizing_compilers, liftoff)
++DEFINE_IMPLICATION(enable_optimizing_compilers, wasm_tier_up)
++DEFINE_IMPLICATION(enable_optimizing_compilers, wasm_dynamic_tiering)
+ // Disable translation of asm.js to Wasm.
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, validate_asm)
++DEFINE_IMPLICATION(enable_optimizing_compilers, validate_asm)
+ #endif  // V8_ENABLE_WEBASSEMBLY
+ // Field type tracking is only used by TurboFan, so can be disabled.
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, track_field_types)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, script_context_cells)
+-DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, function_context_cells)
++DEFINE_IMPLICATION(enable_optimizing_compilers, track_field_types)
++DEFINE_IMPLICATION(enable_optimizing_compilers, script_context_cells)
++DEFINE_IMPLICATION(enable_optimizing_compilers, function_context_cells)
+
+ DEFINE_BOOL(memory_protection_keys, true,
+             "protect code memory with PKU if available")
+diff --git a/v8/src/flags/flags.cc b/v8/src/flags/flags.cc
+index db8ff5c6..563046ae 100644
+--- a/v8/src/flags/flags.cc
++++ b/v8/src/flags/flags.cc
+@@ -1108,19 +1108,19 @@ void FlagList::ResolveContradictionsWhenFuzzing() {
+       // List of flags that lead to known contradictory cycles when both
+       // deviate from their defaults. One of them will be reset with precedence
+       // left to right.
+-      CONTRADICTION(always_osr_from_maglev, disable_optimizing_compilers),
++      CONTRADICTION(always_osr_from_maglev, !enable_optimizing_compilers),
+       CONTRADICTION(always_osr_from_maglev, jitless),
+       CONTRADICTION(always_osr_from_maglev, lite_mode),
+       CONTRADICTION(always_osr_from_maglev, turbofan),
+       CONTRADICTION(always_osr_from_maglev, turboshaft),
+       CONTRADICTION(assert_types, stress_concurrent_inlining),
+       CONTRADICTION(assert_types, stress_concurrent_inlining_attach_code),
+-      CONTRADICTION(disable_optimizing_compilers, maglev_future),
+-      CONTRADICTION(disable_optimizing_compilers, stress_concurrent_inlining),
+-      CONTRADICTION(disable_optimizing_compilers,
++      CONTRADICTION(!enable_optimizing_compilers, maglev_future),
++      CONTRADICTION(!enable_optimizing_compilers, stress_concurrent_inlining),
++      CONTRADICTION(!enable_optimizing_compilers,
+                     stress_concurrent_inlining_attach_code),
+-      CONTRADICTION(disable_optimizing_compilers, stress_maglev),
+-      CONTRADICTION(disable_optimizing_compilers,
++      CONTRADICTION(!enable_optimizing_compilers, stress_maglev),
++      CONTRADICTION(!enable_optimizing_compilers,
+                     turboshaft_wasm_in_js_inlining),
+       CONTRADICTION(jit_fuzzing, max_lazy),
+       CONTRADICTION(jitless, maglev_future),
