@@ -428,21 +428,22 @@ index ae93043d94ddc..4b87309d91176 100644
 +      </settings-toggle-button>
 +    </div>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index b65040b690c5e..e9d93bcf10769 100644
+index 58c759a973..7c30c6d83e 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -29,6 +29,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
- 
+@@ -30,6 +30,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+
  import type {SettingsRadioGroupElement} from '../controls/settings_radio_group.js';
  import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
 +import type {DropdownMenuOptionList} from '../controls/settings_dropdown_menu.js';
- import type {FocusConfig} from '../focus_config.js';
  import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
  import {loadTimeData} from '../i18n_setup.js';
-@@ -119,6 +120,19 @@ export class SettingsSecurityPageElement extends
+ import type {MetricsBrowserProxy} from '../metrics_browser_proxy.js';
+@@ -122,6 +123,19 @@ export class SettingsSecurityPageElement extends
+         },
        },
        // </if>
- 
++
 +      webrtcHandlingPolicyOptions_: {
 +        readOnly: true,
 +        type: Array,
@@ -455,22 +456,21 @@ index b65040b690c5e..e9d93bcf10769 100644
 +          ];
 +        },
 +      },
-+
+
        /**
         * Valid safe browsing states.
-        */
-@@ -215,6 +229,7 @@ export class SettingsSecurityPageElement extends
+@@ -214,6 +228,7 @@ export class SettingsSecurityPageElement extends
        },
      };
    }
 +  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
    declare private showSecureDnsSetting_: boolean;
- 
+
    // <if expr="is_chromeos">
-@@ -281,10 +296,6 @@ export class SettingsSecurityPageElement extends
+@@ -265,10 +280,6 @@ export class SettingsSecurityPageElement extends
        }
      });
- 
+
 -    this.registerHelpBubble(
 -        'kEnhancedProtectionSettingElementId',
 -        this.$.safeBrowsingEnhanced.getBubbleAnchor(), {anchorPaddingTop: 10});
