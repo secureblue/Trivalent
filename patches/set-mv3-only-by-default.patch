@@ -22,3 +22,4 @@ index fa2189ddf0..0da3b35588 100644
 +BASE_FEATURE(kExtensionsManifestV3Only, base::FEATURE_ENABLED_BY_DEFAULT);
 
  BASE_FEATURE(kExtensionsMenuAccessControl, base::FEATURE_DISABLED_BY_DEFAULT);
+
