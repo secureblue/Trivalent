@@ -10,33 +10,37 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/third_party/search_engines_data/resources/definitions/regional_settings.json b/third_party/search_engines_data/resources/definitions/regional_settings.json
-index 9bd4f39..9f259e8 100644
+diff --git a/definitions/regional_settings.json b/definitions/regional_settings.json
+index ca7dc52..8690877 100644
 --- a/third_party/search_engines_data/resources/definitions/regional_settings.json
 +++ b/third_party/search_engines_data/resources/definitions/regional_settings.json
 @@ -165,6 +165,7 @@
      "CA": {
        // Canada
        "search_engines": [
-+        "&startpage,"
++        "&startpage",
          "&google",
          "&bing",
          "&yahoo_ca",
-@@ -245,12 +246,12 @@
+@@ -247,6 +248,7 @@
      "DE": {
        // Germany
        "search_engines": [
-+        "&startpage,"
++        "&startpage",
          "&google",
          "&duckduckgo",
-         "&brave",
          "&ecosia",
+@@ -254,8 +256,7 @@
          "&bing",
--        "&startpage",
+ 
          "&yahoo_de",
-         "&qwant"
+-        "&qwant",
+-        "&startpage"
++        "&qwant"
        ]
-@@ -373,6 +374,7 @@
+     },
+     "DK": {
+@@ -381,6 +382,7 @@
      "GB": {
        // United Kingdom
        "search_engines": [
@@ -44,7 +48,7 @@ index 9bd4f39..9f259e8 100644
          "&google",
          "&bing",
          "&yahoo_uk",
-@@ -758,6 +760,7 @@
+@@ -777,6 +779,7 @@
      "NL": {
        // Netherlands
        "search_engines": [
@@ -52,7 +56,7 @@ index 9bd4f39..9f259e8 100644
          "&google",
          "&duckduckgo",
          "&brave",
-@@ -1086,6 +1089,7 @@
+@@ -1113,6 +1116,7 @@
      "US": {
        // United States
        "search_engines": [
@@ -60,7 +64,7 @@ index 9bd4f39..9f259e8 100644
          "&google",
          "&bing",
          "&yahoo",
-@@ -1146,7 +1150,7 @@
+@@ -1174,7 +1178,7 @@
      // See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#ZZ
      "ZZ": {
        // Default
@@ -68,4 +72,5 @@ index 9bd4f39..9f259e8 100644
 +      "search_engines": ["&startpage", "&google", "&bing", "&yahoo"]
      }
    },
-   "aggregation": {
+ 
+

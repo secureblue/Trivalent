@@ -11,17 +11,17 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/content/public/common/content_features.cc b/content/public/common/content_features.cc
-index 57f1ff40ca..7710b79362 100644
+index f087a28da0..c2d81c423f 100644
 --- a/content/public/common/content_features.cc
 +++ b/content/public/common/content_features.cc
-@@ -195,7 +195,7 @@ BASE_FEATURE(kCapturedSurfaceControlKillswitch,
+@@ -202,7 +202,7 @@ BASE_FEATURE(CapturedSurfaceControlKillswitch,
  // Clear the window.name property for the top-level cross-site navigations that
  // swap BrowsingContextGroups(BrowsingInstances).
- BASE_FEATURE(kClearCrossSiteCrossBrowsingContextGroupWindowName,
+ BASE_FEATURE(ClearCrossSiteCrossBrowsingContextGroupWindowName,
 -             base::FEATURE_DISABLED_BY_DEFAULT);
 +             base::FEATURE_ENABLED_BY_DEFAULT);
 
- BASE_FEATURE(kCompositeBGColorAnimation, base::FEATURE_DISABLED_BY_DEFAULT);
+ BASE_FEATURE(CompositeBGColorAnimation, base::FEATURE_DISABLED_BY_DEFAULT);
  
 diff --git a/third_party/blink/renderer/core/loader/document_loader.cc b/third_party/blink/renderer/core/loader/document_loader.cc
 index 85c4d912e2fdb..d03099ab283f0 100644
