@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/components/autofill/core/common/autofill_prefs.cc b/components/autofill/core/common/autofill_prefs.cc
-index 9919d52a43..3f0b8a4d9f 100644
+index f7b33941c7..91888eda4f 100644
 --- a/components/autofill/core/common/autofill_prefs.cc
 +++ b/components/autofill/core/common/autofill_prefs.cc
 @@ -31,7 +31,7 @@ constexpr char kAutofillRanQuasiDuplicateExtraDeduplication[] =
@@ -23,7 +23,7 @@ index 9919d52a43..3f0b8a4d9f 100644
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
    registry->RegisterIntegerPref(
        kAutofillLastVersionDeduped, 0,
-@@ -40,13 +40,13 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -43,13 +43,13 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
        kAutofillHasSeenIban, false,
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
    registry->RegisterBooleanPref(
@@ -39,4 +39,4 @@ index 9919d52a43..3f0b8a4d9f 100644
 +      kAutofillPaymentCardBenefits, false,
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
 
-   registry->RegisterStringPref(kAutofillNameAndEmailProfileSignature, "",
+   registry->RegisterStringPref(
