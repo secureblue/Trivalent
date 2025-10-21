@@ -11,21 +11,21 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/net/base/features.cc b/net/base/features.cc
-index 58aa8a22e7..4d4d1689d7 100644
+index fc6da73277..47d80767b4 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
-@@ -24,9 +24,12 @@ BASE_FEATURE(AlpsForHttp2, base::FEATURE_ENABLED_BY_DEFAULT);
+@@ -24,9 +24,12 @@ BASE_FEATURE(kAlpsForHttp2, base::FEATURE_ENABLED_BY_DEFAULT);
 
- BASE_FEATURE(AvoidH2Reprioritization, base::FEATURE_DISABLED_BY_DEFAULT);
+ BASE_FEATURE(kAvoidH2Reprioritization, base::FEATURE_DISABLED_BY_DEFAULT);
 
--BASE_FEATURE(CapReferrerToOriginOnCrossOrigin,
-+BASE_FEATURE(DisableCrossOriginReferrers,
+-BASE_FEATURE(kCapReferrerToOriginOnCrossOrigin,
++BASE_FEATURE(kDisableCrossOriginReferrers,
               base::FEATURE_DISABLED_BY_DEFAULT);
 
-+BASE_FEATURE(CapReferrerToOriginOnCrossOrigin,
++BASE_FEATURE(kCapReferrerToOriginOnCrossOrigin,
 +             base::FEATURE_ENABLED_BY_DEFAULT);
 +
- BASE_FEATURE(AsyncDns,
+ BASE_FEATURE(kAsyncDns,
  #if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_ANDROID) || \
      BUILDFLAG(IS_WIN) || BUILDFLAG(IS_LINUX)
 diff --git a/net/base/features.h b/net/base/features.h
