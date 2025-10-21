@@ -204,7 +204,7 @@ index b45a26e61192b..a7218cfa6db8f 100644
  
    private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index fb981e1f7162e..d6d89b267466c 100644
+index 8a52848a1a..609040d221 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 @@ -25,14 +25,14 @@
@@ -215,15 +215,15 @@ index fb981e1f7162e..d6d89b267466c 100644
 +      <settings-safety-hub-entry-point style="display:none" slot="view" id="safetyHubEntryPoint">
        </settings-safety-hub-entry-point>
      </template>
- 
+
      <template is="dom-if" if="[[renderView_(
          routes_.SAFETY_HUB, currentRoute, inSearchMode)]]">
        <!-- TODO(crbug.com/40267370): Make the page searchable.-->
 -      <settings-safety-hub-page slot="view" id="safetyHub" no-search
 +      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
-           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}">
+           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}"
+           route-path$="[[routes_.SAFETY_HUB.path]]">
        </settings-safety-hub-page>
-     </template>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
 index ae93043d94ddc..4b87309d91176 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
@@ -488,18 +488,18 @@ index b65040b690c5e..e9d93bcf10769 100644
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
  
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index 41b2a7bf2cb79..637fd4d16e6e3 100644
+index 1fd9c83cb7..931b3b5aee 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -201,7 +201,7 @@ function createRoutes(): SettingsRoutes {
- 
+@@ -178,7 +178,7 @@ function createRoutes(): SettingsRoutes {
+
    if (visibility.people !== false) {
      r.PEOPLE = r.BASIC.createSection(
 -        '/people', 'people', loadTimeData.getString('peoplePageTitle'));
 +        '/people', 'people', loadTimeData.getString('editPerson'));
-     r.PEOPLE.hasMigratedToPlugin = true;
      // <if expr="not is_chromeos">
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
+     r.SIGN_OUT.isNavigableDialog = true;
 diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
 index d989c90598e38..985a47c20c397 100644
 --- a/chrome/browser/resources/settings/settings_main/settings_main.html
@@ -513,7 +513,7 @@ index d989c90598e38..985a47c20c397 100644
  <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
      restamp>
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 2134fb026dbe6..bf85825d82a12 100644
+index 90780ae82c..e6382ceceb 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -54,7 +54,7 @@
@@ -524,7 +524,7 @@ index 2134fb026dbe6..bf85825d82a12 100644
 +          $i18n{editPerson}
            <cr-ripple></cr-ripple>
          </a>
-         <a role="menuitem" id="autofill" href="/autofill"
+         <a role="menuitem" id="yourSavedInfo" href="/yourSavedInfo"
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
 index 4c518c19856c7..e73df1f31e651 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
