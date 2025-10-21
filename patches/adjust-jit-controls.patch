@@ -44,12 +44,12 @@ index a582e40694..66f7cd437c 100644
    auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
    // Special case to determine if any policy is set.
 diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
-index 2e5e7c71a5..228d8795f8 100644
+index 512feca6fa..821a9254a0 100644
 --- a/content/browser/renderer_host/render_process_host_impl.cc
 +++ b/content/browser/renderer_host/render_process_host_impl.cc
-@@ -3383,8 +3383,21 @@ void RenderProcessHostImpl::AppendRendererCommandLine(
-     command_line->AppendSwitchASCII(blink::switches::kJavaScriptFlags,
-                                     "--jitless");
+@@ -3475,9 +3475,22 @@ void RenderProcessHostImpl::AppendRendererCommandLine(
+     AppendToCommaSeparatedSwitch(
+         command_line, blink::switches::kJavaScriptFlags, "--jitless");
    } else if (AreV8OptimizationsDisabled()) {
 +    std::string jsflags;
 +    bool enable_jitless_wasm =
@@ -64,31 +64,32 @@ index 2e5e7c71a5..228d8795f8 100644
 +    else
 +      jsflags = "--jitless";
 +
-     command_line->AppendSwitchASCII(blink::switches::kJavaScriptFlags,
--                                    "--disable-optimizing-compilers");
-+                                    jsflags);
+     AppendToCommaSeparatedSwitch(command_line,
+                                  blink::switches::kJavaScriptFlags,
+-                                 "--disable-optimizing-compilers");
++                                 jsflags);
    }
- 
+
    if (DisallowV8FeatureFlagOverrides()) {
 diff --git a/content/public/common/content_features.cc b/content/public/common/content_features.cc
-index f087a28da0..5cf9a313fd 100644
+index 57f1ff40ca..d3dbe66e23 100644
 --- a/content/public/common/content_features.cc
 +++ b/content/public/common/content_features.cc
-@@ -19,6 +19,8 @@ namespace features {
+@@ -17,6 +17,8 @@
 
+ namespace features {
+
++BASE_FEATURE(kEnableDrumbrake, base::FEATURE_ENABLED_BY_DEFAULT);
++
  // All features in alphabetical order.
 
-+BASE_FEATURE(EnableDrumbrake, base::FEATURE_ENABLED_BY_DEFAULT);
-+
  // Kill switch to guard additional security checks performed by the browser
- // process on opaque origins, such as when verifying source origins for
- // postMessage. See https://crbug.com/40109437.
-@@ -1010,7 +1012,7 @@ BASE_FEATURE(DisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
+@@ -1019,7 +1021,7 @@ BASE_FEATURE(kDisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
  // Controls whether SpareRenderProcessHostManager tries to always have a warm
  // spare renderer process around for the most recently requested BrowserContext.
  // This feature is only consulted in site-per-process mode.
--BASE_FEATURE(SpareRendererForSitePerProcess, base::FEATURE_ENABLED_BY_DEFAULT);
-+BASE_FEATURE(SpareRendererForSitePerProcess, base::FEATURE_DISABLED_BY_DEFAULT);
+-BASE_FEATURE(kSpareRendererForSitePerProcess, base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kSpareRendererForSitePerProcess, base::FEATURE_DISABLED_BY_DEFAULT);
 
  // Controls whether site isolation should use origins instead of scheme and
  // eTLD+1.
