@@ -61,21 +61,22 @@ index dcc4d40592932..f9a9b002bd956 100644
  
    // Offsets the double-clicked word's range. This is only used in the unusual
 diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
-index 4c6ae8ff79..e6f160160b 100644
+index 88ca7f0b1f..14be7e5a3a 100644
 --- a/ui/views/views_features.cc
 +++ b/ui/views/views_features.cc
-@@ -44,4 +44,11 @@ BASE_FEATURE(kKeyboardAccessibleTooltipInViews,
-              "KeyboardAccessibleTooltipInViews",
-              base::FEATURE_ENABLED_BY_DEFAULT);
- 
+@@ -9,6 +9,12 @@
+
+ namespace views::features {
+
 +// Controls the behavior of middle-mouse copy and pasting.
 +// This may be overridden by the kMiddleClickAutoscroll
 +// blink feature.
-+BASE_FEATURE(kMiddleClickCopyPaste,
-+             "MiddleClickCopyPaste",
-+             base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kMiddleClickCopyPaste, base::FEATURE_ENABLED_BY_DEFAULT);
 +
- }  // namespace views::features
++
+ // Please keep alphabetized.
+
+ // Used to enable additional a11y attributes when announcing text.
 diff --git a/ui/views/views_features.h b/ui/views/views_features.h
 index 58063f2452..3adbb7a5fb 100644
 --- a/ui/views/views_features.h
