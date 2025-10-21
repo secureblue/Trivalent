@@ -166,29 +166,20 @@ index 1020cf880cddc..ac40bc90e9ea3 100644
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index ad81cf875bbba..6885fd10175de 100644
+index 89dbc8c3cb..5e24338e2d 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -83,8 +83,8 @@
-           </cr-link-row>
-         </template>
-         <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
--            class="hr" label="$i18n{securityPageTitle}"
--            sub-label="$i18n{securityPageDescription}"
-+            class="hr" label="$i18n{privacyPageTitle}"
-+            sub-label="$i18n{privacyGuidePromoBody}"
-             on-click="onSecurityPageClick_"
-             role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
-         <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -125,7 +125,7 @@
-       </template>
- 
-       <template is="dom-if" route-path="/security">
--        <settings-subpage id="security" page-title="$i18n{securityPageTitle}"
-+        <settings-subpage id="security" page-title="$i18n{privacyPageTitle}"
-             associated-control="[[$$('#securityLinkRow')]]"
-             learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
-           <template is="dom-if" if="[[!enableBundledSecuritySettings_]]">
+@@ -67,8 +67,8 @@
+       </cr-link-row>
+     </template>
+     <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
+-        class="hr" label="$i18n{securityPageTitle}"
+-        sub-label="$i18n{securityPageDescription}"
++        class="hr" label="$i18n{privacyPageTitle}"
++        sub-label="$i18n{privacyGuidePromoBody}"
+         on-click="onSecurityPageClick_"
+         role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+     <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 index b45a26e61192b..a7218cfa6db8f 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
