@@ -42,18 +42,18 @@ index 8ea949d4f3ff4..1a08b76cbb9e7 100644
      ScreenAIComponentInstallerPolicy::DeleteComponent();
    }
 diff --git a/chrome/browser/devtools/devtools_window.cc b/chrome/browser/devtools/devtools_window.cc
-index b65d877234044..694deb92f080f 100644
+index a2bf7a5c69..bf4da4fca9 100644
 --- a/chrome/browser/devtools/devtools_window.cc
 +++ b/chrome/browser/devtools/devtools_window.cc
-@@ -555,7 +555,7 @@ void DevToolsWindow::RegisterProfilePrefs(
+@@ -561,7 +561,7 @@ void DevToolsWindow::RegisterProfilePrefs(
        prefs::kDevToolsSyncedPreferencesSyncDisabled);
    registry->RegisterIntegerPref(
        prefs::kDevToolsGenAiSettings,
 -      static_cast<int>(DevToolsGenAiEnterprisePolicyValue::kAllow));
 +      static_cast<int>(DevToolsGenAiEnterprisePolicyValue::kDisable));
- }
- 
- // static
+   registry->RegisterIntegerPref(
+       prefs::kDevToolsGoogleDeveloperProgramProfileAvailability,
+       /* enabled */ 0);
 diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browser_prefs.cc
 index d016286d9cb7a..89ac48fb06cd8 100644
 --- a/chrome/browser/prefs/browser_prefs.cc
