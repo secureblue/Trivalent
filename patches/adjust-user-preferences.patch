@@ -216,24 +216,28 @@ index 8a52848a1a..609040d221 100644
            route-path$="[[routes_.SAFETY_HUB.path]]">
        </settings-safety-hub-page>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index ae93043d94ddc..4b87309d91176 100644
+index 6b9bd1adee..52ba4bf0c0 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
-@@ -4,6 +4,10 @@
-         padding: 0 var(--cr-section-padding);
-       }
- 
-+      #webrtcLabel {
-+        flex: 1;
-+      }
+@@ -2,6 +2,10 @@
+     #safeBrowsingSection {
+       padding: 0 var(--cr-section-padding);
+     }
 +
-       .bullet-line {
-         align-items: center;
-         display: flex;
-@@ -71,126 +75,6 @@
-         pointer-events: auto;
-       }
-     </style>
++    #webrtcLabel {
++      flex: 1;
++    }
+
+     .bullet-line {
+       align-items: center;
+@@ -70,129 +74,9 @@
+       pointer-events: auto;
+     }
+   </style>
+-  <settings-subpage page-title="$i18n{securityPageTitle}"
++  <settings-subpage page-title="$i18n{privacyPageTitle}"
+       learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
+       route-path$="[[routePath]]">
 -    <div id="safeBrowsingSection">
 -      <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
 -      <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
@@ -357,7 +361,7 @@ index ae93043d94ddc..4b87309d91176 100644
      <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
        <div id="secureConnectionsSection">
          <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
-@@ -231,15 +115,8 @@
+@@ -233,15 +117,8 @@
        </div>
      </template>
      <div class="cr-row first">
@@ -374,10 +378,10 @@ index ae93043d94ddc..4b87309d91176 100644
      <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
        <settings-toggle-button id="httpsOnlyModeToggle"
            pref="{{prefs.generated.https_first_mode_enabled}}"
-@@ -290,17 +167,38 @@
+@@ -292,18 +169,39 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
- 
+
 -    <cr-link-row id="advancedProtectionProgramLink" class="hr"
 -        label="$i18n{advancedProtectionProgramTitle}"
 -        sub-label="$i18n{advancedProtectionProgramDesc}"
@@ -427,6 +431,7 @@ index ae93043d94ddc..4b87309d91176 100644
 +        sub-label="Changes to this setting requires a restart">
 +      </settings-toggle-button>
 +    </div>
+   </settings-subpage>
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
 index 58c759a973..7c30c6d83e 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.ts
@@ -527,7 +532,7 @@ index 4c518c19856c7..e73df1f31e651 100644
 +<if expr="enable_printing">
 +    <settings-toggle-button class="cr-row"
 +        pref="{{prefs.printing.enabled}}"
-+        label="Enable Printing Capabilities">
++        label="Enable printing capabilities">
 +    </settings-toggle-button>
 +</if>
 +
