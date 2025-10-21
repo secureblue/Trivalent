@@ -67,6 +67,7 @@ index 54c0b44aca..c69d7a2ab3 100644
 -#endif
 
  }  // namespace
+ 
 diff --git a/components/collaboration/public/pref_names.cc b/components/collaboration/public/pref_names.cc
 index 701b1adf50..af25f314c4 100644
 --- a/components/collaboration/public/pref_names.cc
