@@ -10,10 +10,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/definitions/regional_settings.json b/definitions/regional_settings.json
+diff --git a/third_party/search_engines_data/resources/definitions/regional_settings.json b/third_party/search_engines_data/resources/definitions/regional_settings.json
 index 9bd4f39..9f259e8 100644
---- a/definitions/regional_settings.json
-+++ b/definitions/regional_settings.json
+--- a/third_party/search_engines_data/resources/definitions/regional_settings.json
++++ b/third_party/search_engines_data/resources/definitions/regional_settings.json
 @@ -165,6 +165,7 @@
      "CA": {
        // Canada
