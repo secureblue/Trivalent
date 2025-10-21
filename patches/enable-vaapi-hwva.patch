@@ -11,21 +11,20 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/media/base/media_switches.cc b/media/base/media_switches.cc
-index e6484141d7..8cb4dcdc81 100644
+index 640924e1b4..88594319bc 100644
 --- a/media/base/media_switches.cc
 +++ b/media/base/media_switches.cc
-@@ -678,11 +678,21 @@ BASE_FEATURE(kAcceleratedVideoDecodeLinux,
+@@ -688,11 +688,20 @@ BASE_FEATURE(kAcceleratedVideoDecodeLinux,
               base::FEATURE_DISABLED_BY_DEFAULT);
  #endif
 
--BASE_FEATURE(AcceleratedVideoDecodeLinuxGL, base::FEATURE_DISABLED_BY_DEFAULT);
-+BASE_FEATURE(AcceleratedVideoDecodeLinuxGL,
+-BASE_FEATURE(kAcceleratedVideoDecodeLinuxGL, base::FEATURE_DISABLED_BY_DEFAULT);
++BASE_FEATURE(kAcceleratedVideoDecodeLinuxGL,
 +#if BUILDFLAG(USE_VAAPI)
 +             base::FEATURE_ENABLED_BY_DEFAULT);
 +#else
 +             base::FEATURE_DISABLED_BY_DEFAULT);
 +#endif
-+
 
  BASE_FEATURE(kAcceleratedVideoEncodeLinux,
               "AcceleratedVideoEncoder",
@@ -37,28 +36,28 @@ index e6484141d7..8cb4dcdc81 100644
 
  // Ignore the non-intel driver blacklist for VaapiVideoDecoder implementations.
  // Intended for manual usage only in order to gague the status of newer driver
-@@ -692,7 +702,7 @@ BASE_FEATURE(VaapiIgnoreDriverChecks, base::FEATURE_DISABLED_BY_DEFAULT);
+@@ -702,7 +711,7 @@ BASE_FEATURE(kVaapiIgnoreDriverChecks, base::FEATURE_DISABLED_BY_DEFAULT);
 
  // NVIDIA VA-API drivers do not support Chromium and can sometimes cause
  // crashes, disable VA-API on NVIDIA GPUs by default. See crbug.com/1492880.
--BASE_FEATURE(VaapiOnNvidiaGPUs, base::FEATURE_DISABLED_BY_DEFAULT);
-+BASE_FEATURE(VaapiOnNvidiaGPUs, base::FEATURE_ENABLED_BY_DEFAULT);
+-BASE_FEATURE(kVaapiOnNvidiaGPUs, base::FEATURE_DISABLED_BY_DEFAULT);
++BASE_FEATURE(kVaapiOnNvidiaGPUs, base::FEATURE_ENABLED_BY_DEFAULT);
 
  // Enable VA-API hardware low power encoder for all codecs on intel Gen9x gpu.
- BASE_FEATURE(VaapiLowPowerEncoderGen9x, base::FEATURE_ENABLED_BY_DEFAULT);
+ BASE_FEATURE(kVaapiLowPowerEncoderGen9x, base::FEATURE_ENABLED_BY_DEFAULT);
 diff --git a/media/mojo/services/gpu_mojo_media_client_linux.cc b/media/mojo/services/gpu_mojo_media_client_linux.cc
-index 04f938dade..60d077ec68 100644
+index 83cdb124cb..45223eb54b 100644
 --- a/media/mojo/services/gpu_mojo_media_client_linux.cc
 +++ b/media/mojo/services/gpu_mojo_media_client_linux.cc
 @@ -21,7 +21,11 @@ namespace media {
  namespace {
 
- BASE_FEATURE(AcceleratedVideoDecodeLinuxZeroCopyGL,
+ BASE_FEATURE(kAcceleratedVideoDecodeLinuxZeroCopyGL,
 +#if BUILDFLAG(USE_VAAPI)
 +             base::FEATURE_ENABLED_BY_DEFAULT);
 +#else
               base::FEATURE_DISABLED_BY_DEFAULT);
 +#endif
 
- VideoDecoderType GetPreferredLinuxDecoderImplementation() {
-   // VaapiVideoDecoder flag is required for VaapiVideoDecoder.
+ BASE_FEATURE(kRenderableMM21,
+              "RenderableMM21",
