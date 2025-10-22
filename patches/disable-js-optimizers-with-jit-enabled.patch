@@ -10,67 +10,21 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/v8/src/compiler/turboshaft/pipelines.h b/v8/src/compiler/turboshaft/pipelines.h
-index 31c1ac85..6269f77c 100644
---- a/v8/src/compiler/turboshaft/pipelines.h
-+++ b/v8/src/compiler/turboshaft/pipelines.h
-@@ -153,7 +153,7 @@ class V8_EXPORT_PRIVATE Pipeline {
-
-   bool CreateGraphFromTurbofan(compiler::TFPipelineData* turbofan_data,
-                                Linkage* linkage) {
--    CHECK_IMPLIES(!v8_flags.disable_optimizing_compilers, v8_flags.turboshaft);
-+    CHECK_IMPLIES(v8_flags.enable_optimizing_compilers, v8_flags.turboshaft);
-
-     UnparkedScopeIfNeeded scope(data_->broker(),
-                                 v8_flags.turboshaft_trace_reduction ||
 diff --git a/v8/src/flags/flag-definitions.h b/v8/src/flags/flag-definitions.h
-index 63c2a766..23ed19ca 100644
+index 479b4499..9dd25207 100644
 --- a/v8/src/flags/flag-definitions.h
 +++ b/v8/src/flags/flag-definitions.h
-@@ -747,7 +747,7 @@ DEFINE_BOOL(additive_safe_int_feedback, true,
-             "Enable the use of AdditiveSafeInteger feedback")
- // Additive safe ints are only used by TurboFan.
- DEFINE_NEG_IMPLICATION(jitless, additive_safe_int_feedback)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, additive_safe_int_feedback)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, additive_safe_int_feedback)
- #else
- DEFINE_BOOL_READONLY(additive_safe_int_feedback, false,
-                      "Enable the use of AdditiveSafeInteger feedback")
-@@ -880,25 +880,25 @@ DEFINE_NEG_IMPLICATION(jitless, maglev)
+@@ -887,8 +887,12 @@ DEFINE_NEG_IMPLICATION(jitless, turbolev)
  DEFINE_NEG_IMPLICATION(jitless, interpreted_frames_native_stack)
 
  DEFINE_BOOL(
 -    disable_optimizing_compilers, false,
--    "Disable all optimizing compilers while leaving baseline compilers enabled")
++    disable_optimizing_compilers, true,
+     "Disable all optimizing compilers while leaving baseline compilers enabled")
++DEFINE_BOOL(
 +    enable_optimizing_compilers, false,
-+    "Enable all optimizing compilers, otherwise leave baseline compilers enabled")
++    "Enable JIT optimizing compilers")
++DEFINE_NEG_IMPLICATION(enable_optimizing_compilers, disable_optimizing_compilers)
  // Disable all optimizing JavaScript compilers.
  // JavaScript code can execute either in Ignition or Sparkplug.
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turbofan)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turboshaft)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, maglev)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, turbofan)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, turboshaft)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, maglev)
- #if V8_ENABLE_WEBASSEMBLY
- // Disable optimizing Wasm compilers. Wasm code must execute with Liftoff.
--DEFINE_IMPLICATION(disable_optimizing_compilers, liftoff)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, wasm_tier_up)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, wasm_dynamic_tiering)
-+DEFINE_NEG_IMPLICATION(enable_optimizing_compilers, liftoff)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, wasm_tier_up)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, wasm_dynamic_tiering)
- // Disable translation of asm.js to Wasm.
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, validate_asm)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, validate_asm)
- #endif  // V8_ENABLE_WEBASSEMBLY
- // Field type tracking is only used by TurboFan, so can be disabled.
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, track_field_types)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, script_context_cells)
--DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, function_context_cells)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, track_field_types)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, script_context_cells)
-+DEFINE_IMPLICATION(enable_optimizing_compilers, function_context_cells)
-
- DEFINE_BOOL(memory_protection_keys, true,
-             "protect code memory with PKU if available")
+ DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turbofan)
