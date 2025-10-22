@@ -135,3 +135,21 @@ index 8dda88f8..e08a4de7 100644
      if (v8_enable_drumbrake_tracing) {
        defines += [ "V8_ENABLE_DRUMBRAKE_TRACING" ]
      }
+diff --git a/v8/src/flags/flag-definitions.h b/v8/src/flags/flag-definitions.h
+index 479b4499..9dd25207 100644
+--- a/v8/src/flags/flag-definitions.h
++++ b/v8/src/flags/flag-definitions.h
+@@ -887,8 +887,12 @@ DEFINE_NEG_IMPLICATION(jitless, turbolev)
+ DEFINE_NEG_IMPLICATION(jitless, interpreted_frames_native_stack)
+
+ DEFINE_BOOL(
+-    disable_optimizing_compilers, false,
++    disable_optimizing_compilers, true,
+     "Disable all optimizing compilers while leaving baseline compilers enabled")
++DEFINE_BOOL(
++    enable_optimizing_compilers, false,
++    "Enable JIT optimizing compilers")
++DEFINE_NEG_IMPLICATION(enable_optimizing_compilers, disable_optimizing_compilers)
+ // Disable all optimizing JavaScript compilers.
+ // JavaScript code can execute either in Ignition or Sparkplug.
+ DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turbofan)
