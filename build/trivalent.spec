@@ -45,7 +45,7 @@ Name:	%{chromium_name}
 
        -- Strip the dots to make it just a number and compare
        -- If greater than, we use the off-version
-       if string.gsub(off_version_tag) > string.gsub(version_tag) then
+       if string.gsub(off_version_tag, "%.", "") > string.gsub(version_tag, "%.", "") then
            version_tag = off_version_tag
 	   end
 
