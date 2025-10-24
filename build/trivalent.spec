@@ -41,7 +41,7 @@ Name:	%{chromium_name}
         -- This IS NOT the version of the browser
         -- It is only used if it is greater than the automated version detection
         -- The point is to update to an arbitrary greater release tag, like early stable or beta tags
-        local off_version_tag = "0" -- "142.0.7444.52"
+        local off_version_tag = "141.0.7390.127" -- "142.0.7444.52"
 
         -- Strip the dots to make it just a number and compare
         -- If greater than, we use the off-version
