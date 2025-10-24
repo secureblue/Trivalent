@@ -17,7 +17,6 @@ permissions: {}
 on:
   workflow_dispatch:
 
-
 jobs:
   build-x86_64-test:
     name: Build x86_64 test
