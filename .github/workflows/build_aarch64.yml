@@ -21,6 +21,7 @@ on:
 jobs:
   build-aarch64:
     name: Build aarch64
+    environment: Build
     if: github.triggering_actor == 'royaloughtness'
     strategy:
       fail-fast: false

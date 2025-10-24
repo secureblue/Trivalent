@@ -22,13 +22,13 @@ on:
         default: false
     secrets:
       RPM_SIGNING_KEY:
-        required: true
+        required: false
       R2_ACCESS_KEY_ID:
-        required: true
+        required: false
       R2_SECRET_ACCESS_KEY:
-        required: true
+        required: false
       R2_ENDPOINT:
-        required: true
+        required: false
   
 name: Create RPM Release
 
@@ -164,6 +164,7 @@ jobs:
 
       - name: Sign
         shell: bash
+        if: ${{ ! inputs.test_build }}
         id: sign
         run: |
           trivalent_rpm_file=$(ls | grep -E '^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.(x86_64|aarch64)\.rpm$')

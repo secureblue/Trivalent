@@ -21,6 +21,7 @@ on:
 jobs:
   build-x86_64:
     name: Build x86_64
+    environment: Build
     if: github.triggering_actor == 'royaloughtness'
     strategy:
       fail-fast: false
