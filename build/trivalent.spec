@@ -42,6 +42,10 @@ Name:	%{chromium_name}
         -- It is only used if it is greater than the automated version detection
         -- The point is to update to an arbitrary greater release tag, like early stable or beta tags
         local off_version_tag = "141.0.7390.127" -- "142.0.7444.52"
+		-- This was added because Google shipped an update but forgot to ship a security fix:
+		--   https://github.com/uazo/cromite/issues/2427
+		-- And didn't ship said update in stable.
+		-- Instead just pushed the fix the next major version instead.
 
         -- Strip the dots to make it just a number and compare
         -- If greater than, we use the off-version
