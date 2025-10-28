@@ -21,7 +21,7 @@ It's inspired by PaX MPROTECT restrictions.
  2 files changed, 73 insertions(+)
 
 diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-index 303c8e1d26f32..70e67a48e22a2 100644
+index d520ee20fa151..22026c9ac2c06 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 +++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 @@ -15,6 +15,7 @@
@@ -32,7 +32,7 @@ index 303c8e1d26f32..70e67a48e22a2 100644
  #include <sys/socket.h>
  #include <sys/stat.h>
  #include <sys/time.h>
-@@ -262,6 +263,31 @@ SANDBOX_EXPORT ResultExpr RestrictMremapFlagsForODML() {
+@@ -263,6 +264,31 @@ SANDBOX_EXPORT ResultExpr RestrictMremapFlagsForODML() {
    return If((flags & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
@@ -64,7 +64,7 @@ index 303c8e1d26f32..70e67a48e22a2 100644
  ResultExpr RestrictMprotectFlags() {
    // The flags you see are actually the allowed ones, and the variable is a
    // "denied" mask because of the negation operator.
-@@ -280,6 +306,24 @@ ResultExpr RestrictMprotectFlags() {
+@@ -281,6 +307,24 @@ ResultExpr RestrictMprotectFlags() {
    return If((prot & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
@@ -89,7 +89,7 @@ index 303c8e1d26f32..70e67a48e22a2 100644
  ResultExpr RestrictFcntlCommands() {
    // We also restrict the flags in F_SETFL. We don't want to permit flags with
    // a history of trouble such as O_DIRECT. The flags you see are actually the
-@@ -322,6 +366,17 @@ ResultExpr RestrictFcntlCommands() {
+@@ -323,6 +367,17 @@ ResultExpr RestrictFcntlCommands() {
    // clang-format on
  }
  
@@ -108,7 +108,7 @@ index 303c8e1d26f32..70e67a48e22a2 100644
  ResultExpr RestrictSocketcallCommand() {
    // Unfortunately, we are unable to restrict the first parameter to
 diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
-index b17b4e040753c..215d8b3e7ed27 100644
+index ed0f61cfb22ab..40c2b0294660e 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
 +++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
 @@ -40,6 +40,15 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictIoctl();

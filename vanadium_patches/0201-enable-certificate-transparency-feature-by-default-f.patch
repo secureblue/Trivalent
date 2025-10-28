@@ -9,13 +9,13 @@ Subject: [PATCH] enable certificate transparency feature by default for
  1 file changed, 4 deletions(-)
 
 diff --git a/chrome/browser/browser_features.cc b/chrome/browser/browser_features.cc
-index ac73d3e3b4df9..b11dbe795a5c8 100644
+index ed397bd22e079..38425db379402 100644
 --- a/chrome/browser/browser_features.cc
 +++ b/chrome/browser/browser_features.cc
-@@ -60,11 +60,7 @@ BASE_FEATURE(kBookmarkTriggerForPrefetch,
+@@ -49,11 +49,7 @@ BASE_FEATURE(kBookmarkTriggerForPrefetch, base::FEATURE_DISABLED_BY_DEFAULT);
+ // On builds where CT is enabled, this flag is also used as an emergency kill
  // switch.
  BASE_FEATURE(kCertificateTransparencyAskBeforeEnabling,
-              "CertificateTransparencyAskBeforeEnabling",
 -#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
               base::FEATURE_ENABLED_BY_DEFAULT);
 -#else

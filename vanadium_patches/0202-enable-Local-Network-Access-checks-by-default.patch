@@ -8,22 +8,22 @@ Subject: [PATCH] enable Local Network Access checks by default
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/services/network/public/cpp/features.cc b/services/network/public/cpp/features.cc
-index 9ec5916c1740a..8ce94cd202222 100644
+index 43a89fb245c1b..ad82fc0534484 100644
 --- a/services/network/public/cpp/features.cc
 +++ b/services/network/public/cpp/features.cc
-@@ -244,7 +244,7 @@ BASE_FEATURE(kPrivateNetworkAccessPreflightShortTimeout,
+@@ -230,7 +230,7 @@ BASE_FEATURE_PARAM(bool,
+ //
  // Spec: https://wicg.github.io/local-network-access/
- BASE_FEATURE(kLocalNetworkAccessChecks,
-              "LocalNetworkAccessChecks",
+ BASE_FEATURE(kLocalNetworkAccessChecksWebRTC,
 -             base::FEATURE_DISABLED_BY_DEFAULT);
 +             base::FEATURE_ENABLED_BY_DEFAULT);
  
- // If true, local network access checks will only be warnings.
+ // If true, local network access checks will only apply for loopback addresses.
  BASE_FEATURE_PARAM(bool,
-@@ -260,7 +260,7 @@ BASE_FEATURE_PARAM(bool,
+@@ -245,7 +245,7 @@ BASE_FEATURE_PARAM(bool,
+ //
  // Spec: https://wicg.github.io/local-network-access/
- BASE_FEATURE(kLocalNetworkAccessChecksWebRTC,
-              "LocalNetworkAccessChecksWebRTC",
+ BASE_FEATURE(kLocalNetworkAccessChecksWebSockets,
 -             base::FEATURE_DISABLED_BY_DEFAULT);
 +             base::FEATURE_ENABLED_BY_DEFAULT);
  
