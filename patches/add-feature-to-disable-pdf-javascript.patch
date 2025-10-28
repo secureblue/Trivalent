@@ -11,19 +11,20 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/pdf/pdf_features.cc b/pdf/pdf_features.cc
-index 8c6f82b463..6d6ff518b6 100644
+index e4dbc7d5b0834..973bc515cea96 100644
 --- a/pdf/pdf_features.cc
 +++ b/pdf/pdf_features.cc
-@@ -14,6 +14,9 @@ namespace {
+@@ -13,6 +13,10 @@ namespace {
  bool g_is_oopif_pdf_policy_enabled = true;
  }  // namespace
-
+ 
 +// Trivalent
-+BASE_FEATURE(kPdfJavaScript, base::FEATURE_DISABLED_BY_DEFAULT);
++BASE_FEATURE(kPdfJavaScript, "PdfJavaScript",
++             base::FEATURE_DISABLED_BY_DEFAULT);
 +
- BASE_FEATURE(kAccessiblePDFForm, base::FEATURE_DISABLED_BY_DEFAULT);
-
- // "Incremental loading" refers to loading the PDF as it arrives.
+ BASE_FEATURE(kAccessiblePDFForm,
+              "AccessiblePDFForm",
+              base::FEATURE_DISABLED_BY_DEFAULT);
 diff --git a/pdf/pdf_features.h b/pdf/pdf_features.h
 index d41a57843a..92ca24ed0e 100644
 --- a/pdf/pdf_features.h

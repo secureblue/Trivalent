@@ -10,14 +10,14 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/content/public/common/content_features.cc b/content/public/common/content_features.cc
-index 57f1ff40ca..ec322802cb 100644
+iff --git a/content/public/common/content_features.cc b/content/public/common/content_features.cc
+index f087a28da0..d170478965 100644
 --- a/content/public/common/content_features.cc
 +++ b/content/public/common/content_features.cc
-@@ -105,7 +105,7 @@ BASE_FEATURE(kAudioServiceOutOfProcess,
+@@ -112,7 +112,7 @@ BASE_FEATURE(AudioServiceOutOfProcess,
  // Enables the audio-service sandbox. This feature has an effect only when the
  // kAudioServiceOutOfProcess feature is enabled.
- BASE_FEATURE(kAudioServiceSandbox,
+ BASE_FEATURE(AudioServiceSandbox,
 -#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_FUCHSIA)
 +#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_FUCHSIA) || BUILDFLAG(IS_LINUX)
               base::FEATURE_ENABLED_BY_DEFAULT

@@ -11,21 +11,23 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index c03c8ac6f6..307ec92450 100644
+index 647b359c32..8e1536be10 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -285,11 +285,7 @@ bool IsTabGroupMenuMoreEntryPointsEnabled() {
- // Enables preview images in tab-hover cards.
+@@ -203,12 +203,7 @@ BASE_FEATURE(kTabGroupsCollapseFreezing,
  // https://crbug.com/928954
  BASE_FEATURE(kTabHoverCardImages,
+              "TabHoverCardImages",
 -#if BUILDFLAG(IS_MAC)
-              base::FEATURE_DISABLED_BY_DEFAULT
+-             base::FEATURE_DISABLED_BY_DEFAULT
 -#else
 -             base::FEATURE_ENABLED_BY_DEFAULT
 -#endif
- );
-
- BASE_FEATURE(kTabGroupHoverCards, base::FEATURE_DISABLED_BY_DEFAULT);
+-);
++             base::FEATURE_DISABLED_BY_DEFAULT);
+ 
+ BASE_FEATURE(kTabModalUsesDesktopWidget,
+              "TabModalUsesDesktopWidget",
 diff --git a/chrome/browser/sharing_hub/sharing_hub_features.cc b/chrome/browser/sharing_hub/sharing_hub_features.cc
 index 2ddc318a2b738..6fd447d8e5ce1 100644
 --- a/chrome/browser/sharing_hub/sharing_hub_features.cc
@@ -53,21 +55,18 @@ index 2e0e1e41c3c58..d4b7b33d8830d 100644
    registry->RegisterDictionaryPref(kChromeLabsNewBadgeDictAshChrome);
  #endif
 diff --git a/components/history_clusters/core/features.cc b/components/history_clusters/core/features.cc
-index 54c0b44aca..c69d7a2ab3 100644
+index a85534a986fc8..be4d151f7be66 100644
 --- a/components/history_clusters/core/features.cc
 +++ b/components/history_clusters/core/features.cc
-@@ -16,11 +16,7 @@ namespace history_clusters {
- namespace {
-
- constexpr auto enabled_by_default_desktop_only =
--#if BUILDFLAG(IS_ANDROID) || BUILDFLAG(IS_IOS)
-     base::FEATURE_DISABLED_BY_DEFAULT;
--#else
--    base::FEATURE_ENABLED_BY_DEFAULT;
--#endif
-
- }  // namespace
+@@ -26,7 +26,7 @@ constexpr auto enabled_by_default_desktop_only =
  
+ namespace internal {
+ 
+-BASE_FEATURE(kJourneys, "Journeys", enabled_by_default_desktop_only);
++BASE_FEATURE(kJourneys, "Journeys", base::FEATURE_DISABLED_BY_DEFAULT);
+ 
+ BASE_FEATURE(kJourneysImages,
+              "JourneysImages",
 diff --git a/components/collaboration/public/pref_names.cc b/components/collaboration/public/pref_names.cc
 index 701b1adf50..af25f314c4 100644
 --- a/components/collaboration/public/pref_names.cc
