@@ -1,0 +1,16 @@
+diff --git a/third_party/depot_tools/gclient_paths.py b/third_party/depot_tools/gclient_paths.py
+index 7d05599..262ab67 100644
+--- a/third_party/depot_tools/gclient_paths.py
++++ b/third_party/depot_tools/gclient_paths.py
+@@ -97,10 +97,7 @@ def _GetPrimarySolutionPathInternal(cwd):
+
+ def GetPrimarySolutionPath(from_dir=None):
+     """Returns the full path to the primary solution. (gclient_root + src)"""
+-    if not from_dir:
+-        from_dir = os.getcwd()
+-    from_dir = os.path.abspath(from_dir)
+-    return _GetPrimarySolutionPathInternal(from_dir)
++    return _GetPrimarySolutionPathInternal(os.getcwd())
+
+
+ @functools.lru_cache
