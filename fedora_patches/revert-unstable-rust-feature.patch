@@ -49,3 +49,16 @@ index 9df874c..e277d86 100644
  pub(crate) fn yuv_to_rgb(image: &image::Image, rgb: &mut rgb::Image) -> AvifResult<Option<bool>> {
      if (rgb.depth != 8 && rgb.depth != 10) || !image.depth_valid() {
          return Ok(None); // Not implemented.
+diff --git a/third_party/crabbyavif/BUILD.gn b/third_party/crabbyavif/BUILD.gn
+index 38b2055f5ca50..c9ef690b78b6f 100644
+--- a/third_party/crabbyavif/BUILD.gn
++++ b/third_party/crabbyavif/BUILD.gn
+@@ -202,7 +202,7 @@ rust_static_library("crabbyavif") {
+ 
+   # Required for disable_cfi feature.
+   configs -= [ "//build/config/compiler:disallow_unstable_features" ]
+-  rustflags = [ "-Zallow-features=sanitize" ]
++  rustflags = [ "-Zallow-features=no_sanitize" ]
+ 
+   public_deps = [ ":header_files" ]
+   deps = [
