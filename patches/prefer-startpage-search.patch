@@ -18,7 +18,7 @@ index 9bd4f39..9f259e8 100644
      "CA": {
        // Canada
        "search_engines": [
-+        "&startpage,"
++        "&startpage",
          "&google",
          "&bing",
          "&yahoo_ca",
@@ -26,7 +26,7 @@ index 9bd4f39..9f259e8 100644
      "DE": {
        // Germany
        "search_engines": [
-+        "&startpage,"
++        "&startpage",
          "&google",
          "&duckduckgo",
          "&brave",
