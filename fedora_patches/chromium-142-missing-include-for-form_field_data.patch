@@ -1,0 +1,32 @@
+commit 069d424e41f42c6f4a4551334eafc7cfaed6e880
+Author: Nathan Pratta Teodosio <nathan.teodosio@canonical.com>
+Date:   Mon Oct 13 02:29:29 2025 -0700
+
+    Add missing include for FormFieldData type completeness.
+    
+    Bug: 450752866
+    Change-Id: I25b2d6cd627063e006014289de68d2ecc70a2db7
+    Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/7030724
+    Reviewed-by: Christoph Schwering <schwering@google.com>
+    Reviewed-by: Jihad Hanna <jihadghanna@google.com>
+    Commit-Queue: Jihad Hanna <jihadghanna@google.com>
+    Reviewed-by: Matthias Körber <koerber@google.com>
+    Cr-Commit-Position: refs/heads/main@{#1528799}
+
+diff --git a/components/autofill/core/browser/form_parsing/autofill_scanner.h b/components/autofill/core/browser/form_parsing/autofill_scanner.h
+index 844526a5f77..eab073266e8 100644
+--- a/components/autofill/core/browser/form_parsing/autofill_scanner.h
++++ b/components/autofill/core/browser/form_parsing/autofill_scanner.h
+@@ -10,11 +10,10 @@
+ #include "base/compiler_specific.h"
+ #include "base/containers/span.h"
+ #include "base/memory/raw_span.h"
++#include "components/autofill/core/common/form_field_data.h"
+ 
+ namespace autofill {
+ 
+-class FormFieldData;
+-
+ // A helper class for parsing a stream of |FormFieldData|'s with lookahead.
+ class AutofillScanner {
+  private:
