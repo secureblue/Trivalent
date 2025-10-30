@@ -40,7 +40,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
     steps:
       - name: Enable egress auditing
         uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
@@ -77,7 +77,7 @@ jobs:
     needs: buildsrpm
     runs-on: ${{ inputs.arch == 'x86_64' && 'runs-on=${{ github.run_id }}/runner=x86_64-runner' || 'runs-on=${{ github.run_id }}/runner=arm64-runner' }}
     container: 
-      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
       options: --privileged
     steps:
       - name: Enable egress auditing
@@ -134,7 +134,7 @@ jobs:
     environment: ${{ inputs.test_build && 'TestBuild' || 'Build' }}
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     container: 
-      image: ${{ inputs.arch == 'x86_64' && 'fedora:42@sha256:89ed3ea10de7194c36524a290665960ddd4dae876a40beeadde2a9b4a0276681' || 'fedora:42@sha256:b6e8a32686d8bbe7a7e562d7215272a9b96b44c40e37f561ef807d112fde45d0' }}
+      image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
     needs: buildrpm
     outputs:
       hashes: ${{ steps.sign.outputs.hashes }}
