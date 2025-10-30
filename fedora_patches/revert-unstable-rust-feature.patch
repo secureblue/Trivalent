@@ -49,6 +49,15 @@ index 9df874c..e277d86 100644
  pub(crate) fn yuv_to_rgb(image: &image::Image, rgb: &mut rgb::Image) -> AvifResult<Option<bool>> {
      if (rgb.depth != 8 && rgb.depth != 10) || !image.depth_valid() {
          return Ok(None); // Not implemented.
+@@ -833,7 +833,7 @@ fn rgb_to_yuv_conversion_function(
+     }
+ }
+ 
+-#[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
++#[cfg_attr(feature = "disable_cfi", no_sanitize(cfi = "off"))]
+ pub(crate) fn rgb_to_yuv(rgb: &rgb::Image, image: &mut image::Image) -> AvifResult<Option<()>> {
+     let conversion_function = match rgb_to_yuv_conversion_function(rgb, image) {
+         Some(conversion_function) => conversion_function,
 diff --git a/third_party/crabbyavif/BUILD.gn b/third_party/crabbyavif/BUILD.gn
 index 38b2055f5ca50..c9ef690b78b6f 100644
 --- a/third_party/crabbyavif/BUILD.gn
