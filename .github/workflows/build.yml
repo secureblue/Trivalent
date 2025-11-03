@@ -63,7 +63,7 @@ jobs:
           echo "SRPM_HASH: ${SRPM_HASH}"
           
       - name: Save SRPM
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: srpm-artifact
           path: "*.rpm"
@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload log artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: build-logs
           path: "*.log"
@@ -121,7 +121,7 @@ jobs:
           rm trivalent-*.src.rpm
 
       - name: Save RPM
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: rpm-artifact
           path: "*.rpm"
