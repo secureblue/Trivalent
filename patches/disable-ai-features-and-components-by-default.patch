@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index a582e4069416d..b4bc940c8a8c7 100644
+index 0ab10486a183c..9aa7f203055d4 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -1515,7 +1515,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+@@ -1535,7 +1535,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
        prefs::kServiceWorkerToControlSrcdocIframeEnabled, true);
    registry->RegisterBooleanPref(prefs::kReduceAcceptLanguageEnabled, true);
    registry->RegisterBooleanPref(policy::policy_prefs::kBuiltInAIAPIsEnabled,
@@ -42,7 +42,7 @@ index 8ea949d4f3ff4..1a08b76cbb9e7 100644
      ScreenAIComponentInstallerPolicy::DeleteComponent();
    }
 diff --git a/chrome/browser/devtools/devtools_window.cc b/chrome/browser/devtools/devtools_window.cc
-index a2bf7a5c69..bf4da4fca9 100644
+index a2bf7a5c6914c..bf4da4fca9db0 100644
 --- a/chrome/browser/devtools/devtools_window.cc
 +++ b/chrome/browser/devtools/devtools_window.cc
 @@ -561,7 +561,7 @@ void DevToolsWindow::RegisterProfilePrefs(
@@ -55,10 +55,10 @@ index a2bf7a5c69..bf4da4fca9 100644
        prefs::kDevToolsGoogleDeveloperProgramProfileAvailability,
        /* enabled */ 0);
 diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browser_prefs.cc
-index d016286d9cb7a..89ac48fb06cd8 100644
+index 12845dd2464bb..78200c7c22fa7 100644
 --- a/chrome/browser/prefs/browser_prefs.cc
 +++ b/chrome/browser/prefs/browser_prefs.cc
-@@ -2351,7 +2351,7 @@ void RegisterScreenshotPrefs(PrefRegistrySimple* registry) {
+@@ -2505,7 +2505,7 @@ void RegisterScreenshotPrefs(PrefRegistrySimple* registry) {
  }
  
  void RegisterGeminiSettingsPrefs(user_prefs::PrefRegistrySyncable* registry) {
@@ -68,18 +68,31 @@ index d016286d9cb7a..89ac48fb06cd8 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
-index ffedbe6af7..990c311482 100644
+index 467eb386e642b..6aa69dea4ff6c 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
 +++ b/components/omnibox/browser/aim_eligibility_service.cc
-@@ -59,7 +59,7 @@ static constexpr char kRequestQuery[] = "async=_fmt:pb";
+@@ -62,7 +62,7 @@ static constexpr char kRequestQuery[] = "async=_fmt:pb";
  // `GenAiDefaultSettings` policy if `AIModeSettings` isn't set, or the default
  // pref value (0) if neither policy is set. Do not change this value without
  // migrating the existing prefs and the policy's prefs mapping.
 -constexpr int kAiModeAllowedDefault = 0;
 +constexpr int kAiModeAllowedDefault = 1;
-
+ 
  // The pref name used for storing the eligibility response proto.
  constexpr char kResponsePrefName[] =
+diff --git a/components/omnibox/common/omnibox_features.cc b/components/omnibox/common/omnibox_features.cc
+index 6ed6d106682dd..e9a23f3587895 100644
+--- a/components/omnibox/common/omnibox_features.cc
++++ b/components/omnibox/common/omnibox_features.cc
+@@ -196,7 +196,7 @@ BASE_FEATURE(kOmniboxMultimodalInput, DISABLED);
+ // and are located in the US, and has no effect if the first feature is
+ // enabled.
+ BASE_FEATURE(kAiModeOmniboxEntryPoint, DISABLED);
+-BASE_FEATURE(kAiModeOmniboxEntryPointEnUs, ENABLED);
++BASE_FEATURE(kAiModeOmniboxEntryPointEnUs, DISABLED);
+ 
+ // Hides the AIM entrypoint in the Omnibox when user input is in progress. Only
+ // used on desktop platforms.
 diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
 index d2163e7eef014..8090c19e5ab09 100644
 --- a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
