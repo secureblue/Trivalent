@@ -639,7 +639,7 @@ fi
 %{chromium_path}/libGLESv2.so
 # Config
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
-%config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d
+%config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d/
 %config %{_sysconfdir}/%{chromium_name}/master_preferences
 %config %{_sysconfdir}/%{chromium_name}/policies/
 # System entries
