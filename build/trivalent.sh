@@ -45,7 +45,7 @@ HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
 declare FEATURES
-deckare CHROMIUM_FLAGS
+declare CHROMIUM_FLAGS
 
 # obtain extra flags that are likely user-configured
 if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
