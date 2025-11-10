@@ -572,18 +572,15 @@ diff --git a/chrome/browser/resources/settings/search_page/search_page.html b/ch
 index fece6801f3..ea24f185a2 100644
 --- a/chrome/browser/resources/settings/search_page/search_page.html
 +++ b/chrome/browser/resources/settings/search_page/search_page.html
-@@ -101,5 +101,14 @@
+@@ -101,5 +101,11 @@
          label="$i18n{searchEnginesManageSiteSearch}"
          on-click="onManageSearchEnginesClick_"
          role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
 +
-+    <template is="dom-if" restamp>
-+      <settings-toggle-button id="searchSuggestToggle"
-+          class="hr"
-+          pref="{{prefs.search.suggest_enabled}}"
-+          label="$i18n{searchSuggestPref}"
-+          sub-label="$i18n{searchSuggestPrefDesc}">
-+      </settings-toggle-button>
-+    </template>
++    <settings-toggle-button class="cr-row"
++      pref="{{prefs.search.suggest_enabled}}"
++      label="$i18n{searchSuggestPref}"
++      sub-label="$i18n{searchSuggestPrefDesc}">
++    </settings-toggle-button>
    </div>
  </settings-section>
