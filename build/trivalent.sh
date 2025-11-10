@@ -59,7 +59,7 @@ fi
 declare CHROMIUM_SYSTEM_FLAGS
 [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
 
-declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_SYSTEM_FLAGS $CHROMIUM_FLAGS"
+declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_FLAGS $CHROMIUM_SYSTEM_FLAGS"
 
 # desktop integration
 declare -r xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
