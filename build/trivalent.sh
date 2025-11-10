@@ -22,9 +22,11 @@ declare -rx XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 declare -rx XAUTHORITY="$XAUTHORITY"
 declare -rx DISPLAY="$DISPLAY"
 
+declare -r ARCH="$(uname -m)"
+
 # enable hardware CFI feature
 # https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
-if [[ "$(uname -m)" == "x86_64" ]]; then
+if [[ "$ARCH" == "x86_64" ]]; then
   declare -rx GLIBC_TUNABLES="glibc.cpu.x86_ibt=on:glibc.cpu.x86_shstk=permissive"
 fi
 
@@ -42,9 +44,17 @@ declare -rx CHROME_WRAPPER
 HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
+# obtain extra flags that are likely user-configured
+if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
+  for conf_file in /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d/*.conf; do
+    source "$conf_file"
+  done
+fi
+declare -r CHROMIUM_EXTRA_FLAGS="$CHROMIUM_EXTRA_FLAGS"
+
 # obtain chromium flags from system file
 # shellcheck source=build/trivalent.conf
-[[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && . "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
+[[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
 declare -r CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
 
 # desktop integration
@@ -82,5 +92,5 @@ if [[ -r "/etc/ld.so.preload" ]]; then
   exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload --setenv GDK_DISABLE icon-nodes "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
 else
   # shellcheck disable=SC2086
-  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
+  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS $CHROMIUM_EXTRA_FLAGS "$@"
 fi
