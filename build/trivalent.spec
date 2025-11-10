@@ -543,7 +543,7 @@ mkdir -p %{buildroot}%{_bindir} \
 
 # install system wide chromium config
 cp -a %{SOURCE2} %{buildroot}%{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
-mkdir %{buildroot}%{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d
+mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d
 cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_name}.sh
 
 export BUILD_TARGET=`cat /etc/redhat-release`
