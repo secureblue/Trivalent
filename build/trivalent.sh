@@ -44,18 +44,22 @@ declare -rx CHROME_WRAPPER
 HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
+declare FEATURES
+deckare CHROMIUM_FLAGS
+
 # obtain extra flags that are likely user-configured
 if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
   for conf_file in /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d/*.conf; do
     source "$conf_file"
   done
 fi
-declare -r CHROMIUM_EXTRA_FLAGS="$CHROMIUM_EXTRA_FLAGS"
 
 # obtain chromium flags from system file
 # shellcheck source=build/trivalent.conf
+declare CHROMIUM_SYSTEM_FLAGS
 [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
-declare -r CHROMIUM_FLAGS="$CHROMIUM_FLAGS"
+
+declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_SYSTEM_FLAGS $CHROMIUM_FLAGS"
 
 # desktop integration
 declare -r xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
@@ -89,8 +93,8 @@ exec 2> >(exec cat >&2)
 # If ld.so.preload is readable, it may be used to preload into the browser which we don't want
 if [[ -r "/etc/ld.so.preload" ]]; then
   # shellcheck disable=SC2086
-  exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload --setenv GDK_DISABLE icon-nodes "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS "$@"
+  exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload --setenv GDK_DISABLE icon-nodes "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
 else
   # shellcheck disable=SC2086
-  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_FLAGS $CHROMIUM_EXTRA_FLAGS "$@"
+  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
 fi
