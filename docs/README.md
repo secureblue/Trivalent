@@ -36,7 +36,7 @@ Unsupported installation is also possible [via our repo](https://repo.secureblue
 
 **<details><summary>Installation methods</summary>**
 
-**<details><summary>Non-atomic Fedora</summary>**
+**<details><summary>Standard Fedora</summary>**
 
 Add the repo:
 ```
