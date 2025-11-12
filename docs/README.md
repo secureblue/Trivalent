@@ -30,7 +30,30 @@ A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadi
 
 ## Installation
 
-Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks [SELinux confinement](https://github.com/secureblue/secureblue/tree/live/files/scripts/selinux/trivalent).
+Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). 
+
+Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks [SELinux confinement](https://github.com/secureblue/secureblue/tree/live/files/scripts/selinux/trivalent).
+
+**<details><summary>Installation process on non-atomic Fedora</summary>**
+
+Add the repo:
+```
+run0 sh -c 'dnf config-manager addrepo --from-repofile=https://repo.secureblue.dev/secureblue.repo'
+```
+
+```
+run0 sh -c 'dnf install trivalent'
+```
+You willl also need the Copr repo for the subresource filter, the built-in adblocker.
+```
+run0 sh -c 'dnf copr enable secureblue/trivalent'
+```
+
+```
+run0 sh -c 'dnf install trivalent-subresource-filter'
+```
+
+</details>
 
 ## Post-install
 
