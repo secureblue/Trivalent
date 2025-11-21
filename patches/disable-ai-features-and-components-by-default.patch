@@ -68,18 +68,18 @@ index 12845dd2464bb..78200c7c22fa7 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
-index 467eb386e642b..6aa69dea4ff6c 100644
+index 16df28f79d..64c56bf5df 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
 +++ b/components/omnibox/browser/aim_eligibility_service.cc
-@@ -62,7 +62,7 @@ static constexpr char kRequestQuery[] = "async=_fmt:pb";
+@@ -80,7 +80,7 @@ static constexpr char kAuthUserQueryKey[] = "authuser";
  // `GenAiDefaultSettings` policy if `AIModeSettings` isn't set, or the default
  // pref value (0) if neither policy is set. Do not change this value without
  // migrating the existing prefs and the policy's prefs mapping.
 -constexpr int kAiModeAllowedDefault = 0;
 +constexpr int kAiModeAllowedDefault = 1;
- 
- // The pref name used for storing the eligibility response proto.
- constexpr char kResponsePrefName[] =
+
+ // The maximum number of retries for eligibility requests.
+ constexpr int kMaxRetries = 3;
 diff --git a/components/omnibox/common/omnibox_features.cc b/components/omnibox/common/omnibox_features.cc
 index 6ed6d106682dd..e9a23f3587895 100644
 --- a/components/omnibox/common/omnibox_features.cc
