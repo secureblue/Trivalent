@@ -11,13 +11,13 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index a582e40694..66f7cd437c 100644
+index 87a95ef582..a2ba4a1678 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -7641,10 +7641,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -7731,10 +7731,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
- 
+
 -  // Only disable JIT for web schemes.
 -  if (!site_url.SchemeIsHTTPOrHTTPS()) {
 -    return false;
@@ -26,17 +26,17 @@ index a582e40694..66f7cd437c 100644
 +  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
 +      && !site_url.SchemeIs("chrome-extension"))
 +    return true;
- 
+
    return (map && map->GetContentSetting(site_url, site_url,
                                          ContentSettingsType::JAVASCRIPT_JIT) ==
-@@ -7654,13 +7654,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -7744,13 +7744,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
  bool ChromeContentBrowserClient::AreV8OptimizationsDisabledForSite(
      content::BrowserContext* browser_context,
      const GURL& site_url) {
 -  // Only disable optimizations for schemes that might actually load web
 -  // content.
 -  auto* policy = ChildProcessSecurityPolicy::GetInstance();
--  if (!site_url.is_empty() && !policy->IsWebSafeScheme(site_url.scheme())) {
+-  if (!site_url.is_empty() && !policy->IsWebSafeScheme(site_url.GetScheme())) {
 -    return false;
 -  }
 -
