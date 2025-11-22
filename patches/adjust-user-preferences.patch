@@ -214,21 +214,21 @@ index 3692a01c1e..4ba109b3d8 100644
            data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}"
            route-path$="[[routes_.SAFETY_HUB.path]]">
        </settings-safety-hub-page>
-diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 6b9bd1adee..52ba4bf0c0 100644
---- a/chrome/browser/resources/settings/privacy_page/security_page.html
-+++ b/chrome/browser/resources/settings/privacy_page/security_page.html
-@@ -2,6 +2,10 @@
-     #safeBrowsingSection {
+diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.html b/chrome/browser/resources/settings/privacy_page/security/security_page.html
+index 6b9bd1adee..6e0bea5eee 100644
+--- a/chrome/browser/resources/settings/privacy_page/security/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security/security_page.html
+@@ -3,6 +3,10 @@
        padding: 0 var(--cr-section-padding);
      }
-+
+
 +    #webrtcLabel {
 +      flex: 1;
 +    }
-
++
      .bullet-line {
        align-items: center;
+       display: flex;
 @@ -70,129 +74,9 @@
        pointer-events: auto;
      }
@@ -431,23 +431,22 @@ index 6b9bd1adee..52ba4bf0c0 100644
 +      </settings-toggle-button>
 +    </div>
    </settings-subpage>
-diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index 58c759a973..7c30c6d83e 100644
---- a/chrome/browser/resources/settings/privacy_page/security_page.ts
-+++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -30,6 +30,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
-
- import type {SettingsRadioGroupElement} from '../controls/settings_radio_group.js';
- import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
+diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.ts b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
+index 15c880bbaa..21d79a36a3 100644
+--- a/chrome/browser/resources/settings/privacy_page/security/security_page.ts
++++ b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
+@@ -31,6 +31,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+ import type {SettingsCollapseRadioButtonElement} from '../../controls/collapse_radio_button.js';
+ import type {SettingsRadioGroupElement} from '../../controls/settings_radio_group.js';
+ import type {SettingsToggleButtonElement} from '../../controls/settings_toggle_button.js';
 +import type {DropdownMenuOptionList} from '../controls/settings_dropdown_menu.js';
- import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
- import {loadTimeData} from '../i18n_setup.js';
- import type {MetricsBrowserProxy} from '../metrics_browser_proxy.js';
-@@ -122,6 +123,19 @@ export class SettingsSecurityPageElement extends
-         },
+ import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../../hats_browser_proxy.js';
+ import {loadTimeData} from '../../i18n_setup.js';
+ import type {MetricsBrowserProxy} from '../../metrics_browser_proxy.js';
+@@ -123,6 +124,19 @@ export class SettingsSecurityPageElement extends
        },
        // </if>
-+
+
 +      webrtcHandlingPolicyOptions_: {
 +        readOnly: true,
 +        type: Array,
@@ -460,9 +459,10 @@ index 58c759a973..7c30c6d83e 100644
 +          ];
 +        },
 +      },
-
++
        /**
         * Valid safe browsing states.
+        */
 @@ -214,6 +228,7 @@ export class SettingsSecurityPageElement extends
        },
      };
@@ -481,7 +481,6 @@ index 58c759a973..7c30c6d83e 100644
 -
      // Initialize the last focus time on page load.
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
- 
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
 index 1fd9c83cb7..931b3b5aee 100644
 --- a/chrome/browser/resources/settings/route.ts
