@@ -120,7 +120,7 @@ index 47ee2c73fc844..575caacdb6afe 100644
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 1020cf880cddc..ac40bc90e9ea3 100644
+index 220bfa52fa..076c4ec3dc 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
 @@ -65,7 +65,7 @@
@@ -130,26 +130,24 @@ index 1020cf880cddc..ac40bc90e9ea3 100644
 -    <settings-section page-title="$i18n{peoplePageTitle}">
 +    <settings-section page-title="$i18n{editPerson}">
        <div>
- 
+
  <if expr="not is_chromeos">
-@@ -124,32 +124,6 @@
-           </template>
-         </template> <!-- if="[[!shouldShowSyncAccountControl_()]]" -->
- 
+@@ -123,30 +123,6 @@
+           </div>
+         </cr-link-row>
+
 -        <cr-link-row id="sync-setup"
 -            label="$i18n{syncAndNonPersonalizedServices}"
 -            on-click="onSyncClick_"
 -            role-description="$i18n{subpageArrowRoleDescription}"
 -            hidden="[[shouldHideSyncSetupLinkRow_(syncStatus)]]">
 -        </cr-link-row>
--        <template is="dom-if" if="[[shouldHideSyncSetupLinkRow_(syncStatus)]]"
--            restamp>
--          <cr-link-row id="google-services"
--              label="$i18n{googleServicesPageTitle}"
--              on-click="onGoogleServicesClick_"
--              role-description="$i18n{subpageArrowRoleDescription}">
--          </cr-link-row>
--        </template>
+-        <cr-link-row id="google-services"
+-            label="$i18n{googleServicesPageTitle}"
+-            on-click="onGoogleServicesClick_"
+-            role-description="$i18n{subpageArrowRoleDescription}"
+-            hidden="[[!shouldHideSyncSetupLinkRow_(syncStatus)]]">
+-        </cr-link-row>
 -
 -        <template is="dom-if" if="[[signinAllowed_]]">
 -          <cr-link-row id="manage-google-account"
@@ -166,7 +164,7 @@ index 1020cf880cddc..ac40bc90e9ea3 100644
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 89dbc8c3cb..5e24338e2d 100644
+index 95b225cc32..06e98d1a25 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -67,8 +67,8 @@
@@ -179,7 +177,7 @@ index 89dbc8c3cb..5e24338e2d 100644
 +        sub-label="$i18n{privacyGuidePromoBody}"
          on-click="onSecurityPageClick_"
          role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
-     <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
+     <cr-link-row id="siteSettingsLinkRow" start-icon="privacy:page-info"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 index b45a26e61192b..a7218cfa6db8f 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
@@ -195,20 +193,21 @@ index b45a26e61192b..a7218cfa6db8f 100644
  
    private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index 8a52848a1a..609040d221 100644
+index 3692a01c1e..4ba109b3d8 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-@@ -25,14 +25,14 @@
+@@ -25,7 +25,7 @@
    <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
      <template is="dom-if" if="[[renderView_(
-         routes_.PRIVACY, currentRoute, inSearchMode)]]">
+         routes_.PRIVACY, currentRoute, inSearchMode)]]" update-when-false>
 -      <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
 +      <settings-safety-hub-entry-point style="display:none" slot="view" id="safetyHubEntryPoint">
        </settings-safety-hub-entry-point>
      </template>
 
-     <template is="dom-if" if="[[renderView_(
-         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]">
+@@ -33,7 +33,7 @@
+         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]"
+         update-when-false>
        <!-- TODO(crbug.com/40267370): Make the page searchable.-->
 -      <settings-safety-hub-page slot="view" id="safetyHub" no-search
 +      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
@@ -540,21 +539,21 @@ index 4c518c19856c7..e73df1f31e651 100644
        <template is="dom-if" if="[[showFeatureNotificationsSetting_]]">
          <div class="hr"></div>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 662d7bd4acb69..82f82be24716a 100644
+index 86e5d98e45..e4a6a6701a 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -325,10 +325,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+@@ -327,10 +327,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
    html_source->AddBoolean("isOSSettings", false);
  #endif  // BUILDFLAG(IS_CHROMEOS)
- 
+
 -  bool show_privacy_guide =
 -      base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
 -      (!ShouldDisplayManagedUi(profile) && !profile->IsChild());
 -  html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
 +  html_source->AddBoolean("showPrivacyGuide", false);
- 
-   html_source->AddBoolean("enableHandTrackingContentSetting",
- #if BUILDFLAG(ENABLE_VR)
+
+   html_source->AddBoolean(
+       "showResetProfileBannerV2",
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
 index 42fce93fa9125..2e41a1c3fcf44 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
