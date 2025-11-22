@@ -14,15 +14,15 @@ The Windows sandbox prevents dynamic code generation via setting
 MITIGATION_DYNAMIC_CODE_DISABLE on certain processes; prevent dynamic
 code generation in the same processes on Linux via seccomp-bpf.
 ---
- ...renderer_main_platform_delegate_android.cc | 28 ++++++++--
+ ...renderer_main_platform_delegate_android.cc | 28 +++++++++--
  .../seccomp-bpf-helpers/baseline_policy.cc    |  6 +--
  .../policy/linux/bpf_audio_policy_linux.cc    |  3 ++
- .../policy/linux/bpf_renderer_policy_linux.cc | 25 +++++++--
+ .../policy/linux/bpf_renderer_policy_linux.cc | 25 ++++++++--
  .../policy/linux/bpf_renderer_policy_linux.h  |  8 ++-
  .../policy/linux/bpf_service_policy_linux.cc  | 21 ++++++++
  .../policy/linux/bpf_service_policy_linux.h   |  5 +-
- .../policy/linux/sandbox_seccomp_bpf_linux.cc | 51 ++++++++++++++++---
- 8 files changed, 129 insertions(+), 18 deletions(-)
+ .../policy/linux/sandbox_seccomp_bpf_linux.cc | 49 +++++++++++++++++--
+ 8 files changed, 128 insertions(+), 17 deletions(-)
 
 diff --git a/content/renderer/renderer_main_platform_delegate_android.cc b/content/renderer/renderer_main_platform_delegate_android.cc
 index 6486ffd030869..c4979e5c68c29 100644
@@ -237,7 +237,7 @@ index 0f33163d6a87f..48626cb8111fa 100644
  
  }  // namespace policy
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-index 90fdecdb76638..9f3bb3194e272 100644
+index 4de13fe88bee9..59c8b3c2a59c5 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 +++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 @@ -18,6 +18,8 @@
@@ -256,8 +256,8 @@ index 90fdecdb76638..9f3bb3194e272 100644
 +#include "third_party/blink/public/common/switches.h"
  
  #if BUILDFLAG(IS_CHROMEOS)
- #include "chromeos/ash/components/assistant/buildflags.h"
-@@ -188,8 +191,26 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
+ #include "sandbox/policy/features.h"
+@@ -184,8 +187,26 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
    switch (sandbox_type) {
      case sandbox::mojom::Sandbox::kGpu:
        return GetGpuProcessSandbox(options, MremapPolicy::kBlock);
@@ -286,7 +286,7 @@ index 90fdecdb76638..9f3bb3194e272 100644
      case sandbox::mojom::Sandbox::kOnDeviceModelExecution:
        return GetGpuProcessSandbox(options, MremapPolicy::kAllow);
      case sandbox::mojom::Sandbox::kUtility:
-@@ -205,9 +226,27 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
+@@ -201,9 +222,27 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
      case sandbox::mojom::Sandbox::kAudio:
        return std::make_unique<AudioProcessPolicy>();
      case sandbox::mojom::Sandbox::kService:
@@ -317,12 +317,3 @@ index 90fdecdb76638..9f3bb3194e272 100644
      case sandbox::mojom::Sandbox::kSpeechRecognition:
        return std::make_unique<SpeechRecognitionProcessPolicy>();
  #if BUILDFLAG(IS_LINUX)
-@@ -235,7 +274,7 @@ std::unique_ptr<BPFBasePolicy> SandboxSeccompBPF::PolicyForSandboxType(
- #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
- #if BUILDFLAG(IS_LINUX)
-     case sandbox::mojom::Sandbox::kVideoEffects:
--      return std::make_unique<ServiceProcessPolicy>();
-+      return std::make_unique<ServiceProcessPolicy>(true);
- #endif  // BUILDFLAG(IS_LINUX)
- #if BUILDFLAG(IS_CHROMEOS)
-     case sandbox::mojom::Sandbox::kIme:
