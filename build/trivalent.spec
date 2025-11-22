@@ -543,6 +543,7 @@ mkdir -p %{buildroot}%{_bindir} \
 
 # install system wide chromium config
 cp -a %{SOURCE2} %{buildroot}%{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
+mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d
 cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_name}.sh
 
 export BUILD_TARGET=`cat /etc/redhat-release`
@@ -637,7 +638,8 @@ fi
 %{chromium_path}/libEGL.so
 %{chromium_path}/libGLESv2.so
 # Config
-%config(noreplace) %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
+%config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
+%config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d/
 %config %{_sysconfdir}/%{chromium_name}/master_preferences
 %config %{_sysconfdir}/%{chromium_name}/policies/
 # System entries

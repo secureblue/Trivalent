@@ -568,3 +568,19 @@ index 42fce93fa9125..2e41a1c3fcf44 100644
    setupSSLDebuggingInfo();
    document.addEventListener('keypress', handleKeypress);
  
+diff --git a/chrome/browser/resources/settings/search_page/search_page.html b/chrome/browser/resources/settings/search_page/search_page.html
+index fece6801f3..ea24f185a2 100644
+--- a/chrome/browser/resources/settings/search_page/search_page.html
++++ b/chrome/browser/resources/settings/search_page/search_page.html
+@@ -101,5 +101,11 @@
+         label="$i18n{searchEnginesManageSiteSearch}"
+         on-click="onManageSearchEnginesClick_"
+         role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
++
++    <settings-toggle-button class="cr-row"
++      pref="{{prefs.search.suggest_enabled}}"
++      label="$i18n{searchSuggestPref}"
++      sub-label="$i18n{searchSuggestPrefDesc}">
++    </settings-toggle-button>
+   </div>
+ </settings-section>
