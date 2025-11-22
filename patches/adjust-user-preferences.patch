@@ -481,6 +481,7 @@ index 15c880bbaa..21d79a36a3 100644
 -
      // Initialize the last focus time on page load.
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
+ 
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
 index 1fd9c83cb7..931b3b5aee 100644
 --- a/chrome/browser/resources/settings/route.ts
