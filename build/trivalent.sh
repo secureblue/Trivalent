@@ -93,8 +93,8 @@ exec 2> >(exec cat >&2)
 # If ld.so.preload is readable, it may be used to preload into the browser which we don't want
 if [[ -r "/etc/ld.so.preload" ]]; then
   # shellcheck disable=SC2086
-  exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload --setenv GDK_DISABLE icon-nodes "$HERE/$CHROMIUM_NAME" "$CHROMIUM_ALL_FLAGS $@"
+  exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload --setenv GDK_DISABLE icon-nodes "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
 else
   # shellcheck disable=SC2086
-  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" "$CHROMIUM_ALL_FLAGS $@"
+  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
 fi
