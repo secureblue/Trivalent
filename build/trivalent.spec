@@ -35,30 +35,47 @@ Source69: chromium-version.txt
 
 Name:	%{chromium_name}
 %{lua:
-        local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
-        local version_tag = f:read "*all"
+  function splitVersionTag(vtag)
+    local vtag_array = {}
+    local index = 1
+    for version_block in string.gmatch(vtag, ".") do
+      vtag_array[index] = version_block
+      index = index + 1
+    end
+    return vtag_array
+  end
 
-        -- This IS NOT the version of the browser
-        -- It is only used if it is greater than the automated version detection
-        -- The point is to update to an arbitrary greater release tag, like early stable or beta tags
-        local off_version_tag = "141.0.7390.127" -- "142.0.7444.52"
-		-- This was added because Google shipped an update but forgot to ship a security fix:
-		--   https://github.com/uazo/cromite/issues/2427
-		-- And didn't ship said update in stable.
-		-- Instead just pushed the fix the next major version instead.
+  local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
+  local version_tag = f:read "*all"
 
-        -- Strip the dots to make it just a number and compare
-        -- If greater than, we use the off-version
-        if string.gsub(off_version_tag, "%.", "") > string.gsub(version_tag, "%.", "") then
-            version_tag = off_version_tag
-        end
+  -- This IS NOT the version of the browser
+  -- It is only used if it is greater than the automated version detection
+  -- The point is to update to an arbitrary greater release tag, like early stable or beta tags
+  local off_version_tag = "141.0.7390.127"
+	-- This was added because Google shipped an update but forgot to ship a security fix:
+	--   https://github.com/uazo/cromite/issues/2427
+	-- And didn't ship said update in stable.
+	-- Instead just pushed the fix the next major version instead.
 
-        -- This will dynamically set the version based on chromium's latest stable release channel
-        print("Version: "..version_tag.."\n")
+  local vt = splitVersionTag(version_tag)
+  local ovt = splitVersionTag(off_version_tag)
 
-        -- This will automatically increment the release every ~1 hour
-        print("Release: "..(os.time() // 4000).."\n")
+  for i = 1, # vt do
+    if vt[i] > ovt[i] then
+      break
+    elseif ovt[i] > vt[i] then
+      version_tag = off_version_tag
+      break
+    end
+  end
+
+	-- This will dynamically set the version based on chromium's latest stable release channel
+	print("Version: "..version_tag.."\n")
+
+	-- This will automatically increment the release every ~1 hour
+	print("Release: "..(os.time() // 4000).."\n")
 }
+
 Summary: A security-focused browser built upon Google's Chromium web browser
 Url: https://github.com/secureblue/Trivalent
 License: (GPL-2.0-only WITH (Apache-2.0-note AND FTL-note AND WebView-note)) AND BSD-3-Clause AND BSD-2-Clause AND dtoa AND SunPro AND Zlib AND Libpng AND libtiff AND FTL AND LGPL-2.1 AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)
