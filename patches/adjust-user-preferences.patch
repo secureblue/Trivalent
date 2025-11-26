@@ -583,3 +583,18 @@ index fece6801f3..ea24f185a2 100644
 +    </settings-toggle-button>
    </div>
  </settings-section>
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+index 3eb464c572..e9498414b8 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+@@ -32,8 +32,8 @@
+           $i18n{resetDialogCommit}
+         </cr-button>
+       </div>
+-      <div slot="footer">
+-        <cr-checkbox id="sendSettings" checked>
++      <div style="display:none" slot="footer">
++        <cr-checkbox id="sendSettings">
+           $i18nRaw{resetPageFeedback}</cr-checkbox>
+       </div>
+     </cr-dialog>
