@@ -275,11 +275,11 @@ index 6ea960c6f8..1f83c81812 100644
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
 +  if (gpu_sandbox_linux)
 +    // Only enable on platforms where the sandbox works
-+    gpu_sandbox_linux = angle::IsAMD(gpu_info_.active_gpu().vendor_id);
-+                   //|| angle::IsIntel(gpu_info_.active_gpu().vendor_id)
-+                   //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
-+                   //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
-+                   //|| andle::IsARM(gpu_info_.active_gpu().vendor_id)
++    gpu_sandbox_linux = angle::IsAMD(gpu_info_.active_gpu().vendor_id)
++                     || angle::IsIntel(gpu_info_.active_gpu().vendor_id);
++                     //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
++                     //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
++                     //|| andle::IsARM(gpu_info_.active_gpu().vendor_id)
 +  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early ||
 +      // The sandbox does not work with Vulkan currently
 +      (gpu_sandbox_linux && !features::IsUsingVulkan());
