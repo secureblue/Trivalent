@@ -44,6 +44,10 @@ declare -rx CHROME_WRAPPER
 HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
+# LOG_LEVEL=[0,1,2]
+# Default: 0
+declare -ix LOG_LEVEL="${LOG_LEVEL:0}"
+
 declare FEATURES
 declare CHROMIUM_FLAGS
 
@@ -75,10 +79,10 @@ IS_BROWSER_RUNNING=$?
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
 if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
-  echo "Ruh roh! This shouldn't be here..."
+  [[ "$LOG_LEVEL" > 0 ]] && echo "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
-  echo "A process is already open in this directory or Singleton process files are not present."
+  [[ "$LOG_LEVEL" > 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
 # Do this at the end so that everything else still gets hardened_malloc
