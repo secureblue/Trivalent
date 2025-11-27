@@ -46,7 +46,7 @@ declare -r HERE
 
 # LOG_LEVEL=[0,1,2]
 # Default: 0
-declare LOG_LEVEL
+declare -ix LOG_LEVEL="${LOG_LEVEL:0}"
 
 declare FEATURES
 declare CHROMIUM_FLAGS
