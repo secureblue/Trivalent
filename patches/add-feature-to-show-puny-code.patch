@@ -34,20 +34,18 @@ index 63b6e1583a837..a0b8b8c588161 100644
    // on a per-component basis.
    std::u16string out16;
 diff --git a/url/url_features.cc b/url/url_features.cc
-index 4ce9fd4c0b..cd5e72de29 100644
+index 55cdc8b1ee..718c387490 100644
 --- a/url/url_features.cc
 +++ b/url/url_features.cc
-@@ -7,6 +7,10 @@
- 
+@@ -7,6 +7,8 @@
+
  namespace url {
- 
-+BASE_FEATURE(kShowPunycodeDomains,
-+             "ShowPunycodeDomains",
-+             base::FEATURE_DISABLED_BY_DEFAULT);
+
++BASE_FEATURE(kShowPunycodeDomains, base::FEATURE_DISABLED_BY_DEFAULT);
 +
  BASE_FEATURE(kDisallowSpaceCharacterInURLHostParsing,
-              "DisallowSpaceCharacterInURLHostParsing",
               base::FEATURE_DISABLED_BY_DEFAULT);
+
 diff --git a/url/url_features.h b/url/url_features.h
 index 61a665aa0a..586462e007 100644
 --- a/url/url_features.h

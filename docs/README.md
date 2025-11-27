@@ -34,7 +34,7 @@ Official support is only provided via [secureblue](https://github.com/secureblue
 
 ## Post-install
 
-Some additional preferences are added to `chrome://settings/security`, these provide additional security and privacy controls should they be needed. An example of one toggle is the `Network Service Sandbox`, which is known to occasionally clear cookies on exit, disabling the sandbox may help.
+Some additional preferences are added to `chrome://settings/security`, these provide additional security and privacy controls should they be needed. An example of one toggle is the `Network Service Sandbox` (disabled by default), which is known to occasionally [clear cookies on exit](https://secureblue.dev/faq#trivalent-net-sandbox).
 \
 There is also a Website Dark Mode preference added to `chrome://settings/appearance`.
 \

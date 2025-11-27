@@ -23,16 +23,16 @@ index 33c74c40b02fe..bdc4f9b9e2305 100644
    if (command_line->HasSwitch(::switches::kExtensionContentVerification)) {
      std::string switch_value = command_line->GetSwitchValueASCII(
          ::switches::kExtensionContentVerification);
-diff --git a/chrome/browser/extensions/install_verifier.cc b/chrome/browser/extensions/install_verifier.cc
-index 47af320d9cbf9..ee9c64d398ec9 100644
---- a/chrome/browser/extensions/install_verifier.cc
-+++ b/chrome/browser/extensions/install_verifier.cc
-@@ -87,7 +87,7 @@ VerifyStatus GetCommandLineStatus() {
+diff --git a/extensions/browser/install_verifier.cc b/extensions/browser/install_verifier.cc
+index 6769e636a8..6906ddd8eb 100644
+--- a/extensions/browser/install_verifier.cc
++++ b/extensions/browser/install_verifier.cc
+@@ -88,7 +88,7 @@ VerifyStatus GetCommandLineStatus() {
        return VerifyStatus::ENFORCE;
    }
- 
+
 -  return VerifyStatus::NONE;
 +  return VerifyStatus::ENFORCE_STRICT;
  }
- 
+
  VerifyStatus GetStatus() {

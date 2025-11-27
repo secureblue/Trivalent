@@ -11,15 +11,15 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/extensions/common/extension_features.cc b/extensions/common/extension_features.cc
-index f2557c1673..4b046535ee 100644
+index fa2189ddf0..0da3b35588 100644
 --- a/extensions/common/extension_features.cc
 +++ b/extensions/common/extension_features.cc
-@@ -73,7 +73,7 @@ BASE_FEATURE(AllowLegacyMV2Extensions, base::FEATURE_DISABLED_BY_DEFAULT);
+@@ -78,7 +78,7 @@ BASE_FEATURE(kAllowLegacyMV2Extensions, base::FEATURE_DISABLED_BY_DEFAULT);
 
- BASE_FEATURE(ExtensionProtocolHandlers, base::FEATURE_DISABLED_BY_DEFAULT);
+ BASE_FEATURE(kExtensionProtocolHandlers, base::FEATURE_DISABLED_BY_DEFAULT);
 
--BASE_FEATURE(ExtensionsManifestV3Only, base::FEATURE_DISABLED_BY_DEFAULT);
-+BASE_FEATURE(ExtensionsManifestV3Only, base::FEATURE_ENABLED_BY_DEFAULT);
+-BASE_FEATURE(kExtensionsManifestV3Only, base::FEATURE_DISABLED_BY_DEFAULT);
++BASE_FEATURE(kExtensionsManifestV3Only, base::FEATURE_ENABLED_BY_DEFAULT);
 
- BASE_FEATURE(ExtensionsMenuAccessControl, base::FEATURE_DISABLED_BY_DEFAULT);
+ BASE_FEATURE(kExtensionsMenuAccessControl, base::FEATURE_DISABLED_BY_DEFAULT);
  

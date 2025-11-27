@@ -17,7 +17,6 @@ permissions: {}
 on:
   workflow_dispatch:
 
-
 jobs:
   build-aarch64:
     name: Build aarch64

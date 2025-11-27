@@ -9,7 +9,7 @@ Subject: [PATCH] enable subresource filter on all sites
  2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/components/subresource_filter/core/browser/subresource_filter_features.cc b/components/subresource_filter/core/browser/subresource_filter_features.cc
-index 63aa275a14c1c..78ac2f8da422b 100644
+index 24b577dab099f..014fb12371d82 100644
 --- a/components/subresource_filter/core/browser/subresource_filter_features.cc
 +++ b/components/subresource_filter/core/browser/subresource_filter_features.cc
 @@ -136,7 +136,9 @@ std::vector<Configuration> FillEnabledPresetConfigurations(
@@ -23,7 +23,7 @@ index 63aa275a14c1c..78ac2f8da422b 100644
  
    CommaSeparatedStrings enabled_presets(
        TakeVariationParamOrReturnEmpty(params, kEnablePresetsParameterName));
-@@ -290,6 +292,7 @@ const char kPresetPerformanceTestingDryRunOnAllSites[] =
+@@ -286,6 +288,7 @@ const char kPresetPerformanceTestingDryRunOnAllSites[] =
      "performance_testing_dryrun_on_all_sites";
  const char kPresetLiveRunForBetterAds[] =
      "liverun_on_better_ads_violating_sites";
@@ -31,7 +31,7 @@ index 63aa275a14c1c..78ac2f8da422b 100644
  
  // Configuration --------------------------------------------------------------
  
-@@ -320,6 +323,14 @@ Configuration Configuration::MakePresetForLiveRunForBetterAds() {
+@@ -316,6 +319,14 @@ Configuration Configuration::MakePresetForLiveRunForBetterAds() {
    return config;
  }
  

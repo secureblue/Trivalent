@@ -10,31 +10,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/chrome/browser/ui/views/tabs/tab_strip.cc b/chrome/browser/ui/views/tabs/tab_strip.cc
-index 9b5b2834eb..40e7c7b6fa 100644
---- a/chrome/browser/ui/views/tabs/tab_strip.cc
-+++ b/chrome/browser/ui/views/tabs/tab_strip.cc
-@@ -2,6 +2,9 @@
- // Use of this source code is governed by a BSD-style license that can be
- // found in the LICENSE file.
- 
-+#include "ui/views/views_features.h"
-+#include "third_party/blink/public/common/features_generated.h"
-+
- #include "chrome/browser/ui/views/tabs/tab_strip.h"
- 
- #include <stddef.h>
-@@ -2186,7 +2189,9 @@ void TabStrip::NewTabButtonPressed(const ui::Event& event) {
-     const ui::MouseEvent& mouse = static_cast<const ui::MouseEvent&>(event);
-     if (mouse.IsOnlyMiddleMouseButton()) {
-       if (ui::Clipboard::IsSupportedClipboardBuffer(
--              ui::ClipboardBuffer::kSelection)) {
-+              ui::ClipboardBuffer::kSelection) &&
-+          base::FeatureList::IsEnabled(
-+                             views::features::kMiddleClickCopyPaste)) {
-         ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-         CHECK(clipboard)
-             << "Clipboard instance is not available, cannot proceed with "
 diff --git a/ui/views/selection_controller.h b/ui/views/selection_controller.h
 index dcc4d40592932..f9a9b002bd956 100644
 --- a/ui/views/selection_controller.h
@@ -61,21 +36,22 @@ index dcc4d40592932..f9a9b002bd956 100644
  
    // Offsets the double-clicked word's range. This is only used in the unusual
 diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
-index 4c6ae8ff79..e6f160160b 100644
+index 88ca7f0b1f..14be7e5a3a 100644
 --- a/ui/views/views_features.cc
 +++ b/ui/views/views_features.cc
-@@ -44,4 +44,11 @@ BASE_FEATURE(kKeyboardAccessibleTooltipInViews,
-              "KeyboardAccessibleTooltipInViews",
-              base::FEATURE_ENABLED_BY_DEFAULT);
- 
+@@ -9,6 +9,12 @@
+
+ namespace views::features {
+
 +// Controls the behavior of middle-mouse copy and pasting.
 +// This may be overridden by the kMiddleClickAutoscroll
 +// blink feature.
-+BASE_FEATURE(kMiddleClickCopyPaste,
-+             "MiddleClickCopyPaste",
-+             base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kMiddleClickCopyPaste, base::FEATURE_ENABLED_BY_DEFAULT);
 +
- }  // namespace views::features
++
+ // Please keep alphabetized.
+
+ // Used to enable additional a11y attributes when announcing text.
 diff --git a/ui/views/views_features.h b/ui/views/views_features.h
 index 58063f2452..3adbb7a5fb 100644
 --- a/ui/views/views_features.h

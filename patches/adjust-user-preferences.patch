@@ -120,7 +120,7 @@ index 47ee2c73fc844..575caacdb6afe 100644
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 1020cf880cddc..ac40bc90e9ea3 100644
+index 220bfa52fa..076c4ec3dc 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
 @@ -65,7 +65,7 @@
@@ -130,26 +130,24 @@ index 1020cf880cddc..ac40bc90e9ea3 100644
 -    <settings-section page-title="$i18n{peoplePageTitle}">
 +    <settings-section page-title="$i18n{editPerson}">
        <div>
- 
+
  <if expr="not is_chromeos">
-@@ -124,32 +124,6 @@
-           </template>
-         </template> <!-- if="[[!shouldShowSyncAccountControl_()]]" -->
- 
+@@ -123,30 +123,6 @@
+           </div>
+         </cr-link-row>
+
 -        <cr-link-row id="sync-setup"
 -            label="$i18n{syncAndNonPersonalizedServices}"
 -            on-click="onSyncClick_"
 -            role-description="$i18n{subpageArrowRoleDescription}"
 -            hidden="[[shouldHideSyncSetupLinkRow_(syncStatus)]]">
 -        </cr-link-row>
--        <template is="dom-if" if="[[shouldHideSyncSetupLinkRow_(syncStatus)]]"
--            restamp>
--          <cr-link-row id="google-services"
--              label="$i18n{googleServicesPageTitle}"
--              on-click="onGoogleServicesClick_"
--              role-description="$i18n{subpageArrowRoleDescription}">
--          </cr-link-row>
--        </template>
+-        <cr-link-row id="google-services"
+-            label="$i18n{googleServicesPageTitle}"
+-            on-click="onGoogleServicesClick_"
+-            role-description="$i18n{subpageArrowRoleDescription}"
+-            hidden="[[!shouldHideSyncSetupLinkRow_(syncStatus)]]">
+-        </cr-link-row>
 -
 -        <template is="dom-if" if="[[signinAllowed_]]">
 -          <cr-link-row id="manage-google-account"
@@ -166,29 +164,20 @@ index 1020cf880cddc..ac40bc90e9ea3 100644
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index ad81cf875bbba..6885fd10175de 100644
+index 95b225cc32..06e98d1a25 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -83,8 +83,8 @@
-           </cr-link-row>
-         </template>
-         <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
--            class="hr" label="$i18n{securityPageTitle}"
--            sub-label="$i18n{securityPageDescription}"
-+            class="hr" label="$i18n{privacyPageTitle}"
-+            sub-label="$i18n{privacyGuidePromoBody}"
-             on-click="onSecurityPageClick_"
-             role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
-         <cr-link-row id="permissionsLinkRow" start-icon="privacy:page-info"
-@@ -125,7 +125,7 @@
-       </template>
- 
-       <template is="dom-if" route-path="/security">
--        <settings-subpage id="security" page-title="$i18n{securityPageTitle}"
-+        <settings-subpage id="security" page-title="$i18n{privacyPageTitle}"
-             associated-control="[[$$('#securityLinkRow')]]"
-             learn-more-url="$i18n{safeBrowsingHelpCenterURL}">
-           <template is="dom-if" if="[[!enableBundledSecuritySettings_]]">
+@@ -67,8 +67,8 @@
+       </cr-link-row>
+     </template>
+     <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
+-        class="hr" label="$i18n{securityPageTitle}"
+-        sub-label="$i18n{securityPageDescription}"
++        class="hr" label="$i18n{privacyPageTitle}"
++        sub-label="$i18n{privacyGuidePromoBody}"
+         on-click="onSecurityPageClick_"
+         role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+     <cr-link-row id="siteSettingsLinkRow" start-icon="privacy:page-info"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
 index b45a26e61192b..a7218cfa6db8f 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
@@ -204,45 +193,50 @@ index b45a26e61192b..a7218cfa6db8f 100644
  
    private onBrowsingDataDeleted_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index fb981e1f7162e..d6d89b267466c 100644
+index 3692a01c1e..4ba109b3d8 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-@@ -25,14 +25,14 @@
+@@ -25,7 +25,7 @@
    <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
      <template is="dom-if" if="[[renderView_(
-         routes_.PRIVACY, currentRoute, inSearchMode)]]">
+         routes_.PRIVACY, currentRoute, inSearchMode)]]" update-when-false>
 -      <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
 +      <settings-safety-hub-entry-point style="display:none" slot="view" id="safetyHubEntryPoint">
        </settings-safety-hub-entry-point>
      </template>
- 
-     <template is="dom-if" if="[[renderView_(
-         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]">
+
+@@ -33,7 +33,7 @@
+         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]"
+         update-when-false>
        <!-- TODO(crbug.com/40267370): Make the page searchable.-->
 -      <settings-safety-hub-page slot="view" id="safetyHub" no-search
 +      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
-           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}">
+           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}"
+           route-path$="[[routes_.SAFETY_HUB.path]]">
        </settings-safety-hub-page>
-     </template>
-diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index ae93043d94ddc..4b87309d91176 100644
---- a/chrome/browser/resources/settings/privacy_page/security_page.html
-+++ b/chrome/browser/resources/settings/privacy_page/security_page.html
-@@ -4,6 +4,10 @@
-         padding: 0 var(--cr-section-padding);
-       }
- 
-+      #webrtcLabel {
-+        flex: 1;
-+      }
+diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.html b/chrome/browser/resources/settings/privacy_page/security/security_page.html
+index 6b9bd1adee..6e0bea5eee 100644
+--- a/chrome/browser/resources/settings/privacy_page/security/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security/security_page.html
+@@ -3,6 +3,10 @@
+       padding: 0 var(--cr-section-padding);
+     }
+
++    #webrtcLabel {
++      flex: 1;
++    }
 +
-       .bullet-line {
-         align-items: center;
-         display: flex;
-@@ -71,126 +75,6 @@
-         pointer-events: auto;
-       }
-     </style>
+     .bullet-line {
+       align-items: center;
+       display: flex;
+@@ -70,129 +74,9 @@
+       pointer-events: auto;
+     }
+   </style>
+-  <settings-subpage page-title="$i18n{securityPageTitle}"
++  <settings-subpage page-title="$i18n{privacyPageTitle}"
+       learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
+       route-path$="[[routePath]]">
 -    <div id="safeBrowsingSection">
 -      <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
 -      <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
@@ -366,7 +360,7 @@ index ae93043d94ddc..4b87309d91176 100644
      <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
        <div id="secureConnectionsSection">
          <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
-@@ -231,15 +115,8 @@
+@@ -233,15 +117,8 @@
        </div>
      </template>
      <div class="cr-row first">
@@ -383,10 +377,10 @@ index ae93043d94ddc..4b87309d91176 100644
      <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
        <settings-toggle-button id="httpsOnlyModeToggle"
            pref="{{prefs.generated.https_first_mode_enabled}}"
-@@ -290,17 +167,38 @@
+@@ -292,18 +169,39 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
- 
+
 -    <cr-link-row id="advancedProtectionProgramLink" class="hr"
 -        label="$i18n{advancedProtectionProgramTitle}"
 -        sub-label="$i18n{advancedProtectionProgramDesc}"
@@ -436,22 +430,23 @@ index ae93043d94ddc..4b87309d91176 100644
 +        sub-label="Changes to this setting requires a restart">
 +      </settings-toggle-button>
 +    </div>
-diff --git a/chrome/browser/resources/settings/privacy_page/security_page.ts b/chrome/browser/resources/settings/privacy_page/security_page.ts
-index b65040b690c5e..e9d93bcf10769 100644
---- a/chrome/browser/resources/settings/privacy_page/security_page.ts
-+++ b/chrome/browser/resources/settings/privacy_page/security_page.ts
-@@ -29,6 +29,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
- 
- import type {SettingsRadioGroupElement} from '../controls/settings_radio_group.js';
- import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
-+import type {DropdownMenuOptionList} from '../controls/settings_dropdown_menu.js';
- import type {FocusConfig} from '../focus_config.js';
- import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../hats_browser_proxy.js';
- import {loadTimeData} from '../i18n_setup.js';
-@@ -119,6 +120,19 @@ export class SettingsSecurityPageElement extends
+   </settings-subpage>
+diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.ts b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
+index 15c880bbaa..21d79a36a3 100644
+--- a/chrome/browser/resources/settings/privacy_page/security/security_page.ts
++++ b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
+@@ -31,6 +31,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+ import type {SettingsCollapseRadioButtonElement} from '../../controls/collapse_radio_button.js';
+ import type {SettingsRadioGroupElement} from '../../controls/settings_radio_group.js';
+ import type {SettingsToggleButtonElement} from '../../controls/settings_toggle_button.js';
++import type {DropdownMenuOptionList} from '../../controls/settings_dropdown_menu.js';
+ import {HatsBrowserProxyImpl, SecurityPageInteraction} from '../../hats_browser_proxy.js';
+ import {loadTimeData} from '../../i18n_setup.js';
+ import type {MetricsBrowserProxy} from '../../metrics_browser_proxy.js';
+@@ -123,6 +124,19 @@ export class SettingsSecurityPageElement extends
        },
        // </if>
- 
+
 +      webrtcHandlingPolicyOptions_: {
 +        readOnly: true,
 +        type: Array,
@@ -468,18 +463,18 @@ index b65040b690c5e..e9d93bcf10769 100644
        /**
         * Valid safe browsing states.
         */
-@@ -215,6 +229,7 @@ export class SettingsSecurityPageElement extends
+@@ -214,6 +228,7 @@ export class SettingsSecurityPageElement extends
        },
      };
    }
 +  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
    declare private showSecureDnsSetting_: boolean;
- 
+
    // <if expr="is_chromeos">
-@@ -281,10 +296,6 @@ export class SettingsSecurityPageElement extends
+@@ -265,10 +280,6 @@ export class SettingsSecurityPageElement extends
        }
      });
- 
+
 -    this.registerHelpBubble(
 -        'kEnhancedProtectionSettingElementId',
 -        this.$.safeBrowsingEnhanced.getBubbleAnchor(), {anchorPaddingTop: 10});
@@ -488,18 +483,18 @@ index b65040b690c5e..e9d93bcf10769 100644
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
  
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index 41b2a7bf2cb79..637fd4d16e6e3 100644
+index 1fd9c83cb7..931b3b5aee 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -201,7 +201,7 @@ function createRoutes(): SettingsRoutes {
- 
+@@ -178,7 +178,7 @@ function createRoutes(): SettingsRoutes {
+
    if (visibility.people !== false) {
      r.PEOPLE = r.BASIC.createSection(
 -        '/people', 'people', loadTimeData.getString('peoplePageTitle'));
 +        '/people', 'people', loadTimeData.getString('editPerson'));
-     r.PEOPLE.hasMigratedToPlugin = true;
      // <if expr="not is_chromeos">
      r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
+     r.SIGN_OUT.isNavigableDialog = true;
 diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
 index d989c90598e38..985a47c20c397 100644
 --- a/chrome/browser/resources/settings/settings_main/settings_main.html
@@ -513,7 +508,7 @@ index d989c90598e38..985a47c20c397 100644
  <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
      restamp>
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 2134fb026dbe6..bf85825d82a12 100644
+index 90780ae82c..e6382ceceb 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -54,7 +54,7 @@
@@ -524,7 +519,7 @@ index 2134fb026dbe6..bf85825d82a12 100644
 +          $i18n{editPerson}
            <cr-ripple></cr-ripple>
          </a>
-         <a role="menuitem" id="autofill" href="/autofill"
+         <a role="menuitem" id="yourSavedInfo" href="/yourSavedInfo"
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
 index 4c518c19856c7..e73df1f31e651 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
@@ -536,7 +531,7 @@ index 4c518c19856c7..e73df1f31e651 100644
 +<if expr="enable_printing">
 +    <settings-toggle-button class="cr-row"
 +        pref="{{prefs.printing.enabled}}"
-+        label="Enable Printing Capabilities">
++        label="Enable printing capabilities">
 +    </settings-toggle-button>
 +</if>
 +
@@ -544,21 +539,21 @@ index 4c518c19856c7..e73df1f31e651 100644
        <template is="dom-if" if="[[showFeatureNotificationsSetting_]]">
          <div class="hr"></div>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 662d7bd4acb69..82f82be24716a 100644
+index 86e5d98e45..e4a6a6701a 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -325,10 +325,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+@@ -327,10 +327,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
    html_source->AddBoolean("isOSSettings", false);
  #endif  // BUILDFLAG(IS_CHROMEOS)
- 
+
 -  bool show_privacy_guide =
 -      base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
 -      (!ShouldDisplayManagedUi(profile) && !profile->IsChild());
 -  html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
 +  html_source->AddBoolean("showPrivacyGuide", false);
- 
-   html_source->AddBoolean("enableHandTrackingContentSetting",
- #if BUILDFLAG(ENABLE_VR)
+
+   html_source->AddBoolean(
+       "showResetProfileBannerV2",
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
 index 42fce93fa9125..2e41a1c3fcf44 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
@@ -572,3 +567,34 @@ index 42fce93fa9125..2e41a1c3fcf44 100644
    setupSSLDebuggingInfo();
    document.addEventListener('keypress', handleKeypress);
  
+diff --git a/chrome/browser/resources/settings/search_page/search_page.html b/chrome/browser/resources/settings/search_page/search_page.html
+index fece6801f3..ea24f185a2 100644
+--- a/chrome/browser/resources/settings/search_page/search_page.html
++++ b/chrome/browser/resources/settings/search_page/search_page.html
+@@ -101,5 +101,11 @@
+         label="$i18n{searchEnginesManageSiteSearch}"
+         on-click="onManageSearchEnginesClick_"
+         role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
++
++    <settings-toggle-button class="cr-row"
++      pref="{{prefs.search.suggest_enabled}}"
++      label="$i18n{searchSuggestPref}"
++      sub-label="$i18n{searchSuggestPrefDesc}">
++    </settings-toggle-button>
+   </div>
+ </settings-section>
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+index 3eb464c572..e9498414b8 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+@@ -32,8 +32,8 @@
+           $i18n{resetDialogCommit}
+         </cr-button>
+       </div>
+-      <div slot="footer">
+-        <cr-checkbox id="sendSettings" checked>
++      <div style="display:none" slot="footer">
++        <cr-checkbox id="sendSettings">
+           $i18nRaw{resetPageFeedback}</cr-checkbox>
+       </div>
+     </cr-dialog>

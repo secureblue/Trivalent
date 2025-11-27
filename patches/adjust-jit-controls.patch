@@ -11,13 +11,13 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index a582e40694..66f7cd437c 100644
+index 87a95ef582..a2ba4a1678 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -7641,10 +7641,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -7731,10 +7731,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
- 
+
 -  // Only disable JIT for web schemes.
 -  if (!site_url.SchemeIsHTTPOrHTTPS()) {
 -    return false;
@@ -26,17 +26,17 @@ index a582e40694..66f7cd437c 100644
 +  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
 +      && !site_url.SchemeIs("chrome-extension"))
 +    return true;
- 
+
    return (map && map->GetContentSetting(site_url, site_url,
                                          ContentSettingsType::JAVASCRIPT_JIT) ==
-@@ -7654,13 +7654,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -7744,13 +7744,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
  bool ChromeContentBrowserClient::AreV8OptimizationsDisabledForSite(
      content::BrowserContext* browser_context,
      const GURL& site_url) {
 -  // Only disable optimizations for schemes that might actually load web
 -  // content.
 -  auto* policy = ChildProcessSecurityPolicy::GetInstance();
--  if (!site_url.is_empty() && !policy->IsWebSafeScheme(site_url.scheme())) {
+-  if (!site_url.is_empty() && !policy->IsWebSafeScheme(site_url.GetScheme())) {
 -    return false;
 -  }
 -
@@ -44,12 +44,12 @@ index a582e40694..66f7cd437c 100644
    auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
    // Special case to determine if any policy is set.
 diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
-index 2e5e7c71a5..228d8795f8 100644
+index 512feca6fa..821a9254a0 100644
 --- a/content/browser/renderer_host/render_process_host_impl.cc
 +++ b/content/browser/renderer_host/render_process_host_impl.cc
-@@ -3383,8 +3383,21 @@ void RenderProcessHostImpl::AppendRendererCommandLine(
-     command_line->AppendSwitchASCII(blink::switches::kJavaScriptFlags,
-                                     "--jitless");
+@@ -3475,9 +3475,22 @@ void RenderProcessHostImpl::AppendRendererCommandLine(
+     AppendToCommaSeparatedSwitch(
+         command_line, blink::switches::kJavaScriptFlags, "--jitless");
    } else if (AreV8OptimizationsDisabled()) {
 +    std::string jsflags;
 +    bool enable_jitless_wasm =
@@ -64,31 +64,32 @@ index 2e5e7c71a5..228d8795f8 100644
 +    else
 +      jsflags = "--jitless";
 +
-     command_line->AppendSwitchASCII(blink::switches::kJavaScriptFlags,
--                                    "--disable-optimizing-compilers");
-+                                    jsflags);
+     AppendToCommaSeparatedSwitch(command_line,
+                                  blink::switches::kJavaScriptFlags,
+-                                 "--disable-optimizing-compilers");
++                                 jsflags);
    }
- 
+
    if (DisallowV8FeatureFlagOverrides()) {
 diff --git a/content/public/common/content_features.cc b/content/public/common/content_features.cc
-index f087a28da0..5cf9a313fd 100644
+index 57f1ff40ca..d3dbe66e23 100644
 --- a/content/public/common/content_features.cc
 +++ b/content/public/common/content_features.cc
-@@ -19,6 +19,8 @@ namespace features {
+@@ -17,6 +17,8 @@
 
+ namespace features {
+
++BASE_FEATURE(kEnableDrumbrake, base::FEATURE_ENABLED_BY_DEFAULT);
++
  // All features in alphabetical order.
 
-+BASE_FEATURE(EnableDrumbrake, base::FEATURE_ENABLED_BY_DEFAULT);
-+
  // Kill switch to guard additional security checks performed by the browser
- // process on opaque origins, such as when verifying source origins for
- // postMessage. See https://crbug.com/40109437.
-@@ -1010,7 +1012,7 @@ BASE_FEATURE(DisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
+@@ -1019,7 +1021,7 @@ BASE_FEATURE(kDisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
  // Controls whether SpareRenderProcessHostManager tries to always have a warm
  // spare renderer process around for the most recently requested BrowserContext.
  // This feature is only consulted in site-per-process mode.
--BASE_FEATURE(SpareRendererForSitePerProcess, base::FEATURE_ENABLED_BY_DEFAULT);
-+BASE_FEATURE(SpareRendererForSitePerProcess, base::FEATURE_DISABLED_BY_DEFAULT);
+-BASE_FEATURE(kSpareRendererForSitePerProcess, base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kSpareRendererForSitePerProcess, base::FEATURE_DISABLED_BY_DEFAULT);
 
  // Controls whether site isolation should use origins instead of scheme and
  // eTLD+1.
@@ -135,3 +136,21 @@ index 8dda88f8..e08a4de7 100644
      if (v8_enable_drumbrake_tracing) {
        defines += [ "V8_ENABLE_DRUMBRAKE_TRACING" ]
      }
+diff --git a/v8/src/flags/flag-definitions.h b/v8/src/flags/flag-definitions.h
+index 479b4499..9dd25207 100644
+--- a/v8/src/flags/flag-definitions.h
++++ b/v8/src/flags/flag-definitions.h
+@@ -887,8 +887,12 @@ DEFINE_NEG_IMPLICATION(jitless, turbolev)
+ DEFINE_NEG_IMPLICATION(jitless, interpreted_frames_native_stack)
+
+ DEFINE_BOOL(
+-    disable_optimizing_compilers, false,
++    disable_optimizing_compilers, true,
+     "Disable all optimizing compilers while leaving baseline compilers enabled")
++DEFINE_BOOL(
++    enable_optimizing_compilers, false,
++    "Enable JIT optimizing compilers")
++DEFINE_NEG_IMPLICATION(enable_optimizing_compilers, disable_optimizing_compilers)
+ // Disable all optimizing JavaScript compilers.
+ // JavaScript code can execute either in Ignition or Sparkplug.
+ DEFINE_NEG_IMPLICATION(disable_optimizing_compilers, turbofan)
