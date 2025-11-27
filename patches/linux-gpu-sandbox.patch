@@ -47,7 +47,7 @@ index 2e53794fa3..a09d370872 100644
    }
  }
 
-+void AddLibGalliumLinuxPermisions(
++void AddLibGalliumLinuxPermissions(
 +    std::vector<BrokerFilePermission>* permissions,
 +    const std::string driver_version) {
 +  const std::string libgallium_path =
@@ -131,7 +131,7 @@ index 2e53794fa3..a09d370872 100644
  std::vector<BrokerFilePermission> FilePermissionsForGpu(
 -    const sandbox::policy::SandboxSeccompBPF::Options& options) {
 +    const sandbox::policy::SandboxSeccompBPF::Options& options,
-+    const std:string& driver_version) {
++    const std::string& driver_version) {
    // All GPU process policies need this file brokered out.
    static const char kDriRcPath[] = "/etc/drirc";
    std::vector<BrokerFilePermission> permissions = {
