@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 2e53794fa3..0ae94f67a4 100644
+index 2e53794fa3..a09d370872 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -48,8 +48,8 @@ using sandbox::syscall_broker::BrokerProcess;
@@ -43,7 +43,21 @@ index 2e53794fa3..0ae94f67a4 100644
      std::vector<BrokerFilePermission>* permissions) {
    // For the ANGLE passthrough command decoder.
    static const char* const kReadOnlyList[] = {"libEGL.so", "libGLESv2.so"};
-@@ -257,6 +257,11 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -115,6 +115,13 @@ void AddStandardChromeOsPermissions(
+   }
+ }
+
++void AddLibGalliumLinuxPermisions(
++    std::vector<BrokerFilePermission>* permissions,
++    const std::string driver_version) {
++  const std::string libgallium_path =
++             "/usr/lib64/libgallium-" + driver_version + ".so";
++  permissions->push_back(BrokerFilePermission::ReadOnly(libgallium_path));
++}
+ void AddV4L2GpuPermissions(
+     std::vector<BrokerFilePermission>* permissions,
+     const sandbox::policy::SandboxSeccompBPF::Options& options) {
+@@ -257,6 +264,11 @@ void AddAmdGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libEGL.so.1",
        "/usr/lib64/libGLESv2.so.2",
@@ -55,7 +69,7 @@ index 2e53794fa3..0ae94f67a4 100644
        "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libgallium_dri.so",
        "/usr/lib64/dri/r300_dri.so",
-@@ -298,6 +303,9 @@ void AddNvidiaGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -298,6 +310,9 @@ void AddNvidiaGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        // that requires the following libs and files to be accessible.
        "/etc/ld.so.cache",
        "/usr/lib64/libgallium_dri.so",
@@ -65,7 +79,7 @@ index 2e53794fa3..0ae94f67a4 100644
        "/usr/lib64/dri/nouveau_dri.so",
        "/usr/lib64/dri/radeonsi_dri.so",
        "/usr/lib64/dri/swrast_dri.so",
-@@ -324,6 +332,10 @@ void AddIntelGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -324,6 +339,10 @@ void AddIntelGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        // To support threads in mesa we use --gpu-sandbox-start-early and
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libgallium_dri.so",
@@ -76,7 +90,7 @@ index 2e53794fa3..0ae94f67a4 100644
        "/usr/lib64/libEGL.so.1", "/usr/lib64/libGLESv2.so.2",
        "/usr/lib64/libelf.so.1", "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libdrm_amdgpu.so.1", "/usr/lib64/libdrm_radeon.so.1",
-@@ -363,6 +375,11 @@ void AddVirtIOGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -363,6 +382,11 @@ void AddVirtIOGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libc++.so.1",
        "/usr/lib64/libgallium_dri.so",
@@ -88,7 +102,7 @@ index 2e53794fa3..0ae94f67a4 100644
        // If kms_swrast_dri is not usable, swrast_dri is used instead.
        "/usr/lib64/dri/swrast_dri.so",
        "/usr/lib64/dri/kms_swrast_dri.so",
-@@ -548,11 +565,13 @@ void LoadArmGpuLibraries() {
+@@ -548,11 +572,13 @@ void LoadArmGpuLibraries() {
  }
 
  bool LoadAmdGpuLibraries() {
@@ -102,7 +116,7 @@ index 2e53794fa3..0ae94f67a4 100644
 
    const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
  #if defined(DRI_DRIVER_DIR)
-@@ -609,7 +628,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+@@ -609,7 +635,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
    command_set.set(sandbox::syscall_broker::COMMAND_ACCESS);
    command_set.set(sandbox::syscall_broker::COMMAND_OPEN);
    command_set.set(sandbox::syscall_broker::COMMAND_STAT);
@@ -111,7 +125,17 @@ index 2e53794fa3..0ae94f67a4 100644
        (options.use_amd_specific_policies ||
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
-@@ -628,9 +647,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+@@ -620,7 +646,8 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+ }
+
+ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+-    const sandbox::policy::SandboxSeccompBPF::Options& options) {
++    const sandbox::policy::SandboxSeccompBPF::Options& options,
++    const std:string& driver_version) {
+   // All GPU process policies need this file brokered out.
+   static const char kDriRcPath[] = "/etc/drirc";
+   std::vector<BrokerFilePermission> permissions = {
+@@ -628,9 +655,10 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
 
    AddVulkanICDPermissions(&permissions);
 
@@ -120,10 +144,11 @@ index 2e53794fa3..0ae94f67a4 100644
      // Permissions are additive, there can be multiple GPUs in the system.
 -    AddStandardChromeOsPermissions(&permissions);
 +    AddStandardLinuxPermissions(&permissions);
++    AddLibGalliumLinuxPermissions(&permissions, driver_version);
      if (UseV4L2Codec(options)) {
        AddV4L2GpuPermissions(&permissions, options);
      }
-@@ -678,7 +697,7 @@ bool LoadLibrariesForGpu(
+@@ -678,7 +706,7 @@ bool LoadLibrariesForGpu(
    if (IsArchitectureArm()) {
      LoadArmGpuLibraries();
    }
@@ -132,32 +157,34 @@ index 2e53794fa3..0ae94f67a4 100644
      if (options.use_amd_specific_policies) {
        if (!LoadAmdGpuLibraries())
          return false;
-diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-index 90fdecdb76..f852c64078 100644
---- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-+++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-@@ -98,8 +98,8 @@ namespace {
- // nacl_helper needs to be tiny and includes only part of content/
- // in its dependencies. Make sure to not link things that are not needed.
- #if !defined(IN_NACL_HELPER)
--inline bool IsChromeOS() {
--#if BUILDFLAG(IS_CHROMEOS)
-+inline bool IsLinux() {
-+#if BUILDFLAG(IS_LINUX)
+@@ -695,9 +723,10 @@ bool LoadLibrariesForGpu(
    return true;
- #else
-   return false;
-@@ -125,7 +125,7 @@ inline bool IsArchitectureArm() {
- std::unique_ptr<BPFBasePolicy> GetGpuProcessSandbox(
-     const SandboxSeccompBPF::Options& options,
-     MremapPolicy mremap_policy) {
--  if (IsChromeOS() || UseChromecastSandboxAllowlist()) {
-+  if (IsLinux() || UseChromecastSandboxAllowlist()) {
-     if (IsArchitectureArm()) {
-       return std::make_unique<CrosArmGpuProcessPolicy>(
-           mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
+ }
+
+-bool GpuPreSandboxHook(sandbox::policy::SandboxLinux::Options options) {
++bool GpuPreSandboxHook(sandbox::policy::SandboxLinux::Options options,
++                       const std::string driver_version) {
+   sandbox::policy::SandboxLinux::GetInstance()->StartBrokerProcess(
+-      CommandSetForGPU(options), FilePermissionsForGpu(options), options);
++      CommandSetForGPU(options), FilePermissionsForGpu(options, driver_version), options);
+
+   if (!LoadLibrariesForGpu(options))
+     return false;
+diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
+index 30cc1d4a17..d441fb0704 100644
+--- a/content/gpu/gpu_main.cc
++++ b/content/gpu/gpu_main.cc
+@@ -550,7 +550,7 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+   bool res = sandbox::policy::SandboxLinux::GetInstance()->InitializeSandbox(
+       sandbox::policy::SandboxTypeFromCommandLine(
+           *base::CommandLine::ForCurrentProcess()),
+-      base::BindOnce(GpuPreSandboxHook), sandbox_options);
++      base::BindOnce(GpuPreSandboxHook), sandbox_options, gpu_info->gpu.driver_versio);
+
+   if (watchdog_thread) {
+     watchdog_thread->Start();
 diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
-index 65dea86a65..1c875d46dd 100644
+index 65dea86a65..3222da15ed 100644
 --- a/content/public/browser/gpu_utils.cc
 +++ b/content/public/browser/gpu_utils.cc
 @@ -82,6 +82,15 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
@@ -225,10 +252,10 @@ index 28d9ac5174..84cf63972b 100644
      return prefs.enable_low_latency_dxva;
    }
 diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
-index cc568a7b4e..579582d235 100644
+index 6ea960c6f8..1f83c81812 100644
 --- a/gpu/ipc/service/gpu_init.cc
 +++ b/gpu/ipc/service/gpu_init.cc
-@@ -53,6 +53,10 @@
+@@ -54,6 +54,10 @@
  #include <GLES2/gl2.h>
  #endif
 
@@ -239,7 +266,7 @@ index cc568a7b4e..579582d235 100644
  #if BUILDFLAG(IS_OZONE)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
  #include "ui/ozone/public/drm_modifiers_filter.h"
-@@ -417,8 +421,18 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -418,8 +422,18 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif
 
@@ -259,7 +286,7 @@ index cc568a7b4e..579582d235 100644
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -459,7 +473,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -460,7 +474,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.
@@ -268,3 +295,27 @@ index cc568a7b4e..579582d235 100644
      gpu_info_.sandboxed = sandbox_helper_->EnsureSandboxInitialized(
          watchdog_thread_.get(), &gpu_info_, gpu_preferences_);
      attempted_startsandbox = true;
+diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
+index 4de13fe88b..aaebda0773 100644
+--- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
++++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
+@@ -94,8 +94,8 @@ namespace {
+ // nacl_helper needs to be tiny and includes only part of content/
+ // in its dependencies. Make sure to not link things that are not needed.
+ #if !defined(IN_NACL_HELPER)
+-inline bool IsChromeOS() {
+-#if BUILDFLAG(IS_CHROMEOS)
++inline bool IsLinux() {
++#if BUILDFLAG(IS_LINUX)
+   return true;
+ #else
+   return false;
+@@ -121,7 +121,7 @@ inline bool IsArchitectureArm() {
+ std::unique_ptr<BPFBasePolicy> GetGpuProcessSandbox(
+     const SandboxSeccompBPF::Options& options,
+     MremapPolicy mremap_policy) {
+-  if (IsChromeOS() || UseChromecastSandboxAllowlist()) {
++  if (IsLinux() || UseChromecastSandboxAllowlist()) {
+     if (IsArchitectureArm()) {
+       return std::make_unique<CrosArmGpuProcessPolicy>(
+           mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
