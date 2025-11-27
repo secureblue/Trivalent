@@ -179,7 +179,7 @@ index 30cc1d4a17..d441fb0704 100644
        sandbox::policy::SandboxTypeFromCommandLine(
            *base::CommandLine::ForCurrentProcess()),
 -      base::BindOnce(GpuPreSandboxHook), sandbox_options);
-+      base::BindOnce(GpuPreSandboxHook), sandbox_options, gpu_info->gpu.driver_versio);
++      base::BindOnce(GpuPreSandboxHook), sandbox_options, gpu_info->gpu.driver_version);
 
    if (watchdog_thread) {
      watchdog_thread->Start();
