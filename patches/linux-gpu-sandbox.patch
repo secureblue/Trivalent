@@ -344,13 +344,13 @@ index 714cb2e115..ec235757fa 100644
  
  void SandboxLinux::StopThread(base::Thread* thread) {
 diff --git a/sandbox/policy/linux/sandbox_linux.h b/sandbox/policy/linux/sandbox_linux.h
-index 76e20d21b7..ef899efe9e 100644
+index 76e20d21b7..beba850dcc 100644
 --- a/sandbox/policy/linux/sandbox_linux.h
 +++ b/sandbox/policy/linux/sandbox_linux.h
 @@ -168,6 +168,11 @@ class SANDBOX_POLICY_EXPORT SandboxLinux {
                           PreSandboxHook hook,
                           const Options& options);
- 
+
 +  bool InitializeSandbox(sandbox::mojom::Sandbox sandbox_type,
 +                         PreSandboxHook hook,
 +                         const Options& options,
@@ -358,7 +358,17 @@ index 76e20d21b7..ef899efe9e 100644
 +
    // Stop |thread| in a way that can be trusted by the sandbox.
    void StopThread(base::Thread* thread);
- 
+
+@@ -199,7 +204,8 @@ class SANDBOX_POLICY_EXPORT SandboxLinux {
+   // multiple threads as a fatal error.
+   bool StartSeccompBPF(sandbox::mojom::Sandbox sandbox_type,
+                        PreSandboxHook hook,
+-                       const Options& options);
++                       const Options& options,
++                       const std::string gpu_driver_version);
+
+   // Limit the address space of the current process (and its children) to make
+   // some vulnerabilities harder to exploit. Writes the errno due to setrlimit
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 index 4de13fe88b..aaebda0773 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
