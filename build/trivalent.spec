@@ -429,17 +429,29 @@ find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
         -e 's/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/ph>Chromium<ph/g' {} + 
 
 ### Branding ###
-cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/linux/product_logo_16.png
-cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/linux/product_logo_32.png
+cp -a %{SOURCE12} chrome/app/theme/chromium/product_logo_16.png
+cp -a %{SOURCE17} chrome/app/theme/chromium/product_logo_24.png
+cp -a %{SOURCE14} chrome/app/theme/chromium/product_logo_32.png
+cp -a %{SOURCE18} chrome/app/theme/chromium/product_logo_48.png
+cp -a %{Source16} chrome/app/theme/chromium/product_logo_64.png
+cp -a %{SOURCE19} chrome/app/theme/chromium/product_logo_128.png
+cp -a %{SOURCE20} chrome/app/theme/chromium/product_logo_256.png
+cp -a %{SOURCE17} chrome/app/theme/chromium/linux/product_logo_24.png
+cp -a %{SOURCE18} chrome/app/theme/chromium/linux/product_logo_48.png
+cp -a %{Source16} chrome/app/theme/chromium/linux/product_logo_64.png
+cp -a %{SOURCE19} chrome/app/theme/chromium/linux/product_logo_128.png
+cp -a %{SOURCE20} chrome/app/theme/chromium/linux/product_logo_256.png
 cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/product_logo_16.png
 cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/product_logo_32.png
-cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22.png
-cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22_white.png
-
-cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/product_logo_16.png
-cp -a %{SOURCE16} chrome/app/theme/default_200_percent/chromium/product_logo_32.png
-cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22.png
-cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22_white.png
+cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/linux/product_logo_16.png
+cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/linux/product_logo_32.png
+cp -a %{SOURCE12} chrome/app/theme/default_200_percent/chromium/product_logo_16.png
+cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/product_logo_32.png
+# These include the browser's name in them, we currently do not have such a branding representation
+#cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22.png
+#cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22_white.png
+#cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22.png
+#cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22_white.png
 
 # Change shebang in all relevant files in this directory and all subdirectories
 # See `man find` for how the `-exec command {} +` syntax works
