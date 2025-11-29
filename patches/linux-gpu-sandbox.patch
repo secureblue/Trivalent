@@ -161,19 +161,20 @@ index 2e53794fa3..e38a8a24b3 100644
        if (!LoadAmdGpuLibraries())
          return false;
 diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
-index 30cc1d4a17..23c42cf0d4 100644
+index 30cc1d4a17..f39df8f142 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -533,6 +533,9 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
-   sandbox_options.accelerated_video_encode_enabled =
-       !gpu_prefs.disable_accelerated_video_encode;
- 
-+  sandbox_options.gpu_driver_version =
-+      gpu_info->gpu.driver_version;
-+
- #if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_LINUX)
-   // Video decoding of many video streams can use thousands of FDs as well as
-   // Exo clients.
+@@ -527,6 +527,10 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+       else if (angle::IsNVIDIA(gpu.vendor_id))
+         sandbox_options.use_nvidia_specific_policies = true;
+     }
++    if (sandbox_options.use_amd_specific_policies ||
++        sandbox_options.use_intel_specific_policies)
++      sandbox_options.gpu_driver_version =
++          gpu_info->gpu.driver_version;
+   }
+   sandbox_options.accelerated_video_decode_enabled =
+       !gpu_prefs.disable_accelerated_video_decode;
 diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
 index 65dea86a65..3222da15ed 100644
 --- a/content/public/browser/gpu_utils.cc
@@ -286,19 +287,6 @@ index 6ea960c6f8..a55023a3c6 100644
      gpu_info_.sandboxed = sandbox_helper_->EnsureSandboxInitialized(
          watchdog_thread_.get(), &gpu_info_, gpu_preferences_);
      attempted_startsandbox = true;
-diff --git a/sandbox/policy/linux/sandbox_linux.h b/sandbox/policy/linux/sandbox_linux.h
-index 76e20d21b7..8fc32294bb 100644
---- a/sandbox/policy/linux/sandbox_linux.h
-+++ b/sandbox/policy/linux/sandbox_linux.h
-@@ -112,6 +112,8 @@ class SANDBOX_POLICY_EXPORT SandboxLinux {
-     // useful for the chroot jail (from the semantic layer of the sandbox), and
-     // can safely be disabled if we are only enabling the seccomp-BPF layer.
-     bool check_for_open_directories = true;
-+
-+    std::string gpu_driver_version;
-   };
- 
-   // Callers can provide this hook to run code right before the policy
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 index 4de13fe88b..aaebda0773 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
@@ -323,3 +311,15 @@ index 4de13fe88b..aaebda0773 100644
      if (IsArchitectureArm()) {
        return std::make_unique<CrosArmGpuProcessPolicy>(
            mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
+diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h
+index 165ca85462..00e0c34024 100644
+--- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h
++++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h
+@@ -33,6 +33,7 @@ class SANDBOX_POLICY_EXPORT SandboxSeccompBPF {
+     // Options for GPU's PreSandboxHook.
+     bool accelerated_video_decode_enabled = false;
+     bool accelerated_video_encode_enabled = false;
++    std::string gpu_driver_version;
+   };
+ 
+   SandboxSeccompBPF() = delete;
