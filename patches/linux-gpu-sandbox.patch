@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 2e53794fa3..0afc17a200 100644
+index 2e53794fa3..e38a8a24b3 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -48,8 +48,8 @@ using sandbox::syscall_broker::BrokerProcess;
@@ -49,7 +49,7 @@ index 2e53794fa3..0afc17a200 100644
  
 +void AddLibGalliumLinuxPermissions(
 +    std::vector<BrokerFilePermission>* permissions,
-+    const std::string& driver_version) {
++    const std::string driver_version) {
 +  if (driver_version.empty())
 +    return;
 +  const std::string libgallium_path =
@@ -127,17 +127,7 @@ index 2e53794fa3..0afc17a200 100644
        (options.use_amd_specific_policies ||
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
-@@ -620,7 +648,8 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
- }
- 
- std::vector<BrokerFilePermission> FilePermissionsForGpu(
--    const sandbox::policy::SandboxSeccompBPF::Options& options) {
-+    const sandbox::policy::SandboxSeccompBPF::Options& options,
-+    const std::string& driver_version) {
-   // All GPU process policies need this file brokered out.
-   static const char kDriRcPath[] = "/etc/drirc";
-   std::vector<BrokerFilePermission> permissions = {
-@@ -628,9 +657,10 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+@@ -628,9 +656,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
  
    AddVulkanICDPermissions(&permissions);
  
@@ -146,10 +136,21 @@ index 2e53794fa3..0afc17a200 100644
      // Permissions are additive, there can be multiple GPUs in the system.
 -    AddStandardChromeOsPermissions(&permissions);
 +    AddStandardLinuxPermissions(&permissions);
-+    AddLibGalliumLinuxPermissions(&permissions, driver_version);
      if (UseV4L2Codec(options)) {
        AddV4L2GpuPermissions(&permissions, options);
      }
+@@ -643,9 +671,11 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+     }
+     if (options.use_amd_specific_policies) {
+       AddAmdGpuPermissions(&permissions);
++      AddLibGalliumLinuxPermissions(&permissions, options.gpu_driver_version);
+     }
+     if (options.use_intel_specific_policies) {
+       AddIntelGpuPermissions(&permissions);
++      AddLibGalliumLinuxPermissions(&permissions, options.gpu_driver_version);
+     }
+     if (options.use_nvidia_specific_policies) {
+       AddStandardGpuPermissions(&permissions);
 @@ -678,7 +708,7 @@ bool LoadLibrariesForGpu(
    if (IsArchitectureArm()) {
      LoadArmGpuLibraries();
@@ -159,32 +160,20 @@ index 2e53794fa3..0afc17a200 100644
      if (options.use_amd_specific_policies) {
        if (!LoadAmdGpuLibraries())
          return false;
-@@ -695,9 +725,10 @@ bool LoadLibrariesForGpu(
-   return true;
- }
- 
--bool GpuPreSandboxHook(sandbox::policy::SandboxLinux::Options options) {
-+bool GpuPreSandboxHook(sandbox::policy::SandboxLinux::Options options,
-+                       const std::string driver_version) {
-   sandbox::policy::SandboxLinux::GetInstance()->StartBrokerProcess(
--      CommandSetForGPU(options), FilePermissionsForGpu(options), options);
-+      CommandSetForGPU(options), FilePermissionsForGpu(options, driver_version), options);
- 
-   if (!LoadLibrariesForGpu(options))
-     return false;
 diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
-index 30cc1d4a17..6bb3cdbb89 100644
+index 30cc1d4a17..23c42cf0d4 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -550,7 +550,7 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
-   bool res = sandbox::policy::SandboxLinux::GetInstance()->InitializeSandbox(
-       sandbox::policy::SandboxTypeFromCommandLine(
-           *base::CommandLine::ForCurrentProcess()),
--      base::BindOnce(GpuPreSandboxHook), sandbox_options);
-+      base::BindOnce(GpuPreSandboxHook), sandbox_options, gpu_info->gpu.driver_version);
+@@ -533,6 +533,9 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+   sandbox_options.accelerated_video_encode_enabled =
+       !gpu_prefs.disable_accelerated_video_encode;
  
-   if (watchdog_thread) {
-     watchdog_thread->Start();
++  sandbox_options.gpu_driver_version =
++      gpu_info->gpu.driver_version;
++
+ #if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_LINUX)
+   // Video decoding of many video streams can use thousands of FDs as well as
+   // Exo clients.
 diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
 index 65dea86a65..3222da15ed 100644
 --- a/content/public/browser/gpu_utils.cc
@@ -297,78 +286,19 @@ index 6ea960c6f8..a55023a3c6 100644
      gpu_info_.sandboxed = sandbox_helper_->EnsureSandboxInitialized(
          watchdog_thread_.get(), &gpu_info_, gpu_preferences_);
      attempted_startsandbox = true;
-diff --git a/sandbox/policy/linux/sandbox_linux.cc b/sandbox/policy/linux/sandbox_linux.cc
-index 714cb2e115..ec235757fa 100644
---- a/sandbox/policy/linux/sandbox_linux.cc
-+++ b/sandbox/policy/linux/sandbox_linux.cc
-@@ -304,7 +304,8 @@ SetuidSandboxClient* SandboxLinux::setuid_sandbox_client() const {
- // For seccomp-bpf, we use the SandboxSeccompBPF class.
- bool SandboxLinux::StartSeccompBPF(sandbox::mojom::Sandbox sandbox_type,
-                                    PreSandboxHook hook,
--                                   const Options& options) {
-+                                   const Options& options,
-+                                   const std::string& gpu_driver_version) {
-   CHECK(!seccomp_bpf_started_);
-   CHECK(pre_initialized_);
- #if BUILDFLAG(USE_SECCOMP_BPF)
-@@ -318,7 +319,7 @@ bool SandboxLinux::StartSeccompBPF(sandbox::mojom::Sandbox sandbox_type,
-   }
- 
-   if (hook)
--    CHECK(std::move(hook).Run(options));
-+    CHECK(std::move(hook).Run(options, gpu_driver_version));
- 
-   // If we allow threads *and* have multiple threads, try to use TSYNC.
-   SandboxBPF::SeccompLevel seccomp_level =
-@@ -344,6 +345,13 @@ bool SandboxLinux::StartSeccompBPF(sandbox::mojom::Sandbox sandbox_type,
- bool SandboxLinux::InitializeSandbox(sandbox::mojom::Sandbox sandbox_type,
-                                      SandboxLinux::PreSandboxHook hook,
-                                      const Options& options) {
-+  return InitializeSandbox(sandbox_type, std::move(hook), options, "");
-+}
-+
-+bool SandboxLinux::InitializeSandbox(sandbox::mojom::Sandbox sandbox_type,
-+                                     SandboxLinux::PreSandboxHook hook,
-+                                     const Options& options,
-+                                     const std::string& gpu_driver_version) {
-   DCHECK(!initialize_sandbox_ran_);
-   initialize_sandbox_ran_ = true;
- 
-@@ -454,7 +462,7 @@ bool SandboxLinux::InitializeSandbox(sandbox::mojom::Sandbox sandbox_type,
-     PCHECK(limited_as);
-   }
- 
--  return StartSeccompBPF(sandbox_type, std::move(hook), options);
-+  return StartSeccompBPF(sandbox_type, std::move(hook), options, gpu_driver_version);
- }
- 
- void SandboxLinux::StopThread(base::Thread* thread) {
 diff --git a/sandbox/policy/linux/sandbox_linux.h b/sandbox/policy/linux/sandbox_linux.h
-index 76e20d21b7..beba850dcc 100644
+index 76e20d21b7..8fc32294bb 100644
 --- a/sandbox/policy/linux/sandbox_linux.h
 +++ b/sandbox/policy/linux/sandbox_linux.h
-@@ -168,6 +168,11 @@ class SANDBOX_POLICY_EXPORT SandboxLinux {
-                          PreSandboxHook hook,
-                          const Options& options);
-
-+  bool InitializeSandbox(sandbox::mojom::Sandbox sandbox_type,
-+                         PreSandboxHook hook,
-+                         const Options& options,
-+                         const std::string& gpu_driver_version);
+@@ -112,6 +112,8 @@ class SANDBOX_POLICY_EXPORT SandboxLinux {
+     // useful for the chroot jail (from the semantic layer of the sandbox), and
+     // can safely be disabled if we are only enabling the seccomp-BPF layer.
+     bool check_for_open_directories = true;
 +
-   // Stop |thread| in a way that can be trusted by the sandbox.
-   void StopThread(base::Thread* thread);
-
-@@ -199,7 +204,8 @@ class SANDBOX_POLICY_EXPORT SandboxLinux {
-   // multiple threads as a fatal error.
-   bool StartSeccompBPF(sandbox::mojom::Sandbox sandbox_type,
-                        PreSandboxHook hook,
--                       const Options& options);
-+                       const Options& options,
-+                       const std::string gpu_driver_version);
-
-   // Limit the address space of the current process (and its children) to make
-   // some vulnerabilities harder to exploit. Writes the errno due to setrlimit
++    std::string gpu_driver_version;
+   };
+ 
+   // Callers can provide this hook to run code right before the policy
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 index 4de13fe88b..aaebda0773 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
