@@ -282,9 +282,9 @@ index 6ea960c6f8..cbce31ca4f 100644
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
 +  // Only enable on platforms where the sandbox works
 +  if (gpu_sandbox_linux &&
-+      IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id) {
++      IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id)) {
 +    for (const auto& gpu : gpu_info_.secondary_gpus) {
-+      if (!IsGpuSandboxSupportedPlatform(gpu.vendor_id) {
++      if (!IsGpuSandboxSupportedPlatform(gpu.vendor_id)) {
 +        gpu_sandbox_linux = false;
 +        break;
 +      }
