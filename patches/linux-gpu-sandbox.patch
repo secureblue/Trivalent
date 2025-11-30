@@ -11,13 +11,13 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 2e53794fa3..e38a8a24b3 100644
+index 2e53794fa3..138228ec8b 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -48,8 +48,8 @@ using sandbox::syscall_broker::BrokerProcess;
  namespace content {
  namespace {
- 
+
 -inline bool IsChromeOS() {
 -#if BUILDFLAG(IS_CHROMEOS)
 +inline bool IsLinux() {
@@ -28,16 +28,16 @@ index 2e53794fa3..e38a8a24b3 100644
 @@ -86,7 +86,7 @@ inline bool UseV4L2Codec(
  static const char kMaliConfPath[] = "/etc/mali_platform.conf";
  #endif
- 
+
 -#if BUILDFLAG(IS_CHROMEOS) && defined(__aarch64__)
 +#if defined(__aarch64__)
  static const char kLibGlesPath[] = "/usr/lib64/libGLESv2.so.2";
  static const char kLibEglPath[] = "/usr/lib64/libEGL.so.1";
  static const char kLibMaliPath[] = "/usr/lib64/libmali.so";
 @@ -100,7 +100,7 @@ static const char kLibTegraPath[] = "/usr/lib/libtegrav4l2.so";
- 
+
  constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE;
- 
+
 -void AddStandardChromeOsPermissions(
 +void AddStandardLinuxPermissions(
      std::vector<BrokerFilePermission>* permissions) {
@@ -46,7 +46,7 @@ index 2e53794fa3..e38a8a24b3 100644
 @@ -115,6 +115,15 @@ void AddStandardChromeOsPermissions(
    }
  }
- 
+
 +void AddLibGalliumLinuxPermissions(
 +    std::vector<BrokerFilePermission>* permissions,
 +    const std::string driver_version) {
@@ -63,7 +63,7 @@ index 2e53794fa3..e38a8a24b3 100644
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libEGL.so.1",
        "/usr/lib64/libGLESv2.so.2",
-+#if !BUILDFLAG(IS_CHROMEOS)
++#if !BUILDFLAG(IS_CHROMEOS) // Linux AMD
 +      "/usr/lib64/libwayland-server.so.0",
 +      "/usr/lib64/gbm/dri_gbm.so",
 +      "/usr/lib64/dri/iHD_drv_video.so",
@@ -75,7 +75,7 @@ index 2e53794fa3..e38a8a24b3 100644
        // that requires the following libs and files to be accessible.
        "/etc/ld.so.cache",
        "/usr/lib64/libgallium_dri.so",
-+#if !BUILDFLAG(IS_CHROMEOS)
++#if !BUILDFLAG(IS_CHROMEOS) // Linux Nvidia
 +      "/usr/lib64/gbm/dri_gbm.so",
 +#endif
        "/usr/lib64/dri/nouveau_dri.so",
@@ -85,7 +85,7 @@ index 2e53794fa3..e38a8a24b3 100644
        // To support threads in mesa we use --gpu-sandbox-start-early and
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libgallium_dri.so",
-+#if !BUILDFLAG(IS_CHROMEOS)
++#if !BUILDFLAG(IS_CHROMEOS) // Linux Intel
 +      "/usr/lib64/gbm/dri_gbm.so",
 +      "/usr/lib64/dri/iHD_drv_video.so",
 +#endif
@@ -96,7 +96,7 @@ index 2e53794fa3..e38a8a24b3 100644
        "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libc++.so.1",
        "/usr/lib64/libgallium_dri.so",
-+#if !BUILDFLAG(IS_CHROMEOS)
++#if !BUILDFLAG(IS_CHROMEOS) // Linux VirtIO
 +      "/usr/lib64/dri/virtio_gpu_drv_video.so",
 +      "/usr/lib64/libwayland-server.so.0",
 +      "/usr/lib64/gbm/dri_gbm.so",
@@ -106,7 +106,7 @@ index 2e53794fa3..e38a8a24b3 100644
        "/usr/lib64/dri/kms_swrast_dri.so",
 @@ -548,11 +574,13 @@ void LoadArmGpuLibraries() {
  }
- 
+
  bool LoadAmdGpuLibraries() {
 +#if BUILDFLAG(IS_CHROMEOS)
    // Preload the amdgpu-dependent libraries.
@@ -115,7 +115,7 @@ index 2e53794fa3..e38a8a24b3 100644
      return false;
    }
 +#endif // IS_CHROMEOS
- 
+
    const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
  #if defined(DRI_DRIVER_DIR)
 @@ -609,7 +637,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
@@ -128,9 +128,9 @@ index 2e53794fa3..e38a8a24b3 100644
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
 @@ -628,9 +656,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
- 
+
    AddVulkanICDPermissions(&permissions);
- 
+
 -  if (IsChromeOS()) {
 +  if (IsLinux()) {
      // Permissions are additive, there can be multiple GPUs in the system.
@@ -182,7 +182,7 @@ index 65dea86a65..3222da15ed 100644
 @@ -82,6 +82,15 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
    gpu_preferences.gpu_sandbox_start_early =
        command_line->HasSwitch(switches::kGpuSandboxStartEarly);
- 
+
 +  gpu_preferences.gpu_sandbox_linux =
 +#if BUILDFLAG(IS_LINUX)
 +      command_line->HasSwitch("enable-gpu-sandbox-linux") &&
@@ -202,13 +202,13 @@ index 7da57a4b42..02be997c1d 100644
 @@ -134,6 +134,9 @@ struct GPU_CONFIG_EXPORT GpuPreferences {
    // Starts the GPU sandbox before creating a GL context.
    bool gpu_sandbox_start_early = false;
- 
+
 +  // Enable the GPU sandbox on Linux, implies gpu_sandbox_start_early
 +  bool gpu_sandbox_linux = false;
 +
    // Enables using CODECAPI_AVLowLatencyMode. Windows only.
    bool enable_low_latency_dxva = true;
- 
+
 diff --git a/gpu/ipc/common/gpu_preferences.mojom b/gpu/ipc/common/gpu_preferences.mojom
 index 9cc16eaa45..39fc10f9f8 100644
 --- a/gpu/ipc/common/gpu_preferences.mojom
@@ -218,7 +218,7 @@ index 9cc16eaa45..39fc10f9f8 100644
    bool disable_gpu_watchdog;
    bool gpu_sandbox_start_early;
 +  bool gpu_sandbox_linux;
- 
+
    // TODO(http://crbug.com/676224) Support preprocessing of mojoms. Following
    // variables should be used on Windows only.
 diff --git a/gpu/ipc/common/gpu_preferences_mojom_traits.h b/gpu/ipc/common/gpu_preferences_mojom_traits.h
@@ -244,13 +244,13 @@ index 28d9ac5174..84cf63972b 100644
      return prefs.enable_low_latency_dxva;
    }
 diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
-index 6ea960c6f8..a55023a3c6 100644
+index 6ea960c6f8..cbce31ca4f 100644
 --- a/gpu/ipc/service/gpu_init.cc
 +++ b/gpu/ipc/service/gpu_init.cc
 @@ -54,6 +54,10 @@
  #include <GLES2/gl2.h>
  #endif
- 
+
 +#if BUILDFLAG(IS_LINUX)
 +#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
 +#endif
@@ -258,27 +258,45 @@ index 6ea960c6f8..a55023a3c6 100644
  #if BUILDFLAG(IS_OZONE)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
  #include "ui/ozone/public/drm_modifiers_filter.h"
-@@ -418,8 +422,18 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -352,6 +356,14 @@ GpuInit::~GpuInit() {
+   StopForceDiscreteGPU();
+ }
+
++// TODO: Add the following
++//angle::IsNVIDIA(vendor_id)
++//angle::IsVirtIO(vendor_id)
++//andle::IsARM(vendor_id)
++bool IsGpuSandboxSupportedPlatform(const uint_32& vendor_id) {
++  return angle::IsAMD(vendor_id) || angle::IsIntel(vendor_id);
++}
++
+ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+                                         const GpuPreferences& gpu_preferences) {
+   TRACE_EVENT("gpu,startup", "gpu::GpuInit::InitializeAndStartSandbox");
+@@ -418,8 +430,21 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif
- 
+
 +  bool gpu_sandbox_linux = gpu_preferences_.gpu_sandbox_linux;
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
-+  if (gpu_sandbox_linux)
-+    // Only enable on platforms where the sandbox works
-+    gpu_sandbox_linux = angle::IsAMD(gpu_info_.active_gpu().vendor_id)
-+                     || angle::IsIntel(gpu_info_.active_gpu().vendor_id);
-+                     //|| angle::IsNVIDIA(gpu_info_.active_gpu().vendor_id)
-+                     //|| angle::IsVirtIO(gpu_info_.active_gpu().vendor_id)
-+                     //|| andle::IsARM(gpu_info_.active_gpu().vendor_id)
++  // Only enable on platforms where the sandbox works
++  if (gpu_sandbox_linux &&
++      IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id) {
++    for (const auto& gpu : gpu_info_.secondary_gpus) {
++      if (!IsGpuSandboxSupportedPlatform(gpu.vendor_id) {
++        gpu_sandbox_linux = false;
++        break;
++      }
++    }
++  }
 +  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early ||
 +      // The sandbox does not work with Vulkan currently
 +      (gpu_sandbox_linux && !features::IsUsingVulkan());
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -460,7 +474,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -460,7 +485,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.
@@ -321,5 +339,5 @@ index 165ca85462..00e0c34024 100644
      bool accelerated_video_encode_enabled = false;
 +    std::string gpu_driver_version;
    };
- 
+
    SandboxSeccompBPF() = delete;
