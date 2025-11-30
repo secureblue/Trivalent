@@ -58,7 +58,7 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "network service sandbox to become persistently disabled, enable only "
 +     "if absolutely necessary. This switch is provided by Trivalent.",
 +     kOsLinux, SINGLE_VALUE_TYPE("enable-gssapi")},
-+    {"linux-gpu-sandbox", "Enable GPU Sandbox Auto-Configuration",
++    {"gpu-sandbox-autoconfig", "Enable GPU Sandbox Auto-Configuration",
 +     "Enables the GPU sandbox if your system supports it, this depends on "
 +     "your graphics card, whether Vulkan is in use, or if X11 is used for "
 +     "windowing.", kOsLinux, SINGLE_VALUE_TYPE("enable-gpu-sandbox-linux")},
