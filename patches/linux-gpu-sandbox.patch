@@ -167,7 +167,7 @@ diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
 index 30cc1d4a17..f39df8f142 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -527,6 +527,7 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -527,6 +527,8 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
