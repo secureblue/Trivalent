@@ -91,21 +91,12 @@ else
   [[ "$BROWSER_LOG_LEVEL" > 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
-declare ERR_PIPE=""
-if [[ "$BROWSER_LOG_LEVEL" == 0 ]]; then
-  ERR_PIPE="2>/dev/null"
-fi
-
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
 mkdir -p "$TMPFS_CACHE_DIR"
 
 declare BWRAP_ARGS="--dev-bind / /"
 BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very concerning
-BWRAP_ARGS+=" --new-session"
-# If ld.so.preload is readable, it may be used to preload into the browser which we don't want
-if [[ -r "/etc/ld.so.preload" ]]; then
-  BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload"
-fi
+BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload used
 BWRAP_ARGS+=" --bind $TMPFS_CACHE_DIR $HOME/.cache" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
@@ -118,4 +109,5 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-exec bwrap $BWRAP_ARGS -- "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@" $ERR_PIPE
+# shellcheck disable=SC2086
+exec bwrap $BWRAP_ARGS -- "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
