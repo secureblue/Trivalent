@@ -175,7 +175,7 @@ index 30cc1d4a17..1ab638e6e9 100644
 +    gpu::GPUInfo temp_gpu_info;
 +    if (CollectContextGraphicsInfo(&temp_gpu_info))
 +      sandbox_options.gpu_driver_version =
-+          temp_gpu_info->gpu.driver_version;
++          temp_gpu_info.gpu.driver_version;
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
