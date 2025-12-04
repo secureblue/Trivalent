@@ -102,7 +102,7 @@ BWRAP_ARGS+=" --new-session"
 if [[ -r "/etc/ld.so.preload" ]]; then
   BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload"
 fi
-BWRAP_ARGS+=" --bind $HOME/.cache $TMPFS_CACHE_DIR" # avoid issues with other applications messing with cache
+BWRAP_ARGS+=" --bind $TMPFS_CACHE_DIR $HOME/.cache" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
 declare EXEC_COMMAND="exec bwrap $BWRAP_ARGS $HERE/$CHROMIUM_NAME $CHROMIUM_ALL_FLAGS $@"
