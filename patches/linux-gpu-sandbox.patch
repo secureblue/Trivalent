@@ -164,15 +164,20 @@ index 2e53794fa3..e081374b49 100644
        if (!LoadAmdGpuLibraries())
          return false;
 diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
-index 30cc1d4a17..f39df8f142 100644
+index 30cc1d4a17..1ab638e6e9 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -527,6 +527,8 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -527,6 +527,13 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    sandbox_options.gpu_driver_version = gpu_info->gpu.driver_version;
-+    LOG(ERROR) << "Detected GPU driver version : " << sandbox_options.gpu_driver_version;
++
++    {
++      GPUInfo temp_gpu_info;
++      if (CollectContextGraphicsInfo(&temp_gpu_info)
++        sandbox_options.gpu_driver_version =
++            temp_gpu_info->gpu.driver_version;
++    }
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
