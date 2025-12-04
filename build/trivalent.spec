@@ -89,16 +89,17 @@ Source4: %{chromium_name}.desktop
 Source9: %{chromium_name}.xml
 Source10: %{chromium_name}.appdata.xml
 Source11: master_preferences
-Source12: %{chromium_name}16.png
-Source13: %{chromium_name}22.png
-Source14: %{chromium_name}32.png
-Source15: %{chromium_name}44.png
-Source16: %{chromium_name}64.png
 
-Source17: %{chromium_name}24.png
-Source18: %{chromium_name}48.png
-Source19: %{chromium_name}128.png
-Source20: %{chromium_name}256.png
+Source12: %{chromium_name}16.png
+Source13: %{chromium_name}32.png
+Source14: %{chromium_name}24.png
+Source15: %{chromium_name}48.png
+Source16: %{chromium_name}64.png
+Source17: %{chromium_name}128.png
+Source18: %{chromium_name}256.png
+
+#Source19: %{chromium_name}22-text.png
+#Source20: %{chromium_name}22-text-white.png
 
 ### Patches ###
 %{lua:
@@ -429,17 +430,29 @@ find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
         -e 's/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/ph>Chromium<ph/g' {} + 
 
 ### Branding ###
-cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/linux/product_logo_16.png
-cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/linux/product_logo_32.png
+cp -a %{SOURCE12} chrome/app/theme/chromium/product_logo_16.png
+cp -a %{SOURCE13} chrome/app/theme/chromium/product_logo_32.png
+cp -a %{SOURCE14} chrome/app/theme/chromium/product_logo_24.png
+cp -a %{SOURCE15} chrome/app/theme/chromium/product_logo_48.png
+cp -a %{SOURCE16} chrome/app/theme/chromium/product_logo_64.png
+cp -a %{SOURCE17} chrome/app/theme/chromium/product_logo_128.png
+cp -a %{SOURCE18} chrome/app/theme/chromium/product_logo_256.png
+cp -a %{SOURCE14} chrome/app/theme/chromium/linux/product_logo_24.png
+cp -a %{SOURCE15} chrome/app/theme/chromium/linux/product_logo_48.png
+cp -a %{SOURCE16} chrome/app/theme/chromium/linux/product_logo_64.png
+cp -a %{SOURCE17} chrome/app/theme/chromium/linux/product_logo_128.png
+cp -a %{SOURCE18} chrome/app/theme/chromium/linux/product_logo_256.png
 cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/product_logo_16.png
-cp -a %{SOURCE14} chrome/app/theme/default_100_percent/chromium/product_logo_32.png
-cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22.png
-cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_name_22_white.png
-
-cp -a %{SOURCE14} chrome/app/theme/default_200_percent/chromium/product_logo_16.png
-cp -a %{SOURCE16} chrome/app/theme/default_200_percent/chromium/product_logo_32.png
-cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22.png
-cp -a %{SOURCE15} chrome/app/theme/default_200_percent/chromium/product_logo_name_22_white.png
+cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/product_logo_32.png
+cp -a %{SOURCE12} chrome/app/theme/default_100_percent/chromium/linux/product_logo_16.png
+cp -a %{SOURCE13} chrome/app/theme/default_100_percent/chromium/linux/product_logo_32.png
+cp -a %{SOURCE12} chrome/app/theme/default_200_percent/chromium/product_logo_16.png
+cp -a %{SOURCE13} chrome/app/theme/default_200_percent/chromium/product_logo_32.png
+# These include the browser's name in them, we currently do not have such a branding representation
+#cp -a %{SOURCE19} chrome/app/theme/default_100_percent/chromium/product_logo_name_22.png
+#cp -a %{SOURCE20} chrome/app/theme/default_100_percent/chromium/product_logo_name_22_white.png
+#cp -a %{SOURCE19} chrome/app/theme/default_200_percent/chromium/product_logo_name_22.png
+#cp -a %{SOURCE20} chrome/app/theme/default_200_percent/chromium/product_logo_name_22_white.png
 
 # Change shebang in all relevant files in this directory and all subdirectories
 # See `man find` for how the `-exec command {} +` syntax works
@@ -604,16 +617,16 @@ popd
 mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/managed
 mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/recommended
 
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
-cp -a %{SOURCE20} %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
-cp -a %{SOURCE19} %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
+cp -a %{SOURCE14} %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
+cp -a %{SOURCE15} %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
 cp -a %{SOURCE16} %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
-cp -a %{SOURCE18} %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
-cp -a %{SOURCE17} %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
+cp -a %{SOURCE17} %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
+cp -a %{SOURCE18} %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
 
 # Install the master_preferences file
 install -m 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/%{chromium_name}/
@@ -663,11 +676,11 @@ fi
 %{_datadir}/applications/%{chromium_name}.desktop
 %{_datadir}/metainfo/%{chromium_name}.appdata.xml
 %{_datadir}/gnome-control-center/default-apps/%{chromium_name}.xml
-%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
-%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
-%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
-%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
 %{_datadir}/icons/hicolor/24x24/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/48x48/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/64x64/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/128x128/apps/%{chromium_name}.png
+%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
 # Locale and Language
 %{chromium_path}/resources.pak
 %{chromium_path}/chrome_100_percent.pak
