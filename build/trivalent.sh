@@ -120,6 +120,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-echo "$EXEC_COMMAND"
-
 $EXEC_COMMAND
