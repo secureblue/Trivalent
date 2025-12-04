@@ -48,7 +48,7 @@ declare -r HERE
 declare -ix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:0}"
 
 # USE_VULKAN=[true,false]
-declare USE_VULKAN="${$USE_VULKAN}:false}"
+declare USE_VULKAN="${USE_VULKAN}:false}"
 
 declare FEATURES
 declare CHROMIUM_FLAGS
