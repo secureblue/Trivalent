@@ -44,9 +44,11 @@ declare -rx CHROME_WRAPPER
 HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
-# LOG_LEVEL=[0,1,2]
-# Default: 0
-declare -ix LOG_LEVEL="${LOG_LEVEL:0}"
+# BROWSER_LOG_LEVEL=[0,1,2]
+declare -ix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:0}"
+
+# USE_VULKAN=[true,false]
+declare USE_VULKAN="${$USE_VULKAN}:false}"
 
 declare FEATURES
 declare CHROMIUM_FLAGS
@@ -61,7 +63,9 @@ fi
 # obtain chromium flags from system file
 # shellcheck source=build/trivalent.conf
 declare CHROMIUM_SYSTEM_FLAGS
-[[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]] && source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
+if [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]]; then
+  source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
+fi
 
 declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_FLAGS $CHROMIUM_SYSTEM_FLAGS"
 
@@ -72,17 +76,39 @@ mkdir -p "$xdg_app_dir"
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-[[ -f "/usr/lib64/trivalent/install_filter.sh" ]] && /bin/bash /usr/lib64/trivalent/install_filter.sh
+if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
+  /bin/bash /usr/lib64/trivalent/install_filter.sh
+fi
 
 pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote"
 IS_BROWSER_RUNNING=$?
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
 if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
-  [[ "$LOG_LEVEL" > 0 ]] && echo "Ruh roh! This shouldn't be here..."
+  [[ "$BROWSER_LOG_LEVEL" > 0 ]] && echo "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
-  [[ "$LOG_LEVEL" > 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
+  [[ "$BROWSER_LOG_LEVEL" > 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
+fi
+
+declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
+mkdir -p "$TMPFS_CACHE_DIR"
+
+declare BWRAP_ARGS="--dev-bind / /"
+BWRAP_ARGS+=" --argv0 $CHROMIUM_NAME"
+BWRAP_ARGS+=" --cap-drop=ALL" # if the browser has capabilities, that is very concerning
+BWRAP_ARGS+=" --new-session"
+# If ld.so.preload is readable, it may be used to preload into the browser which we don't want
+if [[ -r "/etc/ld.so.preload" ]]; then
+  BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload"
+fi
+BWRAP_ARGS+=" --bind \"$TMPFS_CACHE_DIR\" \"$HOME\"/.cache" # avoid issues with other applications messing with cache
+BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
+
+declare EXEC_COMMAND="exec bwrap $BWRAP_ARGS \"$HERE/$CHROMIUM_NAME\" $CHROMIUM_ALL_FLAGS \"$@\""
+
+if [[ "$BROWSER_LOG_LEVEL" <= 0 ]]
+  EXEC_COMMAND+=" 2>/dev/null"
 fi
 
 # Do this at the end so that everything else still gets hardened_malloc
@@ -94,11 +120,4 @@ exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
-# If ld.so.preload is readable, it may be used to preload into the browser which we don't want
-if [[ -r "/etc/ld.so.preload" ]]; then
-  # shellcheck disable=SC2086
-  exec bwrap --dev-bind / / --ro-bind-try /dev/null /etc/ld.so.preload --setenv GDK_DISABLE icon-nodes "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
-else
-  # shellcheck disable=SC2086
-  GDK_DISABLE=icon-nodes exec -a "$0" "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
-fi
+$EXEC_COMMAND
