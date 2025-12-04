@@ -96,18 +96,18 @@ mkdir -p "$TMPFS_CACHE_DIR"
 
 declare BWRAP_ARGS="--dev-bind / /"
 BWRAP_ARGS+=" --argv0 $CHROMIUM_NAME"
-BWRAP_ARGS+=" --cap-drop=ALL" # if the browser has capabilities, that is very concerning
+BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very concerning
 BWRAP_ARGS+=" --new-session"
 # If ld.so.preload is readable, it may be used to preload into the browser which we don't want
 if [[ -r "/etc/ld.so.preload" ]]; then
   BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload"
 fi
-BWRAP_ARGS+=" --bind \"$TMPFS_CACHE_DIR\" \"$HOME\"/.cache" # avoid issues with other applications messing with cache
+BWRAP_ARGS+=" --bind $HOME/.cache $TMPFS_CACHE_DIR" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
-declare EXEC_COMMAND="exec bwrap $BWRAP_ARGS \"$HERE/$CHROMIUM_NAME\" $CHROMIUM_ALL_FLAGS \"$@\""
+declare EXEC_COMMAND="exec bwrap $BWRAP_ARGS $HERE/$CHROMIUM_NAME $CHROMIUM_ALL_FLAGS $@"
 
-if [[ "$BROWSER_LOG_LEVEL" <= 0 ]]
+if [[ "$BROWSER_LOG_LEVEL" == 0 ]]; then
   EXEC_COMMAND+=" 2>/dev/null"
 fi
 
@@ -119,5 +119,7 @@ declare -rx LD_PRELOAD=""
 exec < /dev/null
 exec > >(exec cat)
 exec 2> >(exec cat >&2)
+
+echo "$EXEC_COMMAND"
 
 $EXEC_COMMAND
