@@ -12,6 +12,9 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+# Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
+shopt -s nullglob
+
 # Sanitize & protect risky variables
 declare -rx LD_LIBRARY_PATH=""
 declare -rx LD_AUDIT=""
