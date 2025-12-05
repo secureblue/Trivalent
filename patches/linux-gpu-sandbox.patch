@@ -167,15 +167,11 @@ diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
 index 30cc1d4a17..1ab638e6e9 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -527,6 +527,11 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -527,6 +527,7 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+
-+    gpu::GPUInfo temp_gpu_info;
-+    if (CollectContextGraphicsInfo(&temp_gpu_info))
-+      sandbox_options.gpu_driver_version =
-+          temp_gpu_info.gpu.driver_version;
++    sandbox_options.gpu_driver_version = GetGraphicsGLDriverVersion();
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
@@ -345,3 +341,33 @@ index 165ca85462..00e0c34024 100644
    };
  
    SandboxSeccompBPF() = delete;
+diff --git a/gpu/config/gpu_info_collector.cc b/gpu/config/gpu_info_collector.cc
+index e057ed59c6..6a14b75f11 100644
+--- a/gpu/config/gpu_info_collector.cc
++++ b/gpu/config/gpu_info_collector.cc
+@@ -582,6 +582,12 @@ bool CollectBasicGraphicsInfo(const base::CommandLine* command_line,
+   return CollectBasicGraphicsInfo(gpu_info);
+ }
+
++std::string GetGraphicsGLDriverVersion() {
++  gl::GLVersionInfo gl_info(GetGLString(GL_VERSION), GetGLString(GL_RENDERER),
++              gfx::MakeExtensionSet(gl::GetGLExtensionsFromCurrentContext()));
++  return gl_info.driver_version;
++}
++
+ bool CollectGraphicsInfoGL(GPUInfo* gpu_info, gl::GLDisplay* display) {
+   TRACE_EVENT("gpu,startup", "gpu_info_collector::CollectGraphicsInfoGL");
+   DCHECK_NE(gl::GetGLImplementationParts(), gl::kGLImplementationNone);
+diff --git a/gpu/config/gpu_info_collector.h b/gpu/config/gpu_info_collector.h
+index 1c8fd10296..fde4b147f6 100644
+--- a/gpu/config/gpu_info_collector.h
++++ b/gpu/config/gpu_info_collector.h
+@@ -75,6 +75,8 @@ GPU_CONFIG_EXPORT void CollectHardwareOverlayInfo(OverlayInfo* overlay_info);
+ bool IdentifyActiveGPUWithLuid(GPUInfo* gpu_info);
+ #endif  // BUILDFLAG(IS_WIN)
+
++GPU_CONFIG_EXPORT std::string GetGraphicsGLDriverVersion();
++
+ // Create a GL context and collect GL strings and versions.
+ GPU_CONFIG_EXPORT bool CollectGraphicsInfoGL(GPUInfo* gpu_info,
+                                              gl::GLDisplay* display);
