@@ -171,7 +171,7 @@ index 30cc1d4a17..1ab638e6e9 100644
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    sandbox_options.gpu_driver_version = GetGraphicsGLDriverVersion();
++    sandbox_options.gpu_driver_version = gpu::GetGraphicsGLDriverVersion();
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
