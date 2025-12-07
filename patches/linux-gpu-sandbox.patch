@@ -345,7 +345,7 @@ diff --git a/content/browser/gpu/gpu_process_host.cc b/content/browser/gpu/gpu_p
 index cd6b6be5cb..3e66a9860e 100644
 --- a/content/browser/gpu/gpu_process_host.cc
 +++ b/content/browser/gpu/gpu_process_host.cc
-@@ -1313,6 +1313,11 @@ bool GpuProcessHost::LaunchGpuProcess() {
+@@ -1313,6 +1313,12 @@ bool GpuProcessHost::LaunchGpuProcess() {
    }
  #endif  // BUILDFLAG(IS_WIN)
 
@@ -354,6 +354,7 @@ index cd6b6be5cb..3e66a9860e 100644
 +    cmd_line->AppendSwitchASCII(switches::kGpuDriverVersion,
 +                                device_info.driver_version);
 +  }
++  LOG(ERROR) << "Detected gallium version : " << device_info.driver_version;
    if (kind_ == GPU_PROCESS_KIND_INFO_COLLECTION) {
      cmd_line->AppendSwitch(sandbox::policy::switches::kDisableGpuSandbox);
      cmd_line->AppendSwitchASCII(switches::kUseGL,
