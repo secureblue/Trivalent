@@ -370,7 +370,7 @@ index cd6b6be5cb..3e66a9860e 100644
      cmd_line->AppendSwitchASCII(switches::kGpuRevision,
                                  base::StringPrintf("%u", device_info.revision));
  #endif
--    if (device_info.driver_version.length()) {
+-    if (!device_info.driver_version.empty()) {
 -      cmd_line->AppendSwitchASCII(switches::kGpuDriverVersion,
 -                                  device_info.driver_version);
 -    }
