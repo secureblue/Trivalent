@@ -7,10 +7,10 @@ index 81776c22d5..88e6f8d392 100644
    </message>
 
 +  <!-- Trivalent -->
-+  <message name="IDS_WEBSITE_DARK_MODE" desc="Name of dark mode setting for websites.">
++  <message name="IDS_WEBSITE_DARK_MODE" desc="Trivalent String.">
 +    Website dark mode
 +  </message>
-+  <message name="IDS_PRINTING_CAPABILITIES" desc="Name of toggle to control printing.">
++  <message name="IDS_PRINTING_CAPABILITIES" desc="Trivalent String.">
 +    Printing capabilities
 +  </message>
 +
