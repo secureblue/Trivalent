@@ -12,6 +12,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+# Exit immediately if run as root
+if [ "$(id -u)" -eq 0 ]; then
+    echo "Trivalent must not be run as root."
+    exit 1
+fi
+
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
 shopt -s nullglob
 
