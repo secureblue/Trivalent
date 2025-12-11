@@ -108,7 +108,9 @@ mkdir -p "$TMPFS_CACHE_DIR"
 
 declare BWRAP_ARGS="--dev-bind / /"
 BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very concerning
-BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
+if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will error out
+  BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
+fi
 BWRAP_ARGS+=" --bind $TMPFS_CACHE_DIR $HOME/.cache" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
