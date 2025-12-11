@@ -14,8 +14,8 @@
 
 # Exit immediately if run as root
 if [ "$(id -u)" -eq 0 ]; then
-    echo "Trivalent must not be run as root."
-    exit 1
+  echo "Trivalent must not be run as root."
+  exit 1
 fi
 
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
