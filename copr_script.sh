@@ -49,10 +49,10 @@ cd ..
 
 # copy translation patches for Trivalent (treat them like regular Trivalent patches)
 cd translation_patches/translations/
-cp ../register-trivalent-strings.patch "../trivalent-$((counter+3001)).patch"
+cp ../register-trivalent-strings.patch "../../build/trivalent-$((counter+3001)).patch"
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp "${patches[i]}" "../build/trivalent-$((i+counter+3002)).patch"
+	cp "${patches[i]}" "../../build/trivalent-$((i+counter+3002)).patch"
 done
 cd ../../
 
