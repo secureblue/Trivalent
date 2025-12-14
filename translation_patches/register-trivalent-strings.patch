@@ -42,7 +42,7 @@ index 81776c22d5..88e6f8d392 100644
 +  <message name="IDS_DISABLE_EXTENSIONS_LABEL" desc="Trivalent String.">
 +    Disable Extensions
 +  </message>
-+  <message name="IDS_NETWORK_SERVICE_SANDBOX_DESCRIPTION" desc="Trivalent String.">
++  <message name="IDS_DISABLE_EXTENSIONS_DESCRIPTION" desc="Trivalent String.">
 +    Changes to this setting requires a restart to apply
 +  </message>
 +
