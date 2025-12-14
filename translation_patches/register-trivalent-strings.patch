@@ -27,7 +27,7 @@ index 81776c22d5..88e6f8d392 100644
 +  <message name="IDS_DISABLE_3D_APIS_LABEL" desc="Trivalent String.">
 +    Disable 3D APIs
 +  </message>
-+  <message name="IDS_DISABLE_3D_API_DESCRIPTION" desc="Trivalent String.">
++  <message name="IDS_DISABLE_3D_APIS_DESCRIPTION" desc="Trivalent String.">
 +    Disable web-facing access to features like WebGL
 +  </message>
 +  <message name="IDS_WEBRTC_HANDLING_POLICY_LABEL" desc="Trivalent String.">
