@@ -1,3 +1,3 @@
-# Translations
+# Translations/Strings
 
-WIP
+This directory is for strings in Trivalent that require translations of some sort.
