@@ -38,10 +38,23 @@ cd ..
 # copy Trivalent patches to the build dir
 cd patches/
 patches=(*.patch)
+counter=0
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp "${patches[i]}" "../build/trivalent-$((i+3000)).patch"
+	counter=$i
 done
 cd ..
+
+# copy translation patches for Trivalent (treat them like regular Trivalent patches)
+cd translation_patches/translations/
+counter++
+cp ../register-trivalent-strings.patch "../trivalent-$((counter+3000)).patch"
+counter++
+patches=(*.patch)
+for ((i=0; i<${#patches[@]}; i++)); do
+	cp "${patches[i]}" "../build/trivalent-$((i+counter+3000)).patch"
+done
+cd ../../
 
 # Move all the source files into the parent directory for the COPR build system to find them
 cp /usr/src/chromium/chromium-*-clean.tar.xz ../
