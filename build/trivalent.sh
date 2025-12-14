@@ -12,6 +12,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+# Exit immediately if run as root
+if [ "$(id -u)" -eq 0 ]; then
+  echo "Trivalent must not be run as root."
+  exit 1
+fi
+
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
 shopt -s nullglob
 
@@ -25,7 +31,8 @@ declare -rx XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 declare -rx XAUTHORITY="$XAUTHORITY"
 declare -rx DISPLAY="$DISPLAY"
 
-declare -r ARCH="$(uname -m)"
+ARCH="$(uname -m)"
+declare -r ARCH
 
 # enable hardware CFI feature
 # https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
@@ -58,7 +65,8 @@ declare CHROMIUM_FLAGS
 
 # obtain extra flags that are likely user-configured
 if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
-  for conf_file in /etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d/*.conf; do
+  for conf_file in "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d"/*.conf; do
+    # shellcheck source=/etc/trivalent/trivalent.conf.d/99-example.conf
     source "$conf_file"
   done
 fi
@@ -67,6 +75,7 @@ fi
 # shellcheck source=build/trivalent.conf
 declare CHROMIUM_SYSTEM_FLAGS
 if [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]]; then
+  # shellcheck source=build/trivalent.conf
   source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
 fi
 
@@ -88,10 +97,10 @@ IS_BROWSER_RUNNING=$?
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
 if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
-  [[ "$BROWSER_LOG_LEVEL" > 0 ]] && echo "Ruh roh! This shouldn't be here..."
+  [[ "$BROWSER_LOG_LEVEL" -gt 0 ]] && echo "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
-  [[ "$BROWSER_LOG_LEVEL" > 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
+  [[ "$BROWSER_LOG_LEVEL" -gt 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
@@ -99,7 +108,9 @@ mkdir -p "$TMPFS_CACHE_DIR"
 
 declare BWRAP_ARGS="--dev-bind / /"
 BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very concerning
-BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
+if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will error out
+  BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
+fi
 BWRAP_ARGS+=" --bind $TMPFS_CACHE_DIR $HOME/.cache" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
