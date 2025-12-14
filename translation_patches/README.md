@@ -1,3 +1,3 @@
 # Translations/Strings
 
-This directory is for strings in Trivalent that require translations of some sort.
+This directory is for strings in Trivalent, most require translations of some sort.
