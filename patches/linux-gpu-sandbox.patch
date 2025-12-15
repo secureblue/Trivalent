@@ -178,13 +178,14 @@ index 30cc1d4a17..eff1aaf28c 100644
  #if BUILDFLAG(IS_WIN)
  #include <windows.h>
 
-@@ -527,6 +531,14 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -527,6 +531,15 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    if (command_line->HasSwitch("libgallium-version")) {
++    const base::CommandLine* cmdline = base::CommandLine::ForCurrentProcess();
++    if (cmdline->HasSwitch("libgallium-version")) {
 +      const std::string libgalliumVersion =
-+          command_line->GetSwitchValueASCII("libgallium-version");
++          cmdline->GetSwitchValueASCII("libgallium-version");
 +      // Make sure our input is safe
 +      if (RE2::FullMatch(libgalliumVersion, "^[0-9]+\.[0-9]\.[0-9]$")) {
 +        sandbox_options.gpu_driver_version = libgalliumVersion;
