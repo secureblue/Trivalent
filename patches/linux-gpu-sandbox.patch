@@ -164,16 +164,32 @@ index 2e53794fa3..e081374b49 100644
        if (!LoadAmdGpuLibraries())
          return false;
 diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
-index 30cc1d4a17..1ab638e6e9 100644
+index 30cc1d4a17..eff1aaf28c 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -527,6 +527,10 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -82,6 +82,10 @@
+ #include "ui/gl/gpu_switching_manager.h"
+ #include "ui/gl/init/gl_factory.h"
+
++#if BUILDFLAG(IS_LINUX)
++#include "third_party/re2/src/re2/re2.h"
++#endif
++
+ #if BUILDFLAG(IS_WIN)
+ #include <windows.h>
+
+@@ -527,6 +531,15 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    if (command_line->HasSwitch("libgallium-library-version")) {
-+      sandbox_options.gpu_driver_version =
-+          command_line->GetSwitchValueASCII("libgallium-library-version");
++    if (command_line->HasSwitch("libgallium-version")) {
++      const std::string libgalliumVersion =
++          command_line->GetSwitchValueASCII("libgallium-version");
++      // Make sure our input is correct
++      const RE2 pattern(R"(^[0-9]+\.[0-9]\.[0-9]$)");
++      if (RE2::FullMatch(libgalliumVersion, pattern)) {
++        sandbox_options.gpu_driver_version = libgalliumVersion;
++      }
 +    }
    }
    sandbox_options.accelerated_video_decode_enabled =
