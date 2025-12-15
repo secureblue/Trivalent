@@ -167,11 +167,14 @@ diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
 index 30cc1d4a17..1ab638e6e9 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -527,6 +527,7 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -527,6 +527,10 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    sandbox_options.gpu_driver_version = gpu_info->gpu.driver_version;
++    if (command_line->HasSwitch("libgallium-library-version")) {
++      sandbox_options.gpu_driver_version =
++          command_line->GetSwitchValueASCII("libgallium-library-version");
++    }
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
@@ -341,39 +344,3 @@ index 165ca85462..00e0c34024 100644
    };
  
    SandboxSeccompBPF() = delete;
-diff --git a/content/browser/gpu/gpu_process_host.cc b/content/browser/gpu/gpu_process_host.cc
-index cd6b6be5cb..3e66a9860e 100644
---- a/content/browser/gpu/gpu_process_host.cc
-+++ b/content/browser/gpu/gpu_process_host.cc
-@@ -1313,6 +1313,12 @@ bool GpuProcessHost::LaunchGpuProcess() {
-   }
- #endif  // BUILDFLAG(IS_WIN)
-
-+  const gpu::GPUInfo::GPUDevice device_info = GetGPUInfo().active_gpu();
-+  if (device_info.driver_version.length()) {
-+    cmd_line->AppendSwitchASCII(switches::kGpuDriverVersion,
-+                                device_info.driver_version);
-+  }
-+  LOG(ERROR) << "Detected gallium version : " << device_info.driver_version;
-   if (kind_ == GPU_PROCESS_KIND_INFO_COLLECTION) {
-     cmd_line->AppendSwitch(sandbox::policy::switches::kDisableGpuSandbox);
-     cmd_line->AppendSwitchASCII(switches::kUseGL,
-@@ -1320,7 +1325,6 @@ bool GpuProcessHost::LaunchGpuProcess() {
-
-     // Pass the current device info to the info-collection GPU process for
-     // crash key logging.
--    const gpu::GPUInfo::GPUDevice device_info = GetGPUInfo().active_gpu();
-     cmd_line->AppendSwitchASCII(
-         switches::kGpuVendorId,
-         base::StringPrintf("%u", device_info.vendor_id));
-@@ -1334,10 +1338,6 @@ bool GpuProcessHost::LaunchGpuProcess() {
-     cmd_line->AppendSwitchASCII(switches::kGpuRevision,
-                                 base::StringPrintf("%u", device_info.revision));
- #endif
--    if (!device_info.driver_version.empty()) {
--      cmd_line->AppendSwitchASCII(switches::kGpuDriverVersion,
--                                  device_info.driver_version);
--    }
-   }
-
-   // TODO(penghuang): Replace all GPU related switches with GpuPreferences.
