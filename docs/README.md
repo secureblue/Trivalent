@@ -30,7 +30,7 @@ A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadi
 
 ## Installation
 
-Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks SELinux confinement unless Fedora's SELinux policy is swapped for secureblue's.
+Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks SELinux confinement unless Fedora's SELinux policy is swapped for secureblue's. "Support" here refers to which systems Trivalent is tested against. It does not mean that it's forbidden to open Github issues regarding Trivalent's use on other systems.
 
 ## Post-install
 
