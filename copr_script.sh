@@ -19,33 +19,29 @@ grep \"version\" chromium-version.json | grep -oh "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]
 
 cd Trivalent
 
-shopt -s nullglob
-
 # copy Fedora patches to the build dir
-pushd fedora_patches/
+cd fedora_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp "${patches[i]}" "../build/fedora-$((i+1000)).patch"
 done
-popd
+cd ..
 
 # copy Vanadium patches to the build dir
-pushd vanadium_patches/
+cd vanadium_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp "${patches[i]}" "../build/vanadium-$((i+2000)).patch"
 done
-popd
+cd ..
 
 # copy Trivalent patches to the build dir
-pushd patches/
-cp ../translation_patches/register-trivalent-strings.patch ./
-cp ../translation_patches/translations/*.patch ./
+cd patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp "${patches[i]}" "../build/trivalent-$((i+3000)).patch"
 done
-popd
+cd ..
 
 # Move all the source files into the parent directory for the COPR build system to find them
 cp /usr/src/chromium/chromium-*-clean.tar.xz ../

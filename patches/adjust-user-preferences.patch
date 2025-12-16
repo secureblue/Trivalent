@@ -98,7 +98,7 @@ index f4534420339a7..49393040e0741 100644
 +        <div class="hr"></div>
 +        <settings-toggle-button
 +            pref="{{prefs.webkit.webprefs.force_dark_mode_enabled}}"
-+            label="$i18n{websiteDarkMode}">
++            label="Website Dark Mode">
 +        </settings-toggle-button>
          <div
              class="hr"
@@ -399,20 +399,20 @@ index 6b9bd1adee..6e0bea5eee 100644
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
 +      <settings-toggle-button class="cr-row first"
 +        pref="{{prefs.incognito.launch_mode}}"
-+        label="$i18n{incognitoLaunchLabel}"
-+        sub-label="$i18n{incognitoLaunchDesc}">
++        label="Incognito Launch"
++        sub-label="Opens new sessions and external links in Incognito tabs">
 +      </settings-toggle-button>
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.disable_3d_apis}}"
-+        label="$i18n{disable3dApisLabel}"
-+        sub-label="$i18n{disable3dApisDesc}">
++        label="Disable 3D APIs"
++        sub-label="Disable features like WebGL and Pepper 3D">
 +      </settings-toggle-button>
 +      <div class="cr-row">
 +        <div id="webrtcLabel" class="flex cr-padded-text" aria-hidden="true">
-+          $i18n{webrtcHandlingPolicyLabel}
++          WebRTC Handling Policy
 +        </div>
 +        <settings-dropdown-menu
-+          label="$i18n{webrtcHandlingPolicyLabel}"
++          label="WebRTC Handling Policy"
 +          pref="{{prefs.webrtc.ip_handling_policy}}"
 +          menu-options="[[webrtcHandlingPolicyOptions_]]">
 +        </settings-dropdown-menu>
@@ -420,14 +420,14 @@ index 6b9bd1adee..6e0bea5eee 100644
 +<if expr="is_linux or is_win">
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.net.network_service_sandbox}}"
-+        label="$i18n{netServSandboxLabel}"
-+        sub-label="$i18n{netServSandboxDesc}">
++        label="Network Service Sandbox"
++        sub-label="Disabling may fix issues with data persistence, requires a restart">
 +      </settings-toggle-button>
 +</if>
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.extensions.disabled}}"
-+        label="$i18n{disableExtensionsLabel}"
-+        sub-label="$i18n{disableExtensionsDesc}">
++        label="Disable Extensions"
++        sub-label="Changes to this setting requires a restart">
 +      </settings-toggle-button>
 +    </div>
    </settings-subpage>
@@ -531,7 +531,7 @@ index 4c518c19856c7..e73df1f31e651 100644
 +<if expr="enable_printing">
 +    <settings-toggle-button class="cr-row"
 +        pref="{{prefs.printing.enabled}}"
-+        label="$i18n{printingCapabilities}">
++        label="Enable printing capabilities">
 +    </settings-toggle-button>
 +</if>
 +
