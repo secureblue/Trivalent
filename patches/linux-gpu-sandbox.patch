@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/content/common/gpu_pre_sandbox_hook_linux.cc b/content/common/gpu_pre_sandbox_hook_linux.cc
-index 2e53794fa3..e081374b49 100644
+index 2e53794fa3..986d44ab5d 100644
 --- a/content/common/gpu_pre_sandbox_hook_linux.cc
 +++ b/content/common/gpu_pre_sandbox_hook_linux.cc
 @@ -48,8 +48,8 @@ using sandbox::syscall_broker::BrokerProcess;
@@ -49,13 +49,13 @@ index 2e53794fa3..e081374b49 100644
  
 +void AddLibGalliumLinuxPermissions(
 +    std::vector<BrokerFilePermission>* permissions,
-+    const std::string driver_version) {
++    const std::string gallium_version) {
 +  if (driver_version.empty()) {
 +    LOG(ERROR) << "Detected driver version is empty, gpu sandbox may fail";
 +    return;
 +  }
 +  const std::string libgallium_path =
-+             "/usr/lib64/libgallium-" + driver_version + ".so";
++             "/usr/lib64/libgallium-" + gallium_version + ".so";
 +  LOG(ERROR) << "Detected gallium path : " << libgallium_path;
 +  permissions->push_back(BrokerFilePermission::ReadOnly(libgallium_path));
 +}
@@ -146,11 +146,11 @@ index 2e53794fa3..e081374b49 100644
      }
      if (options.use_amd_specific_policies) {
        AddAmdGpuPermissions(&permissions);
-+      AddLibGalliumLinuxPermissions(&permissions, options.gpu_driver_version);
++      AddLibGalliumLinuxPermissions(&permissions, options.gallium_version);
      }
      if (options.use_intel_specific_policies) {
        AddIntelGpuPermissions(&permissions);
-+      AddLibGalliumLinuxPermissions(&permissions, options.gpu_driver_version);
++      AddLibGalliumLinuxPermissions(&permissions, options.gallium_version);
      }
      if (options.use_nvidia_specific_policies) {
        AddStandardGpuPermissions(&permissions);
@@ -164,41 +164,33 @@ index 2e53794fa3..e081374b49 100644
        if (!LoadAmdGpuLibraries())
          return false;
 diff --git a/content/gpu/gpu_main.cc b/content/gpu/gpu_main.cc
-index 30cc1d4a17..eff1aaf28c 100644
+index 30cc1d4a17..a565ea4b5c 100644
 --- a/content/gpu/gpu_main.cc
 +++ b/content/gpu/gpu_main.cc
-@@ -82,6 +82,10 @@
- #include "ui/gl/gpu_switching_manager.h"
- #include "ui/gl/init/gl_factory.h"
-
-+#if BUILDFLAG(IS_LINUX)
-+#include "third_party/re2/src/re2/re2.h"
-+#endif
-+
- #if BUILDFLAG(IS_WIN)
- #include <windows.h>
-
-@@ -527,6 +531,15 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
+@@ -527,6 +527,7 @@ bool StartSandboxLinux(gpu::GpuWatchdogThread* watchdog_thread,
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    const base::CommandLine* cmdline = base::CommandLine::ForCurrentProcess();
-+    if (cmdline->HasSwitch("libgallium-version")) {
-+      const std::string libgalliumVersion =
-+          cmdline->GetSwitchValueASCII("libgallium-version");
-+      // Make sure our input is safe
-+      if (RE2::FullMatch(libgalliumVersion, "^[0-9]+\.[0-9]\.[0-9]$")) {
-+        sandbox_options.gpu_driver_version = libgalliumVersion;
-+      }
-+    }
++    sandbox_options.gallium_version = gpu_prefs.gallium_version;
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
 diff --git a/content/public/browser/gpu_utils.cc b/content/public/browser/gpu_utils.cc
-index 65dea86a65..3222da15ed 100644
+index 65dea86a65..ab9d387a01 100644
 --- a/content/public/browser/gpu_utils.cc
 +++ b/content/public/browser/gpu_utils.cc
-@@ -82,6 +82,15 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
+@@ -29,6 +29,10 @@
+ #include "ui/gfx/switches.h"
+ #include "ui/gl/gl_features.h"
+ 
++#if BUILDFLAG(IS_LINUX)
++#include "third_party/re2/src/re2/re2.h"
++#endif
++
+ namespace {
+ 
+ void KillGpuProcessImpl(content::GpuProcessHost* host) {
+@@ -82,6 +86,25 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
    gpu_preferences.gpu_sandbox_start_early =
        command_line->HasSwitch(switches::kGpuSandboxStartEarly);
  
@@ -211,17 +203,30 @@ index 65dea86a65..3222da15ed 100644
 +      false;
 +#endif
 +
++#if BUILDFLAG(IS_LINUX)
++  if (command_line->HasSwitch("libgallium-version")) {
++    const std::string libgalliumVersion =
++          cmdline->GetSwitchValueASCII("libgallium-version");
++    // Make sure our input is safe
++    if (RE2::FullMatch(libgalliumVersion, "^[0-9]+\.[0-9]\.[0-9]$"))
++      gpu_preferences.gallium_version = libgalliumVersion;
++  }
++#endif
++
    gpu_preferences.enable_vulkan_protected_memory =
        command_line->HasSwitch(switches::kEnableVulkanProtectedMemory);
    gpu_preferences.disable_vulkan_fallback_to_gl_for_testing =
 diff --git a/gpu/config/gpu_preferences.h b/gpu/config/gpu_preferences.h
-index 7da57a4b42..02be997c1d 100644
+index 7da57a4b42..e9e7fa3df2 100644
 --- a/gpu/config/gpu_preferences.h
 +++ b/gpu/config/gpu_preferences.h
-@@ -134,6 +134,9 @@ struct GPU_CONFIG_EXPORT GpuPreferences {
+@@ -134,6 +134,12 @@ struct GPU_CONFIG_EXPORT GpuPreferences {
    // Starts the GPU sandbox before creating a GL context.
    bool gpu_sandbox_start_early = false;
  
++  // LibGallium library version for sandbox whitelist.
++  std::string gallium_version;
++
 +  // Enable the GPU sandbox on Linux, implies gpu_sandbox_start_early
 +  bool gpu_sandbox_linux = false;
 +
@@ -229,35 +234,40 @@ index 7da57a4b42..02be997c1d 100644
    bool enable_low_latency_dxva = true;
  
 diff --git a/gpu/ipc/common/gpu_preferences.mojom b/gpu/ipc/common/gpu_preferences.mojom
-index 9cc16eaa45..39fc10f9f8 100644
+index 9cc16eaa45..3e221581bf 100644
 --- a/gpu/ipc/common/gpu_preferences.mojom
 +++ b/gpu/ipc/common/gpu_preferences.mojom
-@@ -59,6 +59,7 @@ struct GpuPreferences {
+@@ -59,6 +59,8 @@ struct GpuPreferences {
    bool gpu_startup_dialog;
    bool disable_gpu_watchdog;
    bool gpu_sandbox_start_early;
 +  bool gpu_sandbox_linux;
++  string gallium_version;
  
    // TODO(http://crbug.com/676224) Support preprocessing of mojoms. Following
    // variables should be used on Windows only.
 diff --git a/gpu/ipc/common/gpu_preferences_mojom_traits.h b/gpu/ipc/common/gpu_preferences_mojom_traits.h
-index 28d9ac5174..84cf63972b 100644
+index 28d9ac5174..f621437301 100644
 --- a/gpu/ipc/common/gpu_preferences_mojom_traits.h
 +++ b/gpu/ipc/common/gpu_preferences_mojom_traits.h
-@@ -221,6 +221,7 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+@@ -221,6 +221,8 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
      out->gpu_startup_dialog = prefs.gpu_startup_dialog();
      out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
      out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
 +    out->gpu_sandbox_linux = prefs.gpu_sandbox_linux();
++    out->gallium_version = prefs.gallium_version();
      out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
      out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
      out->enable_nv12_dxgi_video = prefs.enable_nv12_dxgi_video();
-@@ -325,6 +326,9 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+@@ -325,6 +327,12 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
    static bool gpu_sandbox_start_early(const gpu::GpuPreferences& prefs) {
      return prefs.gpu_sandbox_start_early;
    }
 +  static bool gpu_sandbox_linux(const gpu::GpuPreferences& prefs) {
 +    return prefs.gpu_sandbox_linux;
++  }
++  static std::string gallium_version(const gpu::GpuPreferences& prefs) {
++    return prefs.gallium_version;
 +  }
    static bool enable_low_latency_dxva(const gpu::GpuPreferences& prefs) {
      return prefs.enable_low_latency_dxva;
@@ -349,14 +359,14 @@ index 4de13fe88b..aaebda0773 100644
        return std::make_unique<CrosArmGpuProcessPolicy>(
            mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h
-index 165ca85462..00e0c34024 100644
+index 165ca85462..1c6fdeaa88 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h
 +++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.h
 @@ -33,6 +33,7 @@ class SANDBOX_POLICY_EXPORT SandboxSeccompBPF {
      // Options for GPU's PreSandboxHook.
      bool accelerated_video_decode_enabled = false;
      bool accelerated_video_encode_enabled = false;
-+    std::string gpu_driver_version;
++    std::string gallium_version;
    };
  
    SandboxSeccompBPF() = delete;
