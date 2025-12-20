@@ -266,7 +266,7 @@ index 28d9ac5174..f621437301 100644
 +  static bool gpu_sandbox_linux(const gpu::GpuPreferences& prefs) {
 +    return prefs.gpu_sandbox_linux;
 +  }
-+  static std::string gallium_version(const gpu::GpuPreferences& prefs) {
++  static const std::string& gallium_version(const gpu::GpuPreferences& prefs) {
 +    return prefs.gallium_version;
 +  }
    static bool enable_low_latency_dxva(const gpu::GpuPreferences& prefs) {
