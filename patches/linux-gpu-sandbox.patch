@@ -49,13 +49,13 @@ index 2e53794fa3..986d44ab5d 100644
  
 +void AddLibGalliumLinuxPermissions(
 +    std::vector<BrokerFilePermission>* permissions,
-+    const std::string gallium_version) {
++    const std::string driver_version) {
 +  if (driver_version.empty()) {
 +    LOG(ERROR) << "Detected driver version is empty, gpu sandbox may fail";
 +    return;
 +  }
 +  const std::string libgallium_path =
-+             "/usr/lib64/libgallium-" + gallium_version + ".so";
++             "/usr/lib64/libgallium-" + driver_version + ".so";
 +  LOG(ERROR) << "Detected gallium path : " << libgallium_path;
 +  permissions->push_back(BrokerFilePermission::ReadOnly(libgallium_path));
 +}
@@ -146,11 +146,11 @@ index 2e53794fa3..986d44ab5d 100644
      }
      if (options.use_amd_specific_policies) {
        AddAmdGpuPermissions(&permissions);
-+      AddLibGalliumLinuxPermissions(&permissions, options.gallium_version);
++      AddLibGalliumLinuxPermissions(&permissions, options.driver_version);
      }
      if (options.use_intel_specific_policies) {
        AddIntelGpuPermissions(&permissions);
-+      AddLibGalliumLinuxPermissions(&permissions, options.gallium_version);
++      AddLibGalliumLinuxPermissions(&permissions, options.driver_version);
      }
      if (options.use_nvidia_specific_policies) {
        AddStandardGpuPermissions(&permissions);
@@ -171,7 +171,7 @@ index 30cc1d4a17..a565ea4b5c 100644
        else if (angle::IsNVIDIA(gpu.vendor_id))
          sandbox_options.use_nvidia_specific_policies = true;
      }
-+    sandbox_options.gallium_version = gpu_prefs.gallium_version;
++    sandbox_options.driver_version = gpu_prefs.gallium_version;
    }
    sandbox_options.accelerated_video_decode_enabled =
        !gpu_prefs.disable_accelerated_video_decode;
@@ -366,7 +366,7 @@ index 165ca85462..1c6fdeaa88 100644
      // Options for GPU's PreSandboxHook.
      bool accelerated_video_decode_enabled = false;
      bool accelerated_video_encode_enabled = false;
-+    std::string gallium_version;
++    std::string driver_version;
    };
  
    SandboxSeccompBPF() = delete;
