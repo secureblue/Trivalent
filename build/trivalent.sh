@@ -62,8 +62,9 @@ declare USE_VULKAN="${USE_VULKAN}:false}"
 
 declare FEATURES
 declare CHROMIUM_FLAGS
+declare BWRAP_EXTRA_ARGS=''
 
-# obtain extra flags that are likely user-configured
+# obtain extra flags configured by the local administrator
 if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
   for conf_file in "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d"/*.conf; do
     # shellcheck source=/etc/trivalent/trivalent.conf.d/99-example.conf
@@ -112,7 +113,8 @@ if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will er
   BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
 fi
 BWRAP_ARGS+=" --bind $TMPFS_CACHE_DIR $HOME/.cache" # avoid issues with other applications messing with cache
-BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
+BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with GTK icons
+BWRAP_ARGS+=" $BWRAP_EXTRA_ARGS" # add extra args from conf files in trivalent.conf.d
 
 # Do this at the end so that everything else still gets hardened_malloc
 declare -rx LD_PRELOAD=""
