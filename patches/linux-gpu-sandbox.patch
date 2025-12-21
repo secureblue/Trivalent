@@ -206,9 +206,9 @@ index 65dea86a65..ab9d387a01 100644
 +#if BUILDFLAG(IS_LINUX)
 +  if (command_line->HasSwitch("libgallium-version")) {
 +    const std::string libgalliumVersion =
-+          cmdline->GetSwitchValueASCII("libgallium-version");
++          command_line->GetSwitchValueASCII("libgallium-version");
 +    LOG(ERROR) << "Provided gallium version : " << libgalliumVersion;
-+    if (RE2::FullMatch(libgalliumVersion, "^[0-9]+\.[0-9]\.[0-9]$"))
++    if (RE2::FullMatch(libgalliumVersion, "[0-9]+\.[0-9]\.[0-9]"))
 +      gpu_preferences.gallium_version = libgalliumVersion;
 +  }
 +#endif
