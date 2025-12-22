@@ -252,7 +252,7 @@ diff --git a/gpu/ipc/common/gpu_preferences_mojom_traits.h b/gpu/ipc/common/gpu_
 index 28d9ac5174..f621437301 100644
 --- a/gpu/ipc/common/gpu_preferences_mojom_traits.h
 +++ b/gpu/ipc/common/gpu_preferences_mojom_traits.h
-@@ -221,6 +221,8 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+@@ -221,6 +221,9 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
      out->gpu_startup_dialog = prefs.gpu_startup_dialog();
      out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
      out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
@@ -262,7 +262,7 @@ index 28d9ac5174..f621437301 100644
      out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
      out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
      out->enable_nv12_dxgi_video = prefs.enable_nv12_dxgi_video();
-@@ -325,6 +327,12 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
+@@ -325,6 +328,12 @@ struct GPU_IPC_COMMON_EXPORT StructTraits<gpu::mojom::GpuPreferencesDataView,
    static bool gpu_sandbox_start_early(const gpu::GpuPreferences& prefs) {
      return prefs.gpu_sandbox_start_early;
    }
