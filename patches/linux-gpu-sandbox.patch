@@ -257,7 +257,8 @@ index 28d9ac5174..f621437301 100644
      out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
      out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
 +    out->gpu_sandbox_linux = prefs.gpu_sandbox_linux();
-+    out->gallium_version = prefs.gallium_version();
++    if (!prefs.ReadGalliumVersion(&out->gallium_version))
++      return false;
      out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
      out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
      out->enable_nv12_dxgi_video = prefs.enable_nv12_dxgi_video();
