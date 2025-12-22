@@ -190,7 +190,7 @@ index 65dea86a65..ab9d387a01 100644
  namespace {
  
  void KillGpuProcessImpl(content::GpuProcessHost* host) {
-@@ -82,6 +86,25 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
+@@ -82,6 +86,27 @@ const gpu::GpuPreferences GetGpuPreferencesFromCommandLine() {
    gpu_preferences.gpu_sandbox_start_early =
        command_line->HasSwitch(switches::kGpuSandboxStartEarly);
  
@@ -208,8 +208,10 @@ index 65dea86a65..ab9d387a01 100644
 +    const std::string libgalliumVersion =
 +          command_line->GetSwitchValueASCII("libgallium-version");
 +    LOG(ERROR) << "Provided gallium version : " << libgalliumVersion;
-+    if (RE2::FullMatch(libgalliumVersion, "[0-9]+\.[0-9]\.[0-9]"))
++    if (RE2::FullMatch(libgalliumVersion, "[0-9]+\.[0-9]\.[0-9]")) {
 +      gpu_preferences.gallium_version = libgalliumVersion;
++      LOG(ERROR) << "Gallium version match : " << libgalliumVersion;
++    }
 +  }
 +#endif
 +
@@ -255,7 +257,7 @@ index 28d9ac5174..f621437301 100644
      out->disable_gpu_watchdog = prefs.disable_gpu_watchdog();
      out->gpu_sandbox_start_early = prefs.gpu_sandbox_start_early();
 +    out->gpu_sandbox_linux = prefs.gpu_sandbox_linux();
-+    //out->gallium_version = prefs.gallium_version();
++    out->gallium_version = prefs.gallium_version();
      out->enable_low_latency_dxva = prefs.enable_low_latency_dxva();
      out->enable_zero_copy_dxgi_video = prefs.enable_zero_copy_dxgi_video();
      out->enable_nv12_dxgi_video = prefs.enable_nv12_dxgi_video();
