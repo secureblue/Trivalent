@@ -12,6 +12,8 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+set -oue pipefail
+
 # Exit immediately if run as root
 if [ "$(id -u)" -eq 0 ]; then
   echo "Trivalent must not be run as root."
@@ -27,9 +29,9 @@ declare -rx LD_AUDIT=""
 declare -rx LD_PROFILE=""
 declare -rx PATH="/usr/bin:/bin"
 declare -rx HOME="$HOME"
-declare -rx XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR"
-declare -rx XAUTHORITY="$XAUTHORITY"
-declare -rx DISPLAY="$DISPLAY"
+declare -rx XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-}"
+declare -rx XAUTHORITY="${XAUTHORITY:-}"
+declare -rx DISPLAY="${DISPLAY:-}"
 
 ARCH="$(uname -m)"
 declare -r ARCH
@@ -55,13 +57,13 @@ HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
 # BROWSER_LOG_LEVEL=[0,1,2]
-declare -ix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:0}"
+declare -ix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:-0}"
 
 # USE_VULKAN=[true,false]
-declare USE_VULKAN="${USE_VULKAN}:false}"
+declare USE_VULKAN="${USE_VULKAN:-false}"
 
-declare FEATURES
-declare CHROMIUM_FLAGS
+declare FEATURES=""
+declare CHROMIUM_FLAGS=""
 
 # obtain extra flags that are likely user-configured
 if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
@@ -73,7 +75,7 @@ fi
 
 # obtain chromium flags from system file
 # shellcheck source=build/trivalent.conf
-declare CHROMIUM_SYSTEM_FLAGS
+declare CHROMIUM_SYSTEM_FLAGS=""
 if [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]]; then
   # shellcheck source=build/trivalent.conf
   source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
@@ -84,7 +86,9 @@ declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_FLAGS $CHROMIUM_SYSTEM_FLAGS"
 # desktop integration
 declare -r xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
 mkdir -p "$xdg_app_dir"
-[[ -f "$xdg_app_dir/mimeapps.list" ]] || touch "$xdg_app_dir/mimeapps.list"
+if [[ -f "$xdg_app_dir/mimeapps.list" ]]; then
+  touch "$xdg_app_dir/mimeapps.list"
+fi
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
@@ -93,14 +97,16 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
 fi
 
 pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote"
-IS_BROWSER_RUNNING=$?
+declare -i IS_BROWSER_RUNNING=$?
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
 if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
-  [[ "$BROWSER_LOG_LEVEL" -gt 0 ]] && echo "Ruh roh! This shouldn't be here..."
+  if [[ "$BROWSER_LOG_LEVEL" -gt 0 ]]; then
+    echo "Ruh roh! This shouldn't be here..."
+  fi
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
-else
-  [[ "$BROWSER_LOG_LEVEL" -gt 0 ]] && echo "A process is already open in this directory or Singleton process files are not present."
+elif [[ "$BROWSER_LOG_LEVEL" -gt 0 ]]; then
+   echo "A process is already open in this directory or Singleton process files are not present."
 fi
 
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
