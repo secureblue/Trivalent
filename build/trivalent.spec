@@ -590,22 +590,19 @@ ln -s ../..%{chromium_path}/%{chromium_name}.sh %{buildroot}%{_bindir}/%{chromiu
 mkdir -p %{buildroot}%{_mandir}/man1/
 
 pushd %{chromebuilddir}
-	cp -a icudtl.dat %{buildroot}%{chromium_path}
-	cp -a chrom*.pak resources.pak %{buildroot}%{chromium_path}
-	cp -a locales/*.pak %{buildroot}%{chromium_path}/locales/
-  cp -a libvulkan.so.1 %{buildroot}%{chromium_path}
-	cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
-	cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
-	cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-	sed -i "s|@@PACKAGE@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-	sed -i "s|@@MENUNAME@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+  cp -a icudtl.dat %{buildroot}%{chromium_path}
+  cp -a chrom*.pak resources.pak %{buildroot}%{chromium_path}
+  cp -a locales/*.pak %{buildroot}%{chromium_path}/locales/
+  cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
+  cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
+  cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+  sed -i "s|@@PACKAGE@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+  sed -i "s|@@MENUNAME@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
 
-	# V8 initial snapshots
-	# https://code.google.com/p/chromium/issues/detail?id=421063
-	cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
+  # V8 initial snapshots
+  # https://code.google.com/p/chromium/issues/detail?id=421063
+  cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
 
-	# This is ANGLE, not to be confused with the similarly named files under swiftshader/
-	cp -a libEGL.so libGLESv2.so %{buildroot}%{chromium_path}
   cp -a libqt6_shim.so %{buildroot}%{chromium_path}
 popd
 
@@ -666,9 +663,6 @@ fi
 %{chromium_path}/chrome_crashpad_handler
 %{chromium_path}/icudtl.dat
 %{chromium_path}/v8_context_snapshot.bin
-%{chromium_path}/libvulkan.so.1
-%{chromium_path}/libEGL.so
-%{chromium_path}/libGLESv2.so
 # Config
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d/
