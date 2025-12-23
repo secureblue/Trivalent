@@ -62,6 +62,9 @@ declare -ix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:-0}"
 # USE_VULKAN=[true,false]
 declare USE_VULKAN="${USE_VULKAN:-false}"
 
+# USE_WAYLAND=[true|false|unknown]
+declare USE_WAYLAND="${USE_WAYLAND:-}"
+
 declare FEATURES=""
 declare CHROMIUM_FLAGS=""
 
