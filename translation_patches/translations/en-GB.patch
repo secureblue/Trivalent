@@ -1,0 +1,11 @@
+diff --git a/chrome/app/resources/generated_resources_en-GB.xtb b/chrome/app/resources/generated_resources_en-GB.xtb
+index 9c9735d31d..83024879eb 100644
+--- a/chrome/app/resources/generated_resources_en-GB.xtb
++++ b/chrome/app/resources/generated_resources_en-GB.xtb
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
++
+ <translationbundle lang="en-GB">
+ <translation id="1001033507375626788">This network is shared with you</translation>
+ <translation id="1001360573085135660">Click to toggle permission.</translation>
