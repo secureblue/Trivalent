@@ -100,7 +100,7 @@ jobs:
           dnf install rpm-build mock -y
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
-          mock --resultdir=. -r "fedora-42-${ARCH}" --rebuild trivalent-*.src.rpm
+          mock --resultdir=. -r "fedora-43-${ARCH}" --rebuild trivalent-*.src.rpm
             
       - name: Surface build log
         if: always()
