@@ -52,10 +52,10 @@ Name:	%{chromium_name}
   -- It is only used if it is greater than the automated version detection
   -- The point is to update to an arbitrary greater release tag, like early stable or beta tags
   local off_version_tag = "141.0.7390.127"
-	-- This was added because Google shipped an update but forgot to ship a security fix:
-	--   https://github.com/uazo/cromite/issues/2427
-	-- And didn't ship said update in stable.
-	-- Instead just pushed the fix the next major version instead.
+  -- This was added because Google shipped an update but forgot to ship a security fix:
+  --   https://github.com/uazo/cromite/issues/2427
+  -- And didn't ship said update in stable.
+  -- Instead just pushed the fix the next major version instead.
 
   local vt = splitVersionTag(version_tag)
   local ovt = splitVersionTag(off_version_tag)
@@ -69,11 +69,11 @@ Name:	%{chromium_name}
     end
   end
 
-	-- This will dynamically set the version based on chromium's latest stable release channel
-	print("Version: "..version_tag.."\n")
+  -- This will dynamically set the version based on chromium's latest stable release channel
+  print("Version: "..version_tag.."\n")
 
-	-- This will automatically increment the release every ~1 hour
-	print("Release: "..(os.time() // 4000).."\n")
+  -- This will automatically increment the release every ~1 hour
+  print("Release: "..(os.time() // 4000).."\n")
 }
 
 Summary: A security-focused browser built upon Google's Chromium web browser
