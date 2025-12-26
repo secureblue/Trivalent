@@ -295,7 +295,7 @@ index 6ea960c6f8..a22bc31453 100644
 +// TODO: Add the following
 +//angle::IsNVIDIA(vendor_id)
 +//angle::IsVirtIO(vendor_id)
-+//andle::IsARM(vendor_id)
++//angle::IsARM(vendor_id)
 +bool IsGpuSandboxSupportedPlatform(uint32_t vendor_id) {
 +  return angle::IsAMD(vendor_id) || angle::IsIntel(vendor_id);
 +}
