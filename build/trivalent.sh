@@ -89,13 +89,13 @@ declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_FLAGS $CHROMIUM_SYSTEM_FLAGS"
 # desktop integration
 declare -r xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
 mkdir -p "$xdg_app_dir"
-if [[ -f "$xdg_app_dir/mimeapps.list" ]]; then
+if [[ ! -f "$xdg_app_dir/mimeapps.list" ]]; then
   touch "$xdg_app_dir/mimeapps.list"
 fi
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
-if [[ ! -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
+if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
