@@ -32,6 +32,7 @@ declare -rx HOME="$HOME"
 declare -rx XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-}"
 declare -rx XAUTHORITY="${XAUTHORITY:-}"
 declare -rx DISPLAY="${DISPLAY:-}"
+declare -rx WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-}"
 
 ARCH="$(uname -m)"
 declare -r ARCH
