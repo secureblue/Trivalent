@@ -14,7 +14,7 @@ diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
 index 7613006656aaa..ee707f847ccba 100644
 --- a/chrome/browser/about_flags.cc
 +++ b/chrome/browser/about_flags.cc
-@@ -4343,6 +4343,64 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4343,6 +4343,69 @@ const FeatureEntry kFeatureEntries[] = {
  // //tools/flags/generate_unexpire_flags.py.
  #include "build/chromeos_buildflags.h"
  #include "chrome/browser/unexpire_flags_gen.inc"
@@ -58,6 +58,11 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "network service sandbox to become persistently disabled, enable only "
 +     "if absolutely necessary. This switch is provided by Trivalent.",
 +     kOsLinux, SINGLE_VALUE_TYPE("enable-gssapi")},
++    {"gpu-sandbox-autoconfig", "Enable GPU Sandbox Auto-Configuration",
++     "Enables the GPU sandbox if your system supports it, this depends on "
++     "your graphics card, whether Vulkan is in use, or if X11 is used for "
++     "windowing. This flag is provided by Trivalent.",
++     kOsLinux, SINGLE_VALUE_TYPE("enable-gpu-sandbox-linux")},
 +    {"gpu-sandbox-test", "Force GPU Sandbox For Testing",
 +     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
 +     "can disable hardware acceleration or cause crashes. It is for "
