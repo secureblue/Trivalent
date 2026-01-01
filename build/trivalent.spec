@@ -52,10 +52,10 @@ Name:	%{chromium_name}
   -- It is only used if it is greater than the automated version detection
   -- The point is to update to an arbitrary greater release tag, like early stable or beta tags
   local off_version_tag = "141.0.7390.127"
-	-- This was added because Google shipped an update but forgot to ship a security fix:
-	--   https://github.com/uazo/cromite/issues/2427
-	-- And didn't ship said update in stable.
-	-- Instead just pushed the fix the next major version instead.
+  -- This was added because Google shipped an update but forgot to ship a security fix:
+  --   https://github.com/uazo/cromite/issues/2427
+  -- And didn't ship said update in stable.
+  -- Instead just pushed the fix the next major version instead.
 
   local vt = splitVersionTag(version_tag)
   local ovt = splitVersionTag(off_version_tag)
@@ -69,11 +69,11 @@ Name:	%{chromium_name}
     end
   end
 
-	-- This will dynamically set the version based on chromium's latest stable release channel
-	print("Version: "..version_tag.."\n")
+  -- This will dynamically set the version based on chromium's latest stable release channel
+  print("Version: "..version_tag.."\n")
 
-	-- This will automatically increment the release every ~1 hour
-	print("Release: "..(os.time() // 4000).."\n")
+  -- This will automatically increment the release every ~1 hour
+  print("Release: "..(os.time() // 4000).."\n")
 }
 
 Summary: A security-focused browser built upon Google's Chromium web browser
@@ -535,6 +535,7 @@ CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
+CHROMIUM_GN_DEFINES+=' use_static_angle=true angle_shared_libvulkan=false' # bundle graphics libraries
 CHROMIUM_GN_DEFINES+=' enable_swiftshader=false' # build without swiftshader (it is actively being deprecated anyway)
 CHROMIUM_GN_DEFINES+=' build_dawn_tests=false enable_perfetto_unittests=false'
 CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
@@ -588,22 +589,19 @@ ln -s ../..%{chromium_path}/%{chromium_name}.sh %{buildroot}%{_bindir}/%{chromiu
 mkdir -p %{buildroot}%{_mandir}/man1/
 
 pushd %{chromebuilddir}
-	cp -a icudtl.dat %{buildroot}%{chromium_path}
-	cp -a chrom*.pak resources.pak %{buildroot}%{chromium_path}
-	cp -a locales/*.pak %{buildroot}%{chromium_path}/locales/
-  cp -a libvulkan.so.1 %{buildroot}%{chromium_path}
-	cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
-	cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
-	cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-	sed -i "s|@@PACKAGE@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-	sed -i "s|@@MENUNAME@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+  cp -a icudtl.dat %{buildroot}%{chromium_path}
+  cp -a chrom*.pak resources.pak %{buildroot}%{chromium_path}
+  cp -a locales/*.pak %{buildroot}%{chromium_path}/locales/
+  cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
+  cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
+  cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+  sed -i "s|@@PACKAGE@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
+  sed -i "s|@@MENUNAME@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
 
-	# V8 initial snapshots
-	# https://code.google.com/p/chromium/issues/detail?id=421063
-	cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
+  # V8 initial snapshots
+  # https://code.google.com/p/chromium/issues/detail?id=421063
+  cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
 
-	# This is ANGLE, not to be confused with the similarly named files under swiftshader/
-	cp -a libEGL.so libGLESv2.so %{buildroot}%{chromium_path}
   cp -a libqt6_shim.so %{buildroot}%{chromium_path}
 popd
 
@@ -664,9 +662,6 @@ fi
 %{chromium_path}/chrome_crashpad_handler
 %{chromium_path}/icudtl.dat
 %{chromium_path}/v8_context_snapshot.bin
-%{chromium_path}/libvulkan.so.1
-%{chromium_path}/libEGL.so
-%{chromium_path}/libGLESv2.so
 # Config
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d/
