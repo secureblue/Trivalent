@@ -54,10 +54,10 @@ index 87b28c196eb30..5d3a56f226044 100644
    <div id="bulletpoints-wrapper">
      <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
      <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
-diff --git a/chrome/browser/resources/settings/a11y_page/live_translate_section.html b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
-index 3fce5bc069911..c8ce8d033c500 100644
---- a/chrome/browser/resources/settings/a11y_page/live_translate_section.html
-+++ b/chrome/browser/resources/settings/a11y_page/live_translate_section.html
+diff --git a/chrome/browser/resources/settings/a11y_page/live_translate.html b/chrome/browser/resources/settings/a11y_page/live_translate.html
+index 3fce5bc069..c8ce8d033c 100644
+--- a/chrome/browser/resources/settings/a11y_page/live_translate.html
++++ b/chrome/browser/resources/settings/a11y_page/live_translate.html
 @@ -25,28 +25,3 @@
      width: 100%;
    }
