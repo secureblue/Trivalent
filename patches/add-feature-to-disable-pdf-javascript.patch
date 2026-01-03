@@ -38,16 +38,26 @@ index d41a57843a..92ca24ed0e 100644
  BASE_DECLARE_FEATURE(kAccessiblePDFForm);
  BASE_DECLARE_FEATURE(kPdfGetSaveDataInBlocks);
  BASE_DECLARE_FEATURE(kPdfIncrementalLoading);
-diff --git a/pdf/pdfium/pdfium_form_filler.cc b/pdf/pdfium/pdfium_form_filler.cc
-index f319c45d075e2..d1b311d76d1d3 100644
---- a/pdf/pdfium/pdfium_form_filler.cc
-+++ b/pdf/pdfium/pdfium_form_filler.cc
-@@ -41,6 +41,8 @@ std::string WideStringToString(FPDF_WIDESTRING wide_string) {
- 
- // static
- PDFiumFormFiller::ScriptOption PDFiumFormFiller::DefaultScriptOption() {
+diff --git a/pdf/parsed_params.cc b/pdf/parsed_params.cc
+index f5928ceb97..fd1b614065 100644
+--- a/pdf/parsed_params.cc
++++ b/pdf/parsed_params.cc
+@@ -11,6 +11,7 @@
+ #include "pdf/pdfium/pdfium_form_filler.h"
+ #include "third_party/blink/public/platform/web_string.h"
+ #include "third_party/blink/public/web/web_plugin_params.h"
++#include "pdf/pdf_features.h"
+
+ namespace chrome_pdf {
+
+@@ -27,6 +28,10 @@ ParsedParams::~ParsedParams() = default;
+ std::optional<ParsedParams> ParseWebPluginParams(
+     const blink::WebPluginParams& params) {
+   ParsedParams result;
++
 +  if (!base::FeatureList::IsEnabled(features::kPdfJavaScript))
-+    return PDFiumFormFiller::ScriptOption::kNoJavaScript;
- #if defined(PDF_ENABLE_XFA)
-   if (base::FeatureList::IsEnabled(features::kPdfXfaSupport))
-     return PDFiumFormFiller::ScriptOption::kJavaScriptAndXFA;
++    result.script_option = PDFiumFormFiller::ScriptOption::kNoJavaScript;
++
+   for (size_t i = 0; i < params.attribute_names.size(); ++i) {
+     if (params.attribute_names[i] == "src") {
+       result.src_url = params.attribute_values[i].Utf8();
