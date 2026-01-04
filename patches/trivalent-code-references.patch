@@ -46,7 +46,7 @@ index a08e42a464..9453bbeefe 100644
 -constexpr char kBrowserDisplayName[] = "chromium-browser";
 -#define PRODUCT_STRING "Chromium"
 +constexpr char kBrowserDisplayName[] = "trivalent";
-+#define PRODUCT_STRING "TRIVALENT"
++#define PRODUCT_STRING "Trivalent"
  #endif
  
  #if defined(DLOPEN_PULSEAUDIO)
