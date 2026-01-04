@@ -36,18 +36,20 @@ index eb94a11e5c932..25c4e240eb919 100644
    // Google Chrome packaged as a snap is a special case: the application name
    // is always "google-chrome", regardless of the channel (channels are built
 diff --git a/media/audio/pulse/pulse_util.cc b/media/audio/pulse/pulse_util.cc
-index a3523a9bbb1d7..460fdbe273da2 100644
+index a08e42a464..9453bbeefe 100644
 --- a/media/audio/pulse/pulse_util.cc
 +++ b/media/audio/pulse/pulse_util.cc
-@@ -44,7 +44,7 @@ namespace {
+@@ -39,8 +39,8 @@ namespace {
  constexpr char kBrowserDisplayName[] = "google-chrome";
  #define PRODUCT_STRING "Google Chrome"
  #else
 -constexpr char kBrowserDisplayName[] = "chromium-browser";
+-#define PRODUCT_STRING "Chromium"
 +constexpr char kBrowserDisplayName[] = "trivalent";
- #define PRODUCT_STRING "Chromium"
++#define PRODUCT_STRING "TRIVALENT"
  #endif
  
+ #if defined(DLOPEN_PULSEAUDIO)
 diff --git a/base/files/file_util_posix.cc b/base/files/file_util_posix.cc
 index 9661e09573..3bba1abafa 100644
 --- a/base/files/file_util_posix.cc
