@@ -11,15 +11,15 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc b/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc
-index a82a333a97..cfdaa62866 100644
+index ce768e551d..624255d55c 100644
 --- a/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc
 +++ b/ui/base/accelerators/global_accelerator_listener/global_accelerator_listener_ozone.cc
-@@ -25,7 +25,7 @@ using content::BrowserThread;
- 
+@@ -24,7 +24,7 @@ using content::BrowserThread;
+
  namespace {
  #if BUILDFLAG(IS_LINUX) && BUILDFLAG(USE_DBUS)
 -BASE_FEATURE(kGlobalShortcutsPortal, base::FEATURE_ENABLED_BY_DEFAULT);
 +BASE_FEATURE(kGlobalShortcutsPortal, base::FEATURE_DISABLED_BY_DEFAULT);
- 
- constexpr char kSessionSuffix[] = "_global_shortcuts";
- 
+ constexpr char kChannelEnvVar[] = "CHROME_VERSION_EXTRA";
+
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)

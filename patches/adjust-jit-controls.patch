@@ -11,13 +11,13 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 900df063b8..287de90eb1 100644
+index 87a95ef582..a2ba4a1678 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -7761,10 +7761,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -7731,10 +7731,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
- 
+
 -  // Only disable JIT for web schemes.
 -  if (!site_url.SchemeIsHTTPOrHTTPS()) {
 -    return false;
@@ -26,29 +26,23 @@ index 900df063b8..287de90eb1 100644
 +  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
 +      && !site_url.SchemeIs("chrome-extension"))
 +    return true;
- 
+
    return (map && map->GetContentSetting(site_url, site_url,
                                          ContentSettingsType::JAVASCRIPT_JIT) ==
-@@ -7776,18 +7776,10 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
-     const std::optional<base::SafeRef<content::ProcessSelectionUserData>>&
-         process_selection_user_data,
+@@ -7744,13 +7744,6 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+ bool ChromeContentBrowserClient::AreV8OptimizationsDisabledForSite(
+     content::BrowserContext* browser_context,
      const GURL& site_url) {
 -  // Only disable optimizations for schemes that might actually load web
--  // content. This check enables v8-optimization for schemes such as chrome://
--  // and chrome-untrusted://.
+-  // content.
 -  auto* policy = ChildProcessSecurityPolicy::GetInstance();
 -  if (!site_url.is_empty() && !policy->IsWebSafeScheme(site_url.GetScheme())) {
--    return true;
+-    return false;
 -  }
 -
    Profile* profile = Profile::FromBrowserContext(browser_context);
    auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
-   if (!map) {
--    return true;
-+    return false;
-   }
- 
-   if (site_url.is_empty()) {
+   // Special case to determine if any policy is set.
 diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
 index 512feca6fa..821a9254a0 100644
 --- a/content/browser/renderer_host/render_process_host_impl.cc
@@ -78,19 +72,19 @@ index 512feca6fa..821a9254a0 100644
 
    if (DisallowV8FeatureFlagOverrides()) {
 diff --git a/content/public/common/content_features.cc b/content/public/common/content_features.cc
-index b0162fdbdc..b2d291d8ea 100644
+index 57f1ff40ca..d3dbe66e23 100644
 --- a/content/public/common/content_features.cc
 +++ b/content/public/common/content_features.cc
-@@ -19,6 +19,8 @@ namespace features {
+@@ -17,6 +17,8 @@
 
- // All features in alphabetical order.
+ namespace features {
 
 +BASE_FEATURE(kEnableDrumbrake, base::FEATURE_ENABLED_BY_DEFAULT);
 +
- // Marks navigations as aborted when the NavigationHandle is destroyed mid
- // navigation, likely due to a tab closure. This is a kill switch.
- BASE_FEATURE(kAbortNavigationsFromTabClosures,
-@@ -1013,7 +1015,7 @@ BASE_FEATURE(kDisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
+ // All features in alphabetical order.
+
+ // Kill switch to guard additional security checks performed by the browser
+@@ -1019,7 +1021,7 @@ BASE_FEATURE(kDisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
  // Controls whether SpareRenderProcessHostManager tries to always have a warm
  // spare renderer process around for the most recently requested BrowserContext.
  // This feature is only consulted in site-per-process mode.
@@ -100,18 +94,18 @@ index b0162fdbdc..b2d291d8ea 100644
  // Controls whether site isolation should use origins instead of scheme and
  // eTLD+1.
 diff --git a/content/public/common/content_features.h b/content/public/common/content_features.h
-index ae18db8a3d..5bbf28711b 100644
+index 34478026bd..be37022a43 100644
 --- a/content/public/common/content_features.h
 +++ b/content/public/common/content_features.h
-@@ -24,6 +24,8 @@ namespace features {
+@@ -23,6 +23,8 @@ namespace features {
  // BEFORE MODIFYING THIS FILE: If your feature is only used inside content/, add
  // your feature in `content/common/features.h` instead.
-
+ 
 +CONTENT_EXPORT BASE_DECLARE_FEATURE(kEnableDrumbrake);
 +
  // All features in alphabetical order. The features should be documented
  // alongside the definition of their values in the .cc file.
- CONTENT_EXPORT BASE_DECLARE_FEATURE(kAbortNavigationsFromTabClosures);
+ CONTENT_EXPORT BASE_DECLARE_FEATURE(kAdditionalOpaqueOriginEnforcements);
 diff --git a/v8/BUILD.gn b/v8/BUILD.gn
 index 8dda88f8..e08a4de7 100644
 --- a/v8/BUILD.gn

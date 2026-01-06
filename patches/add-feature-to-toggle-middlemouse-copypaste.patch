@@ -53,17 +53,17 @@ index 88ca7f0b1f..14be7e5a3a 100644
 
  // Used to enable additional a11y attributes when announcing text.
 diff --git a/ui/views/views_features.h b/ui/views/views_features.h
-index 5f5ea15678..6240bbae10 100644
+index 58063f2452..3adbb7a5fb 100644
 --- a/ui/views/views_features.h
 +++ b/ui/views/views_features.h
-@@ -17,6 +17,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
+@@ -17,6 +17,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnablePlatformHighContrastInkDrop);
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
  VIEWS_EXPORT BASE_DECLARE_FEATURE(kKeyboardAccessibleTooltipInViews);
- VIEWS_EXPORT BASE_DECLARE_FEATURE(kApplyInitialUrlToWebContents);
-
+ 
 +VIEWS_EXPORT BASE_DECLARE_FEATURE(kMiddleClickCopyPaste);
 +
  }  // namespace views::features
-
+ 
  #endif  // UI_VIEWS_VIEWS_FEATURES_H_
 diff --git a/third_party/blink/renderer/core/editing/selection_controller.cc b/third_party/blink/renderer/core/editing/selection_controller.cc
 index 8f129a1d5d..0ce49f8457 100644

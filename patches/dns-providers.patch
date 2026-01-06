@@ -11,10 +11,19 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/net/dns/public/doh_provider_entry.cc b/net/dns/public/doh_provider_entry.cc
-index 0bf0282647..c88056aab5 100644
+index 910a0c91aa1fa..bfe959f1475f2 100644
 --- a/net/dns/public/doh_provider_entry.cc
 +++ b/net/dns/public/doh_provider_entry.cc
-@@ -90,7 +90,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -77,7 +77,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+         /*ui_name=*/"alekberg.net (NL)",
+         /*privacy_policy=*/"https://alekberg.net/privacy",
+         /*display_globally=*/false,
+-        /*display_countries=*/{"NL"}, LoggingLevel::kNormal},
++        /*display_countries=*/{}, LoggingLevel::kNormal},
+        {"CleanBrowsingAdult",
+         MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderCleanBrowsingAdult,
+                                               base::FEATURE_ENABLED_BY_DEFAULT),
+@@ -99,7 +99,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          "https://doh.cleanbrowsing.org/doh/family-filter{?dns}",
          /*ui_name=*/"CleanBrowsing (Family Filter)",
          /*privacy_policy=*/"https://cleanbrowsing.org/privacy",
@@ -23,13 +32,15 @@ index 0bf0282647..c88056aab5 100644
          /*display_countries=*/{},
          LoggingLevel::kNormal},
         {"CleanBrowsingSecure",
-@@ -109,14 +109,106 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -117,15 +117,107 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+         MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderCloudflare,
                                                base::FEATURE_ENABLED_BY_DEFAULT),
          {"1.1.1.1", "1.0.0.1", "2606:4700:4700::1111", "2606:4700:4700::1001"},
-         /*dns_over_tls_hostnames=*/
+-        /*dns_over_tls_hostnames=*/
 -        {"one.one.one.one", "1dot1dot1dot1.cloudflare-dns.com"},
 -        "https://chrome.cloudflare-dns.com/dns-query",
-+        {"one.one.one.one", "1dot1dot1dot1.cloudflare-dns.com", "cloudflare-dns.com"},
++        /*dns_over_tls_hostnames=*/{"one.one.one.one", "cloudflare-dns.com",
++        "1dot1dot1dot1.cloudflare-dns.com"},
 +        "https://cloudflare-dns.com/dns-query",
          /*ui_name=*/"Cloudflare (1.1.1.1)",
          "https://developers.cloudflare.com/1.1.1.1/privacy/"
@@ -132,19 +143,7 @@ index 0bf0282647..c88056aab5 100644
         {"Comcast",
          MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderComcast,
                                                base::FEATURE_ENABLED_BY_DEFAULT),
-@@ -162,10 +254,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
-         "https://app-eu1.hubspotdocuments.com/documents/142290803/view/"
-         "1331719984?accessId=b505d9",
-         /*display_globally=*/false,
--        /*display_countries=*/{"AT", "BE", "BG", "HR", "CY", "CZ", "DK",
--                               "EE", "FI", "FR", "DE", "GR", "HU", "IE",
--                               "IT", "LV", "LT", "LU", "MT", "NL", "PL",
--                               "PT", "RO", "SK", "SI", "ES", "SE"},
-+        /*display_countries=*/{},
-         LoggingLevel::kNormal,
-         /*dns_over_https_server_ip_strs=*/
-         {"86.54.11.1", "86.54.11.201", "2a13:1001::86:54:11:1",
-@@ -191,7 +280,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -181,7 +273,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          /*ui_name=*/"Google (Public DNS)",
          "https://developers.google.com/speed/public-dns/"
          /*privacy_policy=*/"privacy",
@@ -153,16 +152,7 @@ index 0bf0282647..c88056aab5 100644
          /*display_countries=*/{},
          LoggingLevel::kExtra},
         {"GoogleDns64",
-@@ -212,7 +301,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
-         /*dns_over_tls_hostnames=*/{}, "https://public.dns.iij.jp/dns-query",
-         /*ui_name=*/"IIJ (Public DNS)",
-         /*privacy_policy=*/"https://policy.public.dns.iij.jp/",
--        /*display_globally=*/false, /*display_countries=*/{"JP"},
-+        /*display_globally=*/false, /*display_countries=*/{},
-         LoggingLevel::kNormal},
-        {"Levonet",
-         MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderLevonet,
-@@ -235,7 +324,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -225,7 +317,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          /*dns_over_tls_hostnames=*/{}, "https://chromium.dns.nextdns.io",
          /*ui_name=*/"NextDNS",
          /*privacy_policy=*/"https://nextdns.io/privacy",
@@ -171,7 +161,7 @@ index 0bf0282647..c88056aab5 100644
          LoggingLevel::kNormal},
         {"OpenDNS",
          MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(DohProviderOpenDNS,
-@@ -247,7 +336,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -237,7 +329,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          /*ui_name=*/"OpenDNS",
          "https://www.cisco.com/c/en/us/about/legal/"
          /*privacy_policy=*/"privacy-full.html",
@@ -180,7 +170,7 @@ index 0bf0282647..c88056aab5 100644
          /*display_countries=*/{},
          LoggingLevel::kNormal},
         {"OpenDNSFamily",
-@@ -292,7 +381,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -282,7 +374,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
          "https://dns.quad9.net/dns-query",
          /*ui_name=*/"Quad9 (9.9.9.9)",
          /*privacy_policy=*/"https://www.quad9.net/home/privacy/",
