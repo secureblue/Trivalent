@@ -98,11 +98,11 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
-declare -i IS_BROWSER_RUNNING=1
-pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote" || IS_BROWSER_RUNNING=0
+declare -i IS_BROWSER_RUNNING=0
+pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote" || IS_BROWSER_RUNNING=1
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
-if [[ $IS_BROWSER_RUNNING -eq 0 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
+if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
   if [[ "$BROWSER_LOG_LEVEL" -gt 0 ]]; then
     echo "Ruh roh! This shouldn't be here..."
   fi
