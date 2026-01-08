@@ -335,27 +335,113 @@ index 6ea960c6f8..a22bc31453 100644
      gpu_info_.sandboxed = sandbox_helper_->EnsureSandboxInitialized(
          watchdog_thread_.get(), &gpu_info_, gpu_preferences_);
      attempted_startsandbox = true;
+diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+index f6e95147c6..81f68bf97d 100644
+--- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
++++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+@@ -256,6 +256,16 @@ ResultExpr RestrictMmapFlags() {
+   return If((flags & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
+ }
+ 
++SANDBOX_EXPORT ResultExpr RestrictMmapFlagsNvidia() {
++  const uint64_t kNvidiaSpecificAllowedMask = MAP_32BIT | MAP_EXECUTABLE;
++  const uint64_t kAllowedMask = MAP_SHARED | MAP_PRIVATE | MAP_ANONYMOUS |
++                                MAP_STACK | MAP_NORESERVE | MAP_FIXED |
++                                MAP_DENYWRITE | MAP_LOCKED | MAP_DROPPABLE |
++                                kNvidiaSpecificAllowedMask;
++  const Arg<int> flags(3);
++  return If((flags & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
++}
++
+ SANDBOX_EXPORT ResultExpr RestrictMremapFlagsForODML() {
+   // No flags are allowed.
+   const uint64_t kAllowedMask = 0;
+diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
+index ed0f61cfb2..5f711ed1bb 100644
+--- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
++++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h
+@@ -40,6 +40,10 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictIoctl();
+ // Crash if any other flag is used.
+ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMmapFlags();
+
++// Nvidia requires a few more mmap calls in the gpu process
++// Extra flags: MAP_32BIT | MAP_EXECUTABLE
++SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMmapFlagsNvidia();
++
+ // Restrict the flags argument in mremap(2).
+ // Crash if any flags are used.
+ SANDBOX_EXPORT bpf_dsl::ResultExpr RestrictMremapFlagsForODML();
+diff --git a/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc
+index c4e4614eb8..288f7f03ea 100644
+--- a/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc
++++ b/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.h"
++#include "sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h"
+ 
+ // Define these so that unistd.h pulls in needed symbols.
+ #if !defined(__ARCH_WANT_SYSCALL_NO_AT) || \
+@@ -29,7 +30,16 @@ CrosNvidiaGpuProcessPolicy::~CrosNvidiaGpuProcessPolicy() = default;
+ ResultExpr CrosNvidiaGpuProcessPolicy::EvaluateSyscall(int sysno) const {
+   switch (sysno) {
+     case __NR_sched_setscheduler:
++    case __NR_mprotect:
+       return Allow();
++#if defined(__i386__) || defined(__x86_64__) || defined(__mips__)
++    // (MAP_LOCKED | MAP_EXECUTABLE | MAP_32BIT)
++    case __NR_mmap:
++      return RestrictMmapFlagsNvidia();
++#endif
++    case __NR_memfd_create:
++      // TODO(crbug.com/442771181)
++      return RestrictMemfdCreateWithExecMappings();
+     default:
+       return GpuProcessPolicy::EvaluateSyscall(sysno);
+   }
+diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
+index 5725da248d..1d4d1d60d6 100644
+--- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
++++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
+@@ -80,16 +80,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+     case __NR_getdents64:
+     case __NR_ioctl:
+       return Allow();
+-#if defined(__i386__) || defined(__x86_64__) || defined(__mips__)
+-    // The Nvidia driver uses flags not in the baseline policy
+-    // (MAP_LOCKED | MAP_EXECUTABLE | MAP_32BIT)
+-    case __NR_mmap:
+-      return Allow();
+-#endif
+-    // We also hit this on the linux_chromeos bot but don't yet know what
+-    // weird flags were involved.
+-    case __NR_mprotect:
+-      return Allow();
+     // XNNPACK needs mremap when building weight caches.
+     case __NR_mremap:
+       if (mremap_policy_ == MremapPolicy::kAllow) {
+@@ -106,10 +96,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+       return RestrictSchedTarget(GetPolicyPid(), sysno);
+     case __NR_prlimit64:
+       return RestrictPrlimit64(GetPolicyPid());
+-    case __NR_memfd_create:
+-      // TODO(crbug.com/442771181): Only nvidia drivers seems to use this. Maybe
+-      // scope this allowance to only nvidia drivers.
+-      return RestrictMemfdCreateWithExecMappings();
+     default:
+       break;
+   }
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-index 4de13fe88b..aaebda0773 100644
+index 73bf31cb28..b198172a9d 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 +++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-@@ -94,8 +94,8 @@ namespace {
- // nacl_helper needs to be tiny and includes only part of content/
- // in its dependencies. Make sure to not link things that are not needed.
- #if !defined(IN_NACL_HELPER)
--inline bool IsChromeOS() {
--#if BUILDFLAG(IS_CHROMEOS)
-+inline bool IsLinux() {
-+#if BUILDFLAG(IS_LINUX)
-   return true;
- #else
-   return false;
 @@ -121,7 +121,7 @@ inline bool IsArchitectureArm() {
  std::unique_ptr<BPFBasePolicy> GetGpuProcessSandbox(
      const SandboxSeccompBPF::Options& options,
      MremapPolicy mremap_policy) {
 -  if (IsChromeOS() || UseChromecastSandboxAllowlist()) {
-+  if (IsLinux() || UseChromecastSandboxAllowlist()) {
++  if (true) {
      if (IsArchitectureArm()) {
        return std::make_unique<CrosArmGpuProcessPolicy>(
            mremap_policy, base::CommandLine::ForCurrentProcess()->HasSwitch(
