@@ -274,24 +274,24 @@ index 28d9ac5174..f621437301 100644
      return prefs.enable_low_latency_dxva;
    }
 diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
-index 6ea960c6f8..a22bc31453 100644
+index f7044194b5..0336958235 100644
 --- a/gpu/ipc/service/gpu_init.cc
 +++ b/gpu/ipc/service/gpu_init.cc
 @@ -54,6 +54,10 @@
  #include <GLES2/gl2.h>
  #endif
- 
+
 +#if BUILDFLAG(IS_LINUX)
 +#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
 +#endif
 +
  #if BUILDFLAG(IS_OZONE)
+ #if BUILDFLAG(ENABLE_VULKAN)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
- #include "ui/ozone/public/drm_modifiers_filter.h"
-@@ -352,6 +356,14 @@ GpuInit::~GpuInit() {
+@@ -354,6 +358,14 @@ GpuInit::~GpuInit() {
    StopForceDiscreteGPU();
  }
- 
+
 +// TODO: Add the following
 +//angle::IsNVIDIA(vendor_id)
 +//angle::IsVirtIO(vendor_id)
@@ -303,10 +303,10 @@ index 6ea960c6f8..a22bc31453 100644
  bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
                                          const GpuPreferences& gpu_preferences) {
    TRACE_EVENT("gpu,startup", "gpu::GpuInit::InitializeAndStartSandbox");
-@@ -418,8 +430,21 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -420,8 +432,21 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif
- 
+
 +  bool gpu_sandbox_linux = gpu_preferences_.gpu_sandbox_linux;
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
@@ -326,7 +326,7 @@ index 6ea960c6f8..a22bc31453 100644
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -460,7 +485,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -462,7 +487,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.

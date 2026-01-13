@@ -36,41 +36,52 @@ index eb94a11e5c932..25c4e240eb919 100644
    // Google Chrome packaged as a snap is a special case: the application name
    // is always "google-chrome", regardless of the channel (channels are built
 diff --git a/media/audio/pulse/pulse_util.cc b/media/audio/pulse/pulse_util.cc
-index a3523a9bbb1d7..460fdbe273da2 100644
+index a08e42a464..9453bbeefe 100644
 --- a/media/audio/pulse/pulse_util.cc
 +++ b/media/audio/pulse/pulse_util.cc
-@@ -44,7 +44,7 @@ namespace {
+@@ -39,8 +39,8 @@ namespace {
  constexpr char kBrowserDisplayName[] = "google-chrome";
  #define PRODUCT_STRING "Google Chrome"
  #else
 -constexpr char kBrowserDisplayName[] = "chromium-browser";
+-#define PRODUCT_STRING "Chromium"
 +constexpr char kBrowserDisplayName[] = "trivalent";
- #define PRODUCT_STRING "Chromium"
++#define PRODUCT_STRING "Trivalent"
  #endif
  
+ #if defined(DLOPEN_PULSEAUDIO)
 diff --git a/base/files/file_util_posix.cc b/base/files/file_util_posix.cc
-index 84e81affcb..13d5c0f601 100644
+index 9661e09573..3bba1abafa 100644
 --- a/base/files/file_util_posix.cc
 +++ b/base/files/file_util_posix.cc
-@@ -870,7 +870,7 @@ FilePath FormatTemporaryFileName(FilePath::StringViewType identifier) {
+@@ -879,7 +879,7 @@ FilePath FormatTemporaryFileName(FilePath::StringViewType identifier,
  #elif BUILDFLAG(GOOGLE_CHROME_BRANDING)
    std::string_view prefix = "com.google.Chrome";
  #else
 -  std::string_view prefix = "org.chromium.Chromium";
 +  std::string_view prefix = "dev.secureblue.Trivalent";
  #endif
-   return FilePath(StrCat({".", prefix, ".", identifier}));
+   return FilePath(StrCat({hidden ? "." : "", prefix, ".", identifier}));
  }
-diff --git a/components/dbus/xdg/systemd.cc b/components/dbus/xdg/systemd.cc
-index 88a595c3eb..ac7f3cb675 100644
---- a/components/dbus/xdg/systemd.cc
-+++ b/components/dbus/xdg/systemd.cc
-@@ -55,7 +55,7 @@ constexpr char kChannelEnvVar[] = "CHROME_VERSION_EXTRA";
+diff --git a/base/version_info/nix/version_extra_utils.cc b/base/version_info/nix/version_extra_utils.cc
+index e48fbf2976..1166cf83be 100644
+--- a/base/version_info/nix/version_extra_utils.cc
++++ b/base/version_info/nix/version_extra_utils.cc
+@@ -39,7 +39,7 @@ std::string GetAppName(base::Environment& env) {
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
- constexpr char kAppNamePrefix[] = "com.google.Chrome";
+   static constexpr std::string_view kAppName = "com.google.Chrome";
  #else
--constexpr char kAppNamePrefix[] = "org.chromium.Chromium";
-+constexpr char kAppNamePrefix[] = "dev.secureblue.Trivalent";
+-  static constexpr std::string_view kAppName = "org.chromium.Chromium";
++  static constexpr std::string_view kAppName = "dev.secureblue.Trivalent";
  #endif
- 
- const char* GetAppNameSuffix(const std::string& channel) {
+
+   std::string_view suffix;
+@@ -64,7 +64,7 @@ std::string GetSessionNamePrefix(base::Environment& env) {
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+   static constexpr std::string_view kSessionNamePrefix = "chrome";
+ #else
+-  static constexpr std::string_view kSessionNamePrefix = "chromium";
++  static constexpr std::string_view kSessionNamePrefix = "trivalent";
+ #endif
+
+   std::string_view suffix;

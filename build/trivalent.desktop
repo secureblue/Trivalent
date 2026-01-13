@@ -1,6 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Name=Trivalent
+GenericName="Web Browser"
+Comment="A security-focused, Chromium-based browser"
 Exec=/usr/bin/trivalent %U
 Terminal=false
 X-MultipleArgs=false

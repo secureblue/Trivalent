@@ -1,7 +1,8 @@
-diff -up chromium-141.0.7390.37/build/config/clang/BUILD.gn.rust-clang_lib chromium-141.0.7390.37/build/config/clang/BUILD.gn
---- chromium-141.0.7390.37/build/config/clang/BUILD.gn.rust-clang_lib	2025-09-23 22:21:14.000000000 +0200
-+++ chromium-141.0.7390.37/build/config/clang/BUILD.gn	2025-09-27 12:15:44.380395911 +0200
-@@ -168,7 +168,21 @@ template("clang_lib") {
+diff --git a/build/config/clang/BUILD.gn b/build/config/clang/BUILD.gn
+index d49f0ec758..1cc64a3a85 100644
+--- a/build/config/clang/BUILD.gn
++++ b/build/config/clang/BUILD.gn
+@@ -177,7 +177,21 @@ template("clang_lib") {
          }
        } else if (is_apple) {
          _dir = "darwin"
@@ -24,37 +25,45 @@ diff -up chromium-141.0.7390.37/build/config/clang/BUILD.gn.rust-clang_lib chrom
          if (current_cpu == "x64") {
            _dir = "x86_64-unknown-linux-gnu"
          } else if (current_cpu == "x86") {
-diff -up chromium-141.0.7390.37/build/rust/rust_bindgen_generator.gni.rust-clang_lib chromium-141.0.7390.37/build/rust/rust_bindgen_generator.gni
---- chromium-141.0.7390.37/build/rust/rust_bindgen_generator.gni.rust-clang_lib	2025-09-23 22:21:14.000000000 +0200
-+++ chromium-141.0.7390.37/build/rust/rust_bindgen_generator.gni	2025-09-27 11:41:29.777786734 +0200
-@@ -18,11 +18,11 @@ if (host_os == "win") {
- 
+diff --git a/build/rust/rust_bindgen.gni b/build/rust/rust_bindgen.gni
+index 05a660ddfc..0e9a14fb18 100644
+--- a/build/rust/rust_bindgen.gni
++++ b/build/rust/rust_bindgen.gni
+@@ -19,14 +19,14 @@ if (host_os == "win") {
+
  # On Windows, the libclang.dll is beside the bindgen.exe, otherwise it is in
  # ../lib.
 -_libclang_path = rust_bindgen_root
 +_libclang_path = clang_base_path
- if (host_os == "win") {
+ if (!use_chromium_rust_toolchain &&
+     (current_cpu == "ppc64" || current_cpu == "s390x")) {
+   _libclang_path = rust_sysroot_absolute + "/lib64"
+ } else if (host_os == "win") {
    _libclang_path += "/bin"
  } else {
 -  _libclang_path += "/lib"
 +  _libclang_path += "/lib64"
  }
- 
+
  # Template to build Rust/C bindings with bindgen.
-diff -up chromium-141.0.7390.37/build/rust/rust_bindgen.gni.rust-clang_lib chromium-141.0.7390.37/build/rust/rust_bindgen.gni
---- chromium-141.0.7390.37/build/rust/rust_bindgen.gni.rust-clang_lib	2025-09-23 22:21:14.000000000 +0200
-+++ chromium-141.0.7390.37/build/rust/rust_bindgen.gni	2025-09-27 11:41:29.777891843 +0200
-@@ -19,11 +19,11 @@ if (host_os == "win") {
- 
+diff --git a/build/rust/rust_bindgen_generator.gni b/build/rust/rust_bindgen_generator.gni
+index 0ddb769276..3bca82f6c0 100644
+--- a/build/rust/rust_bindgen_generator.gni
++++ b/build/rust/rust_bindgen_generator.gni
+@@ -26,14 +26,14 @@ if (!use_chromium_rust_toolchain &&
+
  # On Windows, the libclang.dll is beside the bindgen.exe, otherwise it is in
  # ../lib.
 -_libclang_path = rust_bindgen_root
 +_libclang_path = clang_base_path
- if (host_os == "win") {
+ if (!use_chromium_rust_toolchain &&
+     (host_cpu == "ppc64" || host_cpu == "s390x")) {
+   _libclang_path = rust_sysroot_absolute + "/lib64"
+ } else if (host_os == "win") {
    _libclang_path += "/bin"
  } else {
 -  _libclang_path += "/lib"
 +  _libclang_path += "/lib64"
  }
- 
+
  # Template to build Rust/C bindings with bindgen.

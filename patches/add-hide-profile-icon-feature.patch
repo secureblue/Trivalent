@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index 703fc03b7e6cc..0623c0ed9ffab 100644
+index 6a8be4abd7..36113be58a 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -13,6 +13,10 @@
+@@ -17,6 +17,10 @@
  
  namespace features {
  
@@ -22,22 +22,22 @@ index 703fc03b7e6cc..0623c0ed9ffab 100644
 +BASE_FEATURE(kHideProfileIcon, "HideProfileIcon",
 +             base::FEATURE_DISABLED_BY_DEFAULT);
 +
- // Enables the tab dragging fallback when full window dragging is not supported
- // by the platform (e.g. Wayland). See https://crbug.com/896640
- BASE_FEATURE(kAllowWindowDragUsingSystemDragDrop,
+ // Enables the use of WGC for the Eye Dropper screen capture.
+ BASE_FEATURE(kAllowEyeDropperWGCScreenCapture,
+ #if BUILDFLAG(IS_WIN)
 diff --git a/chrome/browser/ui/ui_features.h b/chrome/browser/ui/ui_features.h
-index 504a3419f1bb0..341667da5e703 100644
+index d4456c7bf1..adb2bf2ef7 100644
 --- a/chrome/browser/ui/ui_features.h
 +++ b/chrome/browser/ui/ui_features.h
-@@ -21,6 +21,8 @@ namespace features {
+@@ -20,6 +20,8 @@ namespace features {
  // All features in alphabetical order. The features should be documented
  // alongside the definition of their values in the .cc file.
- 
+
 +BASE_DECLARE_FEATURE(kHideProfileIcon);
 +
- // TODO(crbug.com/40598679): Remove this when the tab dragging
- // interactive_ui_tests pass on Wayland.
- BASE_DECLARE_FEATURE(kAllowWindowDragUsingSystemDragDrop);
+ BASE_DECLARE_FEATURE(kAllowEyeDropperWGCScreenCapture);
+ 
+ BASE_DECLARE_FEATURE(kCreateNewTabGroupAppMenuTopLevel);
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
 index d1519e7f3782a..548be223ca340 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc

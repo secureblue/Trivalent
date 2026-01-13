@@ -25,12 +25,12 @@ index bde438ed438c6..71911553c4c65 100644
          download::DownloadClient::OPTIMIZATION_GUIDE_PREDICTION_MODELS,
          std::make_unique<download::DeferredClientWrapper>(
 diff --git a/chrome/browser/optimization_guide/model_execution/optimization_guide_global_state.cc b/chrome/browser/optimization_guide/model_execution/optimization_guide_global_state.cc
-index af63a600bf019..0a68673112dbd 100644
+index c398dbccc9294..32904a980b3b9 100644
 --- a/chrome/browser/optimization_guide/model_execution/optimization_guide_global_state.cc
 +++ b/chrome/browser/optimization_guide/model_execution/optimization_guide_global_state.cc
-@@ -197,8 +197,11 @@ OptimizationGuideGlobalState::OptimizationGuideGlobalState()
- #endif  // BUILDFLAG(USE_ON_DEVICE_MODEL_SERVICE)
-       ) {
+@@ -190,8 +190,11 @@ ChromePredictionManager::ChromePredictionManager()
+                           OptimizationGuideLogger::GetInstance(),
+                           base::BindRepeating(&unzip::LaunchUnzipper)) {
    prediction_model_store_.Initialize(GetBaseStoreDir());
 -  prediction_manager_.MaybeInitializeModelDownloads(
 -      profile_download_service_tracker_, g_browser_process->local_state());
@@ -39,14 +39,14 @@ index af63a600bf019..0a68673112dbd 100644
 +    prediction_manager_.MaybeInitializeModelDownloads(
 +        profile_download_service_tracker_, g_browser_process->local_state());
 +  }
+ }
+ ChromePredictionManager::~ChromePredictionManager() = default;
  
- #if BUILDFLAG(USE_ON_DEVICE_MODEL_SERVICE)
-   // Register an observer on the component state manager after it is created but
 diff --git a/components/optimization_guide/core/optimization_guide_features.cc b/components/optimization_guide/core/optimization_guide_features.cc
-index e6701beddfc71..3c9e5dc5dd9c4 100644
+index eea7f3faf7af9..7bba854531c3a 100644
 --- a/components/optimization_guide/core/optimization_guide_features.cc
 +++ b/components/optimization_guide/core/optimization_guide_features.cc
-@@ -54,6 +54,10 @@ BASE_FEATURE(kOptimizationHints, base::FEATURE_DISABLED_BY_DEFAULT);
+@@ -56,6 +56,10 @@ BASE_FEATURE(kOptimizationHints, base::FEATURE_DISABLED_BY_DEFAULT);
  // Enables the prediction of optimization targets.
  BASE_FEATURE(kOptimizationTargetPrediction, base::FEATURE_ENABLED_BY_DEFAULT);
  
@@ -54,10 +54,10 @@ index e6701beddfc71..3c9e5dc5dd9c4 100644
 +BASE_FEATURE(kOptimizationGuideModelDownloading,
 +             base::FEATURE_DISABLED_BY_DEFAULT);
 +
- // Enables push notification of hints.
- BASE_FEATURE(kPushNotifications,
-              "OptimizationGuidePushNotifications",
-@@ -329,6 +333,10 @@ base::TimeDelta ModelExecutionWatchdogDefaultTimeout() {
+ // This feature flag does not turn off any behavior, it is only used for
+ // experiment parameters.
+ BASE_FEATURE(kPageTextExtraction,
+@@ -339,6 +343,10 @@ base::TimeDelta ModelExecutionWatchdogDefaultTimeout() {
        ));
  }
  
@@ -69,7 +69,7 @@ index e6701beddfc71..3c9e5dc5dd9c4 100644
    DCHECK(base::FeatureList::IsEnabled(kOptimizationGuideMetadataValidation));
    return GetFieldTrialParamByFeatureAsBool(kOptimizationGuideMetadataValidation,
 diff --git a/components/optimization_guide/core/optimization_guide_features.h b/components/optimization_guide/core/optimization_guide_features.h
-index 12cb2643bd168..adbd390dc4a76 100644
+index 8fd0272509ba9..065bc0b9dfcfd 100644
 --- a/components/optimization_guide/core/optimization_guide_features.h
 +++ b/components/optimization_guide/core/optimization_guide_features.h
 @@ -39,6 +39,8 @@ BASE_DECLARE_FEATURE(kOptimizationGuideFetchingForSRP);
@@ -81,7 +81,7 @@ index 12cb2643bd168..adbd390dc4a76 100644
  BASE_DECLARE_FEATURE(kPageTextExtraction);
  COMPONENT_EXPORT(OPTIMIZATION_GUIDE_FEATURES)
  BASE_DECLARE_FEATURE(kPushNotifications);
-@@ -226,6 +228,10 @@ bool IsModelExecutionWatchdogEnabled();
+@@ -236,6 +238,10 @@ bool IsModelExecutionWatchdogEnabled();
  COMPONENT_EXPORT(OPTIMIZATION_GUIDE_FEATURES)
  base::TimeDelta ModelExecutionWatchdogDefaultTimeout();
  
