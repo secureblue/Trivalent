@@ -15,10 +15,10 @@ Android.
  4 files changed, 54 insertions(+)
 
 diff --git a/components/embedder_support/user_agent_utils.cc b/components/embedder_support/user_agent_utils.cc
-index fc9fea77d1e66..6e5f1434fd662 100644
+index e2e1c68ab7d87..9f60748d59461 100644
 --- a/components/embedder_support/user_agent_utils.cc
 +++ b/components/embedder_support/user_agent_utils.cc
-@@ -689,6 +689,35 @@ blink::UserAgentMetadata GetUserAgentMetadata(bool only_low_entropy_ch) {
+@@ -691,6 +691,35 @@ blink::UserAgentMetadata GetUserAgentMetadata(bool only_low_entropy_ch) {
                 : metadata;
    }
  
@@ -80,10 +80,10 @@ index 7dd544f2ac121..278ec3daf0f4b 100644
    if (ShouldAddClientHint(data, WebClientHintsType::kDeviceMemory_DEPRECATED)) {
      AddDeviceMemoryHeader(headers, /*use_deprecated_version*/ true);
 diff --git a/third_party/blink/common/features.cc b/third_party/blink/common/features.cc
-index fcb916c2ed079..d316110ab18f7 100644
+index 31e802dadc861..4a23bbcdd23d8 100644
 --- a/third_party/blink/common/features.cc
 +++ b/third_party/blink/common/features.cc
-@@ -369,6 +369,14 @@ BASE_FEATURE(kCaptureJSExecutionLocation, base::FEATURE_ENABLED_BY_DEFAULT);
+@@ -375,6 +375,14 @@ BASE_FEATURE(kCaptureJSExecutionLocation, base::FEATURE_ENABLED_BY_DEFAULT);
  BASE_FEATURE(kCheckHTMLParserBudgetLessOften,
               base::FEATURE_DISABLED_BY_DEFAULT);
  
@@ -99,10 +99,10 @@ index fcb916c2ed079..d316110ab18f7 100644
               base::FEATURE_ENABLED_BY_DEFAULT);
  
 diff --git a/third_party/blink/public/common/features.h b/third_party/blink/public/common/features.h
-index fe83ffedda34e..b8c22688deb95 100644
+index 0c17c6fa3bdec..4bdd1f6a18267 100644
 --- a/third_party/blink/public/common/features.h
 +++ b/third_party/blink/public/common/features.h
-@@ -228,6 +228,9 @@ BLINK_COMMON_EXPORT BASE_DECLARE_FEATURE(kCaptureJSExecutionLocation);
+@@ -234,6 +234,9 @@ BLINK_COMMON_EXPORT BASE_DECLARE_FEATURE(kCaptureJSExecutionLocation);
  // If enabled, the HTMLDocumentParser will only check its budget after parsing a
  // commonly slow token or for one out of 10 fast tokens.
  BLINK_COMMON_EXPORT BASE_DECLARE_FEATURE(kCheckHTMLParserBudgetLessOften);

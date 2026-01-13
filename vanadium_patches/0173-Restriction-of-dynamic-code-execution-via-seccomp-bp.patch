@@ -25,10 +25,10 @@ code generation in the same processes on Linux via seccomp-bpf.
  8 files changed, 128 insertions(+), 17 deletions(-)
 
 diff --git a/content/renderer/renderer_main_platform_delegate_android.cc b/content/renderer/renderer_main_platform_delegate_android.cc
-index 6486ffd030869..c4979e5c68c29 100644
+index 06a6593358a72..88ab4a88e7f5f 100644
 --- a/content/renderer/renderer_main_platform_delegate_android.cc
 +++ b/content/renderer/renderer_main_platform_delegate_android.cc
-@@ -17,6 +17,10 @@
+@@ -19,6 +19,10 @@
  #include "sandbox/policy/linux/bpf_renderer_policy_linux.h"
  #include "sandbox/policy/mojom/sandbox.mojom.h"
  #include "sandbox/policy/sandbox_type.h"
@@ -39,7 +39,7 @@ index 6486ffd030869..c4979e5c68c29 100644
  #endif
  
  namespace content {
-@@ -52,10 +56,28 @@ bool RendererMainPlatformDelegate::EnableSandbox() {
+@@ -60,10 +64,28 @@ bool RendererMainPlatformDelegate::EnableSandbox() {
    if (sandbox::policy::SandboxTypeFromCommandLine(
            *base::CommandLine::ForCurrentProcess()) ==
            sandbox::mojom::Sandbox::kRenderer &&
@@ -237,7 +237,7 @@ index 0f33163d6a87f..48626cb8111fa 100644
  
  }  // namespace policy
 diff --git a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
-index 4de13fe88bee9..59c8b3c2a59c5 100644
+index 73bf31cb284a2..d15276da5d0f4 100644
 --- a/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 +++ b/sandbox/policy/linux/sandbox_seccomp_bpf_linux.cc
 @@ -18,6 +18,8 @@
@@ -316,4 +316,4 @@ index 4de13fe88bee9..59c8b3c2a59c5 100644
 +    }
      case sandbox::mojom::Sandbox::kSpeechRecognition:
        return std::make_unique<SpeechRecognitionProcessPolicy>();
- #if BUILDFLAG(IS_LINUX)
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
