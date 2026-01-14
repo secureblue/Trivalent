@@ -222,6 +222,7 @@ BuildRequires: compiler-rt
 BuildRequires: llvm
 BuildRequires: lld
 BuildRequires: rustc
+BuildRequires: rustfmt
 BuildRequires: bindgen-cli
 BuildRequires: ninja-build
 BuildRequires: gn
