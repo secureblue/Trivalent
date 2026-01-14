@@ -67,23 +67,6 @@ index 2c7878aec4a53..02cb255a30814 100644
  }
  
  #if BUILDFLAG(IS_CHROMEOS)
-diff --git a/chrome/browser/ui/search_engines/template_url_table_model.cc b/chrome/browser/ui/search_engines/template_url_table_model.cc
-index 14b8ba881f9ff..2b14493596317 100644
---- a/chrome/browser/ui/search_engines/template_url_table_model.cc
-+++ b/chrome/browser/ui/search_engines/template_url_table_model.cc
-@@ -117,10 +117,9 @@ void TemplateURLTableModel::Reload() {
-       extension_entries;
-   // Keywords that can be made the default first.
-   for (TemplateURL* template_url : urls) {
--    // Skip @gemini if feature disabled.
-+    // Skip @gemini.
-     if (template_url->starter_pack_id() ==
--            template_url_starter_pack_data::kGemini &&
--        !OmniboxFieldTrial::IsStarterPackExpansionEnabled()) {
-+            template_url_starter_pack_data::kGemini) {
-       continue;
-     }
-     // Skip @page if feature disabled.
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
 index 7ec6de161a28d..63045da2b0c19 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
@@ -111,7 +94,7 @@ index 014e4ad46ec9e..088c44bac95af 100644
  BASE_FEATURE(kAimServerEligibilityEnabled, base::FEATURE_ENABLED_BY_DEFAULT);
  
 diff --git a/components/omnibox/common/omnibox_features.cc b/components/omnibox/common/omnibox_features.cc
-index 4ace48c694f60..267290922d358 100644
+index 4ace48c694f60..0654ea54f1360 100644
 --- a/components/omnibox/common/omnibox_features.cc
 +++ b/components/omnibox/common/omnibox_features.cc
 @@ -173,7 +173,7 @@ BASE_FEATURE(kOmniboxMultimodalInput, DISABLED);
@@ -123,6 +106,15 @@ index 4ace48c694f60..267290922d358 100644
  
  // Hides the AIM entrypoint in the Omnibox when user input is in progress. Only
  // used on desktop platforms.
+@@ -251,7 +251,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
+ BASE_FEATURE(kOmniboxSiteSearch, DISABLED);
+ 
+ // Enables additional site search providers for the Site search Starter Pack.
+-BASE_FEATURE(kStarterPackExpansion, enable_if(!IS_ANDROID && !IS_IOS));
++BASE_FEATURE(kStarterPackExpansion, DISABLED);
+ 
+ // Enables an informational IPH message at the bottom of the Omnibox directing
+ // users to certain starter pack engines.
 diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
 index c5ceac4713a5b..a25847ee6022d 100644
 --- a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
