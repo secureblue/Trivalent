@@ -1,0 +1,16 @@
+diff -up chromium-144.0.7559.31/build/rust/std/BUILD.gn.than chromium-144.0.7559.31/build/rust/std/BUILD.gn
+--- chromium-144.0.7559.31/build/rust/std/BUILD.gn.than	2025-12-26 15:06:36.274081861 +0100
++++ chromium-144.0.7559.31/build/rust/std/BUILD.gn	2025-12-26 16:11:45.697054423 +0100
+@@ -55,11 +55,7 @@ if (toolchain_has_rust) {
+       "miniz_oxide",
+       "object",
+     ]
+-    if (rustc_nightly_capability) {
+-      stdlib_files += [ "adler2" ]
+-    } else {
+-      stdlib_files += [ "adler" ]
+-    }
++    stdlib_files += [ "adler2" ]
+   }
+ 
+   if (toolchain_for_rust_host_build_tools) {
