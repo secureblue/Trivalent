@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,16 +11,16 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/components/lens/lens_features.cc b/components/lens/lens_features.cc
-index 99d7d08de6..11ead880ed 100644
+index ed88895a1abf6..91e0658cbf4f6 100644
 --- a/components/lens/lens_features.cc
 +++ b/components/lens/lens_features.cc
 @@ -15,14 +15,10 @@
-
+ 
  namespace lens::features {
-
+ 
 -BASE_FEATURE(kLensStandalone, base::FEATURE_ENABLED_BY_DEFAULT);
 +BASE_FEATURE(kLensStandalone, base::FEATURE_DISABLED_BY_DEFAULT);
-
+ 
  BASE_FEATURE(kLensOverlay,
 -#if BUILDFLAG(IS_ANDROID) || BUILDFLAG(IS_IOS)
               base::FEATURE_DISABLED_BY_DEFAULT
@@ -28,10 +28,10 @@ index 99d7d08de6..11ead880ed 100644
 -             base::FEATURE_ENABLED_BY_DEFAULT
 -#endif
  );
-
+ 
  BASE_FEATURE(kLensOverlayTranslateButton, base::FEATURE_DISABLED_BY_DEFAULT);
 diff --git a/components/lens/lens_overlay_permission_utils.cc b/components/lens/lens_overlay_permission_utils.cc
-index f707b2c4d1..6e864faf60 100644
+index 067786be500bb..7a4a55167693f 100644
 --- a/components/lens/lens_overlay_permission_utils.cc
 +++ b/components/lens/lens_overlay_permission_utils.cc
 @@ -17,7 +17,7 @@ namespace prefs {
@@ -40,6 +40,6 @@ index f707b2c4d1..6e864faf60 100644
        kLensOverlaySettings,
 -      static_cast<int>(LensOverlaySettingsPolicyValue::kEnabled));
 +      static_cast<int>(LensOverlaySettingsPolicyValue::kDisabled));
+   registry->RegisterIntegerPref(kLensOverlayNonBlockingPrivacyNoticeShownCount,
+                                 0);
  
-   registry->RegisterBooleanPref(kLensSharingPageScreenshotEnabled, false);
-   registry->RegisterBooleanPref(kLensSharingPageContentEnabled, false);

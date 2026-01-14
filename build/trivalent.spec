@@ -683,19 +683,3 @@ fi
 %dir %{chromium_path}/locales/
 %{chromium_path}/locales/*.pak
 
-
-%changelog
-* Wed Oct 01 2025 secureblue <secureblueadmin@proton.me> - 141.0.7390.54-439843
-- Update to 141.0.7390.54
-  * High CVE-2025-11205: Heap buffer overflow in WebGPU
-  * High CVE-2025-11206: Heap buffer overflow in Video
-  * Medium CVE-2025-11207: Side-channel information leakage in Storage
-  * Medium CVE-2025-11208: Inappropriate implementation in Media
-  * Medium CVE-2025-11209: Inappropriate implementation in Omnibox
-  * Medium CVE-2025-11210: Side-channel information leakage in Tab
-  * Medium CVE-2025-11211: Out of bounds read in Media
-  * Medium CVE-2025-11212: Inappropriate implementation in Media
-  * Medium CVE-2025-11213: Inappropriate implementation in Omnibox
-  * Medium CVE-2025-11215: Off by one error in V8
-  * Low CVE-2025-11216: Inappropriate implementation in Storage
-  * Low CVE-2025-11219: Use after free in V8
