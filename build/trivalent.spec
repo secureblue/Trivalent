@@ -524,6 +524,7 @@ CHROMIUM_GN_DEFINES+=" clang_use_chrome_plugins=false"
 CHROMIUM_GN_DEFINES+=" rust_sysroot_absolute=\"$(rustc --print sysroot)\""
 CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$rust_bindgen_root\""
 CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version)\""
+CHROMIUM_GN_DEFINES+=" chrome_pgo_phase=0"
 %endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
 CHROMIUM_GN_DEFINES+=' is_official_build=true'
