@@ -20,7 +20,7 @@ index 6864d76343794..678a7c240d91e 100644
          <div class="info-section">
 -          <div class="secondary">$i18n{aboutProductTitle}</div>
 +          <div class="secondary">Trivalent</div>
-+          <div class="secondary">Copyright 2024-2025 The Trivalent authors.</div>
++          <div class="secondary">Copyright 2024-2026 The Trivalent Authors.</div>
 +          <div class="secondary">Trivalent license:
 +            <pre>
 +Trivalent is available under the terms of the GNU General Public

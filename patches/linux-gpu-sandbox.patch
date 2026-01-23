@@ -339,12 +339,16 @@ diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.c
 index f6e95147c6..81f68bf97d 100644
 --- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 +++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-@@ -256,6 +256,16 @@ ResultExpr RestrictMmapFlags() {
+@@ -256,6 +256,20 @@ ResultExpr RestrictMmapFlags() {
    return If((flags & ~kAllowedMask) == 0, Allow()).Else(CrashSIGSYS());
  }
  
 +SANDBOX_EXPORT ResultExpr RestrictMmapFlagsNvidia() {
-+  const uint64_t kNvidiaSpecificAllowedMask = MAP_32BIT | MAP_EXECUTABLE;
++#if defined(__x86_64__)
++  const uint64_t kNvidiaSpecificAllowedMask = MAP_EXECUTABLE | MAP_32BIT;
++#else
++  const uint64_t kNvidiaSpecificAllowedMask = MAP_EXECUTABLE;
++#endif
 +  const uint64_t kAllowedMask = MAP_SHARED | MAP_PRIVATE | MAP_ANONYMOUS |
 +                                MAP_STACK | MAP_NORESERVE | MAP_FIXED |
 +                                MAP_DENYWRITE | MAP_LOCKED | MAP_DROPPABLE |
