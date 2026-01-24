@@ -14,12 +14,6 @@
 
 set -oue pipefail
 
-# Exit immediately if run as root
-if [ "$(id -u)" -eq 0 ]; then
-  echo "Trivalent must not be run as root."
-  exit 1
-fi
-
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
 shopt -s nullglob
 
@@ -36,6 +30,12 @@ declare -rx WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-}"
 
 ARCH="$(uname -m)"
 declare -r ARCH
+
+# Exit immediately if run as root
+if [ "$(id -u)" -eq 0 ]; then
+  echo "Trivalent must not be run as root."
+  exit 1
+fi
 
 # enable hardware CFI feature
 # https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
@@ -57,9 +57,6 @@ declare -rx CHROME_WRAPPER
 HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
 
-# BROWSER_LOG_LEVEL=[0,1,2]
-declare -ix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:-0}"
-
 # USE_VULKAN=[true,false]
 declare USE_VULKAN="${USE_VULKAN:-false}"
 
@@ -76,6 +73,16 @@ if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
     source "$conf_file"
   done
 fi
+
+# BROWSER_LOG_LEVEL=[0,1,2]
+declare -rix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:-0}"
+
+function logecho () {
+  local -ri level=$1
+  if [[ $BROWSER_LOG_LEVEL -ge $level ]]; then
+    echo "$2"
+  fi
+}
 
 # obtain chromium flags from system file
 # shellcheck source=build/trivalent.conf
@@ -98,17 +105,12 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
-declare -i IS_BROWSER_RUNNING=0
-pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote" || IS_BROWSER_RUNNING=1
-
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
-if [[ $IS_BROWSER_RUNNING -eq 1 ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
-  if [[ "$BROWSER_LOG_LEVEL" -gt 0 ]]; then
-    echo "Ruh roh! This shouldn't be here..."
-  fi
+if [[ -z "$(pgrep -ax -U $(id -ru) $CHROMIUM_NAME | grep -F ' --type=zygote')" ]] && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
+  logecho 1 "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
-elif [[ "$BROWSER_LOG_LEVEL" -gt 0 ]]; then
-   echo "A process is already open in this directory or Singleton process files are not present."
+else
+  logecho 1 "A process is already open in this directory or Singleton process files are not present."
 fi
 
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
