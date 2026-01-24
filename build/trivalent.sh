@@ -28,14 +28,14 @@ declare -rx XAUTHORITY="${XAUTHORITY:-}"
 declare -rx DISPLAY="${DISPLAY:-}"
 declare -rx WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-}"
 
-ARCH="$(uname -m)"
-declare -r ARCH
-
 # Exit immediately if run as root
 if [ "$(id -u)" -eq 0 ]; then
   echo "Trivalent must not be run as root."
   exit 1
 fi
+
+ARCH="$(uname -m)"
+declare -r ARCH
 
 # enable hardware CFI feature
 # https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
