@@ -98,19 +98,19 @@ new file mode 100644
 +    if (directive == network::mojom::CSPDirectiveName::DefaultSrc)
 +      return "default-src 'none'";
 +    else if (directive == network::mojom::CSPDirectiveName::StyleSrc)
-+      return "style-src-elem chrome: 'unsafe-inline'"
++      return "style-src-elem chrome: 'unsafe-inline'";
 +    else if (directive == network::mojom::CSPDirectiveName::FontSrc)
-+      return "font-src chrome:"
++      return "font-src chrome:";
 +    else if (directive == network::mojom::CSPDirectiveName::FormAction)
-+      return "form-action 'none'"
++      return "form-action 'none'";
 +    else if (directive == network::mojom::CSPDirectiveName::FrameAncestors)
-+      return "frame-ancestors 'none'"
++      return "frame-ancestors 'none'";
 +    else if (directive == network::mojom::CSPDirectiveName::BaseURI)
-+      return "base-uri 'none'"
++      return "base-uri 'none'";
 +    else if (directive == network::mojom::CSPDirectiveName::Sandbox)
-+      return "sandbox"
++      return "sandbox";
 +    else if (directive == network::mojom::CSPDirectiveName::UpgradeInsecureRequests)
-+      return "upgrade-insecure-requests"
++      return "upgrade-insecure-requests";
 +    return std::string();
 +  }
 +  void StartDataRequest(const GURL& url,
