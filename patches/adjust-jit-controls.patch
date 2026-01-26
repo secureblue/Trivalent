@@ -85,7 +85,7 @@ index b0162fdbdc..b2d291d8ea 100644
 
  // All features in alphabetical order.
 
-+BASE_FEATURE(kEnableDrumbrake, base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kEnableDrumbrake, base::FEATURE_DISABLED_BY_DEFAULT);
 +
  // Marks navigations as aborted when the NavigationHandle is destroyed mid
  // navigation, likely due to a tab closure. This is a kill switch.
