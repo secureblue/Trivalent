@@ -75,7 +75,7 @@ diff --git a/chrome/browser/ui/webui/trivalent_faq.h b/chrome/browser/ui/webui/t
 new file mode 100644
 --- /dev/null
 +++ b/chrome/browser/ui/webui/trivalent_faq.h
-@@ -0,0 +1,213 @@
+@@ -0,0 +1,215 @@
 +#ifndef CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +#define CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +
@@ -184,10 +184,9 @@ new file mode 100644
 +</section>
 +<section>
 +  <h2>Additional Preferences</h2><p>
-+    Some extra settings are added to Trivalent to control some of the hardeningit sets by default.
-+    These preferences can be accessed in the
-+    <a href="chrome://settings/security">security settings</a>,
-+    at the bottom there is a section: <code>Hardening</code>.
++    Some of the features Trivalent provides can be controlled via preferences.
++    These preferences can be accessed in the <a href="chrome://settings/security">security settings</a>
++    in the section titled <code>Hardening</code> at the bottom.
 +    Some additional preferences are also added for convenience, such as a website dark mode toggle in
 +    <a href="chrome://settings/appearance">appearance settings</a>.
 +</section>
@@ -198,7 +197,8 @@ new file mode 100644
 +    regional filter lists covering Europe, Asia, the Middle East, and more. It also includes
 +    Anti-Adblock Filters to bypass detection. You can see the full list here:
 +    <a href="https://github.com/secureblue/trivalent-subresource-filter/blob/live/copr_script.sh">Trivalent filter sources</a>.
-+    If you want to add a new filter, open an issue or submit a pull request in the same repository.
++    Since these filters are precompiled at build time, if you want to add a new filter, please open an issue or submit a pull
++    request in the same repository.
 +  </details>
 +  <details><summary><b>Why aren’t YouTube ads blocked, and how can I watch YouTube without ads?</b></summary><br>
 +    Trivalent’s subresource filter cannot perform script injection or observe and alter what happens
@@ -208,14 +208,16 @@ new file mode 100644
 +    <a href="https://flathub.org/apps/de.schmidhuberj.tubefeeder">Pipeline Piped proxy Flatpak</a>,
 +    and the YouTube PWA (progressive web-app) paired with uBlock Origin Lite. Consider creating a
 +    separate profile for the Youtube PWA, so you can continue browsing extensionless for your
-+    usual profile.
++    usual profile.<br>
++    To install a PWA, click the <code>Install</code> button in the address bar, or at the top right,
++    click the three dots, then </code>Save and Share -> Install page as app</code>.
 +  </details>
 +  <details><summary><b>Why does Trivalent log me out of all sites by default?</b></summary><br>
-+    It shouldn’t. This is a bug related to Chromium’s Network Service Sandbox where cookies are
++    It shouldn’t, but this is a bug related to Chromium’s Network Service Sandbox where cookies are
 +    either cleared or become inaccessible when the browser is closed. If you experience this,
 +    navigate to <a href="chrome://settings/security">security settings</a>, at the bottom you will
 +    see a <code>Hardening</code> section and within it a toggle <code>Network Service Sandbox</code>,
-+    flip this to off and restart your browser.
++    flip this to off and restarting your browser.
 +    <br><br>
 +    Please note that the <code>Network Service Sandbox</code> is no longer enabled by default. Users
 +    should keep in mind that enabling this setting may result in issues with cookie persistence.
@@ -231,8 +233,8 @@ new file mode 100644
 +    (this toggle is per-profile).
 +    <br><br>
 +    If the extension you installed doesn’t work, it may be because it requires JavaScript
-+    Just-In-Time Compilation (JIT). To re-enable JavaScript JIT for an extension, visit
-+    <a href="chrome://extensions">chrome://extensions</a>, under the extension with the issues, go
++    Just-In-Time Compilation (JIT), which is disabled by default in Trivalent. To re-enable JavaScript JIT
++    for an extension, visit <a href="chrome://extensions">chrome://extensions</a>, under the extension with the issues, go
 +    <code>Details -> Site Settings</code>, then scroll to
 +    <code>JavaScript Optimization & Security</code> and flip to allow.
 +    If the extension continues to not work, try reinstalling the extension.
@@ -249,7 +251,7 @@ new file mode 100644
 +    after reloading, only after closing and re-opening the tab does the optimizations toggle
 +    properly apply.
 +  </details>
-+  <details><summary><b>Why doesn’t DRM content (Spotify, Netflix etc.) work in Trivalent?</b></summary><br>
++  <details><summary><b>Why doesn’t DRM content (Spotify, Netflix etc.) work in Trivalent by default?</b></summary><br>
 +    DRM-protected content is available in Trivalent, however it is disabled by default. Visit
 +    <a href="chrome://settings/content/protectedContent">chrome://settings/content/protectedContent</a>
 +    and select <code>Sites can play protected content</code>.
