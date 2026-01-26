@@ -75,7 +75,7 @@ diff --git a/chrome/browser/ui/webui/trivalent_faq.h b/chrome/browser/ui/webui/t
 new file mode 100644
 --- /dev/null
 +++ b/chrome/browser/ui/webui/trivalent_faq.h
-@@ -0,0 +1,214 @@
+@@ -0,0 +1,213 @@
 +#ifndef CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +#define CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +
@@ -177,9 +177,8 @@ new file mode 100644
 +<base target="_blank">
 +<section>
 +  <h2>Trivalent</h2><p>
-+  This browser was built with Trivalent, Vanadium, and Fedora patches (see licensing
-+  <a href="chrome://settings/help">here</a>). Trivalent is updated weekly with security fixes from
-+  upstream chromium, so remember to keep it up-to-date!
++  Trivalent is a security-focused, Chromium-based browser for desktop Linux inspired by
++  <a href="https://github.com/GrapheneOS/Vanadium">Vanadium</a>.
 +  <p>
 +  This page can always be accessed from <a href="chrome://trivalent-faq">chrome://trivalent-faq</a>
 +</section>
