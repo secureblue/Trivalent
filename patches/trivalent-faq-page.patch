@@ -229,7 +229,7 @@ new file mode 100644
 +    use them. If you want content/ad blocking, that is already built into Trivalent and enabled by
 +    default. If you require extensions, you can re-enable them by disabling the
 +    <code>Disable Extensions</code> toggle under
-+    <a href="chrome://settings/security">chrome://settings/security</a>, then restart your browser
++    <a href="chrome://settings/security">chrome://settings/security</a>, then restarting your browser
 +    (this toggle is per-profile).
 +    <br><br>
 +    If the extension you installed doesn’t work, it may be because it requires JavaScript
