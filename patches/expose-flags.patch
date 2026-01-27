@@ -78,7 +78,7 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "is disabled, the 'JavaScript optimization & security' permission "
 +     "will disable WebAssembly when disallowed.  When enabled, WebAssembly "
 +     "in the same configuration will be available. Disabled by default "
-+     "until it becomes more stable. This feature is provided by Trivalent."
++     "until it becomes more stable. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(features::kEnableDrumbrake)},
 +#endif
      {variations::switches::kEnableBenchmarking,
