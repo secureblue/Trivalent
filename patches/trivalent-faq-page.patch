@@ -75,7 +75,7 @@ diff --git a/chrome/browser/ui/webui/trivalent_faq.h b/chrome/browser/ui/webui/t
 new file mode 100644
 --- /dev/null
 +++ b/chrome/browser/ui/webui/trivalent_faq.h
-@@ -0,0 +1,215 @@
+@@ -0,0 +1,218 @@
 +#ifndef CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +#define CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +
@@ -94,6 +94,9 @@ new file mode 100644
 +  TFDataSource& operator=(const TFDataSource&) = delete;
 +  std::string GetSource() { return "trivalent-faq"; }
 +  std::string GetMimeType(const GURL& url) { return "text/html"; }
++  bool IsWebUIEnabled(content::BrowserContext* browser_context) {
++    return !Profile::FromBrowserContext(browser_context)->IsOffTheRecord();
++  }
 +  std::string GetContentSecurityPolicy(network::mojom::CSPDirectiveName directive) {
 +    if (directive == network::mojom::CSPDirectiveName::DefaultSrc)
 +      return "default-src 'none';";
