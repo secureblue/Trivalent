@@ -38,8 +38,8 @@ Name:	%{chromium_name}
   function splitVersionTag(vtag)
     local vtag_array = {}
     local index = 1
-    for version_block in string.gmatch(vtag, ".") do
-      vtag_array[index] = version_block
+    for version_block in string.gmatch(vtag, "%d+") do
+      vtag_array[index] = tonumber(version_block)
       index = index + 1
     end
     return vtag_array
