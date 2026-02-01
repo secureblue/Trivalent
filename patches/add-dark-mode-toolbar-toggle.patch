@@ -95,6 +95,18 @@ index aa732ca6d7..e8ce235eb4 100644
  void ToggleBookmarkBar(Browser* browser) {
    base::RecordAction(UserMetricsAction("ShowBookmarksBar"));
    ToggleBookmarkBarWhenVisible(browser->profile());
+diff --git a/chrome/browser/ui/browser_commands.h b/chrome/browser/ui/browser_commands.h
+index 57754e9b20..83524c3041 100644
+--- a/chrome/browser/ui/browser_commands.h
++++ b/chrome/browser/ui/browser_commands.h
+@@ -241,6 +241,7 @@ void SharingHub(Browser* browser);
+ void ScreenshotCapture(Browser* browser);
+ void SavePage(Browser* browser);
+ bool CanSavePage(const Browser* browser);
++void ToggleWebsiteDarkmode(Browser* browser_);
+ void Print(BrowserWindowInterface* bwi);
+ bool CanPrint(BrowserWindowInterface* bwi);
+ #if BUILDFLAG(ENABLE_PRINTING)
 diff --git a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar.mojom b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar.mojom
 index dc2fed7651..d1956d42ce 100644
 --- a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar.mojom
