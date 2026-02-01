@@ -43,7 +43,7 @@ index bf32395f9b..58ac707068 100644
    root_action_item_->AddChild(
        ChromeMenuAction(base::BindRepeating(
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index d637eecb9e..9483940433 100644
+index d637eecb9e..621b51f79c 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
 @@ -745,6 +745,10 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
@@ -57,6 +57,14 @@ index d637eecb9e..9483940433 100644
  #if BUILDFLAG(ENABLE_PRINTING)
      case IDC_BASIC_PRINT:
        base::RecordAction(base::UserMetricsAction("Accel_Advanced_Print"));
+@@ -1570,6 +1574,7 @@ void BrowserCommandController::InitCommandState() {
+   command_updater_.UpdateCommandEnabled(
+       IDC_SHOW_HISTORY_CLUSTERS_SIDE_PANEL,
+       (!guest_session && !profile()->IsSystemProfile()));
++  command_updater_.UpdateCommandEnabled(IDC_WEBSITE_DARKMODE, true);
+   command_updater_.UpdateCommandEnabled(IDC_SHOW_DOWNLOADS, true);
+   command_updater_.UpdateCommandEnabled(IDC_SHOW_COMMENTS_SIDE_PANEL, true);
+   command_updater_.UpdateCommandEnabled(IDC_FIND_AND_EDIT_MENU, true);
 diff --git a/chrome/browser/ui/browser_commands.cc b/chrome/browser/ui/browser_commands.cc
 index aa732ca6d7..e8ce235eb4 100644
 --- a/chrome/browser/ui/browser_commands.cc
