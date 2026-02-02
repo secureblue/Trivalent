@@ -28,24 +28,55 @@ diff --git a/chrome/browser/profiles/profile.cc b/chrome/browser/profiles/profil
 index a490fefce8c79..1b071f5c7c571 100644
 --- a/chrome/browser/profiles/profile.cc
 +++ b/chrome/browser/profiles/profile.cc
-@@ -316,6 +316,7 @@ const char Profile::kProfileKey[] = "__PROFILE__";
+@@ -316,6 +316,8 @@ const char Profile::kProfileKey[] = "__PROFILE__";
  
  // static
  void Profile::RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 +  registry->RegisterBooleanPref(prefs::kIncognitoLaunch, false);
++  registry->RegisterBooleanPref(prefs::kIncognitoStartup, true);
    registry->RegisterBooleanPref(
        prefs::kSearchSuggestEnabled,
        true,
+diff --git a/chrome/browser/ui/startup/startup_browser_creator.cc b/chrome/browser/ui/startup/startup_browser_creator.cc
+index 8c99b3663e..757f2704e0 100644
+--- a/chrome/browser/ui/startup/startup_browser_creator.cc
++++ b/chrome/browser/ui/startup/startup_browser_creator.cc
+@@ -719,6 +719,13 @@ ProfileSetupResult SetupProfileAndIncognito(
+   ProfileSetupResult result;
+   result.silent_launch = false;
+
++  if (profile_info.profile->GetPrefs()->GetBoolean(prefs::kIncognitoStartup))
++    incognito_startup = IncognitoModePrefs::ShouldLaunchIncognito(
++                            command_line, profile_info.profile->GetPrefs());
++  else
++    incognito_startup = IncognitoModePrefs::ShouldOpenSubsequentBrowsersInIncognito(
++                            command_line, profile_info.profile->GetPrefs());
++
+   result.should_launch_incognito =
+       // Note: kIncognito and some related flags disable profile picker startups
+       // via `ShouldShowProfilePickerAtProcessLaunch()`, so we can use it as
+@@ -726,8 +733,7 @@ ProfileSetupResult SetupProfileAndIncognito(
+       // TODO(crbug.com/40819749): Refactor command line processing logic
+       // to validate the flag sets and reliably determine the startup mode.
+       profile_info.mode != StartupProfileMode::kProfilePicker &&
+-      IncognitoModePrefs::ShouldLaunchIncognito(
+-          command_line, profile_info.profile->GetPrefs());
++      incognito_startup;
+
+   result.can_use_profile =
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
 index 32141931a58d5..93cf4c2a33d54 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -28,6 +28,9 @@ namespace prefs {
+@@ -28,6 +28,12 @@ namespace prefs {
  // *************** PROFILE PREFS ***************
  // These are attached to the user profile
  
-+// Launch sessions and open external links in Incognito
++// Launch external links in Incognito
 +inline constexpr char kIncognitoLaunch[] = "incognito.launch_mode";
++
++// Start sessions in Incognito
++inline constexpr char kIncognitoStartup[] = "incognito.startup_mode";
 +
  // A string property indicating whether default apps should be installed
  // in this profile.  Use the value "install" to enable defaults apps, or
