@@ -14,7 +14,7 @@ diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chro
 index ab19b6cb94e9d..b9f99abf97a1c 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -182,6 +182,22 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -182,6 +182,24 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
    }
    s_allowlist = new PrefsUtil::TypedPrefMap();
  
@@ -32,6 +32,8 @@ index ab19b6cb94e9d..b9f99abf97a1c 100644
 +  (*s_allowlist)[::prefs::kNetworkServiceSandboxEnabled] =
 +      settings_api::PrefType::kBoolean;
 +  (*s_allowlist)[::prefs::kIncognitoLaunch] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kIncognitoStartup] =
 +      settings_api::PrefType::kBoolean;
 +
    // Miscellaneous
@@ -377,7 +379,7 @@ index 6b9bd1adee..6e0bea5eee 100644
      <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
        <settings-toggle-button id="httpsOnlyModeToggle"
            pref="{{prefs.generated.https_first_mode_enabled}}"
-@@ -292,18 +169,39 @@
+@@ -292,18 +169,46 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
 
@@ -402,6 +404,13 @@ index 6b9bd1adee..6e0bea5eee 100644
 +        label="$i18n{incognitoLaunchLabel}"
 +        sub-label="$i18n{incognitoLaunchDesc}">
 +      </settings-toggle-button>
++      <template is="dom-if" if="[[prefs.incognito.launch_mode.value]]">
++        <settings-toggle-button class="cr-row first"
++          pref="{{prefs.incognito.startup_mode}}"
++          label="$i18n{incognitoStartupLabel}"
++          sub-label="$i18n{incognitoStartupDesc}">
++        </settings-toggle-button>
++      </template>
 +      <settings-toggle-button class="cr-row"
 +        pref="{{prefs.disable_3d_apis}}"
 +        label="$i18n{disable3dApisLabel}"
