@@ -47,7 +47,7 @@ index bf32395f9b..58ac707068 100644
 +      ChromeMenuAction(
 +          base::BindRepeating(
 +              [](BrowserWindowInterface* bwi, actions::ActionItem* item,
-+                 actions::ActionInvocationContext context) {}, bwi)
++                 actions::ActionInvocationContext context) {}, bwi),
 +          kActionWebsiteDarkmode, IDS_WEBSITE_DARK_MODE, IDS_WEBSITE_DARK_MODE,
 +          kWebsiteDarkmodeIcon).Build());
 +
