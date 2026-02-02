@@ -88,7 +88,7 @@ index aa732ca6d7..e8ce235eb4 100644
 +void ToggleWebsiteDarkmode(Browser* browser) {
 +  bool pref_enabled = browser->profile()->GetPrefs()->GetBoolean(
 +      prefs::kWebKitForceDarkModeEnabled);
-+  browser->profile->GetPrefs()->SetBoolean(
++  browser->profile()->GetPrefs()->SetBoolean(
 +      prefs::kWebKitForceDarkModeEnabled, !pref_enabled);
 +}
 +
