@@ -11,16 +11,31 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/prefs/incognito_mode_prefs.cc b/chrome/browser/prefs/incognito_mode_prefs.cc
-index ce5660ca65a4f..4cf8a3dbb1eaa 100644
+index 1760e5e956..bfe44b3edd 100644
 --- a/chrome/browser/prefs/incognito_mode_prefs.cc
 +++ b/chrome/browser/prefs/incognito_mode_prefs.cc
-@@ -162,6 +162,9 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
+@@ -17,6 +17,8 @@
+ #include "components/pref_registry/pref_registry_syncable.h"
+ #include "components/prefs/pref_service.h"
+
++#include "chrome/browser/ui/startup/startup_tab_provider.h"
++
+ #if BUILDFLAG(IS_WIN)
+ #include "chrome/browser/win/parental_controls.h"
+ #endif  // BUILDFLAG(IS_WIN)
+@@ -155,8 +157,14 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
+         browser_defaults::
+             kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch;
    }
++  bool incognito_launch = (prefs->GetBoolean(prefs::kIncognitoLaunch) &&
++         (prefs->GetBoolean(prefs::kIncognitoStartup) ||
++         StartupTabProviderImpl().HasCommandLineTabs(command_line, "")) &&
++         !for_subsequent_browsers &&
++         !command_line.HasSwitch(switches::kAppId) &&
++         !command_line.HasSwitch(switches::kApp);
    bool should_use_incognito =
-       forced_by_switch ||
-+      (prefs->GetBoolean(prefs::kIncognitoLaunch) && !for_subsequent_browsers &&
-+       !command_line.HasSwitch(switches::kAppId) &&
-+       !command_line.HasSwitch(switches::kApp)) ||
+-      forced_by_switch ||
++      forced_by_switch || incognito_launch ||
        GetAvailabilityInternal(prefs, DONT_CHECK_PARENTAL_CONTROLS) ==
            IncognitoModeAvailability::kForced;
    return should_use_incognito &&
@@ -37,33 +52,6 @@ index a490fefce8c79..1b071f5c7c571 100644
    registry->RegisterBooleanPref(
        prefs::kSearchSuggestEnabled,
        true,
-diff --git a/chrome/browser/ui/startup/startup_browser_creator.cc b/chrome/browser/ui/startup/startup_browser_creator.cc
-index 8c99b3663e..757f2704e0 100644
---- a/chrome/browser/ui/startup/startup_browser_creator.cc
-+++ b/chrome/browser/ui/startup/startup_browser_creator.cc
-@@ -719,6 +719,13 @@ ProfileSetupResult SetupProfileAndIncognito(
-   ProfileSetupResult result;
-   result.silent_launch = false;
-
-+  if (profile_info.profile->GetPrefs()->GetBoolean(prefs::kIncognitoStartup))
-+    incognito_startup = IncognitoModePrefs::ShouldLaunchIncognito(
-+                            command_line, profile_info.profile->GetPrefs());
-+  else
-+    incognito_startup = IncognitoModePrefs::ShouldOpenSubsequentBrowsersInIncognito(
-+                            command_line, profile_info.profile->GetPrefs());
-+
-   result.should_launch_incognito =
-       // Note: kIncognito and some related flags disable profile picker startups
-       // via `ShouldShowProfilePickerAtProcessLaunch()`, so we can use it as
-@@ -726,8 +733,7 @@ ProfileSetupResult SetupProfileAndIncognito(
-       // TODO(crbug.com/40819749): Refactor command line processing logic
-       // to validate the flag sets and reliably determine the startup mode.
-       profile_info.mode != StartupProfileMode::kProfilePicker &&
--      IncognitoModePrefs::ShouldLaunchIncognito(
--          command_line, profile_info.profile->GetPrefs());
-+      incognito_startup;
-
-   result.can_use_profile =
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
 index 32141931a58d5..93cf4c2a33d54 100644
 --- a/chrome/common/pref_names.h
