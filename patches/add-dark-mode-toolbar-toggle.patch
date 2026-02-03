@@ -141,6 +141,18 @@ index 1b91f821cb..e2a3d4fae6 100644
      case side_panel::customize_chrome::mojom::ActionId::kShowBookmarks:
        return kActionSidePanelShowBookmarks;
      case side_panel::customize_chrome::mojom::ActionId::kShowHistoryCluster:
+diff --git a/chrome/app/vector_icons/BUILD.gn b/chrome/app/vector_icons/BUILD.gn
+index 7537afaf13..9c17b4466e 100644
+--- a/chrome/app/vector_icons/BUILD.gn
++++ b/chrome/app/vector_icons/BUILD.gn
+@@ -244,6 +244,7 @@ aggregate_vector_icons("chrome_vector_icons") {
+     "webauthn/windows_hello_color.icon",
+     "webid/webid_arrow.icon",
+     "webid/webid_globe.icon",
++    "website_darkmode.icon",
+     "zoom_in.icon",
+     "zoom_in_map.icon",
+     "zoom_minus.icon",
 diff --git a/chrome/app/vector_icons/website_darkmode.icon b/chrome/app/vector_icons/website_darkmode.icon
 --- /dev/null
 +++ b/chrome/app/vector_icons/website_darkmode.icon
