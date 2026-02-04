@@ -68,7 +68,7 @@ index 2c7878aec4a53..02cb255a30814 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
-index 7ec6de161a28d..63045da2b0c19 100644
+index 4460710a91100..5aeae001d71f0 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
 +++ b/components/omnibox/browser/aim_eligibility_service.cc
 @@ -81,7 +81,7 @@ static constexpr char kAuthUserQueryKey[] = "authuser";
@@ -94,19 +94,19 @@ index 014e4ad46ec9e..088c44bac95af 100644
  BASE_FEATURE(kAimServerEligibilityEnabled, base::FEATURE_ENABLED_BY_DEFAULT);
  
 diff --git a/components/omnibox/common/omnibox_features.cc b/components/omnibox/common/omnibox_features.cc
-index 4ace48c694f60..0654ea54f1360 100644
+index a9d1a0a25dbe8..fbca614044dfd 100644
 --- a/components/omnibox/common/omnibox_features.cc
 +++ b/components/omnibox/common/omnibox_features.cc
-@@ -173,7 +173,7 @@ BASE_FEATURE(kOmniboxMultimodalInput, DISABLED);
- // and are located in the US, and has no effect if the first feature is
- // enabled.
- BASE_FEATURE(kAiModeOmniboxEntryPoint, DISABLED);
--BASE_FEATURE(kAiModeOmniboxEntryPointEnUs, ENABLED);
-+BASE_FEATURE(kAiModeOmniboxEntryPointEnUs, DISABLED);
+@@ -168,7 +168,7 @@ BASE_FEATURE(kOmniboxMultimodalInput, DISABLED);
+ 
+ // Whether the AI Mode entrypoint is shown in the Omnibox as a RHS button. Only
+ // used on desktop platforms.
+-BASE_FEATURE(kAiModeOmniboxEntryPoint, ENABLED);
++BASE_FEATURE(kAiModeOmniboxEntryPoint, DISABLED);
  
  // Hides the AIM entrypoint in the Omnibox when user input is in progress. Only
  // used on desktop platforms.
-@@ -251,7 +251,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
+@@ -246,7 +246,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
  BASE_FEATURE(kOmniboxSiteSearch, DISABLED);
  
  // Enables additional site search providers for the Site search Starter Pack.
