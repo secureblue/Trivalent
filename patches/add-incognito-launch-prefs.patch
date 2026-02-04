@@ -30,8 +30,8 @@ index 1760e5e956..bfe44b3edd 100644
 +  bool incognito_launch = (prefs->GetBoolean(prefs::kIncognitoLaunch) &&
 +         (prefs->GetBoolean(prefs::kIncognitoStartup) ||
 +         StartupTabProviderImpl().
-+             HasCommandLineTabs(command_line, base::FilePath(""))) ==
-+                 CommandLineTabsPresent::kYes &&
++             HasCommandLineTabs(command_line, base::FilePath("")) ==
++                 CommandLineTabsPresent::kYes) &&
 +         !for_subsequent_browsers &&
 +         !command_line.HasSwitch(switches::kAppId) &&
 +         !command_line.HasSwitch(switches::kApp);
