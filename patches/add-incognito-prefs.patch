@@ -33,7 +33,7 @@ index 1760e5e956..bfe44b3edd 100644
 +             HasCommandLineTabs(command_line, base::FilePath("")) ==
 +                 CommandLineTabsPresent::kYes) &&
 +         (!for_subsequent_browsers || browser_defaults::
-             kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch) &&
++            kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch) &&
 +         !command_line.HasSwitch(switches::kAppId) &&
 +         !command_line.HasSwitch(switches::kApp);
    bool should_use_incognito =
