@@ -2,7 +2,7 @@ diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
 index 81776c22d5..88e6f8d392 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
-@@ -1322,6 +1322,46 @@
+@@ -1322,6 +1322,52 @@
      Browsing and searching is faster than standard preloading
    </message>
 
@@ -22,7 +22,13 @@ index 81776c22d5..88e6f8d392 100644
 +    Incognito Launch
 +  </message>
 +  <message name="IDS_INCOGNITO_LAUNCH_DESCRIPTION" desc="Trivalent String.">
-+    Opens new sessions and external links in Incognito tabs
++    Open external links in Incognito tabs
++  </message>
++  <message name="IDS_INCOGNITO_STARTUP_LABEL" desc="Trivalent String.">
++    Incognito Startup
++  </message>
++  <message name="IDS_INCOGNITO_STARTUP_DESCRIPTION" desc="Trivalent String.">
++    Opens new sessions in Incognito tabs
 +  </message>
 +  <message name="IDS_DISABLE_3D_APIS_LABEL" desc="Trivalent String.">
 +    Disable 3D APIs
@@ -61,13 +67,15 @@ index 556a396168..a6547ce454 100644
        {"appearancePageTitle", IDS_SETTINGS_APPEARANCE},
        {"customWebAddress", IDS_SETTINGS_CUSTOM_WEB_ADDRESS},
        {"enterCustomWebAddress", IDS_SETTINGS_ENTER_CUSTOM_WEB_ADDRESS},
-@@ -2129,6 +2130,16 @@ bool ShouldLinkSecureDnsOsSettings() {
+@@ -2129,6 +2130,18 @@ bool ShouldLinkSecureDnsOsSettings() {
  void AddPrivacyStrings(content::WebUIDataSource* html_source,
                         Profile* profile) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
 +      {"hardeningSectionTitle", IDS_HARDENING_TITLE},
 +      {"incognitoLaunchLabel", IDS_INCOGNITO_LAUNCH_LABEL},
 +      {"incognitoLaunchDesc", IDS_INCOGNITO_LAUNCH_DESCRIPTION},
++      {"incognitoStartupLabel", IDS_INCOGNITO_STARTUP_LABEL},
++      {"incognitoStartupDesc", IDS_INCOGNITO_STARTUP_DESCRIPTION},
 +      {"disable3dApisLabel", IDS_DISABLE_3D_APIS_LABEL},
 +      {"disable3dApisDesc", IDS_DISABLE_3D_APIS_DESCRIPTION},
 +      {"webrtcHandlingPolicyLabel", IDS_WEBRTC_HANDLING_POLICY_LABEL},

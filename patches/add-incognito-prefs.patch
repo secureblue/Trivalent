@@ -11,16 +11,34 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/prefs/incognito_mode_prefs.cc b/chrome/browser/prefs/incognito_mode_prefs.cc
-index ce5660ca65a4f..4cf8a3dbb1eaa 100644
+index 1760e5e956..bfe44b3edd 100644
 --- a/chrome/browser/prefs/incognito_mode_prefs.cc
 +++ b/chrome/browser/prefs/incognito_mode_prefs.cc
-@@ -162,6 +162,9 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
+@@ -17,6 +17,8 @@
+ #include "components/pref_registry/pref_registry_syncable.h"
+ #include "components/prefs/pref_service.h"
+
++#include "chrome/browser/ui/startup/startup_tab_provider.h"
++
+ #if BUILDFLAG(IS_WIN)
+ #include "chrome/browser/win/parental_controls.h"
+ #endif  // BUILDFLAG(IS_WIN)
+@@ -155,8 +157,18 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
+         browser_defaults::
+             kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch;
    }
++  bool incognito_launch = prefs->GetBoolean(prefs::kIncognitoLaunch) &&
++         (prefs->GetBoolean(prefs::kIncognitoStartup) ||
++         StartupTabProviderImpl().
++             HasCommandLineTabs(command_line, base::FilePath("")) ==
++                 CommandLineTabsPresent::kYes) &&
++         (!for_subsequent_browsers || browser_defaults::
++            kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch) &&
++         !command_line.HasSwitch(switches::kAppId) &&
++         !command_line.HasSwitch(switches::kApp);
    bool should_use_incognito =
        forced_by_switch ||
-+      (prefs->GetBoolean(prefs::kIncognitoLaunch) && !for_subsequent_browsers &&
-+       !command_line.HasSwitch(switches::kAppId) &&
-+       !command_line.HasSwitch(switches::kApp)) ||
++      incognito_launch ||
        GetAvailabilityInternal(prefs, DONT_CHECK_PARENTAL_CONTROLS) ==
            IncognitoModeAvailability::kForced;
    return should_use_incognito &&
@@ -28,11 +46,12 @@ diff --git a/chrome/browser/profiles/profile.cc b/chrome/browser/profiles/profil
 index a490fefce8c79..1b071f5c7c571 100644
 --- a/chrome/browser/profiles/profile.cc
 +++ b/chrome/browser/profiles/profile.cc
-@@ -316,6 +316,7 @@ const char Profile::kProfileKey[] = "__PROFILE__";
+@@ -316,6 +316,8 @@ const char Profile::kProfileKey[] = "__PROFILE__";
  
  // static
  void Profile::RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 +  registry->RegisterBooleanPref(prefs::kIncognitoLaunch, false);
++  registry->RegisterBooleanPref(prefs::kIncognitoStartup, true);
    registry->RegisterBooleanPref(
        prefs::kSearchSuggestEnabled,
        true,
@@ -40,12 +59,15 @@ diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
 index 32141931a58d5..93cf4c2a33d54 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -28,6 +28,9 @@ namespace prefs {
+@@ -28,6 +28,12 @@ namespace prefs {
  // *************** PROFILE PREFS ***************
  // These are attached to the user profile
  
-+// Launch sessions and open external links in Incognito
++// Launch external links in Incognito
 +inline constexpr char kIncognitoLaunch[] = "incognito.launch_mode";
++
++// Start sessions in Incognito
++inline constexpr char kIncognitoStartup[] = "incognito.startup_mode";
 +
  // A string property indicating whether default apps should be installed
  // in this profile.  Use the value "install" to enable defaults apps, or
