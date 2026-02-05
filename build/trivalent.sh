@@ -12,7 +12,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-set -oue pipefail
+set -ue
 
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
 shopt -s nullglob
@@ -106,7 +106,7 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
 fi
 
 # Fix Singleton process locking if the browser isn't running and the singleton files are present
-if ! ps -U "$(id -ru)" | grep -Fq "$CHROMIUM_NAME" && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
+if ! pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote" && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
   logecho 1 "Ruh roh! This shouldn't be here..."
   rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
 else
