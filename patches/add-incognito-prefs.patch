@@ -23,7 +23,7 @@ index 1760e5e956..bfe44b3edd 100644
  #if BUILDFLAG(IS_WIN)
  #include "chrome/browser/win/parental_controls.h"
  #endif  // BUILDFLAG(IS_WIN)
-@@ -155,8 +157,17 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
+@@ -155,8 +157,18 @@ bool IncognitoModePrefs::ShouldLaunchIncognitoInternal(
          browser_defaults::
              kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch;
    }
@@ -32,7 +32,8 @@ index 1760e5e956..bfe44b3edd 100644
 +         StartupTabProviderImpl().
 +             HasCommandLineTabs(command_line, base::FilePath("")) ==
 +                 CommandLineTabsPresent::kYes) &&
-+         !for_subsequent_browsers &&
++         (!for_subsequent_browsers || browser_defaults::
+             kAlwaysOpenIncognitoBrowserIfStartedWithIncognitoSwitch) &&
 +         !command_line.HasSwitch(switches::kAppId) &&
 +         !command_line.HasSwitch(switches::kApp);
    bool should_use_incognito =
