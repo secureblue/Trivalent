@@ -39,7 +39,7 @@ diff --git a/chrome/browser/ui/browser_actions.cc b/chrome/browser/ui/browser_ac
 index bf32395f9b..58ac707068 100644
 --- a/chrome/browser/ui/browser_actions.cc
 +++ b/chrome/browser/ui/browser_actions.cc
-@@ -687,6 +687,19 @@ void BrowserActions::InitializeBrowserActions() {
+@@ -687,6 +687,16 @@ void BrowserActions::InitializeBrowserActions() {
            .SetEnabled(chrome::CanPrint(bwi))
            .Build());
 
@@ -48,10 +48,7 @@ index bf32395f9b..58ac707068 100644
 +          base::BindRepeating(
 +              [](BrowserWindowInterface* bwi, actions::ActionItem* item,
 +                 actions::ActionInvocationContext context) {
-+                bool pref_enabled = bwi->GetProfile()->GetPrefs()->GetBoolean(
-+                    prefs::kWebKitForceDarkModeEnabled);
-+                bwi->GetProfile()->GetPrefs()->SetBoolean(
-+                    prefs::kWebKitForceDarkModeEnabled, !pref_enabled);
++                chrome::ToggleWebsiteDarkmode(bwi->GetProfile()->GetPrefs());
 +              }, bwi),
 +          kActionWebsiteDarkmode, IDS_WEBSITE_DARK_MODE, IDS_WEBSITE_DARK_MODE,
 +          kWebsiteDarkmodeIcon).Build());
@@ -68,7 +65,7 @@ index d637eecb9e..621b51f79c 100644
        break;
 
 +    case IDC_WEBSITE_DARKMODE:
-+      ToggleWebsiteDarkmode(browser_);
++      ToggleWebsiteDarkmode(browser_->profile()->GetPrefs());
 +      break;
 +
  #if BUILDFLAG(ENABLE_PRINTING)
@@ -86,15 +83,13 @@ diff --git a/chrome/browser/ui/browser_commands.cc b/chrome/browser/ui/browser_c
 index aa732ca6d7..e8ce235eb4 100644
 --- a/chrome/browser/ui/browser_commands.cc
 +++ b/chrome/browser/ui/browser_commands.cc
-@@ -2327,6 +2327,13 @@ void OpenFeedbackDialog(BrowserWindowInterface* bwi,
+@@ -2327,6 +2327,11 @@ void OpenFeedbackDialog(BrowserWindowInterface* bwi,
                             category_tag, std::string() /* extra_diagnostics */);
  }
 
-+void ToggleWebsiteDarkmode(Browser* browser) {
-+  bool pref_enabled = browser->profile()->GetPrefs()->GetBoolean(
-+      prefs::kWebKitForceDarkModeEnabled);
-+  browser->profile()->GetPrefs()->SetBoolean(
-+      prefs::kWebKitForceDarkModeEnabled, !pref_enabled);
++void ToggleWebsiteDarkmode(PrefService* pref_service) {
++  bool pref_enabled = pref_service->GetBoolean(prefs::kWebKitForceDarkModeEnabled);
++  pref_service->SetBoolean(prefs::kWebKitForceDarkModeEnabled, !pref_enabled);
 +}
 +
  void ToggleBookmarkBar(Browser* browser) {
