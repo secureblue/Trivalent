@@ -103,7 +103,7 @@ index 57754e9b20..83524c3041 100644
  void ScreenshotCapture(Browser* browser);
  void SavePage(Browser* browser);
  bool CanSavePage(const Browser* browser);
-+void ToggleWebsiteDarkmode(Browser* browser_);
++void ToggleWebsiteDarkmode(PrefService* pref_service);
  void Print(BrowserWindowInterface* bwi);
  bool CanPrint(BrowserWindowInterface* bwi);
  #if BUILDFLAG(ENABLE_PRINTING)
