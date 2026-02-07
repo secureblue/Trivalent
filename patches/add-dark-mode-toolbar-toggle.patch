@@ -96,10 +96,18 @@ index aa732ca6d7..e8ce235eb4 100644
    base::RecordAction(UserMetricsAction("ShowBookmarksBar"));
    ToggleBookmarkBarWhenVisible(browser->profile());
 diff --git a/chrome/browser/ui/browser_commands.h b/chrome/browser/ui/browser_commands.h
-index 57754e9b20..83524c3041 100644
+index 57754e9b20..c99ce70d8f 100644
 --- a/chrome/browser/ui/browser_commands.h
 +++ b/chrome/browser/ui/browser_commands.h
-@@ -241,6 +241,7 @@ void SharingHub(Browser* browser);
+@@ -28,6 +28,7 @@ class BrowserWindowInterface;
+ class CommandObserver;
+ class GURL;
+ class Profile;
++class PrefService;
+ enum class DevToolsOpenedByAction;
+
+ namespace content {
+@@ -241,6 +242,7 @@ void SharingHub(Browser* browser);
  void ScreenshotCapture(Browser* browser);
  void SavePage(Browser* browser);
  bool CanSavePage(const Browser* browser);
