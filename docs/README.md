@@ -30,7 +30,7 @@ A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadi
 
 ## Installation
 
-Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks SELinux confinement unless Fedora's SELinux policy is swapped for secureblue's. "Support" here refers to which systems Trivalent is tested against. It does not mean that it's forbidden to open Github issues regarding Trivalent's use on other systems.
+Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). In addition to being unsupported, use of Trivalent outside of secureblue lacks SELinux confinement unless Fedora's SELinux policy is swapped for secureblue's. "Support" here refers to which systems Trivalent is tested against. It does not mean that it's forbidden to open GitHub issues regarding Trivalent's use on other systems.
 
 ## Post-install
 
@@ -48,9 +48,9 @@ Other flags are also provided for compatibility should you experience an issue r
 
 ## Content Blocking
 
-Trivalent comes by default with content filtering enabled using chromium's internal subresource filter. The lists used for content filtering can be found [here](https://github.com/secureblue/trivalent-subresource-filter/blob/live/copr_script.sh#L19).
+Trivalent comes by default with content filtering enabled using Chromium's internal subresource filter. The lists used for content filtering can be found [here](https://github.com/secureblue/trivalent-subresource-filter/blob/live/copr_script.sh#L19).
 \
-If you want to contribute to the subresource filter, example suggesting a new list, visit [here](https://github.com/secureblue/trivalent-subresource-filter).
+If you want to contribute to the subresource filter, for example suggesting a new list, visit [here](https://github.com/secureblue/trivalent-subresource-filter).
 
 ## Contributing
 
