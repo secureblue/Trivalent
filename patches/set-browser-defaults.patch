@@ -11,23 +11,19 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/ui/browser_ui_prefs.cc b/chrome/browser/ui/browser_ui_prefs.cc
-index 1b3eb32613379..6e10eb7064db6 100644
+index e94568b1c7..324e839546 100644
 --- a/chrome/browser/ui/browser_ui_prefs.cc
 +++ b/chrome/browser/ui/browser_ui_prefs.cc
-@@ -129,10 +129,10 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -129,7 +129,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
    registry->RegisterBooleanPref(prefs::kWebAppCreateInAppsMenu, true);
    registry->RegisterBooleanPref(prefs::kWebAppCreateInQuickLaunchBar, true);
    registry->RegisterBooleanPref(
 -      translate::prefs::kOfferTranslateEnabled, true,
 +      translate::prefs::kOfferTranslateEnabled, false,
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
-   registry->RegisterStringPref(prefs::kCloudPrintEmail, std::string());
--  registry->RegisterBooleanPref(prefs::kCloudPrintProxyEnabled, true);
-+  registry->RegisterBooleanPref(prefs::kCloudPrintProxyEnabled, false);
    registry->RegisterDictionaryPref(prefs::kBrowserWindowPlacement);
    registry->RegisterDictionaryPref(prefs::kBrowserWindowPlacementPopup);
-   registry->RegisterDictionaryPref(prefs::kAppWindowPlacement);
-@@ -144,21 +144,21 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -142,21 +142,21 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
                                  false);
  #endif
    registry->RegisterStringPref(prefs::kWebRTCIPHandlingPolicy,
@@ -40,22 +36,22 @@ index 1b3eb32613379..6e10eb7064db6 100644
    registry->RegisterListPref(prefs::kWebRtcLocalIpsAllowedUrls);
 -  registry->RegisterBooleanPref(prefs::kWebRtcTextLogCollectionAllowed, true);
 +  registry->RegisterBooleanPref(prefs::kWebRtcTextLogCollectionAllowed, false);
- 
+
    // We need to register the type of these preferences in order to query
    // them even though they're only typically controlled via policy.
 -  registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, false);
 -  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, true);
 +  registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, true);
 +  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, false);
- 
+
  #if BUILDFLAG(ENABLE_CLICK_TO_CALL)
 -  registry->RegisterBooleanPref(prefs::kClickToCallEnabled, true);
 +  registry->RegisterBooleanPref(prefs::kClickToCallEnabled, false);
  #endif  // BUILDFLAG(ENABLE_CLICK_TO_CALL)
- 
+
  #if BUILDFLAG(IS_MAC)
-@@ -187,7 +187,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
- 
+@@ -185,7 +185,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+
    registry->RegisterBooleanPref(prefs::kEnterpriseHardwarePlatformAPIEnabled,
                                  false);
 -  registry->RegisterBooleanPref(prefs::kUserFeedbackAllowed, true);
@@ -63,9 +59,9 @@ index 1b3eb32613379..6e10eb7064db6 100644
    registry->RegisterBooleanPref(
        prefs::kExternalProtocolDialogShowAlwaysOpenCheckbox, true);
    registry->RegisterBooleanPref(prefs::kScreenCaptureAllowed, true);
-@@ -209,7 +209,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -207,7 +207,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
  #endif
- 
+
    registry->RegisterBooleanPref(
 -      prefs::kHttpsOnlyModeEnabled, false,
 +      prefs::kHttpsOnlyModeEnabled, true,
