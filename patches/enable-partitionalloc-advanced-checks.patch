@@ -11,12 +11,12 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/base/allocator/partition_alloc_features.cc b/base/allocator/partition_alloc_features.cc
-index fdc30ae2f9..0e258adc5f 100644
+index 4d4db512ae..c5ee49e23b 100644
 --- a/base/allocator/partition_alloc_features.cc
 +++ b/base/allocator/partition_alloc_features.cc
-@@ -94,7 +94,7 @@ BASE_FEATURE(kPartitionAllocLargeEmptySlotSpanRing,
-              FEATURE_DISABLED_BY_DEFAULT);
- #endif
+@@ -94,7 +94,7 @@ BASE_FEATURE_PARAM(int,
+                    "ring-size",
+                    partition_alloc::internal::SlotSpanRingMaxSize::kMedium);
 
 -BASE_FEATURE(kPartitionAllocWithAdvancedChecks, FEATURE_DISABLED_BY_DEFAULT);
 +BASE_FEATURE(kPartitionAllocWithAdvancedChecks, FEATURE_ENABLED_BY_DEFAULT);
