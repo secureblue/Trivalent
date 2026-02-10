@@ -77,7 +77,7 @@ index ddb0d6c099..872eafd703 100644
    registry->RegisterStringPref(kResponsePrefName, "");
 -  registry->RegisterIntegerPref(omnibox::kAIModeSettings,
 -                                kAiModeAllowedDefault);
-+  registry->RegisterIntegerPref(1);
++  registry->RegisterIntegerPref(omnibox::kAIModeSettings, 1);
  }
 
  // static
