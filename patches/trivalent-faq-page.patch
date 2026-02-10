@@ -75,7 +75,7 @@ diff --git a/chrome/browser/ui/webui/trivalent_faq.h b/chrome/browser/ui/webui/t
 new file mode 100644
 --- /dev/null
 +++ b/chrome/browser/ui/webui/trivalent_faq.h
-@@ -0,0 +1,218 @@
+@@ -0,0 +1,214 @@
 +#ifndef CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +#define CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +
@@ -110,10 +110,6 @@ new file mode 100644
 +      return "frame-ancestors 'none';";
 +    else if (directive == network::mojom::CSPDirectiveName::BaseURI)
 +      return "base-uri 'none';";
-+    else if (directive == network::mojom::CSPDirectiveName::Sandbox)
-+      return "sandbox;";
-+    else if (directive == network::mojom::CSPDirectiveName::UpgradeInsecureRequests)
-+      return "upgrade-insecure-requests;";
 +    return std::string();
 +  }
 +  void StartDataRequest(const GURL& url,
