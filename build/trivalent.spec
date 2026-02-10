@@ -596,9 +596,6 @@ pushd %{chromebuilddir}
   cp -a locales/*.pak %{buildroot}%{chromium_path}/locales/
   cp -a chrome %{buildroot}%{chromium_path}/%{chromium_name}
   cp -a chrome_crashpad_handler %{buildroot}%{chromium_path}/chrome_crashpad_handler
-  cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-  sed -i "s|@@PACKAGE@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
-  sed -i "s|@@MENUNAME@@|%{chromium_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_name}.1
 
   # V8 initial snapshots
   # https://code.google.com/p/chromium/issues/detail?id=421063
@@ -655,7 +652,6 @@ fi
 %files
 %doc AUTHORS
 %license LICENSE
-%{_mandir}/man1/%{chromium_name}.*
 # Binary and Libs
 %{_bindir}/%{chromium_name}
 %dir %{chromium_path}/
