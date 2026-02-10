@@ -26,19 +26,20 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
 diff --git a/components/regional_capabilities/program_settings.cc b/components/regional_capabilities/program_settings.cc
-index ad23174e4b..48867e9824 100644
+index 3aa393c618..21d2744759 100644
 --- a/components/regional_capabilities/program_settings.cc
 +++ b/components/regional_capabilities/program_settings.cc
-@@ -80,8 +80,7 @@ bool IsValidSerializedProgram(int serialized_program) {
+@@ -105,8 +105,8 @@ bool IsValidSerializedProgram(int serialized_program) {
 
  bool IsInProgramRegion(Program program,
                         const country_codes::CountryId& country_id) {
--  return base::Contains(GetSettingsForProgram(program).associated_countries,
--                        country_id);
-+  return true;
- }
+-  if (program == Program::kDefault) {
+-    return true;  // All countries can be associated with the default program.
++  if (program == Program::kWaffle) {
++    return true;
+   }
 
- bool IsClientCompatibleWithProgram(Program program) {
+   return base::Contains(GetSettingsForProgram(program).associated_countries,
 diff --git a/components/regional_capabilities/regional_capabilities_service.cc b/components/regional_capabilities/regional_capabilities_service.cc
 index 4f95ae3d04..7f4d4953ec 100644
 --- a/components/regional_capabilities/regional_capabilities_service.cc
