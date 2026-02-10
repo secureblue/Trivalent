@@ -112,10 +112,10 @@ index ae18db8a3d..5bbf28711b 100644
  // All features in alphabetical order. The features should be documented
  // alongside the definition of their values in the .cc file.
  CONTENT_EXPORT BASE_DECLARE_FEATURE(kAbortNavigationsFromTabClosures);
-diff --git a/BUILD.gn b/BUILD.gn
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
 index 6801927b..90e90b1a 100644
---- a/BUILD.gn
-+++ b/BUILD.gn
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
 @@ -986,6 +986,7 @@ external_v8_defines = [
    "V8_COMPRESS_POINTERS_IN_SHARED_CAGE",
    "V8_31BIT_SMIS_ON_64BIT_ARCH",
