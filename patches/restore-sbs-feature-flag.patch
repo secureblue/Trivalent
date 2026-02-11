@@ -41,20 +41,43 @@ index 21a87921fe01b..7d3fc0b29ddb8 100644
        case MenuSource.TOOLBAR:
          return [
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index 823074dcba674..5d136eb6ad98c 100644
+index 823074dcba674..57f02ce515eb0 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-@@ -280,10 +280,6 @@
-         </settings-toggle-button>
+@@ -281,6 +281,7 @@
  </if>
        </div>
--      <settings-toggle-button class="hr" id="splitViewDragAndDrop"
--          pref="{{prefs.browser.split_view_drag_and_drop_enabled}}"
--          label="$i18n{allowSplitViewDragAndDrop}">
--      </settings-toggle-button>
-     </settings-section>
-     <template is="dom-if" if="[[showManagedThemeDialog_]]" restamp>
-       <managed-dialog on-close="onManagedDialogClosed_"
+       <settings-toggle-button class="hr" id="splitViewDragAndDrop"
++          hidden="[[!showSplitViewDragAndDropSetting_]]"
+           pref="{{prefs.browser.split_view_drag_and_drop_enabled}}"
+           label="$i18n{allowSplitViewDragAndDrop}">
+       </settings-toggle-button>
+diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.ts b/chrome/browser/resources/settings/appearance_page/appearance_page.ts
+index 76d3bf527f0db..25d4d7f5fea00 100644
+--- a/chrome/browser/resources/settings/appearance_page/appearance_page.ts
++++ b/chrome/browser/resources/settings/appearance_page/appearance_page.ts
+@@ -238,6 +238,13 @@ export class SettingsAppearancePageElement extends
+         value: false,
+       },
+ 
++      showSplitViewDragAndDropSetting_: {
++        type: Boolean,
++        value() {
++          return loadTimeData.getBoolean('showSplitViewDragAndDropSetting');
++        },
++      },
++
+       showResetPinnedActionsButton_: {
+         type: Boolean,
+         value: false,
+@@ -292,6 +299,7 @@ export class SettingsAppearancePageElement extends
+   declare private isForcedTheme_: boolean;
+   declare private showHoverCardImagesOption_: boolean;
+   declare private showResetPinnedActionsButton_: boolean;
++  declare private showSplitViewDragAndDropSetting_: boolean;
+ 
+   // <if expr="is_linux">
+   declare private showCustomChromeFrame_: boolean;
 diff --git a/chrome/browser/resources/side_panel/bookmarks/power_bookmarks_context_menu.ts b/chrome/browser/resources/side_panel/bookmarks/power_bookmarks_context_menu.ts
 index 1cdc95feab6d1..c1943c428229a 100644
 --- a/chrome/browser/resources/side_panel/bookmarks/power_bookmarks_context_menu.ts
