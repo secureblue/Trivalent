@@ -833,10 +833,10 @@ index 0ff93b7d1a2fc..e5f229f3ef331 100644
    // launch account storage for bookmarks.
    source->AddBoolean("isBookmarksInTransportModeEnabled",
 diff --git a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
-index 31b360347f2bc..adbde34c64bde 100644
+index 31b360347f2bc..40f0c5099c5e0 100644
 --- a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
 +++ b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
-@@ -238,15 +238,19 @@ void CustomizeToolbarHandler::ListActions(ListActionsCallback callback) {
+@@ -238,17 +238,19 @@ void CustomizeToolbarHandler::ListActions(ListActionsCallback callback) {
    actions.push_back(std::move(home_action));
    actions.push_back(std::move(forward_action));
  
@@ -849,6 +849,8 @@ index 31b360347f2bc..adbde34c64bde 100644
 -          ui::ImageModel::FromVectorIcon(kSplitSceneIcon, icon_color_id)
 -              .Rasterize(&provider),
 -          scale_factor)));
+-
+-  actions.push_back(std::move(split_tab_action));
 +  if (base::FeatureList::IsEnabled(features::kSideBySide)) {
 +    auto split_tab_action = side_panel::customize_chrome::mojom::Action::New(
 +        MojoActionForChromeAction(kActionSplitTab).value(),
@@ -863,8 +865,8 @@ index 31b360347f2bc..adbde34c64bde 100644
 +    actions.push_back(std::move(split_tab_action));
 +  }
  
-   actions.push_back(std::move(split_tab_action));
- 
+   if (base::FeatureList::IsEnabled(contextual_tasks::kContextualTasks) &&
+       (contextual_tasks::kShowEntryPoint.Get() ==
 diff --git a/chrome/browser/ui/webui/tab_search/tab_search_page_handler.cc b/chrome/browser/ui/webui/tab_search/tab_search_page_handler.cc
 index 3e18950bbdd4f..f14d14a11a2ec 100644
 --- a/chrome/browser/ui/webui/tab_search/tab_search_page_handler.cc
