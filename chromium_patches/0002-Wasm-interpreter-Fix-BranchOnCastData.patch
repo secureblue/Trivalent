@@ -14,8 +14,7 @@ Cr-Commit-Position: refs/heads/main@{#104634}
 ---
  src/wasm/interpreter/wasm-interpreter.cc | 2 +-
  src/wasm/interpreter/wasm-interpreter.h  | 7 +++++--
- test/mjsunit/mjsunit.status              | 2 ++
- 3 files changed, 8 insertions(+), 3 deletions(-)
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/v8/src/wasm/interpreter/wasm-interpreter.cc b/v8/src/wasm/interpreter/wasm-interpreter.cc
 index 2972396b732..428edd60495 100644
@@ -55,26 +54,4 @@ index 525fe2a4c47..238bd45c7de 100644
      uint32_t index;  // global/local/label/memory/table index
      int32_t i32;
      int64_t i64;
-diff --git a/test/mjsunit/mjsunit.status b/test/mjsunit/mjsunit.status
-index 9ebb81d5493..ffe4133e247 100644
---- a/test/mjsunit/mjsunit.status
-+++ b/test/mjsunit/mjsunit.status
-@@ -681,6 +681,7 @@
- 
-   # --experimental-wasm-wasmfx
-   'regress/wasm/regress-455832038': [SKIP],
-+  'wasm/resume-throw': [SKIP],
-   'wasm/stack-switching*': [SKIP],
- 
-   # --experimental-wasm-growable-stacks
-@@ -699,6 +700,7 @@
-   'wasm/gc-casts-from-any': [SKIP],
-   'wasm/reference-globals-import': [SKIP],
-   'wasm/reference-table-js-interop': [SKIP],
-+  'wasm/regress-467863659': [SKIP],
-   'wasm/stringref*': [SKIP],
-   'wasm/stringview-valuestack': [SKIP],
-   'wasm/turboshaft/instruction-selection': [SKIP],
--- 
-2.53.0
 
