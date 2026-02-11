@@ -41,6 +41,7 @@ popd
 pushd patches/
 cp ../translation_patches/register-trivalent-strings.patch ./
 cp ../translation_patches/translations/*.patch ./
+cp ../chromium_patches/*.patch ./
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp "${patches[i]}" "../build/trivalent-$((i+3000)).patch"
