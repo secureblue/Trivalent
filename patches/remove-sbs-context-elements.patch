@@ -1,0 +1,81 @@
+Copyright 2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+index 2dabd63623347..dc22a974d4a2e 100644
+--- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
++++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+@@ -1742,7 +1742,8 @@ void RenderViewContextMenu::AppendLinkItems() {
+       // constraints as opening a link in a new tab since a split view tab is a
+       // new tab that is then joined with the current active tab.
+       Browser* const browser = GetBrowser();
+-      if (browser && browser->is_type_normal()) {
++      if (base::FeatureList::IsEnabled(features::kSideBySide) && browser &&
++           browser->is_type_normal()) {
+         int string_id = IDS_CONTENT_CONTEXT_OPENLINKSPLITVIEW;
+         tabs::TabInterface* tab =
+             tabs::TabInterface::MaybeGetFromContents(GetWebContents());
+diff --git a/chrome/browser/ui/tabs/tab_menu_model.cc b/chrome/browser/ui/tabs/tab_menu_model.cc
+index 2d5d304e2a3bd..13c74a732eddb 100644
+--- a/chrome/browser/ui/tabs/tab_menu_model.cc
++++ b/chrome/browser/ui/tabs/tab_menu_model.cc
+@@ -147,6 +147,7 @@ void TabMenuModel::Build(TabStripModel* tab_strip, int index) {
+   }
+   SetElementIdentifierAt(GetItemCount() - 1, kAddNewTabAdjacentMenuItem);
+ 
++  if (base::FeatureList::IsEnabled(features::kSideBySide)) {
+     if (!tab_strip->GetSplitForTab(index).has_value()) {
+       if (tab_strip->GetActiveTab()->IsSplit()) {
+         swap_with_split_submenu_ =
+@@ -185,6 +186,7 @@ void TabMenuModel::Build(TabStripModel* tab_strip, int index) {
+     SetIsNewFeatureAt(GetItemCount() - 1,
+                       UserEducationService::MaybeShowNewBadge(
+                           tab_strip->profile(), features::kSideBySide));
++  }
+ 
+   if (ExistingTabGroupSubMenuModel::ShouldShowSubmenu(
+           tab_strip, index, tab_menu_model_delegate_)) {
+diff --git a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
+index 31b360347f2bc..40f0c5099c5e0 100644
+--- a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
++++ b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
+@@ -238,17 +238,19 @@ void CustomizeToolbarHandler::ListActions(ListActionsCallback callback) {
+   actions.push_back(std::move(home_action));
+   actions.push_back(std::move(forward_action));
+ 
+-  auto split_tab_action = side_panel::customize_chrome::mojom::Action::New(
+-      MojoActionForChromeAction(kActionSplitTab).value(),
+-      base::UTF16ToUTF8(l10n_util::GetStringUTF16(IDS_PIN_SPLIT_TAB_TOGGLE)),
+-      prefs()->GetBoolean(prefs::kPinSplitTabButton), false,
+-      side_panel::customize_chrome::mojom::CategoryId::kNavigation,
+-      GURL(webui::EncodePNGAndMakeDataURI(
+-          ui::ImageModel::FromVectorIcon(kSplitSceneIcon, icon_color_id)
+-              .Rasterize(&provider),
+-          scale_factor)));
+-
+-  actions.push_back(std::move(split_tab_action));
++  if (base::FeatureList::IsEnabled(features::kSideBySide)) {
++    auto split_tab_action = side_panel::customize_chrome::mojom::Action::New(
++        MojoActionForChromeAction(kActionSplitTab).value(),
++        base::UTF16ToUTF8(l10n_util::GetStringUTF16(IDS_PIN_SPLIT_TAB_TOGGLE)),
++        prefs()->GetBoolean(prefs::kPinSplitTabButton), false,
++        side_panel::customize_chrome::mojom::CategoryId::kNavigation,
++        GURL(webui::EncodePNGAndMakeDataURI(
++            ui::ImageModel::FromVectorIcon(kSplitSceneIcon, icon_color_id)
++                .Rasterize(&provider),
++            scale_factor)));
++
++    actions.push_back(std::move(split_tab_action));
++  }
+ 
+   if (base::FeatureList::IsEnabled(contextual_tasks::kContextualTasks) &&
+       (contextual_tasks::kShowEntryPoint.Get() ==
