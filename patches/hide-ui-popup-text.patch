@@ -60,3 +60,16 @@ index b6ba9e11cd..ae83b7fd5e 100644
    if (registry.IsFeatureRegistered(
            user_education::features::kNewBadgeTestFeature)) {
      return;
+diff --git a/components/user_education/common/new_badge/new_badge_controller.cc b/components/user_education/common/new_badge/new_badge_controller.cc
+index b548edf508..fb08335dca 100644
+--- a/components/user_education/common/new_badge/new_badge_controller.cc
++++ b/components/user_education/common/new_badge/new_badge_controller.cc
+@@ -13,7 +13,7 @@
+ namespace user_education {
+
+ // static
+-bool NewBadgeController::disable_new_badges_ = false;
++bool NewBadgeController::disable_new_badges_ = true;
+
+ NewBadgeController::NewBadgeController(
+     NewBadgeRegistry& registry,
