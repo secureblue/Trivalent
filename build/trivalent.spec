@@ -2,7 +2,7 @@
 %global _default_patch_fuzz 2
 %global numjobs %{_smp_build_ncpus}
 
-%global enable_debug 0
+%global enable_debug 1
 
 %if ! %{enable_debug}
 %global debug_package %{nil}
