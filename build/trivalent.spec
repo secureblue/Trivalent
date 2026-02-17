@@ -2,9 +2,18 @@
 %global _default_patch_fuzz 2
 %global numjobs %{_smp_build_ncpus}
 
-%global chromebuilddir out/Release
+%global enable_debug 0
+
+%if ! %{enable_debug}
 %global debug_package %{nil}
 %global debug_level 0
+%else
+%global debug_level 1
+# workaround for the error empty file debugsource
+%undefine _debugsource_packages
+%endif
+
+%global chromebuilddir out/Release
 %global chromium_name trivalent
 %global chromium_name_branding Trivalent
 %global chromium_path %{_libdir}/%{chromium_name}
@@ -573,11 +582,13 @@ pushd %{chromebuilddir}
   cp -a libqt6_shim.so %{buildroot}%{chromium_path}
 popd
 
+%if ! %{enable_debug}
 pushd %{buildroot}%{chromium_path}/
 for f in *.so *.so.1 chrome_crashpad_handler %{chromium_name} headless_shell chromedriver ; do
    [ -f $f ] && strip $f
 done
 popd
+%endif
 
 # Add directories for policy management
 mkdir -p %{buildroot}%{_sysconfdir}/%{chromium_name}/policies/managed
