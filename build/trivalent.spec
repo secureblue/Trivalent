@@ -3,7 +3,7 @@
 %global numjobs %{_smp_build_ncpus}
 
 %global enable_debug 0
-	
+
 %if ! %{enable_debug}
 %global debug_package %{nil}
 %global debug_level 0
