@@ -24,44 +24,15 @@ index 67786bb905..f49a5bb28c 100644
  };
  
  const ContentSettingsImageDetails* GetImageDetails(ContentSettingsType type) {
-diff --git a/chrome/browser/ui/views/user_education/browser_user_education_service.cc b/chrome/browser/ui/views/user_education/browser_user_education_service.cc
-index b6ba9e11cd..ae83b7fd5e 100644
---- a/chrome/browser/ui/views/user_education/browser_user_education_service.cc
-+++ b/chrome/browser/ui/views/user_education/browser_user_education_service.cc
-@@ -201,6 +201,7 @@ user_education::HelpBubbleDelegate* GetHelpBubbleDelegate() {
- 
- void RegisterChromeHelpBubbleFactories(
-     user_education::HelpBubbleFactoryRegistry& registry) {
-+  return; // Disable help bubbles
-   const user_education::HelpBubbleDelegate* const delegate =
-       GetHelpBubbleDelegate();
- #if BUILDFLAG(IS_CHROMEOS)
-@@ -1455,6 +1456,7 @@ void MaybeRegisterChromeFeaturePromos(
- 
- void MaybeRegisterChromeTutorials(
-     user_education::TutorialRegistry& tutorial_registry) {
-+  return; // Disable tutorials
-   using user_education::HelpBubbleArrow;
-   using user_education::TutorialDescription;
-   using BubbleStep = user_education::TutorialDescription::BubbleStep;
-@@ -1697,6 +1699,7 @@ void MaybeRegisterChromeTutorials(
- //    longer that necessary just to keep a "New" Badge around.
- //
- void MaybeRegisterChromeNewBadges(user_education::NewBadgeRegistry& registry) {
-+  return; // Disable badges
-   if (registry.IsFeatureRegistered(
-           user_education::features::kNewBadgeTestFeature)) {
-     return;
-diff --git a/components/user_education/common/new_badge/new_badge_controller.cc b/components/user_education/common/new_badge/new_badge_controller.cc
-index b548edf508..fb08335dca 100644
---- a/components/user_education/common/new_badge/new_badge_controller.cc
-+++ b/components/user_education/common/new_badge/new_badge_controller.cc
-@@ -13,7 +13,7 @@
- namespace user_education {
+diff --git a/chrome/browser/user_education/user_education_service_factory.cc b/chrome/browser/user_education/user_education_service_factory.cc
+index 2bc8bbc578..04df4bf832 100644
+--- a/chrome/browser/user_education/user_education_service_factory.cc
++++ b/chrome/browser/user_education/user_education_service_factory.cc
+@@ -112,6 +112,7 @@ UserEducationServiceFactory::BuildServiceInstanceForBrowserContextImpl(
 
  // static
--bool NewBadgeController::disable_new_badges_ = false;
-+bool NewBadgeController::disable_new_badges_ = true;
-
- NewBadgeController::NewBadgeController(
-     NewBadgeRegistry& registry,
+ bool UserEducationServiceFactory::ProfileAllowsUserEducation(Profile* profile) {
++  return false; // Disable user education services
+ #if BUILDFLAG(CHROME_FOR_TESTING)
+   // IPH is always disabled in Chrome for Testing.
+   return false;
