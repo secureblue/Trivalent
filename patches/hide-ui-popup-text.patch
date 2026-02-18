@@ -36,6 +36,22 @@ index b6ba9e11cd..ae83b7fd5e 100644
    const user_education::HelpBubbleDelegate* const delegate =
        GetHelpBubbleDelegate();
  #if BUILDFLAG(IS_CHROMEOS)
+@@ -1455,6 +1456,7 @@ void MaybeRegisterChromeFeaturePromos(
+ 
+ void MaybeRegisterChromeTutorials(
+     user_education::TutorialRegistry& tutorial_registry) {
++  return; // Disable tutorials
+   using user_education::HelpBubbleArrow;
+   using user_education::TutorialDescription;
+   using BubbleStep = user_education::TutorialDescription::BubbleStep;
+@@ -1697,6 +1699,7 @@ void MaybeRegisterChromeTutorials(
+ //    longer that necessary just to keep a "New" Badge around.
+ //
+ void MaybeRegisterChromeNewBadges(user_education::NewBadgeRegistry& registry) {
++  return; // Disable badges
+   if (registry.IsFeatureRegistered(
+           user_education::features::kNewBadgeTestFeature)) {
+     return;
 diff --git a/components/user_education/common/new_badge/new_badge_controller.cc b/components/user_education/common/new_badge/new_badge_controller.cc
 index b548edf508..fb08335dca 100644
 --- a/components/user_education/common/new_badge/new_badge_controller.cc
