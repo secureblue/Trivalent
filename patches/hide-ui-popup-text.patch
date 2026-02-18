@@ -24,6 +24,18 @@ index 67786bb905..f49a5bb28c 100644
  };
  
  const ContentSettingsImageDetails* GetImageDetails(ContentSettingsType type) {
+diff --git a/chrome/browser/ui/views/user_education/browser_user_education_service.cc b/chrome/browser/ui/views/user_education/browser_user_education_service.cc
+index b6ba9e11cd..ae83b7fd5e 100644
+--- a/chrome/browser/ui/views/user_education/browser_user_education_service.cc
++++ b/chrome/browser/ui/views/user_education/browser_user_education_service.cc
+@@ -201,6 +201,7 @@ user_education::HelpBubbleDelegate* GetHelpBubbleDelegate() {
+ 
+ void RegisterChromeHelpBubbleFactories(
+     user_education::HelpBubbleFactoryRegistry& registry) {
++  return; // Disable help bubbles
+   const user_education::HelpBubbleDelegate* const delegate =
+       GetHelpBubbleDelegate();
+ #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/user_education/common/new_badge/new_badge_controller.cc b/components/user_education/common/new_badge/new_badge_controller.cc
 index b548edf508..fb08335dca 100644
 --- a/components/user_education/common/new_badge/new_badge_controller.cc
