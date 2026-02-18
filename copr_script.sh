@@ -14,9 +14,6 @@
 
 set -oue pipefail
 
-wget https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions/all/releases?filter=endtime=none -O chromium-version.json
-grep \"version\" chromium-version.json | grep -oh "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" > chromium-version.txt
-
 cd Trivalent
 
 shopt -s nullglob
@@ -50,4 +47,5 @@ popd
 
 # Move all the source files into the parent directory for the COPR build system to find them
 cp /usr/src/chromium/chromium-*-clean.tar.xz ../
+cp /usr/src/chromium/chromium-version.txt ../
 mv ./build/* ../
