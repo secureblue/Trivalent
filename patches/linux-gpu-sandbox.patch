@@ -408,6 +408,18 @@ diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux
 index 5725da248d..1d4d1d60d6 100644
 --- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
+diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
+index 5725da248d..e3317282db 100644
+--- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
++++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
+@@ -62,7 +62,7 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+       const Arg<unsigned long> arg(2);
+
+       const unsigned long kAllowedMask =
+-          F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW;
++          F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_FUTURE_WRITE;
+       BoolExpr add_seals =
+           AllOf(cmd == F_ADD_SEALS, (arg & ~kAllowedMask) == 0);
 @@ -80,16 +80,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
      case __NR_getdents64:
      case __NR_ioctl:
