@@ -405,10 +405,6 @@ index c4e4614eb8..288f7f03ea 100644
        return GpuProcessPolicy::EvaluateSyscall(sysno);
    }
 diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-index 5725da248d..1d4d1d60d6 100644
---- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-+++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
 index 5725da248d..e3317282db 100644
 --- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
