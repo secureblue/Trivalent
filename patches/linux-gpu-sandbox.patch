@@ -405,19 +405,33 @@ index c4e4614eb8..288f7f03ea 100644
        return GpuProcessPolicy::EvaluateSyscall(sysno);
    }
 diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-index 5725da248d..e3317282db 100644
+index 5725da248d..58720e9860 100644
 --- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-@@ -62,7 +62,7 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
-       const Arg<unsigned long> arg(2);
-
-       const unsigned long kAllowedMask =
+@@ -52,22 +52,8 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+       return Error(ENOSYS);
+ #if !BUILDFLAG(IS_CHROMEOS)
+     case __NR_fallocate:
+-      return Allow();
+ #endif  // BUILDFLAG(IS_CHROMEOS)
+     case __NR_fcntl: {
+-      // The Nvidia driver uses flags not in the baseline policy
+-      // fcntl(fd, F_ADD_SEALS, F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW)
+-      // https://crbug.com/1128175
+-      const Arg<unsigned int> cmd(1);
+-      const Arg<unsigned long> arg(2);
+-
+-      const unsigned long kAllowedMask =
 -          F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW;
-+          F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_FUTURE_WRITE;
-       BoolExpr add_seals =
-           AllOf(cmd == F_ADD_SEALS, (arg & ~kAllowedMask) == 0);
- 
-@@ -80,16 +80,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+-      BoolExpr add_seals =
+-          AllOf(cmd == F_ADD_SEALS, (arg & ~kAllowedMask) == 0);
+-
+-      return If(add_seals, Allow()).Else(BPFBasePolicy::EvaluateSyscall(sysno));
+-    }
+     case __NR_fdatasync:
+     case __NR_ftruncate:
+ #if defined(__i386__) || defined(__arm__) || \
+@@ -80,17 +66,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
      case __NR_getdents64:
      case __NR_ioctl:
        return Allow();
@@ -431,10 +445,11 @@ index 5725da248d..e3317282db 100644
 -    // weird flags were involved.
 -    case __NR_mprotect:
 -      return Allow();
-     // XNNPACK needs mremap when building weight caches.
+-    // XNNPACK needs mremap when building weight caches.
      case __NR_mremap:
        if (mremap_policy_ == MremapPolicy::kAllow) {
-@@ -106,10 +96,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+         return RestrictMremapFlagsForODML();
+@@ -106,10 +81,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
        return RestrictSchedTarget(GetPolicyPid(), sysno);
      case __NR_prlimit64:
        return RestrictPrlimit64(GetPolicyPid());
