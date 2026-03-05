@@ -80,10 +80,10 @@ index d637eecb9e..621b51f79c 100644
    command_updater_.UpdateCommandEnabled(IDC_SHOW_COMMENTS_SIDE_PANEL, true);
    command_updater_.UpdateCommandEnabled(IDC_FIND_AND_EDIT_MENU, true);
 diff --git a/chrome/browser/ui/browser_commands.cc b/chrome/browser/ui/browser_commands.cc
-index aa732ca6d7..e8ce235eb4 100644
+index 3f477375e0..3627f15f06 100644
 --- a/chrome/browser/ui/browser_commands.cc
 +++ b/chrome/browser/ui/browser_commands.cc
-@@ -2327,6 +2327,11 @@ void OpenFeedbackDialog(BrowserWindowInterface* bwi,
+@@ -2320,6 +2320,11 @@ void OpenFeedbackDialog(BrowserWindowInterface* bwi,
                             category_tag, std::string() /* extra_diagnostics */);
  }
 
@@ -92,9 +92,9 @@ index aa732ca6d7..e8ce235eb4 100644
 +  pref_service->SetBoolean(prefs::kWebKitForceDarkModeEnabled, !pref_enabled);
 +}
 +
- void ToggleBookmarkBar(Browser* browser) {
-   base::RecordAction(UserMetricsAction("ShowBookmarksBar"));
-   ToggleBookmarkBarWhenVisible(browser->profile());
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ void OpenReportUnsafeSiteDialog(Browser* browser) {
+   base::RecordAction(UserMetricsAction("ReportUnsafeSite"));
 diff --git a/chrome/browser/ui/browser_commands.h b/chrome/browser/ui/browser_commands.h
 index 57754e9b20..c99ce70d8f 100644
 --- a/chrome/browser/ui/browser_commands.h
