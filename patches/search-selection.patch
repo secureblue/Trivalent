@@ -26,10 +26,10 @@ index e4d2eacf3f316..0dfdd8c0d365d 100644
    if (command_line->HasSwitch(switches::kNoFirstRun) &&
        !command_line->HasSwitch(
 diff --git a/components/regional_capabilities/program_settings.cc b/components/regional_capabilities/program_settings.cc
-index 3aa393c618..21d2744759 100644
+index 7d49e2a8dd..34308c414f 100644
 --- a/components/regional_capabilities/program_settings.cc
 +++ b/components/regional_capabilities/program_settings.cc
-@@ -105,8 +105,8 @@ bool IsValidSerializedProgram(int serialized_program) {
+@@ -106,8 +106,8 @@ bool IsValidSerializedProgram(int serialized_program) {
 
  bool IsInProgramRegion(Program program,
                         const country_codes::CountryId& country_id) {
@@ -39,7 +39,7 @@ index 3aa393c618..21d2744759 100644
 +    return true;
    }
 
-   return base::Contains(GetSettingsForProgram(program).associated_countries,
+   return std::ranges::contains(
 diff --git a/components/regional_capabilities/regional_capabilities_service.cc b/components/regional_capabilities/regional_capabilities_service.cc
 index 4f95ae3d04..7f4d4953ec 100644
 --- a/components/regional_capabilities/regional_capabilities_service.cc
