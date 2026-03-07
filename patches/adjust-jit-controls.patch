@@ -24,7 +24,7 @@ index 900df063b8..287de90eb1 100644
 -  }
 +  // Disable JIT & WASM for non-(web|file|extension) schemes.
 +  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
-+      && !site_url.SchemeIs("chrome-extension"))
++      && !site_url.SchemeIs("chrome-extension") && !site_url.SchemeIs("devtools"))
 +    return true;
  
    return (map && map->GetContentSetting(site_url, site_url,
