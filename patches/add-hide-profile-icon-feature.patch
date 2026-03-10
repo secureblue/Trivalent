@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,22 +11,20 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index 6a8be4abd7..36113be58a 100644
+index 45501ce4b4..dffd87c1e2 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -17,6 +17,10 @@
- 
+@@ -18,6 +18,8 @@
+
  namespace features {
- 
-+// Hides the toolbar profile icon in regular profiles
-+BASE_FEATURE(kHideProfileIcon, "HideProfileIcon",
-+             base::FEATURE_DISABLED_BY_DEFAULT);
+
++BASE_FEATURE(kHideProfileIcon, base::FEATURE_DISABLED_BY_DEFAULT);
 +
  // Enables the use of WGC for the Eye Dropper screen capture.
  BASE_FEATURE(kAllowEyeDropperWGCScreenCapture,
  #if BUILDFLAG(IS_WIN)
 diff --git a/chrome/browser/ui/ui_features.h b/chrome/browser/ui/ui_features.h
-index d4456c7bf1..adb2bf2ef7 100644
+index 43f876760f..d1a60b37ab 100644
 --- a/chrome/browser/ui/ui_features.h
 +++ b/chrome/browser/ui/ui_features.h
 @@ -20,6 +20,8 @@ namespace features {
@@ -36,8 +34,8 @@ index d4456c7bf1..adb2bf2ef7 100644
 +BASE_DECLARE_FEATURE(kHideProfileIcon);
 +
  BASE_DECLARE_FEATURE(kAllowEyeDropperWGCScreenCapture);
- 
- BASE_DECLARE_FEATURE(kCreateNewTabGroupAppMenuTopLevel);
+
+ BASE_DECLARE_FEATURE(kBrowserWidgetCacheThemeService);
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
 index d1519e7f3782a..548be223ca340 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc

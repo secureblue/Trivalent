@@ -50,13 +50,15 @@ jobs:
       - name: Build SRPM 
         shell: bash
         id: srpm_build
+        env:
+          BRANCH: ${{ github.ref_name }}
         run: |
           dnf copr enable secureblue/trivalent -y
           dnf update -y
           dnf install git wget rpmbuild yum-utils rpm-sign trivalent-chromium-clean-source -y
           SOURCE_CACHE_HASH=$(sha256sum /usr/src/chromium/chromium-*.xz)
           echo "SOURCE_CACHE_HASH: ${SOURCE_CACHE_HASH}"
-          git clone https://github.com/secureblue/Trivalent.git
+          git clone --branch "${BRANCH}" https://github.com/secureblue/Trivalent.git
           bash ./Trivalent/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           SRPM_HASH=$(sha256sum *.rpm)
