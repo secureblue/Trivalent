@@ -1,0 +1,28 @@
+diff --git a/third_party/rust/bytemuck/v1/BUILD.gn b/third_party/rust/bytemuck/v1/BUILD.gn
+index 028a8e7000f9a..a17dc33bbc047 100644
+--- a/third_party/rust/bytemuck/v1/BUILD.gn
++++ b/third_party/rust/bytemuck/v1/BUILD.gn
+@@ -52,13 +52,9 @@ cargo_crate("lib") {
+     "derive",
+     "extern_crate_alloc",
+     "min_const_generics",
+-    "nightly_portable_simd",
+     "rustversion",
+   ]
+ 
+-  # `gnrt_config.toml` for this crate specifies `allow_unstable_features`.
+-  rustflags = [ "-Zallow-features=portable_simd" ]
+-
+   #####################################################################
+   # Tweaking which GN `config`s apply to this target.
+ 
+@@ -75,9 +71,6 @@ cargo_crate("lib") {
+   ]
+   _configs_to_add = []
+ 
+-  # `gnrt_config.toml` for this crate specifies `allow_unstable_features`.
+-  _configs_to_remove += [ "//build/config/compiler:disallow_unstable_features" ]
+-
+   # Changing (if needed) which configs apply to this specific crate (based on
+   # `extra_kv.configs_to_remove` and `extra_kv.configs_to_add` from
+   # `gnrt_config.toml`).
