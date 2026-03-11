@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/ui/browser_ui_prefs.cc b/chrome/browser/ui/browser_ui_prefs.cc
-index e94568b1c7..324e839546 100644
+index 837e75e79b..bb8acd5cb1 100644
 --- a/chrome/browser/ui/browser_ui_prefs.cc
 +++ b/chrome/browser/ui/browser_ui_prefs.cc
 @@ -129,7 +129,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
@@ -23,19 +23,22 @@ index e94568b1c7..324e839546 100644
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
    registry->RegisterDictionaryPref(prefs::kBrowserWindowPlacement);
    registry->RegisterDictionaryPref(prefs::kBrowserWindowPlacementPopup);
-@@ -142,21 +142,21 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -142,24 +142,24 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
                                  false);
  #endif
    registry->RegisterStringPref(prefs::kWebRTCIPHandlingPolicy,
 -                               blink::kWebRTCIPHandlingDefault);
 +                               blink::kWebRTCIPHandlingDisableNonProxiedUdp);
-   registry->RegisterListPref(prefs::kWebRTCIPHandlingUrl, base::Value::List());
+   registry->RegisterListPref(prefs::kWebRTCIPHandlingUrl, base::ListValue());
    registry->RegisterBooleanPref(prefs::kWebRTCPostQuantumKeyAgreement, false);
    registry->RegisterStringPref(prefs::kWebRTCUDPPortRange, std::string());
    registry->RegisterBooleanPref(prefs::kWebRtcEventLogCollectionAllowed, false);
    registry->RegisterListPref(prefs::kWebRtcLocalIpsAllowedUrls);
 -  registry->RegisterBooleanPref(prefs::kWebRtcTextLogCollectionAllowed, true);
 +  registry->RegisterBooleanPref(prefs::kWebRtcTextLogCollectionAllowed, false);
+   registry->RegisterListPref(
+       prefs::kWebRTCDiagnosticLogCollectionAllowedForOrigins,
+       base::ListValue());
 
    // We need to register the type of these preferences in order to query
    // them even though they're only typically controlled via policy.
@@ -50,7 +53,7 @@ index e94568b1c7..324e839546 100644
  #endif  // BUILDFLAG(ENABLE_CLICK_TO_CALL)
 
  #if BUILDFLAG(IS_MAC)
-@@ -185,7 +185,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -188,7 +188,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
 
    registry->RegisterBooleanPref(prefs::kEnterpriseHardwarePlatformAPIEnabled,
                                  false);
@@ -59,7 +62,7 @@ index e94568b1c7..324e839546 100644
    registry->RegisterBooleanPref(
        prefs::kExternalProtocolDialogShowAlwaysOpenCheckbox, true);
    registry->RegisterBooleanPref(prefs::kScreenCaptureAllowed, true);
-@@ -207,7 +207,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -210,7 +210,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
  #endif
 
    registry->RegisterBooleanPref(

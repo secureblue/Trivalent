@@ -144,15 +144,15 @@ index 1565c71ec1..325b1344e4 100644
 
  // static
 diff --git a/components/optimization_guide/core/model_execution/model_execution_prefs.cc b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-index b43996146e..d5c820facd 100644
+index d73e762683..9f89b41abd 100644
 --- a/components/optimization_guide/core/model_execution/model_execution_prefs.cc
 +++ b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-@@ -112,7 +112,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
+@@ -116,7 +116,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
    registry->RegisterInt64Pref(localstate::kModelQualityLoggingClientId, 0,
                                PrefRegistry::LOSSY_PREF);
    registry->RegisterIntegerPref(
 -      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 0);
 +      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 1);
+   registry->RegisterBooleanPref(localstate::kOnDeviceAiUserSettingsEnabled,
+                                 true);
  }
-
- void PruneOldUsagePrefs(PrefService* local_state) {

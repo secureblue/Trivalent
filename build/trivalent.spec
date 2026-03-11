@@ -458,6 +458,7 @@ CXXFLAGS="$FLAGS"
 
 # reduce the size of relocations
 LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
+echo "RUSTFLAGS=$RUSTFLAGS"
 RUSTFLAGS=${RUSTFLAGS/--cap-lints/-Clink-arg=-Wl,-z,pack-relative-relocs --cap-lints}
 RUSTFLAGS=${RUSTFLAGS/debuginfo=?/debuginfo=0}
 
@@ -501,7 +502,7 @@ CHROMIUM_GN_DEFINES+=" clang_version=$clang_version"
 CHROMIUM_GN_DEFINES+=" clang_use_chrome_plugins=false"
 CHROMIUM_GN_DEFINES+=" rust_sysroot_absolute=\"$(rustc --print sysroot)\""
 CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$rust_bindgen_root\""
-CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version)\""
+CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version | awk '{print $2}')\""
 CHROMIUM_GN_DEFINES+=" chrome_pgo_phase=0"
 %endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'

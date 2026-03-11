@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -525,7 +525,7 @@ index d989c90598e38..985a47c20c397 100644
  <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
      restamp>
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 90780ae82c..e6382ceceb 100644
+index 3cb9e3af7a..12b7f1fa3b 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -54,7 +54,7 @@
@@ -536,25 +536,24 @@ index 90780ae82c..e6382ceceb 100644
 +          $i18n{editPerson}
            <cr-ripple></cr-ripple>
          </a>
-         <a role="menuitem" id="yourSavedInfo" href="/yourSavedInfo"
+         <a role="menuitem" id="autofill" href="/autofill"
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
-index 4c518c19856c7..e73df1f31e651 100644
+index 7b4808a0ff..18ab3b96b1 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
 +++ b/chrome/browser/resources/settings/system_page/system_page.html
-@@ -19,6 +19,13 @@
+@@ -27,6 +27,12 @@
+         </cr-button>
        </template>
      </settings-toggle-button>
- 
 +<if expr="enable_printing">
 +    <settings-toggle-button class="cr-row"
 +        pref="{{prefs.printing.enabled}}"
 +        label="$i18n{printingCapabilities}">
 +    </settings-toggle-button>
 +</if>
-+
-     <!-- <if expr="_google_chrome and is_win"> -->
-       <template is="dom-if" if="[[showFeatureNotificationsSetting_]]">
-         <div class="hr"></div>
+   <if expr="_google_chrome">
+     <!-- On device AI settings -->
+     <template is="dom-if" if="[[showOnDeviceAiSettings_]]" restamp>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
 index 86e5d98e45..e4a6a6701a 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
