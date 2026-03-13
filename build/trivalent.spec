@@ -642,15 +642,6 @@ install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/devel/include/distributed selinux/%{modulename}.if
 %endif
 
-%post
-# Set SELinux labels - semanage itself will adjust the lib directory naming
-# But only do it when selinux is enabled, otherwise, it gets noisy.
-if selinuxenabled; then
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_name} &>/dev/null || :
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_name}/%{chromium_name}.sh &>/dev/null || :
-	restorecon -R -v %{chromium_path}/%{chromium_name} &>/dev/null || :
-fi
-
 %files
 %doc AUTHORS
 %license LICENSE
