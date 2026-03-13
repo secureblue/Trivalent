@@ -219,6 +219,7 @@ BuildRequires: nodejs
 %endif
 
 %if 0%{?with_selinux}
+BuildRequires:  container-selinux
 BuildRequires:  make
 BuildRequires:  selinux-policy-devel
 Recommends:     (%{name}-selinux if selinux-policy-%{selinuxtype})
@@ -460,6 +461,12 @@ cp -a %{SOURCE21} %{SOURCE22} %{SOURCE23} selinux
 %endif
 
 %build
+# Build SELinux policy module first so any failure in this step makes the build fail early.
+%if 0%{?with_selinux}
+make -f %{_datadir}/selinux/devel/Makefile %{modulename}.pp
+bzip2 -9 %{modulename}.pp
+%endif
+
 # reduce warnings
 FLAGS=' -Wno-deprecated-declarations -Wno-unknown-warning-option -Wno-unused-command-line-argument'
 FLAGS+=' -Wno-unused-but-set-variable -Wno-unused-result -Wno-unused-function -Wno-unused-variable'
@@ -556,11 +563,6 @@ gn --script-executable=%{__python3} gen --args="$CHROMIUM_GN_DEFINES" %{chromebu
 %build_target %{chromebuilddir} chrome
 %else
 %{__python3} $SOURCE_DIR/depot_tools/autoninja.py -C %{chromebuilddir} chrome
-%endif
-
-%if 0%{?with_selinux}
-make -f %{_datadir}/selinux/devel/Makefile %{modulename}.pp
-bzip2 -9 %{modulename}.pp
 %endif
 
 %install
