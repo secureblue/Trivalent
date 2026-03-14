@@ -712,11 +712,12 @@ fi
 
 %posttrans selinux
 %selinux_relabel_post -s %{selinuxtype}
+%{_sbindir}/restorecon -R %{chromium_path}
 
 %files selinux
 %{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.*
 %{_datadir}/selinux/devel/include/distributed/%{modulename}.if
-%ghost %verify(not md5 size mode mtime) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/%{modulename}
+%ghost %verify(not md5 size mode mtime) %{_selinux_store_path}/%{selinuxtype}/active/modules/200/%{modulename}
 
 # if with_selinux
 %endif
