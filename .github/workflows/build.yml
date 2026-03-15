@@ -29,17 +29,17 @@ on:
         required: false
       R2_ENDPOINT:
         required: false
-  
+
 name: Create RPM Release
 
-permissions: {} 
+permissions: {}
 
 jobs:
   buildsrpm:
     name: Build SRPM
     if: github.triggering_actor == 'royaloughtness'
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
-    container: 
+    container:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
     steps:
       - name: Enable egress auditing
@@ -47,7 +47,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: Build SRPM 
+      - name: Build SRPM
         shell: bash
         id: srpm_build
         env:
@@ -63,13 +63,13 @@ jobs:
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
-          
+
       - name: Save SRPM
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: srpm-artifact
           path: "*.rpm"
-          compression-level: 0 
+          compression-level: 0
           retention-days: 30
 
   buildrpm:
@@ -78,7 +78,7 @@ jobs:
     timeout-minutes: 180
     needs: buildsrpm
     runs-on: ${{ inputs.arch == 'x86_64' && 'runs-on=${{ github.run_id }}/runner=x86_64-runner' || 'runs-on=${{ github.run_id }}/runner=arm64-runner' }}
-    container: 
+    container:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
       options: --privileged
     steps:
@@ -91,8 +91,8 @@ jobs:
         uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
           name: srpm-artifact
-          
-      - name: Build RPM 
+
+      - name: Build RPM
         shell: bash
         id: rpm_build
         env:
@@ -103,7 +103,7 @@ jobs:
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
           mock --resultdir=. -r "fedora-43-${ARCH}" --rebuild trivalent-*.src.rpm
-            
+
       - name: Surface build log
         if: always()
         run: |
@@ -127,7 +127,7 @@ jobs:
         with:
           name: rpm-artifact
           path: "*.rpm"
-          compression-level: 0 
+          compression-level: 0
           retention-days: 7
 
   pushrpm:
@@ -135,7 +135,7 @@ jobs:
     if: github.triggering_actor == 'royaloughtness'
     environment: ${{ inputs.test_build && 'TestBuild' || 'Build' }}
     runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
-    container: 
+    container:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
     needs: buildrpm
     outputs:
@@ -177,9 +177,9 @@ jobs:
           else
             echo "Trivalent RPM found: ${trivalent_rpm_file}"
           fi
-          
+
           rpm --addsign *.rpm
-          rpm_hash=$(sha256sum "${trivalent_rpm_file}" | base64 -w0)
+          rpm_hash=$(sha256sum *.rpm | base64 -w0)
           echo "hashes=${rpm_hash}" >> "$GITHUB_OUTPUT"
           reposync --repo secureblue -y
           mv *.rpm secureblue/Packages
@@ -200,7 +200,7 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: .
         run: |
-          rclone copy ./secureblue/ R2:/ 
+          rclone copy ./secureblue/ R2:/
 
   provenance:
     needs: [pushrpm]
@@ -212,4 +212,3 @@ jobs:
     with:
       base64-subjects: ${{ needs.pushrpm.outputs.hashes }}
       upload-assets: true
-  
