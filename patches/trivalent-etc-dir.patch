@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ index 33fd5790123ea..a778eb4471405 100644
    return installer::InitialPreferences::Path(dir_exe);
  }
 diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
-index ec09803ffabcf..4475a3112326d 100644
+index eae95c5f35..150f806dd1 100644
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc
-@@ -609,7 +609,7 @@ bool PathProvider(int key, base::FilePath* result) {
-           FILE_PATH_LITERAL("/etc/opt/chrome/native-messaging-hosts"));
+@@ -482,7 +482,7 @@ bool PathProvider(int key, base::FilePath* result) {
+           "/etc/opt/chrome_for_testing/native-messaging-hosts"));
  #else
        cur = base::FilePath(
 -          FILE_PATH_LITERAL("/etc/chromium/native-messaging-hosts"));

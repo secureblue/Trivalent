@@ -40,24 +40,24 @@ index d347c428ac..29faea895d 100644
      }
    }
 diff --git a/chrome/browser/ui/webui/chrome_web_ui_configs.cc b/chrome/browser/ui/webui/chrome_web_ui_configs.cc
-index d185bfdfbb..7e66f32eb3 100644
+index bee885f130..5ac5e37fd0 100644
 --- a/chrome/browser/ui/webui/chrome_web_ui_configs.cc
 +++ b/chrome/browser/ui/webui/chrome_web_ui_configs.cc
-@@ -48,6 +48,7 @@
+@@ -49,6 +49,7 @@
  #include "chrome/browser/ui/webui/signin_internals_ui.h"
  #include "chrome/browser/ui/webui/sync_internals/sync_internals_ui.h"
  #include "chrome/browser/ui/webui/translate_internals/translate_internals_ui.h"
 +#include "chrome/browser/ui/webui/trivalent_faq.h"
  #include "chrome/browser/ui/webui/usb_internals/usb_internals_ui.h"
- #include "chrome/browser/ui/webui/user_actions/user_actions_ui.h"
  #include "chrome/browser/ui/webui/version/version_ui.h"
-@@ -274,6 +275,7 @@ void RegisterChromeWebUIConfigs() {
+ #include "components/enterprise/buildflags/buildflags.h"
+@@ -285,6 +286,7 @@ void RegisterChromeWebUIConfigs() {
    map.AddWebUIConfig(std::make_unique<SiteEngagementUIConfig>());
    map.AddWebUIConfig(std::make_unique<SyncInternalsUIConfig>());
    map.AddWebUIConfig(std::make_unique<TranslateInternalsUIConfig>());
 +  map.AddWebUIConfig(std::make_unique<TrivalentFAQUIConfig>());
    map.AddWebUIConfig(std::make_unique<UsbInternalsUIConfig>());
-   map.AddWebUIConfig(std::make_unique<UserActionsUIConfig>());
+   map.AddWebUIConfig(std::make_unique<user_actions_ui::UserActionsUIConfig>());
    map.AddWebUIConfig(std::make_unique<VersionUIConfig>());
 diff --git a/chrome/common/webui_url_constants.cc b/chrome/common/webui_url_constants.cc
 index f96fccfbc2..a058283fb5 100644

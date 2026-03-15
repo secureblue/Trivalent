@@ -18,6 +18,10 @@
 %global chromium_name_branding Trivalent
 %global chromium_path %{_libdir}/%{chromium_name}
 
+%global with_selinux 1
+%global modulename %{chromium_name}
+%global selinuxtype targeted
+
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
 %global __provides_exclude_from ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
@@ -78,6 +82,10 @@ Source18: %{chromium_name}256.png
 
 #Source19: %{chromium_name}22-text.png
 #Source20: %{chromium_name}22-text-white.png
+
+Source21: %{chromium_name}.fc
+Source22: %{chromium_name}.if
+Source23: %{chromium_name}.te
 
 ### Patches ###
 %{lua:
@@ -208,6 +216,13 @@ BuildRequires: nodejs
 %global build_target() \
 	export NINJA_STATUS="[%2:%f/%t] " ; \
 	ninja -j %{numjobs} -C '%1' '%2'
+%endif
+
+%if 0%{?with_selinux}
+BuildRequires:  container-selinux
+BuildRequires:  make
+BuildRequires:  selinux-policy-devel
+Recommends:     (%{name}-selinux if selinux-policy-%{selinuxtype})
 %endif
 
 Requires: nss%{_isa} >= 3.26
@@ -367,13 +382,6 @@ Provides: bundled(zstd)
 %description
 %{chromium_name_branding} is a security-focused browser built upon the Chromium web browser.
 
-%package qt6-ui
-Summary: Qt6 UI built from %{chromium_name_branding}
-Requires: %{chromium_name}%{_isa} = %{version}-%{release}
-
-%description qt6-ui
-Qt6 UI for %{chromium_name_branding}.
-
 %prep
 %setup -q -n chromium-%{version}
 
@@ -447,7 +455,18 @@ ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 # Hard code extra version
 sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
 
+%if 0%{?with_selinux}
+mkdir -p selinux
+cp -a %{SOURCE21} %{SOURCE22} %{SOURCE23} selinux
+%endif
+
 %build
+# Build SELinux policy module first so any failure in this step makes the build fail early.
+%if 0%{?with_selinux}
+make -f %{_datadir}/selinux/devel/Makefile %{modulename}.pp
+bzip2 -9 %{modulename}.pp
+%endif
+
 # reduce warnings
 FLAGS=' -Wno-deprecated-declarations -Wno-unknown-warning-option -Wno-unused-command-line-argument'
 FLAGS+=' -Wno-unused-but-set-variable -Wno-unused-result -Wno-unused-function -Wno-unused-variable'
@@ -458,6 +477,7 @@ CXXFLAGS="$FLAGS"
 
 # reduce the size of relocations
 LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
+echo "RUSTFLAGS=$RUSTFLAGS"
 RUSTFLAGS=${RUSTFLAGS/--cap-lints/-Clink-arg=-Wl,-z,pack-relative-relocs --cap-lints}
 RUSTFLAGS=${RUSTFLAGS/debuginfo=?/debuginfo=0}
 
@@ -501,7 +521,7 @@ CHROMIUM_GN_DEFINES+=" clang_version=$clang_version"
 CHROMIUM_GN_DEFINES+=" clang_use_chrome_plugins=false"
 CHROMIUM_GN_DEFINES+=" rust_sysroot_absolute=\"$(rustc --print sysroot)\""
 CHROMIUM_GN_DEFINES+=" rust_bindgen_root=\"$rust_bindgen_root\""
-CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version)\""
+CHROMIUM_GN_DEFINES+=" rustc_version=\"$(rustc --version | awk '{print $2}')\""
 CHROMIUM_GN_DEFINES+=" chrome_pgo_phase=0"
 %endif
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
@@ -617,17 +637,10 @@ appstream-util validate-relax --nonet ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{ch
 mkdir -p %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 
-%post
-# Set SELinux labels - semanage itself will adjust the lib directory naming
-# But only do it when selinux is enabled, otherwise, it gets noisy.
-if selinuxenabled; then
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_name} &>/dev/null || :
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_name}/%{chromium_name}.sh &>/dev/null || :
-	restorecon -R -v %{chromium_path}/%{chromium_name} &>/dev/null || :
-fi
-
-%files qt6-ui
-%{chromium_path}/libqt6_shim.so
+%if 0%{?with_selinux}
+install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %{modulename}.pp.bz2
+install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/devel/include/distributed selinux/%{modulename}.if
+%endif
 
 %files
 %doc AUTHORS
@@ -661,3 +674,50 @@ fi
 %dir %{chromium_path}/locales/
 %{chromium_path}/locales/*.pak
 
+%package qt6-ui
+Summary: Qt6 UI built from %{chromium_name_branding}
+Requires: %{chromium_name}%{_isa} = %{version}-%{release}
+
+%description qt6-ui
+Qt6 UI for %{chromium_name_branding}.
+
+%files qt6-ui
+%{chromium_path}/libqt6_shim.so
+
+%if 0%{?with_selinux}
+%package selinux
+Summary:        SELinux policies for %{chromium_name_branding}
+License:        Apache-2.0 OR MIT
+
+Requires:       %{name}
+Requires:       selinux-policy-%{selinuxtype}
+Requires(post): selinux-policy-%{selinuxtype}
+BuildArch:      noarch
+%{?selinux_requires_min}
+
+%description selinux
+SELinux policy modules for %{chromium_name_branding}.
+
+%pre selinux
+%selinux_relabel_pre -s %{selinuxtype}
+
+%post selinux
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.bz2
+
+%postun selinux
+if [ "$1" -eq 0 ]; then
+    %selinux_modules_uninstall -s %{selinuxtype} %{modulename}
+    %selinux_relabel_post -s %{selinuxtype}
+fi
+
+%posttrans selinux
+%selinux_relabel_post -s %{selinuxtype}
+%{_sbindir}/restorecon -R %{chromium_path}
+
+%files selinux
+%{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.*
+%{_datadir}/selinux/devel/include/distributed/%{modulename}.if
+%ghost %verify(not md5 size mode mtime) %{_selinux_store_path}/%{selinuxtype}/active/modules/200/%{modulename}
+
+# if with_selinux
+%endif
