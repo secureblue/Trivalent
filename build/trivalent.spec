@@ -692,6 +692,7 @@ License:        Apache-2.0 OR MIT
 Requires:       %{name}
 Requires:       selinux-policy-%{selinuxtype}
 Requires(post): selinux-policy-%{selinuxtype}
+Recommends:     container-selinux
 BuildArch:      noarch
 %{?selinux_requires_min}
 
