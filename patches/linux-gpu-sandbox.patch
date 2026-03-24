@@ -84,18 +84,19 @@ index 2e53794fa3..986d44ab5d 100644
        "/usr/lib64/dri/nouveau_dri.so",
        "/usr/lib64/dri/radeonsi_dri.so",
        "/usr/lib64/dri/swrast_dri.so",
-@@ -324,6 +344,10 @@ void AddIntelGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -324,6 +344,11 @@ void AddIntelGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        // To support threads in mesa we use --gpu-sandbox-start-early and
        // that requires the following libs and files to be accessible.
        "/usr/lib64/libgallium_dri.so",
 +#if !BUILDFLAG(IS_CHROMEOS) // Linux Intel
 +      "/usr/lib64/gbm/dri_gbm.so",
 +      "/usr/lib64/dri/iHD_drv_video.so",
++      "/usr/lib64/libsensors.so.4",
 +#endif
        "/usr/lib64/libEGL.so.1", "/usr/lib64/libGLESv2.so.2",
        "/usr/lib64/libelf.so.1", "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libdrm_amdgpu.so.1", "/usr/lib64/libdrm_radeon.so.1",
-@@ -363,6 +387,11 @@ void AddVirtIOGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
+@@ -363,6 +388,11 @@ void AddVirtIOGpuPermissions(std::vector<BrokerFilePermission>* permissions) {
        "/usr/lib64/libglapi.so.0",
        "/usr/lib64/libc++.so.1",
        "/usr/lib64/libgallium_dri.so",
@@ -107,7 +108,7 @@ index 2e53794fa3..986d44ab5d 100644
        // If kms_swrast_dri is not usable, swrast_dri is used instead.
        "/usr/lib64/dri/swrast_dri.so",
        "/usr/lib64/dri/kms_swrast_dri.so",
-@@ -548,11 +577,13 @@ void LoadArmGpuLibraries() {
+@@ -548,11 +578,13 @@ void LoadArmGpuLibraries() {
  }
  
  bool LoadAmdGpuLibraries() {
@@ -121,7 +122,7 @@ index 2e53794fa3..986d44ab5d 100644
  
    const char* radeonsi_lib = "/usr/lib64/dri/radeonsi_dri.so";
  #if defined(DRI_DRIVER_DIR)
-@@ -609,7 +640,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
+@@ -609,7 +641,7 @@ sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
    command_set.set(sandbox::syscall_broker::COMMAND_ACCESS);
    command_set.set(sandbox::syscall_broker::COMMAND_OPEN);
    command_set.set(sandbox::syscall_broker::COMMAND_STAT);
@@ -130,7 +131,7 @@ index 2e53794fa3..986d44ab5d 100644
        (options.use_amd_specific_policies ||
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
-@@ -628,9 +659,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+@@ -628,9 +660,9 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
  
    AddVulkanICDPermissions(&permissions);
  
@@ -142,7 +143,7 @@ index 2e53794fa3..986d44ab5d 100644
      if (UseV4L2Codec(options)) {
        AddV4L2GpuPermissions(&permissions, options);
      }
-@@ -643,9 +674,11 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+@@ -643,9 +675,11 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
      }
      if (options.use_amd_specific_policies) {
        AddAmdGpuPermissions(&permissions);
@@ -154,7 +155,7 @@ index 2e53794fa3..986d44ab5d 100644
      }
      if (options.use_nvidia_specific_policies) {
        AddStandardGpuPermissions(&permissions);
-@@ -678,7 +711,7 @@ bool LoadLibrariesForGpu(
+@@ -678,7 +712,7 @@ bool LoadLibrariesForGpu(
    if (IsArchitectureArm()) {
      LoadArmGpuLibraries();
    }
@@ -405,10 +406,34 @@ index c4e4614eb8..288f7f03ea 100644
        return GpuProcessPolicy::EvaluateSyscall(sysno);
    }
 diff --git a/sandbox/policy/linux/bpf_gpu_policy_linux.cc b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-index 5725da248d..1d4d1d60d6 100644
+index 5725da248d..58720e9860 100644
 --- a/sandbox/policy/linux/bpf_gpu_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_gpu_policy_linux.cc
-@@ -80,16 +80,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+@@ -52,22 +52,8 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+       return Error(ENOSYS);
+ #if !BUILDFLAG(IS_CHROMEOS)
+     case __NR_fallocate:
+-      return Allow();
+ #endif  // BUILDFLAG(IS_CHROMEOS)
+-    case __NR_fcntl: {
+-      // The Nvidia driver uses flags not in the baseline policy
+-      // fcntl(fd, F_ADD_SEALS, F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW)
+-      // https://crbug.com/1128175
+-      const Arg<unsigned int> cmd(1);
+-      const Arg<unsigned long> arg(2);
+-
+-      const unsigned long kAllowedMask =
+-          F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW;
+-      BoolExpr add_seals =
+-          AllOf(cmd == F_ADD_SEALS, (arg & ~kAllowedMask) == 0);
+-
+-      return If(add_seals, Allow()).Else(BPFBasePolicy::EvaluateSyscall(sysno));
+-    }
++    case __NR_fcntl:
+     case __NR_fdatasync:
+     case __NR_ftruncate:
+ #if defined(__i386__) || defined(__arm__) || \
+@@ -80,17 +66,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
      case __NR_getdents64:
      case __NR_ioctl:
        return Allow();
@@ -422,10 +447,11 @@ index 5725da248d..1d4d1d60d6 100644
 -    // weird flags were involved.
 -    case __NR_mprotect:
 -      return Allow();
-     // XNNPACK needs mremap when building weight caches.
+-    // XNNPACK needs mremap when building weight caches.
      case __NR_mremap:
        if (mremap_policy_ == MremapPolicy::kAllow) {
-@@ -106,10 +96,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
+         return RestrictMremapFlagsForODML();
+@@ -106,10 +81,6 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
        return RestrictSchedTarget(GetPolicyPid(), sysno);
      case __NR_prlimit64:
        return RestrictPrlimit64(GetPolicyPid());
