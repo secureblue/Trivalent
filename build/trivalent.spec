@@ -641,7 +641,6 @@ cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 %if 0%{?with_selinux}
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %{modulename}.pp.bz2
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/devel/include/distributed selinux/%{modulename}.if
-mkdir -p %{buildroot}%{_datadir}/user-tmpfiles.d
 install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_datadir}/user-tmpfiles.d/%{modulename}-drm-fix-secontexts.conf
 %endif
 
