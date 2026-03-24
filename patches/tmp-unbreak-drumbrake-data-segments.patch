@@ -1,7 +1,7 @@
-diff --git a/src/wasm/interpreter/wasm-interpreter-runtime-inl.h b/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
+diff --git a/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h b/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
 index d47775a2b8b..bd1ea442e0b 100644
---- a/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
-+++ b/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
+--- a/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
++++ b/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
 @@ -92,7 +92,7 @@ inline size_t WasmInterpreterRuntime::GetMemorySize() const {
  }
  
@@ -11,10 +11,10 @@ index d47775a2b8b..bd1ea442e0b 100644
  }
  
  inline void WasmInterpreterRuntime::ElemDrop(uint32_t index) {
-diff --git a/src/wasm/interpreter/wasm-interpreter-runtime.cc b/src/wasm/interpreter/wasm-interpreter-runtime.cc
+diff --git a/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc b/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc
 index 401bf9c181a..8263600cb97 100644
---- a/src/wasm/interpreter/wasm-interpreter-runtime.cc
-+++ b/src/wasm/interpreter/wasm-interpreter-runtime.cc
+--- a/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc
++++ b/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc
 @@ -534,18 +534,20 @@ bool WasmInterpreterRuntime::MemoryInit(const uint8_t*& current_code,
    DirectHandle<WasmTrustedInstanceData> trusted_data =
        wasm_trusted_instance_data();
