@@ -16,7 +16,8 @@ set -oue pipefail
 
 shopt -s nullglob
 
-declare -r build_dir="$(pwd)"
+build_dir="$(pwd)"
+declare -r build_dir
 
 cp /usr/src/chromium/chromium-*-clean.tar.xz "${build_dir}/"
 cp /usr/src/chromium/chromium-version.txt "${build_dir}/"
