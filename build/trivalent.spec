@@ -223,6 +223,7 @@ BuildRequires: nodejs
 BuildRequires:  container-selinux
 BuildRequires:  make
 BuildRequires:  selinux-policy-devel
+BuildRequires:  systemd-rpm-macros
 Recommends:     (%{name}-selinux if selinux-policy-%{selinuxtype})
 %endif
 
@@ -641,7 +642,7 @@ cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 %if 0%{?with_selinux}
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %{modulename}.pp.bz2
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/devel/include/distributed selinux/%{modulename}.if
-install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_datadir}/user-tmpfiles.d/%{modulename}-drm-fix-secontexts.conf
+install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_user_tmpfilesdir}/%{modulename}-drm-fix-secontexts.conf
 %endif
 
 %files
@@ -723,6 +724,6 @@ fi
 %{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.*
 %{_datadir}/selinux/devel/include/distributed/%{modulename}.if
 %ghost %verify(not md5 size mode mtime) %{_selinux_store_path}/%{selinuxtype}/active/modules/200/%{modulename}
-%{_datadir}/user-tmpfiles.d/%{modulename}-drm-fix-secontexts.conf
+%{_user_tmpfilesdir}/%{modulename}-drm-fix-secontexts.conf
 # if with_selinux
 %endif
