@@ -7,7 +7,7 @@ index d47775a2b8b..bd1ea442e0b 100644
  
  inline void WasmInterpreterRuntime::DataDrop(uint32_t index) {
 -  wasm_trusted_instance_data()->data_segment_sizes()->set(index, 0);
-+  wasm_trusted_instance_data()->data_segments->set(index, WireBytesRef{});
++  wasm_trusted_instance_data()->data_segments()->set(index, WireBytesRef{});
  }
  
  inline void WasmInterpreterRuntime::ElemDrop(uint32_t index) {
@@ -26,7 +26,7 @@ index 401bf9c181a..8263600cb97 100644
    if (!BoundsCheckMemRange(dst, &size, &dst_addr) ||
 -      !base::IsInBounds(src, size, src_max)) {
 +      !base::IsInBounds(src, size,
-+	      static_cast<uint64_t>(segment_source.length()))) {
++                        static_cast<uint64_t>(segment_source.length()))) {
      SetTrap(MessageTemplate::kWasmTrapMemOutOfBounds, current_code);
      return false;
    }
