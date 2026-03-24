@@ -696,6 +696,7 @@ Requires:       selinux-policy-%{selinuxtype}
 Requires:       systemd
 Requires(post): selinux-policy-%{selinuxtype}
 Requires(post): systemd
+Recommends:     container-selinux
 BuildArch:      noarch
 %{?selinux_requires_min}
 
