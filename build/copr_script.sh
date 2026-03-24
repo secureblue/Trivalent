@@ -14,37 +14,50 @@
 
 set -oue pipefail
 
-cd Trivalent
-
 shopt -s nullglob
 
-# copy Fedora patches to the build dir
+declare -r build_dir="$(pwd)"
+
+cp /usr/src/chromium/chromium-*-clean.tar.xz "${build_dir}/"
+cp /usr/src/chromium/chromium-version.txt "${build_dir}/"
+
+pushd Trivalent/
+
+pushd build/
+
+# Move all the source files into the parent directory for the COPR build system to find them
+cp ./branding/* "${build_dir}/"
+cp ./install/* "${build_dir}/"
+cp ./selinux/* "${build_dir}/"
+cp ./trivalent.spec "${build_dir}/"
+
+pushd patches/
+
 pushd fedora_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp "${patches[i]}" "../build/fedora-$((i+1000)).patch"
+	mv "${patches[i]}" "${build_dir}/fedora-$((i+1000)).patch"
 done
-popd
+popd #fedora_patches/
 
-# copy Vanadium patches to the build dir
 pushd vanadium_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp "${patches[i]}" "../build/vanadium-$((i+2000)).patch"
+	mv "${patches[i]}" "${build_dir}/vanadium-$((i+2000)).patch"
 done
-popd
+popd #vanadium_patches/
 
-# copy Trivalent patches to the build dir
-pushd patches/
-cp ../translation_patches/register-trivalent-strings.patch ./
-cp ../translation_patches/translations/*.patch ./
+pushd trivalent_patches/
+cp translation_patches/register-trivalent-strings.patch ./
+cp translation_patches/translations/*.patch ./
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp "${patches[i]}" "../build/trivalent-$((i+3000)).patch"
+	cp "${patches[i]}" "${build_dir}/trivalent-$((i+3000)).patch"
 done
-popd
+popd #trivalent_patches/
 
-# Move all the source files into the parent directory for the COPR build system to find them
-cp /usr/src/chromium/chromium-*-clean.tar.xz ../
-cp /usr/src/chromium/chromium-version.txt ../
-mv ./build/* ../
+popd #patches/
+
+popd #build/
+
+popd #Trivalent/

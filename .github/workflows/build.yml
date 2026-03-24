@@ -59,7 +59,7 @@ jobs:
           SOURCE_CACHE_HASH=$(sha256sum /usr/src/chromium/chromium-*.xz)
           echo "SOURCE_CACHE_HASH: ${SOURCE_CACHE_HASH}"
           git clone --branch "${BRANCH}" https://github.com/secureblue/Trivalent.git
-          bash ./Trivalent/copr_script.sh
+          bash ./Trivalent/build/copr_script.sh
           rpmbuild -bs -v --define "_sourcedir $PWD" --define "_rpmdir $PWD" --define "_builddir $PWD" --define "_specdir $PWD" --define "_srcrpmdir $PWD" trivalent.spec
           SRPM_HASH=$(sha256sum *.rpm)
           echo "SRPM_HASH: ${SRPM_HASH}"
