@@ -160,9 +160,6 @@ files_rw_generic_tmp_sockets(trivalent_domain)
 files_rw_tmp_file_leaks(trivalent_domain)
 files_map_generic_tmp_files(trivalent_domain)
 
-# copy/pasting to distrobox apps
-container_spc_rw_pipes(trivalent_domain)
-
 # memory pressure
 kernel_read_psi(trivalent_domain)
 kernel_read_kernel_sysctls(trivalent_domain)
@@ -279,6 +276,11 @@ storage_getattr_fixed_disk_dev(trivalent_domain)
 
 optional_policy(`
 	bluetooth_dbus_chat(trivalent_domain)
+')
+
+optional_policy(`
+	# copy/pasting to distrobox apps
+	container_spc_rw_pipes(trivalent_domain)
 ')
 
 allow trivalent_script_domain trivalent_domain:dir { getattr search };

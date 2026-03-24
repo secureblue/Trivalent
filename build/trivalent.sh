@@ -12,7 +12,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-set -ue
+set -ueo pipefail
 
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
 shopt -s nullglob
@@ -22,7 +22,7 @@ declare -rx LD_LIBRARY_PATH=""
 declare -rx LD_AUDIT=""
 declare -rx LD_PROFILE=""
 declare -rx PATH="/usr/bin:/bin"
-declare -rx HOME="$HOME"
+declare -rx HOME="${HOME}"
 declare -rx XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-}"
 declare -rx XAUTHORITY="${XAUTHORITY:-}"
 declare -rx DISPLAY="${DISPLAY:-}"
@@ -52,7 +52,7 @@ declare -rx CHROME_VERSION_EXTRA="Built from source for @@BUILD_TARGET@@"
 declare -rx GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME
 
 # Let the wrapped binary know that it has been run through the wrapper.
-CHROME_WRAPPER=$(readlink -f "$0")
+CHROME_WRAPPER=$(readlink -f "${0}")
 declare -rx CHROME_WRAPPER
 HERE="${CHROME_WRAPPER%/*}"
 declare -r HERE
@@ -63,14 +63,17 @@ declare USE_VULKAN="${USE_VULKAN:-false}"
 # USE_WAYLAND=[true|false|unknown]
 declare USE_WAYLAND="${USE_WAYLAND:-}"
 
+# USE_SINGLETON_WORKAROUND=[true|false]
+declare USE_SINGLETON_WORKAROUND="${USE_SINGLETON_WORKAROUND:-false}"
+
 declare FEATURES=""
 declare CHROMIUM_FLAGS=""
 
 # obtain extra flags that are likely user-configured
-if [[ -d "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d" ]]; then
-  for conf_file in "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf.d"/*.conf; do
+if [[ -d "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf.d" ]]; then
+  for conf_file in "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf.d"/*.conf; do
     # shellcheck source=/etc/trivalent/trivalent.conf.d/99-example.conf
-    source "$conf_file"
+    source "${conf_file}"
   done
 fi
 
@@ -78,26 +81,26 @@ fi
 declare -rix BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:-0}"
 
 function logecho () {
-  local -ri level=$1
-  if [[ $BROWSER_LOG_LEVEL -ge $level ]]; then
-    echo "$2"
+  local -ri level=${1}
+  if [[ ${BROWSER_LOG_LEVEL} -ge ${level} ]]; then
+    echo "${2}"
   fi
 }
 
 # obtain chromium flags from system file
 # shellcheck source=build/trivalent.conf
 declare CHROMIUM_SYSTEM_FLAGS=""
-if [[ -f "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf" ]]; then
+if [[ -f "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf" ]]; then
   # shellcheck source=build/trivalent.conf
-  source "/etc/$CHROMIUM_NAME/$CHROMIUM_NAME.conf"
+  source "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf"
 fi
 
-declare -r CHROMIUM_ALL_FLAGS="$CHROMIUM_FLAGS $CHROMIUM_SYSTEM_FLAGS"
+declare -r CHROMIUM_ALL_FLAGS="${CHROMIUM_FLAGS} ${CHROMIUM_SYSTEM_FLAGS}"
 
 # desktop integration
-declare -r xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}"
-mkdir -p "$xdg_app_dir"
-[[ -f "$xdg_app_dir/mimeapps.list" ]] || touch "$xdg_app_dir/mimeapps.list"
+declare -r xdg_app_dir="${XDG_DATA_HOME:-${HOME}/.local/share/applications}"
+mkdir -p "${xdg_app_dir}"
+[[ -f "${xdg_app_dir}/mimeapps.list" ]] || touch "${xdg_app_dir}/mimeapps.list"
 
 # Check if Trivalent's subresource filter is installed,
 # if so runs the installer
@@ -105,12 +108,15 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
-# Fix Singleton process locking if the browser isn't running and the singleton files are present
-if ! pgrep -ax -U "$(id -ru)" "$CHROMIUM_NAME" | grep -Fq " --type=zygote" && compgen -G "$HOME/.config/$CHROMIUM_NAME/Singleton*" > /dev/null; then
-  logecho 1 "Ruh roh! This shouldn't be here..."
-  rm "$HOME/.config/$CHROMIUM_NAME/Singleton"*
-else
-  logecho 1 "A process is already open in this directory or Singleton process files are not present."
+# The singleton workaround has been causing issues for some time, so we are disabling it by default for now
+if [[ "${USE_SINGLETON_WORKAROUND}" == "true" ]]; then
+  # Fix Singleton process locking if the browser isn't running and the singleton files are present
+  if ! pgrep -ax -U "$(id -ru)" "${CHROMIUM_NAME}" | grep -Fq " --type=zygote" && compgen -G "${HOME}/.config/${CHROMIUM_NAME}/Singleton*" > /dev/null; then
+    logecho 1 "Ruh roh! This shouldn't be here..."
+    rm "${HOME}/.config/${CHROMIUM_NAME}/Singleton"*
+  else
+    logecho 1 "A process is already open in this directory or Singleton process files are not present."
+  fi
 fi
 
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
@@ -121,7 +127,7 @@ BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very co
 if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will error out
   BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
 fi
-BWRAP_ARGS+=" --bind $TMPFS_CACHE_DIR $HOME/.cache" # avoid issues with other applications messing with cache
+BWRAP_ARGS+=" --bind ${TMPFS_CACHE_DIR} ${HOME}/.cache" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
 # Do this at the end so that everything else still gets hardened_malloc
@@ -134,4 +140,4 @@ exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
 # shellcheck disable=SC2086
-exec bwrap $BWRAP_ARGS -- "$HERE/$CHROMIUM_NAME" $CHROMIUM_ALL_FLAGS "$@"
+exec bwrap ${BWRAP_ARGS} -- "${HERE}/${CHROMIUM_NAME}" ${CHROMIUM_ALL_FLAGS} "${@}"
