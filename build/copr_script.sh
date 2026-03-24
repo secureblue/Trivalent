@@ -37,14 +37,14 @@ pushd patches/
 pushd fedora_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	mv "${patches[i]}" "${build_dir}/fedora-$((i+1000)).patch"
+	cp "${patches[i]}" "${build_dir}/fedora-$((i+1000)).patch"
 done
 popd #fedora_patches/
 
 pushd vanadium_patches/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	mv "${patches[i]}" "${build_dir}/vanadium-$((i+2000)).patch"
+	cp "${patches[i]}" "${build_dir}/vanadium-$((i+2000)).patch"
 done
 popd #vanadium_patches/
 
