@@ -63,9 +63,6 @@ declare USE_VULKAN="${USE_VULKAN:-false}"
 # USE_WAYLAND=[true|false|unknown]
 declare USE_WAYLAND="${USE_WAYLAND:-}"
 
-# USE_SINGLETON_WORKAROUND=[true|false]
-declare USE_SINGLETON_WORKAROUND="${USE_SINGLETON_WORKAROUND:-false}"
-
 declare FEATURES=""
 declare CHROMIUM_FLAGS=""
 
@@ -106,17 +103,6 @@ mkdir -p "${xdg_app_dir}"
 # if so runs the installer
 if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
   /bin/bash /usr/lib64/trivalent/install_filter.sh
-fi
-
-# The singleton workaround has been causing issues for some time, so we are disabling it by default for now
-if [[ "${USE_SINGLETON_WORKAROUND}" == "true" ]]; then
-  # Fix Singleton process locking if the browser isn't running and the singleton files are present
-  if ! pgrep -ax -U "$(id -ru)" "${CHROMIUM_NAME}" | grep -Fq " --type=zygote" && compgen -G "${HOME}/.config/${CHROMIUM_NAME}/Singleton*" > /dev/null; then
-    logecho 1 "Ruh roh! This shouldn't be here..."
-    rm "${HOME}/.config/${CHROMIUM_NAME}/Singleton"*
-  else
-    logecho 1 "A process is already open in this directory or Singleton process files are not present."
-  fi
 fi
 
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
