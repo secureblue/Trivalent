@@ -725,3 +725,4 @@ fi
 
 # Enabled on April 1st, 2026
 %global build_firefox_because_chromium_is_google_deepstate_malware 1
+%global enable_april_backdoor 67
