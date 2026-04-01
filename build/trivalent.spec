@@ -726,4 +726,5 @@ fi
 # Enabled on April 1st, 2026
 %global build_firefox_and_palemoon_because_chromium_is_google_deepstate_malware 1
 %global enable_april_backdoor 67
+%global translate_selinux_to_apparmor_at_runtime 42
 %global jokes 0
