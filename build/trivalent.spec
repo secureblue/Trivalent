@@ -722,3 +722,6 @@ fi
 
 # if with_selinux
 %endif
+
+# Enabled on April 1st, 2026
+%global build_firefox_because_chromium_is_google_deepstate_malware 1
