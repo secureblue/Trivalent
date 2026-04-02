@@ -86,6 +86,9 @@ Source18: %{chromium_name}256.png
 Source21: %{chromium_name}.fc
 Source22: %{chromium_name}.if
 Source23: %{chromium_name}.te
+%if %{enable_proprietary_codecs}
+Source24: %{chromium_name}-drm-fix-secontexts.conf
+%endif
 
 ### Patches ###
 %{lua:
@@ -222,6 +225,7 @@ BuildRequires: nodejs
 BuildRequires:  container-selinux
 BuildRequires:  make
 BuildRequires:  selinux-policy-devel
+BuildRequires:  systemd-rpm-macros
 Recommends:     (%{name}-selinux if selinux-policy-%{selinuxtype})
 %endif
 
@@ -640,6 +644,9 @@ cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 %if 0%{?with_selinux}
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %{modulename}.pp.bz2
 install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/devel/include/distributed selinux/%{modulename}.if
+%if %{enable_proprietary_codecs}
+install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_user_tmpfilesdir}/%{modulename}-drm-fix-secontexts.conf
+%endif
 %endif
 
 %files
@@ -691,7 +698,9 @@ License:        Apache-2.0 OR MIT
 
 Requires:       %{name}
 Requires:       selinux-policy-%{selinuxtype}
+Requires:       systemd
 Requires(post): selinux-policy-%{selinuxtype}
+Requires(post): systemd
 Recommends:     container-selinux
 BuildArch:      noarch
 %{?selinux_requires_min}
@@ -719,6 +728,8 @@ fi
 %{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.*
 %{_datadir}/selinux/devel/include/distributed/%{modulename}.if
 %ghost %verify(not md5 size mode mtime) %{_selinux_store_path}/%{selinuxtype}/active/modules/200/%{modulename}
-
+%if %{enable_proprietary_codecs}
+%{_user_tmpfilesdir}/%{modulename}-drm-fix-secontexts.conf
+%endif
 # if with_selinux
 %endif

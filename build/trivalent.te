@@ -19,6 +19,24 @@ policy_module(trivalent, 1.0.0)
 ## </desc>
 gen_tunable(trivalent_rwmap_video_dev, true)
 
+## <desc>
+## <p>
+## Allow chromium to execute flatpaks
+## </p>
+## <p>
+## Needed for extensions to be able to interact with certain flatpaks like keepassxc
+## </p>
+## </desc>
+gen_tunable(trivalent_exec_flatpaks, true)
+
+## <desc>
+## <p>
+## Allow Trivalent to play DRM protected content
+## which implies executing writable files.
+## </p>
+## </desc>
+gen_tunable(trivalent_drm, true)
+
 attribute_role trivalent_roles;
 
 attribute trivalent_domain;
@@ -29,6 +47,10 @@ application_executable_file(trivalent_exec_t)
 
 type trivalent_home_t;
 userdom_user_home_content(trivalent_home_t)
+
+# Widevine CDM library file (DRM)
+type trivalent_home_cdm_lib_t;
+userdom_user_home_content(trivalent_home_cdm_lib_t)
 
 type trivalent_script_exec_t;
 application_executable_file(trivalent_script_exec_t)
@@ -71,7 +93,6 @@ tunable_policy(`deny_ptrace',`',`
 	allow trivalent_domain self:process ptrace;
 ')
 allow trivalent_domain self:dir { manage_dir_perms };
-allow trivalent_domain self:file { manage_file_perms execute map };
 allow trivalent_domain self:lnk_file { manage_lnk_file_perms };
 allow trivalent_domain self:fifo_file rw_fifo_file_perms;
 allow trivalent_domain self:sem create_sem_perms;
@@ -85,12 +106,14 @@ allow trivalent_domain self:socket_class_set create_socket_perms;
 allow trivalent_domain self:tcp_socket { accept listen };
 allow trivalent_domain trivalent_exec_t:file execute_no_trans;
 allow trivalent_domain chrome_sandbox_home_t:dir { manage_dir_perms };
-allow trivalent_domain chrome_sandbox_home_t:file { manage_file_perms execute map };
+allow trivalent_domain chrome_sandbox_home_t:file { manage_file_perms map };
 allow trivalent_domain chrome_sandbox_home_t:lnk_file { manage_lnk_file_perms };
 allow trivalent_domain trivalent_home_t:dir { manage_dir_perms };
-allow trivalent_domain trivalent_home_t:file { manage_file_perms execute map };
+allow trivalent_domain trivalent_home_t:file { manage_file_perms map };
 allow trivalent_domain trivalent_home_t:lnk_file { manage_lnk_file_perms };
 allow trivalent_domain self:netlink_route_socket { nlmsg_read nlmsg_write };
+manage_files_pattern(trivalent_domain, trivalent_home_t, trivalent_home_cdm_lib_t)
+
 
 # not covered by interfaces
 allow trivalent_domain fonts_cache_t:dir mounton;
@@ -131,7 +154,17 @@ optional_policy(`
 # 	flatpak_read_apps(trivalent_domain)
 # 	flatpak_exec_apps(trivalent_domain)
 # ')
-allow trivalent_domain data_home_t:file { execute execute_no_trans };
+tunable_policy(`trivalent_exec_flatpaks', `
+	gen_require(`
+		type data_home_t;
+	')
+	exec_files_pattern(trivalent_domain, data_home_t, data_home_t)
+	read_lnk_files_pattern(trivalent_domain, data_home_t, data_home_t)
+')
+
+tunable_policy(`trivalent_drm', `
+	mmap_exec_files_pattern(trivalent_domain, trivalent_home_t, trivalent_home_cdm_lib_t)
+')
 
 # allow trivalent to own its mpris daemon
 dbus_connect_session_bus(trivalent_domain)
@@ -222,11 +255,8 @@ gnome_search_gconf_data_dir(trivalent_domain)
 gnome_manage_cache_home_dir(trivalent_domain)
 gnome_manage_generic_cache_files(trivalent_domain)
 gnome_manage_generic_cache_sockets(trivalent_domain)
-gnome_map_generic_cache_files(trivalent_domain)
 gnome_manage_home_config(trivalent_domain)
-gnome_exec_config_home_files(trivalent_domain)
 gnome_manage_home_config_dirs(trivalent_domain)
-gnome_manage_data(trivalent_domain)
 gnome_manage_generic_home_files(trivalent_domain)
 gnome_manage_generic_home_dirs(trivalent_domain)
 gnome_map_generic_data_home_files(trivalent_domain)
