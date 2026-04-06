@@ -128,19 +128,19 @@ index dc2fed7651..d1956d42ce 100644
    kShowHistoryCluster,
    kShowReadAnything,
 diff --git a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
-index 1b91f821cb..a26ffc1543 100644
+index c442fa1941..db6ef82436 100644
 --- a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
 +++ b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
-@@ -38,6 +38,8 @@ namespace {
+@@ -40,6 +40,8 @@ namespace {
  std::optional<side_panel::customize_chrome::mojom::ActionId>
  MojoActionForChromeAction(actions::ActionId action_id) {
    switch (action_id) {
-+    case kActionWebsiteDarkmode:
++    case kkActionWebsiteDarkmode:
 +      return side_panel::customize_chrome::mojom::ActionId::kWebsiteDarkmode;
      case kActionSidePanelShowBookmarks:
        return side_panel::customize_chrome::mojom::ActionId::kShowBookmarks;
      case kActionSidePanelShowHistoryCluster:
-@@ -100,6 +102,8 @@ MojoActionForChromeAction(actions::ActionId action_id) {
+@@ -102,6 +104,8 @@ MojoActionForChromeAction(actions::ActionId action_id) {
  std::optional<actions::ActionId> ChromeActionForMojoAction(
      side_panel::customize_chrome::mojom::ActionId action_id) {
    switch (action_id) {
@@ -155,9 +155,9 @@ index 1b91f821cb..a26ffc1543 100644
               side_panel::customize_chrome::mojom::CategoryId::kYourChrome);
 +  add_action(kActionWebsiteDarkmode,
 +             side_panel::customize_chrome::mojom::CategoryId::kYourChrome);
-
-   if (features::HasTabSearchToolbarButton()) {
-     add_action(kActionTabSearch,
+ 
+   if (!base::FeatureList::IsEnabled(tabs::kHorizontalTabStripComboButton) &&
+       features::HasTabSearchToolbarButton()) {
 diff --git a/chrome/app/vector_icons/BUILD.gn b/chrome/app/vector_icons/BUILD.gn
 index 7537afaf13..9c17b4466e 100644
 --- a/chrome/app/vector_icons/BUILD.gn
