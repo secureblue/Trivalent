@@ -135,7 +135,7 @@ index c442fa1941..db6ef82436 100644
  std::optional<side_panel::customize_chrome::mojom::ActionId>
  MojoActionForChromeAction(actions::ActionId action_id) {
    switch (action_id) {
-+    case kkActionWebsiteDarkmode:
++    case kActionWebsiteDarkmode:
 +      return side_panel::customize_chrome::mojom::ActionId::kWebsiteDarkmode;
      case kActionSidePanelShowBookmarks:
        return side_panel::customize_chrome::mojom::ActionId::kShowBookmarks;
