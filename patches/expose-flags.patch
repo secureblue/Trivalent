@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,13 +11,13 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
-index 7613006656aaa..ee707f847ccba 100644
+index bdfa3ed504..9478ea82bc 100644
 --- a/chrome/browser/about_flags.cc
 +++ b/chrome/browser/about_flags.cc
-@@ -4343,6 +4343,69 @@ const FeatureEntry kFeatureEntries[] = {
- // //tools/flags/generate_unexpire_flags.py.
- #include "build/chromeos_buildflags.h"
- #include "chrome/browser/unexpire_flags_gen.inc"
+@@ -4824,6 +4824,69 @@ const FeatureEntry::FeatureVariation kSigninPromoOnAvatarPillVariation[] = {
+ //
+ // When adding a new choice, add it to the end of the list.
+ const FeatureEntry kFeatureEntries[] = {
 +    {"middle-click-autoscroll", "Autoscroll with Middleclick",
 +     "Enables scroll with middleclick. NOTE: Middle-click to paste on sites "
 +     "will be prevented when this feature is enabled. Disabled by default. "
@@ -81,6 +81,6 @@ index 7613006656aaa..ee707f847ccba 100644
 +     "until it becomes more stable. This feature is provided by Trivalent.",
 +     kOsAll, FEATURE_VALUE_TYPE(features::kEnableDrumbrake)},
 +#endif
-     {variations::switches::kEnableBenchmarking,
-      flag_descriptions::kEnableBenchmarkingName,
-      flag_descriptions::kEnableBenchmarkingDescription, kOsAll,
+ // Include generated flags for flag unexpiry; see //docs/flag_expiry.md and
+ // //tools/flags/generate_unexpire_flags.py.
+ #include "build/chromeos_buildflags.h"

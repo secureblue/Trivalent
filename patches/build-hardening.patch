@@ -11,21 +11,22 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 516f7d85fc..60afef1891 100644
+index c092446fa0..46dfacd35a 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -413,14 +413,23 @@ config("compiler") {
+@@ -443,14 +443,24 @@ config("compiler") {
        # On Aarch64, SCS requires the x18 register to be unused because it will hold
        # a pointer to the shadow stack. For Android we know that Clang doesn't use
        # x18 by default. On other OSs adding "-ffixed-x18" might be required.
 -      assert(is_android)
-+      assert(is_linux && target_cpu == "arm64")
-
++      assert((is_linux || is_android) && target_cpu == "arm64")
+ 
        scs_parameters = [
          "-fsanitize=shadow-call-stack",
 -        "-fno-stack-protector",
 +        "-fstack-protector-strong",
        ]
++
 +      rs_scs_params = [
 +        #"-Zsanitizer=shadow-call-stack",
 +        "-Zstack-protector=strong",
@@ -40,7 +41,7 @@ index 516f7d85fc..60afef1891 100644
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
-@@ -435,11 +444,19 @@ config("compiler") {
+@@ -465,10 +475,17 @@ config("compiler") {
        } else if (is_posix || is_fuchsia) {
          if (current_os != "aix") {
            # Not available on aix.
@@ -50,29 +51,27 @@ index 516f7d85fc..60afef1891 100644
          }
        }
      }
-
 +    if (is_linux) {
 +      cflags += [
 +        "-fstack-clash-protection",
 +        "-mharden-sls=all",
 +      ]
 +    }
-+
-     if (use_lld) {
-       ldflags += [ "-fuse-ld=lld" ]
-       if (lld_path != "") {
-@@ -2305,7 +2322,7 @@ config("chromium_code") {
+   }
+ 
+   # Non-Apple Posix and Fuchsia compiler flags setup.
+@@ -2406,7 +2423,7 @@ config("chromium_code") {
        # Non-chromium code is not guaranteed to compile cleanly with
        # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
        # disabled, so only do that for Release build.
 -      fortify_level = "2"
 +      fortify_level = "3"
-
+ 
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3331,8 +3348,14 @@ buildflag_header("compiler_buildflags") {
+@@ -3474,8 +3491,14 @@ buildflag_header("compiler_buildflags") {
  }
-
+ 
  config("cet_shadow_stack") {
 -  if (enable_cet_shadow_stack && is_win) {
 +  if (enable_cet_shadow_stack) {

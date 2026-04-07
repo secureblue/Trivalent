@@ -538,7 +538,7 @@ index 3cb9e3af7a..12b7f1fa3b 100644
          </a>
          <a role="menuitem" id="autofill" href="/autofill"
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
-index 7b4808a0ff..18ab3b96b1 100644
+index ba2e1af7b1..7e490f818a 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
 +++ b/chrome/browser/resources/settings/system_page/system_page.html
 @@ -27,6 +27,12 @@
@@ -551,7 +551,7 @@ index 7b4808a0ff..18ab3b96b1 100644
 +        label="$i18n{printingCapabilities}">
 +    </settings-toggle-button>
 +</if>
-   <if expr="_google_chrome">
+ <if expr="_google_chrome">
      <!-- On device AI settings -->
      <template is="dom-if" if="[[showOnDeviceAiSettings_]]" restamp>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
