@@ -70,39 +70,6 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlD",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlD, base::FEATURE_ENABLED_BY_DEFAULT),
-            MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
--               DohProviderCloudflareFamily, base::FEATURE_DISABLED_BY_DEFAULT),
-+               DohProviderCloudflareFamily, base::FEATURE_ENABLED_BY_DEFAULT),
-            {"1.1.1.3", "1.0.0.3", "2606:4700:4700::1113",
-             "2606:4700:4700::1003"},
-            {"family.cloudflare-dns.com"},
-            "https://family.cloudflare-dns.com/dns-query",
-            /*ui_name=*/"",
-            /*privacy_policy=*/"",
--           /*display_globally=*/false,
-+           /*display_globally=*/true,
-            /*display_countries=*/{},
-        },
-        {
-            "CloudflareSecurity",
-            MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
-                DohProviderCloudflareSecurity,
--               base::FEATURE_DISABLED_BY_DEFAULT),
-+               base::FEATURE_ENABLED_BY_DEFAULT),
-            {"1.1.1.2", "1.0.0.2", "2606:4700:4700::1112",
-             "2606:4700:4700::1002"},
-            {"security.cloudflare-dns.com"},
-            "https://security.cloudflare-dns.com/dns-query",
-            /*ui_name=*/"",
-            /*privacy_policy=*/"",
-+           /*display_globally=*/true,
-+           /*display_countries=*/{},
-+      },
-+      // Source for Control D IP addresses and hostnames/URLs: https://controld.com/free-dns
-+      {
-+           "ControlD",
-+           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
-+               DohProviderControlD, base::FEATURE_ENABLED_BY_DEFAULT),
 +           {"76.76.2.0", "76.76.10.0", "2606:1a40::", "2606:1a40:1::"},
 +           /*dns_over_tls_hostnames=*/{"p0.freedns.controld.com"},
 +           "https://freedns.controld.com/p0",
