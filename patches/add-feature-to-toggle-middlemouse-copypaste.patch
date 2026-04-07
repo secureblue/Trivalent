@@ -10,30 +10,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/ui/views/selection_controller.h b/ui/views/selection_controller.h
-index dcc4d40592932..f9a9b002bd956 100644
---- a/ui/views/selection_controller.h
-+++ b/ui/views/selection_controller.h
-@@ -5,6 +5,10 @@
- #ifndef UI_VIEWS_SELECTION_CONTROLLER_H_
- #define UI_VIEWS_SELECTION_CONTROLLER_H_
- 
-+// Needed features for middle click controls
-+#include "ui/views/views_features.h"
-+#include "third_party/blink/public/common/features_generated.h"
-+
- #include "base/memory/raw_ptr.h"
- #include "base/time/time.h"
- #include "base/timer/timer.h"
-@@ -61,7 +65,8 @@ class VIEWS_EXPORT SelectionController {
-   // Sets whether the SelectionController should update or paste the
-   // selection clipboard on middle-click. Default is false.
-   void set_handles_selection_clipboard(bool value) {
--    handles_selection_clipboard_ = value;
-+    handles_selection_clipboard_ = value &&
-+          base::FeatureList::IsEnabled(features::kMiddleClickCopyPaste);
-   }
- 
    // Offsets the double-clicked word's range. This is only used in the unusual
 diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
 index 88ca7f0b1f..14be7e5a3a 100644
