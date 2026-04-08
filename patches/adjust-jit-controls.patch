@@ -11,25 +11,49 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 900df063b8..287de90eb1 100644
+index 25458578a8..5a59d3f789 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -7761,10 +7761,10 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -7884,7 +7884,7 @@ ChromeContentBrowserClient::ShouldOverrideLocalNetworkAccessRequestPolicy(
+ #if BUILDFLAG(IS_ANDROID)
+   if (base::android::device_info::is_automotive()) {
+     return content::ContentBrowserClient::
+-        LocalNetworkAccessRequestPolicyOverride::kBlockInsteadOfWarn;
++        LocalNetworkAccessReq// Only disable optimizationsuestPolicyOverride::kBlockInsteadOfWarn;
+   }
+ #endif
+ 
+@@ -7905,20 +7905,19 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+     const GURL& site_url) {
+   Profile* profile = Profile::FromBrowserContext(browser_context);
+   auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
++  // Disable JIT & WASM for non-(web|file|extension) schemes.
++  if (!map || !(site_url.SchemeIsHTTPOrHTTPS() || site_url.SchemeIsFile()
++      || site_url.SchemeIs("chrome-extension") || site_url.SchemeIs("devtools")))
++    return true;
++
+   // Special case to determine if any policy is set.
+-  if (map && site_url.is_empty()) {
++  if (site_url.is_empty()) {
+     return map->GetDefaultContentSetting(ContentSettingsType::JAVASCRIPT_JIT,
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
- 
+-
 -  // Only disable JIT for web schemes.
 -  if (!site_url.SchemeIsHTTPOrHTTPS()) {
 -    return false;
 -  }
-+  // Disable JIT & WASM for non-(web|file|extension) schemes.
-+  if (!site_url.SchemeIsHTTPOrHTTPS() && !site_url.SchemeIsFile()
-+      && !site_url.SchemeIs("chrome-extension") && !site_url.SchemeIs("devtools"))
-+    return true;
+-
+-  return (map && map->GetContentSetting(site_url, site_url,
+-                                        ContentSettingsType::JAVASCRIPT_JIT) ==
+-                     CONTENT_SETTING_BLOCK);
++  return map->GetContentSetting(site_url, site_url,
++                                       ContentSettingsType::JAVASCRIPT_JIT) ==
++                     CONTENT_SETTING_BLOCK;
+ }
  
-   return (map && map->GetContentSetting(site_url, site_url,
-                                         ContentSettingsType::JAVASCRIPT_JIT) ==
-@@ -7776,18 +7776,10 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
+ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
+@@ -7926,18 +7925,10 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
      const std::optional<base::SafeRef<content::ProcessSelectionUserData>>&
          process_selection_user_data,
      const GURL& site_url) {
@@ -49,6 +73,90 @@ index 900df063b8..287de90eb1 100644
    }
  
    if (site_url.is_empty()) {
+@@ -7947,75 +7938,14 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
+     // familiarity or site-specific settings cannot be considered here, because
+     // the process will be shared among many sites.
+     return map->GetDefaultContentSetting(
+-               ContentSettingsType::JAVASCRIPT_OPTIMIZER, nullptr) !=
+-           CONTENT_SETTING_BLOCK;
+-  }
+-
+-  content_settings::SettingInfo content_setting_info;
+-  ContentSetting site_content_setting = map->GetContentSetting(
+-      site_url, site_url, ContentSettingsType::JAVASCRIPT_OPTIMIZER,
+-      &content_setting_info);
+-
+-  // `default_javascript_optimizer_setting` is determined based on the user's
+-  // selection in chrome://settings, whether the site-familiarity-feature is
+-  // enabled, and enterprise policy. `default_javascript_optimizer_setting`
+-  // ignores content setting exceptions. "Disable v8 optimizers for unfamiliar
+-  // sites" cannot be applied via content-setting exceptions or enterprise
+-  // policy; it can only be enabled globally via
+-  // `default_javascript_optimizer_setting`.
+-  JavascriptOptimizerSetting default_javascript_optimizer_setting =
+-      site_protection::ComputeDefaultJavascriptOptimizerSetting(profile);
+-  // Invariant guaranteed by ComputeDefaultJavascriptOptimizerSetting().
+-  CHECK(default_javascript_optimizer_setting !=
+-            JavascriptOptimizerSetting::kBlockedForUnfamiliarSites ||
+-        content_setting_info.source == content_settings::SettingSource::kUser);
+-
+-  if (default_javascript_optimizer_setting !=
+-      JavascriptOptimizerSetting::kBlockedForUnfamiliarSites) {
+-    // If site familiarity is turned off, use content settings to set v8
+-    // optimization. Use `site_content_setting` to honor exceptions for specific
+-    // sites over a default policy that applies to all sites.
+-    return site_content_setting == CONTENT_SETTING_ALLOW;
+-  }
+-
+-  if (content_setting_info.primary_pattern !=
+-          ContentSettingsPattern::Wildcard() ||
+-      content_setting_info.secondary_pattern !=
+-          ContentSettingsPattern::Wildcard()) {
+-    // There is a site-specific rule. The rule has precedence over
+-    // kBlockedForUnfamiliarSites.
+-    return site_content_setting == CONTENT_SETTING_ALLOW;
+-  }
+-
+-  // At this point, "block for unfamiliar sites" is turned on, and site-specific
+-  // exceptions have been handled by the Wildcard() check above, so
+-  // `site_content_setting` must reflect the default content setting. Enforce
+-  // that "block for unfamiliar sites" can only be turned on when that default
+-  // content setting is set to "Allow". If it was set to "Blocked",
+-  // default_javascript_optimizer_setting would have also been "Blocked" rather
+-  // than "Blocked for unfamiliar sites".
+-  CHECK_EQ(site_content_setting, CONTENT_SETTING_ALLOW);
+-
+-  const site_protection::SiteFamiliarityProcessSelectionUserData*
+-      site_familiarity_user_data = nullptr;
+-  if (process_selection_user_data) {
+-    site_familiarity_user_data =
+-        site_protection::SiteFamiliarityProcessSelectionUserData::
+-            FromProcessSelectionUserData(*process_selection_user_data);
+-  }
+-
+-  // Lookup site-familiarity previously computed for this navigation by
+-  // SiteFamiliarityProcessSelectionDeferringCondition.
+-  // For now, enable v8 optimizations if there is no site_familiarity_user_data.
+-  // This might be called when creating a SiteInstance and process for a new
+-  // speculative RenderFrameHost, when the navigation is just starting and site
+-  // familiarity hasn't been computed yet. When the navigation receives a
+-  // response, this will be called a second time to determine the final
+-  // SiteInstance and process, and site familiarity should be available then.
+-  // TODO(https://issues.chromium.org/452130797): Determine desired behavior
+-  // for speculative RenderFrameHosts.
+-  return !site_familiarity_user_data ||
+-         site_familiarity_user_data->is_site_familiar();
++               ContentSettingsType::JAVASCRIPT_OPTIMIZER, nullptr) ==
++           CONTENT_SETTING_ALLOW;
++  }
++
++  return map->GetContentSetting(site_url, site_url,
++                                       ContentSettingsType::JAVASCRIPT_OPTIMIZER) ==
++                     CONTENT_SETTING_ALLOW
++         || IsJitDisabledForSite(browser_context, site_url);
+ }
+ 
+ bool ChromeContentBrowserClient::DisallowV8FeatureFlagOverridesForSite(
 diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
 index 512feca6fa..821a9254a0 100644
 --- a/content/browser/renderer_host/render_process_host_impl.cc
