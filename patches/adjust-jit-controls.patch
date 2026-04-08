@@ -14,15 +14,6 @@ diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/ch
 index 25458578a8..5a59d3f789 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -7884,7 +7884,7 @@ ChromeContentBrowserClient::ShouldOverrideLocalNetworkAccessRequestPolicy(
- #if BUILDFLAG(IS_ANDROID)
-   if (base::android::device_info::is_automotive()) {
-     return content::ContentBrowserClient::
--        LocalNetworkAccessRequestPolicyOverride::kBlockInsteadOfWarn;
-+        LocalNetworkAccessReq// Only disable optimizationsuestPolicyOverride::kBlockInsteadOfWarn;
-   }
- #endif
- 
 @@ -7905,20 +7905,19 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
      const GURL& site_url) {
    Profile* profile = Profile::FromBrowserContext(browser_context);
