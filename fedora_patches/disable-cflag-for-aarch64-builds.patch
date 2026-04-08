@@ -1,8 +1,22 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 3caedebb1d279..dd384a47f73e0 100644
+index c092446fa0715..c22987de09be2 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -1855,18 +1855,6 @@ config("sanitize_c_array_bounds") {
+@@ -613,13 +613,6 @@ config("compiler") {
+       ]
+     }
+ 
+-    # The performance improvement does not seem worth the risk. See
+-    # https://crbug.com/484082200 for background and https://crrev.com/c/7593035
+-    # for discussion.
+-    if (!is_wasm) {
+-      cflags += [ "-fno-lifetime-dse" ]
+-    }
+-
+     # TODO(hans): Remove this once Clang generates better optimized debug info
+     # by default. https://crbug.com/765793
+     cflags += [
+@@ -1880,18 +1873,6 @@ config("sanitize_c_array_bounds") {
      cflags = [
        "-fsanitize=array-bounds",
        "-fsanitize-trap=array-bounds",
