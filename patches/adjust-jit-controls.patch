@@ -60,7 +60,7 @@ index 25458578a8..5a59d3f789 100644
    auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
    if (!map) {
 -    return true;
-+    return !IsJitDisabledForSite(browser_context, site_url);
++    return !IsJitDisabledForSite(browser_context, site_url.is_empty() ? GURL() : site_url);
    }
  
    if (site_url.is_empty()) {
