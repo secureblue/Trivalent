@@ -138,7 +138,7 @@ index 25458578a8..5a59d3f789 100644
 -  return !site_familiarity_user_data ||
 -         site_familiarity_user_data->is_site_familiar();
 +               ContentSettingsType::JAVASCRIPT_OPTIMIZER, nullptr) ==
-+           CONTENT_SETTING_ALLOW;
++           CONTENT_SETTING_ALLOW || IsJitDisabledForSite(browser_context, GURL());
 +  }
 +
 +  return map->GetContentSetting(site_url, site_url,
