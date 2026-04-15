@@ -43,7 +43,7 @@ jobs:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:43@sha256:b8f499bee9c97c7c1be0ff7b8b6e4ab72af4216c30d2365c9d474ce2d5c5fd9a' || 'fedora:43@sha256:b5bf856429ce79986e9d80bf58766f6d5b7fad6dab717314539cb7cd0e280f45' }}
     steps:
       - name: Enable egress auditing
-        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d # v2.16.1
+        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df # v2.18.0
         with:
           egress-policy: audit
 
@@ -83,7 +83,7 @@ jobs:
       options: --privileged
     steps:
       - name: Enable egress auditing
-        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d # v2.16.1
+        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df # v2.18.0
         with:
           egress-policy: audit
 
@@ -142,7 +142,7 @@ jobs:
       hashes: ${{ steps.sign.outputs.hashes }}
     steps:
       - name: Enable egress auditing
-        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d # v2.16.1
+        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df # v2.18.0
         with:
           egress-policy: audit
 
