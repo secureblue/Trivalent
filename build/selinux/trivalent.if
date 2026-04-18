@@ -95,12 +95,15 @@ template(`trivalent_role_template',`
 #
 interface(`trivalent_filetrans_home_content',`
 	gen_require(`
+		type trivalent_data_home_t;
+		type trivalent_home_cdm_lib_t;
 		type trivalent_home_t;
 	')
 
 	optional_policy(`
 		gnome_config_filetrans($1, trivalent_home_t, dir, "trivalent")
 		gnome_cache_filetrans($1, trivalent_home_t, dir, "trivalent")
+		gnome_data_filetrans($1, trivalent_data_home_t, file)
 		filetrans_pattern($1, trivalent_home_t, trivalent_home_cdm_lib_t, file, "libwidevinecdm.so")
 	')
 ')
