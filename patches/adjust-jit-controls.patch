@@ -10,6 +10,24 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/chrome/browser/ui/browser_actions.cc b/chrome/browser/ui/browser_actions.cc
+index 99e795a3f9..98d2a604d3 100644
+--- a/chrome/browser/ui/browser_actions.cc
++++ b/chrome/browser/ui/browser_actions.cc
+@@ -426,13 +426,7 @@ void BrowserActions::InitializeBrowserActions() {
+             .SetTooltipText(l10n_util::GetStringUTF16(
+                 IDS_JS_OPTIMIZATIONS_DISABLED_ICON_TOOLTIP))
+             .SetImage(ui::ImageModel::FromVectorIcon(
+-#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+                 vector_icons::kV8OffIcon,
+-#else
+-                // TODO(crbug.com/457422266): Figure out which icon to use for
+-                // non-branded builds.
+-                vector_icons::kCodeIcon,
+-#endif
+                 ui::kColorIcon, ui::SimpleMenuModel::kDefaultIconSize))
+             .SetEnabled(true)
+             .Build());
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
 index 25458578a8..5a59d3f789 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
