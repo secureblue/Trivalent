@@ -70,7 +70,7 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlD",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlD, base::FEATURE_ENABLED_BY_DEFAULT),
-+           {"76.76.2.0", "76.76.10.0", "2606:1a40::", "2606:1a40:1::"},
++           {"76.76.2.0", "76.76.10.0", "2606:1a40::", "2606:1a40:1::", "76.76.2.11", "2606:1a40::11"},
 +           /*dns_over_tls_hostnames=*/{"p0.freedns.controld.com"},
 +           "https://freedns.controld.com/p0",
 +           /*ui_name=*/"",
@@ -82,7 +82,7 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlDMalware",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlDMalware, base::FEATURE_ENABLED_BY_DEFAULT),
-+           {"76.76.2.1", "76.76.10.1", "2606:1a40::1", "2606:1a40:1::1"},
++           {"76.76.2.1", "76.76.10.1", "2606:1a40::1", "2606:1a40:1::1", "76.76.2.11", "2606:1a40::11"},
 +           {"p1.freedns.controld.com"},
 +           "https://freedns.controld.com/p1",
 +           /*ui_name=*/"Control D (Malware Filtering)",
@@ -94,7 +94,7 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlDStandard",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlDStandard, base::FEATURE_ENABLED_BY_DEFAULT),
-+           {"76.76.2.2", "76.76.10.2", "2606:1a40::2", "2606:1a40:1::2"},
++           {"76.76.2.2", "76.76.10.2", "2606:1a40::2", "2606:1a40:1::2", "76.76.2.11", "2606:1a40::11"},
 +           {"p2.freedns.controld.com"},
 +           "https://freedns.controld.com/p2",
 +           /*ui_name=*/"Control D (Tracking & Malware Filtering)",
@@ -106,7 +106,7 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlDSocial",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlDSocial, base::FEATURE_ENABLED_BY_DEFAULT),
-+           {"76.76.2.3", "76.76.10.3", "2606:1a40::3", "2606:1a40:1::3"},
++           {"76.76.2.3", "76.76.10.3", "2606:1a40::3", "2606:1a40:1::3", "76.76.2.11", "2606:1a40::11"},
 +           {"p3.freedns.controld.com"},
 +           "https://freedns.controld.com/p3",
 +           /*ui_name=*/"",
@@ -118,7 +118,7 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlDFamily",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlDFamily, base::FEATURE_ENABLED_BY_DEFAULT),
-+           {"76.76.2.4", "76.76.10.4", "2606:1a40::4", "2606:1a40:1::4"},
++           {"76.76.2.4", "76.76.10.4", "2606:1a40::4", "2606:1a40:1::4", "76.76.2.11", "2606:1a40::11"},
 +           {"p4.freedns.controld.com"},
 +           "https://freedns.controld.com/p4",
 +           /*ui_name=*/"Control D (Tracking & Family Filtering)",
@@ -130,7 +130,7 @@ index 386c76b3c8..eaaec51147 100644
 +           "ControlDUncensored",
 +           MAKE_BASE_FEATURE_WITH_STATIC_STORAGE(
 +               DohProviderControlDUncensored, base::FEATURE_ENABLED_BY_DEFAULT),
-+           {"76.76.2.5", "76.76.10.5", "2606:1a40::5", "2606:1a40:1::5"},
++           {"76.76.2.5", "76.76.10.5", "2606:1a40::5", "2606:1a40:1::5", "76.76.2.11", "2606:1a40::11"},
 +           {"p5.freedns.controld.com"},
 +           "https://freedns.controld.com/p5",
 +           /*ui_name=*/"",
