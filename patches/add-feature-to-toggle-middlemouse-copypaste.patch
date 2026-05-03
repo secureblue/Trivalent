@@ -66,11 +66,11 @@ index 5f5ea15678..6240bbae10 100644
 
  #endif  // UI_VIEWS_VIEWS_FEATURES_H_
 diff --git a/third_party/blink/renderer/core/editing/selection_controller.cc b/third_party/blink/renderer/core/editing/selection_controller.cc
-index 8f129a1d5d..0ce49f8457 100644
+index 5e867c3f30..695e5f5704 100644
 --- a/third_party/blink/renderer/core/editing/selection_controller.cc
 +++ b/third_party/blink/renderer/core/editing/selection_controller.cc
-@@ -63,6 +63,8 @@
- #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
+@@ -66,6 +66,8 @@
+ #include "ui/base/mojom/menu_source_type.mojom-blink.h"
  #include "ui/gfx/geometry/point_conversions.h"
  
 +#include "ui/views/views_features.h"
@@ -78,14 +78,15 @@ index 8f129a1d5d..0ce49f8457 100644
  namespace blink {
  
  SelectionController::SelectionController(LocalFrame& frame)
-@@ -1260,7 +1262,9 @@ bool SelectionController::HandlePasteGlobalSelection(
+@@ -1295,6 +1297,11 @@ bool SelectionController::HandlePasteGlobalSelection(
+     return false;
+   }
+ 
++  // Disable middle click paste if features disable it
++  if (RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled() ||
++      !base::FeatureList::IsEnabled(views::features::kMiddleClickCopyPaste))
++    return false;
++
    Frame* focus_frame =
        frame_->GetPage()->GetFocusController().FocusedOrMainFrame();
    // Do not paste here if the focus was moved somewhere else.
--  if (frame_ == focus_frame)
-+  if (frame_ == focus_frame &&
-+      !RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled() &&
-+      base::FeatureList::IsEnabled(views::features::kMiddleClickCopyPaste))
-     return frame_->GetEditor().ExecuteCommand("PasteGlobalSelection");
- 
-   return false;
