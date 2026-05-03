@@ -73,13 +73,13 @@ index 2a44a0d606..f3790357da 100644
      <template is="dom-if" if="[[showProcessIsolationSetting_]]" restamp>
        <settings-toggle-button id="isolationState"
 diff --git a/chrome/browser/resources/settings/search_page/search_page.html b/chrome/browser/resources/settings/search_page/search_page.html
-index fece6801f3..ea24f185a2 100644
+index 819dc168bd..460caa8b67 100644
 --- a/chrome/browser/resources/settings/search_page/search_page.html
 +++ b/chrome/browser/resources/settings/search_page/search_page.html
-@@ -101,5 +101,11 @@
-         label="$i18n{searchEnginesManageSiteSearch}"
-         on-click="onManageSearchEnginesClick_"
-         role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+@@ -86,5 +86,11 @@
+           on-click="onManageSearchEnginesClick_"
+           role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+     </template>
 +
 +    <settings-toggle-button class="cr-row"
 +      pref="{{prefs.search.suggest_enabled}}"
@@ -89,21 +89,21 @@ index fece6801f3..ea24f185a2 100644
    </div>
  </settings-section>
 diff --git a/chrome/browser/resources/settings/search_page/search_page.ts b/chrome/browser/resources/settings/search_page/search_page.ts
-index 4bad900d36..3c245b9937 100644
+index 08c747e1df..9a13bf803e 100644
 --- a/chrome/browser/resources/settings/search_page/search_page.ts
 +++ b/chrome/browser/resources/settings/search_page/search_page.ts
-@@ -18,12 +18,14 @@ import '../settings_page/settings_section.js';
+@@ -18,12 +18,14 @@ import './search_engine_list_dialog.js';
+ import '../settings_page/settings_section.js';
  import '../settings_shared.css.js';
  import '../settings_vars.css.js';
- import '../site_favicon.js';
 +import '../controls/settings_toggle_button.js';
-
+ 
  import type {CrToastElement} from 'chrome://resources/cr_elements/cr_toast/cr_toast.js';
  import {I18nMixin} from 'chrome://resources/cr_elements/i18n_mixin.js';
  import {WebUiListenerMixin} from 'chrome://resources/cr_elements/web_ui_listener_mixin.js';
  import {assert} from 'chrome://resources/js/assert.js';
  import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 +import type {SettingsToggleButtonElement} from '../controls/settings_toggle_button.js';
-
+ 
  import {loadTimeData} from '../i18n_setup.js';
  import {routes} from '../route.js';
