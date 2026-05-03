@@ -94,41 +94,6 @@ index 47ee2c73fc844..575caacdb6afe 100644
  <cr-collapse opened="[[prefs.translate.enabled.value]]">
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
-diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 220bfa52fa..076c4ec3dc 100644
---- a/chrome/browser/resources/settings/people_page/people_page.html
-+++ b/chrome/browser/resources/settings/people_page/people_page.html
-@@ -123,30 +123,6 @@
-           </div>
-         </cr-link-row>
-
--        <cr-link-row id="sync-setup"
--            label="$i18n{syncAndNonPersonalizedServices}"
--            on-click="onSyncClick_"
--            role-description="$i18n{subpageArrowRoleDescription}"
--            hidden="[[shouldHideSyncSetupLinkRow_(syncStatus)]]">
--        </cr-link-row>
--        <cr-link-row id="google-services"
--            label="$i18n{googleServicesPageTitle}"
--            on-click="onGoogleServicesClick_"
--            role-description="$i18n{subpageArrowRoleDescription}"
--            hidden="[[!shouldHideSyncSetupLinkRow_(syncStatus)]]">
--        </cr-link-row>
--
--        <template is="dom-if" if="[[signinAllowed_]]">
--          <cr-link-row id="manage-google-account"
--              label="$i18n{manageGoogleAccount}"
--              hidden="[[!shouldShowGoogleAccount_]]"
--              on-click="openGoogleAccount_" external></cr-link-row>
--
--          <cr-link-row id="edit-profile"
--              label="$i18n{profileNameAndPicture}"
--              on-click="onProfileClick_" ></cr-link-row>
--        </template>
--
-         <cr-link-row id="importDataDialogTrigger"
-             label="$i18n{importTitle}"
-             on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 index 3692a01c1e..4ba109b3d8 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
