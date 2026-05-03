@@ -10,6 +10,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
+index 4ff0446eb8..a383d56cd8 100644
+--- a/chrome/browser/resources/settings/people_page/people_page.html
++++ b/chrome/browser/resources/settings/people_page/people_page.html
+@@ -65,7 +65,7 @@
+         }
+       }
+     </style>
+-    <settings-section page-title="$i18n{peoplePageTitle}">
++    <settings-section page-title="$i18n{editPerson}">
+       <div>
+ 
+ <if expr="not is_chromeos">
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 index 95b225cc32..06e98d1a25 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
