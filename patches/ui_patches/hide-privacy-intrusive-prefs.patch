@@ -45,20 +45,19 @@ index 220bfa52fa..076c4ec3dc 100644
          <cr-link-row id="importDataDialogTrigger"
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
-diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.ts b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-index b45a26e61192b..a7218cfa6db8f 100644
---- a/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-+++ b/chrome/browser/resources/settings/privacy_page/privacy_page.ts
-@@ -483,8 +483,7 @@ export class SettingsPrivacyPageElement extends SettingsPrivacyPageElementBase {
-   }
+diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
+index 19aebba1df..8e5c62ff84 100644
+--- a/chrome/browser/ui/webui/settings/settings_ui.cc
++++ b/chrome/browser/ui/webui/settings/settings_ui.cc
+@@ -510,7 +510,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+       base::FeatureList::IsEnabled(privacy_sandbox::kRelatedWebsiteSetsUi));
+   html_source->AddBoolean("isPrivacySandboxAdPrivacyUxDeprecationEnabled",
+                           is_ad_privacy_ux_deprecation_enabled);
+-  html_source->AddBoolean("isAdPrivacyAvailable", is_ad_privacy_available);
++  html_source->AddBoolean("isAdPrivacyAvailable", false);
  
-   private shouldShowAdPrivacy_(): boolean {
--    return !this.isPrivacySandboxRestricted_ ||
--        this.isPrivacySandboxRestrictedNoticeEnabled_;
-+    return false;
-   }
- 
-   private onBrowsingDataDeleted_(
+   // Performance
+   AddSettingsPageUIHandler(std::make_unique<PerformanceHandler>());
 diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
 index 3eb464c572..e9498414b8 100644
 --- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
