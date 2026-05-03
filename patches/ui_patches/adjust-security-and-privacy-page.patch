@@ -294,15 +294,16 @@ index 92eb5ebaef..4f3726dd7e 100644
          'contentSettingCategoryChanged', (category: ContentSettingsTypes) => {
            if (category === ContentSettingsTypes.JAVASCRIPT_OPTIMIZER) {
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
-index 42fce93fa9125..2e41a1c3fcf44 100644
+index 5f4217446a..8dc0759c9b 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js
 +++ b/components/security_interstitials/core/browser/resources/interstitial_large.js
-@@ -315,8 +315,6 @@ function setupEvents() {
+@@ -335,8 +335,6 @@ function setupEvents() {
    }
  
    preventDefaultOnPoundLinkClicks();
 -  setupExtendedReportingCheckbox();
 -  setupEnhancedProtectionMessage();
    setupSSLDebuggingInfo();
-   document.addEventListener('keypress', handleKeypress);
+ 
+   const disableKeyboardOverride =
  
