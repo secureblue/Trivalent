@@ -56,7 +56,7 @@ index f4534420339a7..49393040e0741 100644
              class="hr"
              hidden="[[!showHr_(
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
-index ba2e1af7b1..7e490f818a 100644
+index 2a44a0d606..f3790357da 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html
 +++ b/chrome/browser/resources/settings/system_page/system_page.html
 @@ -27,6 +27,12 @@
@@ -69,9 +69,9 @@ index ba2e1af7b1..7e490f818a 100644
 +        label="$i18n{printingCapabilities}">
 +    </settings-toggle-button>
 +</if>
- <if expr="_google_chrome">
-     <!-- On device AI settings -->
-     <template is="dom-if" if="[[showOnDeviceAiSettings_]]" restamp>
+     <!-- <if expr="is_win"> -->
+     <template is="dom-if" if="[[showProcessIsolationSetting_]]" restamp>
+       <settings-toggle-button id="isolationState"
 diff --git a/chrome/browser/resources/settings/search_page/search_page.html b/chrome/browser/resources/settings/search_page/search_page.html
 index fece6801f3..ea24f185a2 100644
 --- a/chrome/browser/resources/settings/search_page/search_page.html
