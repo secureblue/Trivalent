@@ -293,7 +293,7 @@ index 2e53794fa3..059e71b3ff 100644
        (options.use_amd_specific_policies ||
         options.use_intel_specific_policies ||
         options.use_nvidia_specific_policies ||
-@@ -656,6 +868,33 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
+@@ -656,6 +868,32 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
      }
      return permissions;
    }
@@ -316,7 +316,6 @@ index 2e53794fa3..059e71b3ff 100644
 +      AddIntelGpuPermissionsLinux(&permissions);
 +    }
 +    if (options.use_nvidia_specific_policies) {
-+      AddStandardGpuPermissionsLinux(&permissions);
 +      AddNvidiaGpuPermissionsLinux(&permissions);
 +    }
 +    if (options.use_virtio_specific_policies) {
@@ -327,7 +326,7 @@ index 2e53794fa3..059e71b3ff 100644
  
    if (UseChromecastSandboxAllowlist()) {
      if (UseV4L2Codec(options)) {
-@@ -683,11 +922,14 @@ bool LoadLibrariesForGpu(
+@@ -683,11 +921,14 @@ bool LoadLibrariesForGpu(
        if (!LoadAmdGpuLibraries())
          return false;
      }
@@ -340,7 +339,7 @@ index 2e53794fa3..059e71b3ff 100644
 +    if (UseV4L2Codec(options)) {
 +      LoadChromecastV4L2Libraries();
 +    }
-+  } else if (IsLinux) {
++  } else if (IsLinux()) {
 +    if (options.use_amd_specific_policies) {
 +      if (!LoadAmdGpuLinuxLibraries())
 +        return false;
