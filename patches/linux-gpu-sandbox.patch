@@ -297,7 +297,7 @@ index 2e53794fa3..059e71b3ff 100644
      }
      return permissions;
    }
-+  else (IsLinux()) {
++  else if (IsLinux()) {
 +    AddLibGalliumPermissionsLinux(&permissions, options.driver_version);
 +    if (UseV4L2Codec(options)) {
 +      AddV4L2GpuPermissions(&permissions, options);
