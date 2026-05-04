@@ -36,41 +36,38 @@ index eb1b09a5dc..41088e7db1 100644
  
    // Offsets the double-clicked word's range. This is only used in the unusual
 diff --git a/ui/views/views_features.cc b/ui/views/views_features.cc
-index 88ca7f0b1f..14be7e5a3a 100644
+index 47077e1687..17c16f9bf0 100644
 --- a/ui/views/views_features.cc
 +++ b/ui/views/views_features.cc
-@@ -9,6 +9,12 @@
-
- namespace views::features {
-
-+// Controls the behavior of middle-mouse copy and pasting.
-+// This may be overridden by the kMiddleClickAutoscroll
-+// blink feature.
+@@ -11,6 +11,8 @@ namespace views::features {
+ 
+ // Please keep alphabetized.
+ 
 +BASE_FEATURE(kMiddleClickCopyPaste, base::FEATURE_ENABLED_BY_DEFAULT);
 +
-+
- // Please keep alphabetized.
-
- // Used to enable additional a11y attributes when announcing text.
+ // Used to apply the initial URL to the WebContents in WebView. This is a kill
+ // switch for this new logic, see crbug.com/456058558.
+ // TODO(https://crbug.com/456058558): Remove this flag once the feature becomes
 diff --git a/ui/views/views_features.h b/ui/views/views_features.h
-index 5f5ea15678..6240bbae10 100644
+index 888a16fb62..25ba68dee7 100644
 --- a/ui/views/views_features.h
 +++ b/ui/views/views_features.h
-@@ -17,6 +17,8 @@ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableTouchDragCursorSync);
- VIEWS_EXPORT BASE_DECLARE_FEATURE(kKeyboardAccessibleTooltipInViews);
- VIEWS_EXPORT BASE_DECLARE_FEATURE(kApplyInitialUrlToWebContents);
-
+@@ -11,6 +11,8 @@
+ 
+ namespace views::features {
+ 
 +VIEWS_EXPORT BASE_DECLARE_FEATURE(kMiddleClickCopyPaste);
 +
- }  // namespace views::features
+ // Please keep alphabetized.
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kApplyInitialUrlToWebContents);
+ VIEWS_EXPORT BASE_DECLARE_FEATURE(kEnableInputProtection);
 
- #endif  // UI_VIEWS_VIEWS_FEATURES_H_
 diff --git a/third_party/blink/renderer/core/editing/selection_controller.cc b/third_party/blink/renderer/core/editing/selection_controller.cc
-index 8f129a1d5d..0ce49f8457 100644
+index 5e867c3f30..695e5f5704 100644
 --- a/third_party/blink/renderer/core/editing/selection_controller.cc
 +++ b/third_party/blink/renderer/core/editing/selection_controller.cc
-@@ -63,6 +63,8 @@
- #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
+@@ -66,6 +66,8 @@
+ #include "ui/base/mojom/menu_source_type.mojom-blink.h"
  #include "ui/gfx/geometry/point_conversions.h"
  
 +#include "ui/views/views_features.h"
@@ -78,14 +75,15 @@ index 8f129a1d5d..0ce49f8457 100644
  namespace blink {
  
  SelectionController::SelectionController(LocalFrame& frame)
-@@ -1260,7 +1262,9 @@ bool SelectionController::HandlePasteGlobalSelection(
+@@ -1295,6 +1297,11 @@ bool SelectionController::HandlePasteGlobalSelection(
+     return false;
+   }
+ 
++  // Disable middle click paste if features disable it
++  if (RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled() ||
++      !base::FeatureList::IsEnabled(views::features::kMiddleClickCopyPaste))
++    return false;
++
    Frame* focus_frame =
        frame_->GetPage()->GetFocusController().FocusedOrMainFrame();
    // Do not paste here if the focus was moved somewhere else.
--  if (frame_ == focus_frame)
-+  if (frame_ == focus_frame &&
-+      !RuntimeEnabledFeatures::MiddleClickAutoscrollEnabled() &&
-+      base::FeatureList::IsEnabled(views::features::kMiddleClickCopyPaste))
-     return frame_->GetEditor().ExecuteCommand("PasteGlobalSelection");
- 
-   return false;
