@@ -540,7 +540,8 @@ CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
 CHROMIUM_GN_DEFINES+=' use_static_angle=true angle_shared_libvulkan=false' # bundle graphics libraries
-CHROMIUM_GN_DEFINES+=' enable_swiftshader=false' # build without swiftshader (it is actively being deprecated anyway)
+CHROMIUM_GN_DEFINES+=' enable_swiftshader=false enable_swiftshader_vulkan=false' # build without swiftshader
+CHROMIUM_GN_DEFINES+=' dawn_use_swiftshader=false angle_enable_swiftshader=false' # disable rendering usage of swiftshader
 CHROMIUM_GN_DEFINES+=' build_dawn_tests=false enable_perfetto_unittests=false'
 CHROMIUM_GN_DEFINES+=' disable_fieldtrial_testing_config=true'
 CHROMIUM_GN_DEFINES+=' symbol_level=%{debug_level} blink_symbol_level=%{debug_level}'
