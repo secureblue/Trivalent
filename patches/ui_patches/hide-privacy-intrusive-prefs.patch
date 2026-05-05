@@ -46,9 +46,18 @@ index 220bfa52fa..076c4ec3dc 100644
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 19aebba1df..8e5c62ff84 100644
+index 19aebba1df..45d59b65ec 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
+@@ -346,7 +346,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   bool show_privacy_guide =
+       base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
+       (!ShouldDisplayManagedUi(profile) && !profile->IsChild());
+-  html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
++  html_source->AddBoolean("showPrivacyGuide", false);
+ 
+   html_source->AddBoolean(
+       "showResetProfileBannerV2",
 @@ -510,7 +510,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
        base::FeatureList::IsEnabled(privacy_sandbox::kRelatedWebsiteSetsUi));
    html_source->AddBoolean("isPrivacySandboxAdPrivacyUxDeprecationEnabled",
