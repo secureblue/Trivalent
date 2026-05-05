@@ -1,0 +1,22 @@
+diff --git a/chrome/browser/ui/content_settings/content_setting_image_model.cc b/chrome/browser/ui/content_settings/content_setting_image_model.cc
+index 560d750b58..51bdab2481 100644
+--- a/chrome/browser/ui/content_settings/content_setting_image_model.cc
++++ b/chrome/browser/ui/content_settings/content_setting_image_model.cc
+@@ -581,8 +581,7 @@ void ContentSettingImageModel::Update(content::WebContents* contents) {
+ bool ContentSettingImageModel::ShouldRunAnimation(
+     content::WebContents* contents) {
+   DCHECK(contents);
+-  return !ContentSettingImageModelStates::Get(contents)->AnimationHasRun(
+-      image_type());
++  return true;
+ }
+ 
+ void ContentSettingImageModel::SetAnimationHasRun(
+@@ -1184,6 +1183,7 @@ bool ContentSettingPopupImageModel::UpdateAndGetVisibility(
+   SetIcon(ContentSettingsType::POPUPS, /*blocked=*/true);
+   set_explanatory_string_id(IDS_BLOCKED_POPUPS_EXPLANATORY_TEXT);
+   set_tooltip(l10n_util::GetStringUTF16(IDS_BLOCKED_POPUPS_TOOLTIP));
++  set_should_auto_open_bubble(true);
+   return true;
+ }
+ 
