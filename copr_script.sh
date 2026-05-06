@@ -26,7 +26,7 @@ count=0
 for ((i=0; i<${#patches[@]}; i++)); do
 	if [[ "${patches[i]}" != "chromium-148-v8-sanitize-build-error.patch" ]]; then	
 		cp "${patches[i]}" "../build/fedora-$((count+1000)).patch"
-		((count++))
+		((++count))
 	fi
 done
 popd
