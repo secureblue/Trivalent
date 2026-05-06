@@ -1,0 +1,123 @@
+commit d3f0ec122bd234aa82347cc0e838c8fae8cd6565
+Author: Kalvin Lee <kdlee@chromium.org>
+Date:   Mon Mar 16 00:39:28 2026 -0700
+
+    Revert "build: Move sanitizer defines into GN"
+    
+    This reverts commit 3138277894378caa7211fb0ea36128f357c34653.
+    
+    Reason for revert: Updated Chromium build config (see comments)
+    
+    Original change's description:
+    > build: Move sanitizer defines into GN
+    >
+    > To accommodate Chromium defaulting `-fsanitize=array-bounds` in
+    > `//build/config`, this change moves V8's sanitizer `#define`s out of
+    > `base/macros.h` straight into a global-ish build config provided by
+    > the V8 build templates. This strongly ties the sanitizer gating macros
+    > to GN's `is_asan` etc.
+    >
+    > Bug: 430178746
+    > Change-Id: I4c1d96827db70d3309c093b3473998237ceeb1a0
+    > Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/6966641
+    > Reviewed-by: Michael Achenbach <machenbach@chromium.org>
+    > Reviewed-by: Michael Lippautz <mlippautz@chromium.org>
+    > Commit-Queue: Kalvin Lee <kdlee@chromium.org>
+    > Cr-Commit-Position: refs/heads/main@{#102621}
+    
+    Bug: 430178746
+    Change-Id: Id78435e16ab4765f64dde1895e25f87c770d4648
+    Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/7665605
+    Reviewed-by: Michael Lippautz <mlippautz@chromium.org>
+    Reviewed-by: Michael Achenbach <machenbach@chromium.org>
+    Commit-Queue: Kalvin Lee <kdlee@chromium.org>
+    Cr-Commit-Position: refs/heads/main@{#105818}
+
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+index a905e5a3754..40c615ec3a2 100644
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -1901,32 +1901,6 @@ config("always_turbofanimize") {
+   }
+ }
+ 
+-# Sanitizer defines. V8 will inherit a default `-fsanitize=array-bounds`
+-# from Chromium's `//build/config/`, which prevents clean usage of
+-# `__has_feature(undefined_behavior_sanitizer)` in the short term,
+-# until something like `--lie-about-ubsan-enablement=array-bounds`
+-# can be implemented.
+-#
+-# This config provides a clear signal of "are we sanitizing" tied to
+-# GN configuration.
+-#
+-# See also: https://crbug.com/386992829
+-config("sanitizer_defines") {
+-  defines = []
+-  if (is_asan) {
+-    defines += [ "V8_USE_ADDRESS_SANITIZER" ]
+-  }
+-  if (is_hwasan) {
+-    defines += [ "V8_USE_HWADDRESS_SANITIZER" ]
+-  }
+-  if (is_msan) {
+-    defines += [ "V8_USE_MEMORY_SANITIZER" ]
+-  }
+-  if (is_ubsan) {
+-    defines += [ "V8_USE_UNDEFINED_BEHAVIOR_SANITIZER" ]
+-  }
+-}
+-
+ ###############################################################################
+ # Actions
+ #
+diff --git a/v8/gni/v8.gni b/v8/gni/v8.gni
+index b616a1f0abc..3a031e9ddfb 100644
+--- a/v8/gni/v8.gni
++++ b/v8/gni/v8.gni
+@@ -392,7 +392,6 @@ v8_add_configs = [
+   v8_path_prefix + ":features",
+   v8_path_prefix + ":toolchain",
+   v8_path_prefix + ":strict_warnings",
+-  v8_path_prefix + ":sanitizer_defines",
+ ]
+ 
+ if (v8_force_optimize_speed) {
+diff --git a/v8/src/base/macros.h b/v8/src/base/macros.h
+index da1a964d50d..bba1d05127a 100644
+--- a/v8/src/base/macros.h
++++ b/v8/src/base/macros.h
+@@ -201,6 +201,34 @@ V8_INLINE constexpr Dest bit_cast(Source const& source) noexcept {
+   void operator delete(void*, size_t) { v8::base::OS::Abort(); } \
+   void operator delete[](void*, size_t) { v8::base::OS::Abort(); }
+ 
++// Define V8_USE_ADDRESS_SANITIZER macro.
++#if defined(__has_feature)
++#if __has_feature(address_sanitizer)
++#define V8_USE_ADDRESS_SANITIZER 1
++#endif
++#endif
++
++// Define V8_USE_HWADDRESS_SANITIZER macro.
++#if defined(__has_feature)
++#if __has_feature(hwaddress_sanitizer)
++#define V8_USE_HWADDRESS_SANITIZER 1
++#endif
++#endif
++
++// Define V8_USE_MEMORY_SANITIZER macro.
++#if defined(__has_feature)
++#if __has_feature(memory_sanitizer)
++#define V8_USE_MEMORY_SANITIZER 1
++#endif
++#endif
++
++// Define V8_USE_UNDEFINED_BEHAVIOR_SANITIZER macro.
++#if defined(__has_feature)
++#if __has_feature(undefined_behavior_sanitizer)
++#define V8_USE_UNDEFINED_BEHAVIOR_SANITIZER 1
++#endif
++#endif
++
+ // Define V8_USE_SAFE_STACK macro.
+ #if defined(__has_feature)
+ #if __has_feature(safe_stack)
