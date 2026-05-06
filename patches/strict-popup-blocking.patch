@@ -70,7 +70,7 @@ index 2b329f433b..0e6012bc09 100644
    void set_should_auto_open_bubble(const bool should_auto_open_bubble) {
      should_auto_open_bubble_ = should_auto_open_bubble;
    }
-+  void set_always_open_bubble(const bool always_auto_open_bubble) {
++  void set_always_open_bubble(const bool always_open_bubble) {
 +    always_open_bubble_ = always_open_bubble;
 +  }
    void set_blocked_on_system_level(const bool blocked_on_system_level) {
