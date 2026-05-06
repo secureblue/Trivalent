@@ -90,6 +90,10 @@ Source23: %{chromium_name}.te
 Source24: %{chromium_name}-drm-fix-secontexts.conf
 %endif
 
+%if %{use_system_toolchain}
+Patch9999: chromium-148-v8-sanitize-build-error.patch
+%endif
+
 ### Patches ###
 %{lua:
     rpm.execute("pwd")
@@ -393,6 +397,7 @@ Provides: bundled(zstd)
 %if %{use_system_toolchain}
 # License: MIT
 %autopatch -p1 -m 1000 -M %{_fedoraPatchCount}
+%patch -P9999 -p1 -R -b .v8-sanitize-build-error
 %endif
 # License: GPL-2.0-Only
 %autopatch -p1 -m 2000 -M %{_vanadiumPatchCount}

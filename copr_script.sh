@@ -20,9 +20,12 @@ shopt -s nullglob
 
 # copy Fedora patches to the build dir
 pushd fedora_patches/
+cp chromium-148-v8-sanitize-build-error.patch ../build/
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp "${patches[i]}" "../build/fedora-$((i+1000)).patch"
+	if [[ "${patches[i]}" != "chromium-148-v8-sanitize-build-error.patch" ]]; then	
+		cp "${patches[i]}" "../build/fedora-$((i+1000)).patch"
+	fi
 done
 popd
 
