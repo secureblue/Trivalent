@@ -22,7 +22,6 @@ index 1f155a7cee..6eb87d9738 100644
    auto it = blocked_popups_.find(id);
    if (it == blocked_popups_.end())
      return;
-
 diff --git a/components/blocked_content/popup_blocker.cc b/components/blocked_content/popup_blocker.cc
 index 8b12c7dd441f3..9c13ac10a6f1a 100644
 --- a/components/blocked_content/popup_blocker.cc
