@@ -80,23 +80,23 @@ index d637eecb9e..621b51f79c 100644
    command_updater_.UpdateCommandEnabled(IDC_SHOW_COMMENTS_SIDE_PANEL, true);
    command_updater_.UpdateCommandEnabled(IDC_FIND_AND_EDIT_MENU, true);
 diff --git a/chrome/browser/ui/browser_commands.cc b/chrome/browser/ui/browser_commands.cc
-index 3f477375e0..3627f15f06 100644
+index cd7f650386..261e7e0d53 100644
 --- a/chrome/browser/ui/browser_commands.cc
 +++ b/chrome/browser/ui/browser_commands.cc
-@@ -2320,6 +2320,11 @@ void OpenFeedbackDialog(BrowserWindowInterface* bwi,
+@@ -2371,6 +2371,11 @@ void OpenFeedbackDialog(BrowserWindowInterface* browser,
                             category_tag, std::string() /* extra_diagnostics */);
  }
-
+ 
 +void ToggleWebsiteDarkmode(PrefService* pref_service) {
 +  bool pref_enabled = pref_service->GetBoolean(prefs::kWebKitForceDarkModeEnabled);
 +  pref_service->SetBoolean(prefs::kWebKitForceDarkModeEnabled, !pref_enabled);
 +}
 +
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
- void OpenReportUnsafeSiteDialog(Browser* browser) {
+ void OpenReportUnsafeSiteDialog(BrowserWindowInterface* browser) {
    base::RecordAction(UserMetricsAction("ReportUnsafeSite"));
 diff --git a/chrome/browser/ui/browser_commands.h b/chrome/browser/ui/browser_commands.h
-index 57754e9b20..c99ce70d8f 100644
+index 9a4b59415d..06f30410b0 100644
 --- a/chrome/browser/ui/browser_commands.h
 +++ b/chrome/browser/ui/browser_commands.h
 @@ -28,6 +28,7 @@ class BrowserWindowInterface;
@@ -105,15 +105,15 @@ index 57754e9b20..c99ce70d8f 100644
  class Profile;
 +class PrefService;
  enum class DevToolsOpenedByAction;
-
+ 
  namespace content {
-@@ -241,6 +242,7 @@ void SharingHub(Browser* browser);
- void ScreenshotCapture(Browser* browser);
- void SavePage(Browser* browser);
- bool CanSavePage(const Browser* browser);
+@@ -251,6 +252,7 @@ void SharingHub(BrowserWindowInterface* browser);
+ void ScreenshotCapture(BrowserWindowInterface* browser);
+ void SavePage(BrowserWindowInterface* browser);
+ bool CanSavePage(const BrowserWindowInterface* browser);
 +void ToggleWebsiteDarkmode(PrefService* pref_service);
- void Print(BrowserWindowInterface* bwi);
- bool CanPrint(BrowserWindowInterface* bwi);
+ void Print(BrowserWindowInterface* browser);
+ bool CanPrint(BrowserWindowInterface* browser);
  #if BUILDFLAG(ENABLE_PRINTING)
 diff --git a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar.mojom b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar.mojom
 index dc2fed7651..d1956d42ce 100644

@@ -1,8 +1,8 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index c092446fa0715..c22987de09be2 100644
+index f2b15447535c0..db4cab206a818 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -613,13 +613,6 @@ config("compiler") {
+@@ -625,13 +625,6 @@ config("compiler") {
        ]
      }
  
@@ -16,7 +16,7 @@ index c092446fa0715..c22987de09be2 100644
      # TODO(hans): Remove this once Clang generates better optimized debug info
      # by default. https://crbug.com/765793
      cflags += [
-@@ -1880,18 +1873,6 @@ config("sanitize_c_array_bounds") {
+@@ -1905,18 +1898,6 @@ config("sanitize_c_array_bounds") {
      cflags = [
        "-fsanitize=array-bounds",
        "-fsanitize-trap=array-bounds",
@@ -32,6 +32,19 @@ index c092446fa0715..c22987de09be2 100644
 -      # since we know that the array bounds sanitizing will catch any out-of-
 -      # bounds accesses.
 -      "-Wno-unsafe-buffer-usage-in-static-sized-array",
+     ]
+   }
+ }
+@@ -1929,12 +1910,6 @@ config("sanitize_return") {
+     cflags = [
+       "-fsanitize=return",
+       "-fsanitize-trap=return",
+-
+-      # Some code users feature detection to determine if UBSAN (or any
+-      # sanitizer) is enabled, they then do expensive debug like operations. We
+-      # want to suppress this behaviour since we want to keep performance costs
+-      # as low as possible while having these checks.
+-      "-fsanitize-ignore-for-ubsan-feature=return",
      ]
    }
  }

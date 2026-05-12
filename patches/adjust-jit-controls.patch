@@ -64,7 +64,7 @@ index 25458578a8..5a59d3f789 100644
    }
  
    if (site_url.is_empty()) {
-@@ -7947,75 +7938,14 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
+@@ -7967,83 +7967,14 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
      // familiarity or site-specific settings cannot be considered here, because
      // the process will be shared among many sites.
      return map->GetDefaultContentSetting(
@@ -76,6 +76,13 @@ index 25458578a8..5a59d3f789 100644
 -  ContentSetting site_content_setting = map->GetContentSetting(
 -      site_url, site_url, ContentSettingsType::JAVASCRIPT_OPTIMIZER,
 -      &content_setting_info);
+-
+-  content_settings::ProviderType default_content_setting_provider;
+-  map->GetDefaultContentSetting(ContentSettingsType::JAVASCRIPT_OPTIMIZER,
+-                                &default_content_setting_provider);
+-  auto default_content_setting_source =
+-      content_settings::GetSettingSourceFromProviderType(
+-          default_content_setting_provider);
 -
 -  // `default_javascript_optimizer_setting` is determined based on the user's
 -  // selection in chrome://settings, whether the site-familiarity-feature is
@@ -89,7 +96,8 @@ index 25458578a8..5a59d3f789 100644
 -  // Invariant guaranteed by ComputeDefaultJavascriptOptimizerSetting().
 -  CHECK(default_javascript_optimizer_setting !=
 -            JavascriptOptimizerSetting::kBlockedForUnfamiliarSites ||
--        content_setting_info.source == content_settings::SettingSource::kUser);
+-        default_content_setting_source ==
+-            content_settings::SettingSource::kUser);
 -
 -  if (default_javascript_optimizer_setting !=
 -      JavascriptOptimizerSetting::kBlockedForUnfamiliarSites) {

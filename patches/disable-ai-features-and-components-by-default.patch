@@ -130,24 +130,24 @@ index c5ceac4713a5b..a25847ee6022d 100644
    }
    // From that point on, it's too late to modify the registry as the prefs
 diff --git a/components/contextual_search/contextual_search_service.cc b/components/contextual_search/contextual_search_service.cc
-index 1565c71ec1..325b1344e4 100644
+index 3a07c761e3..dd1a14ffa3 100644
 --- a/components/contextual_search/contextual_search_service.cc
 +++ b/components/contextual_search/contextual_search_service.cc
-@@ -61,7 +61,8 @@ void ContextualSearchService::RegisterProfilePrefs(
+@@ -65,7 +65,8 @@ void ContextualSearchService::RegisterProfilePrefs(
      PrefRegistrySimple* registry) {
    registry->RegisterIntegerPref(
        kSearchContentSharingSettings,
 -      static_cast<int>(kSearchContentSharingAllowedDefault));
 +      static_cast<int>(contextual_search::
 +                       SearchContentSharingSettingsValue::kDisabled));
- }
-
- // static
+   registry->RegisterBooleanPref(
+       kDriveDisclaimerAccepted, false,
+       user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
 diff --git a/components/optimization_guide/core/model_execution/model_execution_prefs.cc b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-index d73e762683..9f89b41abd 100644
+index c01de2e0f7..b37b6254e2 100644
 --- a/components/optimization_guide/core/model_execution/model_execution_prefs.cc
 +++ b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-@@ -116,7 +116,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
+@@ -124,7 +124,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
    registry->RegisterInt64Pref(localstate::kModelQualityLoggingClientId, 0,
                                PrefRegistry::LOSSY_PREF);
    registry->RegisterIntegerPref(
@@ -155,4 +155,4 @@ index d73e762683..9f89b41abd 100644
 +      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 1);
    registry->RegisterBooleanPref(localstate::kOnDeviceAiUserSettingsEnabled,
                                  true);
- }
+   registry->RegisterDictionaryPref(localstate::kManifestAssetLedger);

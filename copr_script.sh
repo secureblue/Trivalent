@@ -20,9 +20,14 @@ shopt -s nullglob
 
 # copy Fedora patches to the build dir
 pushd fedora_patches/
+cp chromium-148-v8-sanitize-build-error.patch ../build/
 patches=(*.patch)
+count=0
 for ((i=0; i<${#patches[@]}; i++)); do
-	cp "${patches[i]}" "../build/fedora-$((i+1000)).patch"
+	if [[ "${patches[i]}" != "chromium-148-v8-sanitize-build-error.patch" ]]; then	
+		cp "${patches[i]}" "../build/fedora-$((count+1000)).patch"
+		((++count))
+	fi
 done
 popd
 
@@ -38,6 +43,7 @@ popd
 pushd patches/
 cp ../translation_patches/register-trivalent-strings.patch ./
 cp ../translation_patches/translations/*.patch ./
+cp ui_patches/*.patch ./
 patches=(*.patch)
 for ((i=0; i<${#patches[@]}; i++)); do
 	cp "${patches[i]}" "../build/trivalent-$((i+3000)).patch"

@@ -1,0 +1,95 @@
+Copyright 2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
+index 4ff0446eb8..a383d56cd8 100644
+--- a/chrome/browser/resources/settings/people_page/people_page.html
++++ b/chrome/browser/resources/settings/people_page/people_page.html
+@@ -65,7 +65,7 @@
+         }
+       }
+     </style>
+-    <settings-section page-title="$i18n{peoplePageTitle}">
++    <settings-section page-title="$i18n{editPerson}">
+       <div>
+ 
+ <if expr="not is_chromeos">
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index 95b225cc32..06e98d1a25 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -67,8 +67,8 @@
+       </cr-link-row>
+     </template>
+     <cr-link-row id="securityLinkRow" start-icon="privacy:lock"
+-        class="hr" label="$i18n{securityPageTitle}"
+-        sub-label="$i18n{securityPageDescription}"
++        class="hr" label="$i18n{privacyPageTitle}"
++        sub-label="$i18n{privacyGuidePromoBody}"
+         on-click="onSecurityPageClick_"
+         role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+     <cr-link-row id="siteSettingsLinkRow" start-icon="privacy:page-info"
+diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
+index 1fd9c83cb7..931b3b5aee 100644
+--- a/chrome/browser/resources/settings/route.ts
++++ b/chrome/browser/resources/settings/route.ts
+@@ -178,7 +178,7 @@ function createRoutes(): SettingsRoutes {
+
+   if (visibility.people !== false) {
+     r.PEOPLE = r.BASIC.createSection(
+-        '/people', 'people', loadTimeData.getString('peoplePageTitle'));
++        '/people', 'people', loadTimeData.getString('editPerson'));
+     // <if expr="not is_chromeos">
+     r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
+     r.SIGN_OUT.isNavigableDialog = true;
+diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+index 3cb9e3af7a..12b7f1fa3b 100644
+--- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
++++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+@@ -54,7 +54,7 @@
+ <if expr="_google_chrome">
+           <cr-icon icon="settings-internal:google-g"></cr-icon>
+ </if>
+-          $i18n{peoplePageTitle}
++          $i18n{editPerson}
+           <cr-ripple></cr-ripple>
+         </a>
+         <a role="menuitem" id="autofill" href="/autofill"
+diff --git a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
+index 87b28c196eb30..5d3a56f226044 100644
+--- a/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
++++ b/chrome/browser/resources/new_tab_page_incognito_guest/incognito_tab.html
+@@ -22,12 +22,6 @@ document.querySelector('#incognitothemecss').href =
+ <div class="content">
+   <div class="icon" role="presentation" alt=""></div>
+   <h1>$i18n{incognitoTabHeading}</h1>
+-  <p id="subtitle">
+-    <span>$i18n{incognitoTabDescription}</span>
+-    <a class="learn-more-button"
+-        href="$i18n{learnMoreLink}"
+-        aria-label="$i18nPolymer{learnMoreA11yLabel}">$i18n{learnMore}</a>
+-  </p>
+   <div id="bulletpoints-wrapper">
+     <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
+     <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
+diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
+index d989c90598e38..985a47c20c397 100644
+--- a/chrome/browser/resources/settings/settings_main/settings_main.html
++++ b/chrome/browser/resources/settings/settings_main/settings_main.html
+@@ -35,7 +35,6 @@
+ </style>
+ <div id="noSearchResults" hidden$="[[!showNoResultsFound_]]">
+   <div>$i18n{searchNoResults}</div>
+-  <div>$i18nRaw{searchNoResultsHelp}</div>
+ </div>
+ <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
+     restamp>
