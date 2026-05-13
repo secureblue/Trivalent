@@ -31,10 +31,10 @@ index 81776c22d5..88e6f8d392 100644
 +    Opens new sessions in Incognito tabs
 +  </message>
 +  <message name="IDS_DISABLE_3D_APIS_LABEL" desc="Trivalent String.">
-+    Disable 3D APIs
++    Block 3D APIs
 +  </message>
 +  <message name="IDS_DISABLE_3D_APIS_DESCRIPTION" desc="Trivalent String.">
-+    Disable web-facing access to features like WebGL
++    Block web-facing access to features like WebGL
 +  </message>
 +  <message name="IDS_WEBRTC_HANDLING_POLICY_LABEL" desc="Trivalent String.">
 +    WebRTC Handling Policy
@@ -46,7 +46,7 @@ index 81776c22d5..88e6f8d392 100644
 +    Disabling may fix issues with data persistence but will reduce security slightly, requires a restart to apply
 +  </message>
 +  <message name="IDS_DISABLE_EXTENSIONS_LABEL" desc="Trivalent String.">
-+    Disable Extensions
++    Block Extensions
 +  </message>
 +  <message name="IDS_DISABLE_EXTENSIONS_DESCRIPTION" desc="Trivalent String.">
 +    Changes to this setting requires a restart to apply
