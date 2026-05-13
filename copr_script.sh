@@ -27,49 +27,47 @@ pushd build
 	cp resources/* "${BUILD_DIR}"
 	cp selinux/* "${BUILD_DIR}"
 	pushd patches
-		declare -i reversecount=0
 		function mv_patch() {
 			local -r patch="${1}"
 			local -r source="${2}"
 			local -i count="${3}"
 			
 			if [[ "${patch:0:8}" == "REVERSE-" ]]; then
-				cp "${patch}" "${BUILD_DIR}/reverse-$((reversecount+4000)).patch"
-				((++reversecount))
+				cp "${patch}" "${BUILD_DIR}/${patch:8}"
 			else
 				cp "${patch}" "${BUILD_DIR}/${source}-${count}.patch"
 				((++count))
 			fi
-			return "${count}"
+			echo "${count}"
 		}
 
 		pushd trivalent/
 			for dir in *; do
 				if [[ -d "${dir}" ]]; then
-					mv "${dir}/"*.patch .
+					cp "${dir}/"*.patch .
 				fi
 			done
 			patches=(*.patch)
-			count=0
+			count=3000
 			for ((i=0; i<${#patches[@]}; i++)); do
-				count="$(mv_patch "${patches[i]}" "trivalent" "$((count+3000))")"
+				count="$(mv_patch "${patches[i]}" "trivalent" "$((count))")"
 			done
 		popd
 
 		pushd third_party/
 			pushd fedora/
 				patches=(*.patch)
-				count=0
+				count=1000
 				for ((i=0; i<${#patches[@]}; i++)); do
-					count="$(mv_patch "${patches[i]}" "fedora" "$((count+1000))")"
+					count="$(mv_patch "${patches[i]}" "fedora" "$((count))")"
 				done
 			popd
 
 			pushd vanadium/
 				patches=(*.patch)
-				count=0
+				count=2000
 				for ((i=0; i<${#patches[@]}; i++)); do
-					count="$(mv_patch "${patches[i]}" "vanadium" "$((count+2000))")"
+					count="$(mv_patch "${patches[i]}" "vanadium" "$((count))")"
 				done
 			popd
 		popd
