@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2025 The Trivalent Authors
+# Copyright 2025-2026 The Trivalent Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 set -oue pipefail
 
-repo_directory="$(pwd)"
+patches_directory="$(pwd)"
 readonly repo_directory
 remote_vanadium_patches=()
 truncated_remote_vanadium_patches=()
@@ -60,7 +60,7 @@ get_remote_vanadium_patches() {
 
 update_vanadium_patches() {
 	get_remote_vanadium_patches
-	cd "./vanadium_patches/"
+	cd "./vanadium/"
 	GLOBIGNORE="modified-*"
 	local current_vanadium_patches=(*.patch)
  	unset GLOBIGNORE
