@@ -23,6 +23,7 @@ cd Trivalent
 shopt -s nullglob
 
 pushd build
+	cp trivalent.spec "${BUILD_DIR}"
 	cp install/* "${BUILD_DIR}"
 	cp resources/* "${BUILD_DIR}"
 	cp selinux/* "${BUILD_DIR}"
