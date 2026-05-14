@@ -1,0 +1,309 @@
+Copyright 2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.html b/chrome/browser/resources/settings/privacy_page/security/security_page.html
+index 6b9bd1adee..6e0bea5eee 100644
+--- a/chrome/browser/resources/settings/privacy_page/security/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security/security_page.html
+@@ -3,6 +3,10 @@
+       padding: 0 var(--cr-section-padding);
+     }
+
++    #webrtcLabel {
++      flex: 1;
++    }
++
+     .bullet-line {
+       align-items: center;
+       display: flex;
+@@ -70,129 +74,9 @@
+       pointer-events: auto;
+     }
+   </style>
+-  <settings-subpage page-title="$i18n{securityPageTitle}"
++  <settings-subpage page-title="$i18n{privacyPageTitle}"
+       learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
+       route-path$="[[routePath]]">
+-    <div id="safeBrowsingSection">
+-      <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
+-      <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
+-          pref="{{prefs.generated.safe_browsing}}"
+-          selectable-elements="cr-radio-button, settings-collapse-radio-button"
+-          on-change="onSafeBrowsingRadioChange_">
+-        <settings-collapse-radio-button id="safeBrowsingEnhanced"
+-            name="[[safeBrowsingSettingEnum_.ENHANCED]]"
+-            pref="[[prefs.generated.safe_browsing]]"
+-            label="$i18n{safeBrowsingEnhanced}"
+-            sub-label="$i18n{safeBrowsingEnhancedDescUpdated}"
+-            indicator-aria-label="$i18n{controlledSettingPolicy}"
+-            expand-aria-label="$i18n{safeBrowsingEnhancedExpandA11yLabel}"
+-            on-expand-clicked="onEnhancedProtectionExpandButtonClicked_"
+-            no-automatic-collapse>
+-          <div slot="collapse">
+-            <div id="enhancedProtectionDescContainer"
+-                class="settings-columned-section">
+-              <div class="column">
+-                <h3 class="description-header">
+-                  $i18n{columnHeadingWhenOn}
+-                </h3>
+-                <ul class="icon-bulleted-list">
+-                  <li>
+-                    <cr-icon icon="settings20:data" aria-hidden="true">
+-                    </cr-icon>
+-                    <div class="secondary">
+-                      $i18n{safeBrowsingEnhancedWhenOnBulOne}
+-                    </div>
+-                  </li>
+-                  <li>
+-                    <cr-icon icon="settings20:download" aria-hidden="true">
+-                    </cr-icon>
+-                    <div class="secondary">
+-                      $i18n{safeBrowsingEnhancedWhenOnBulTwo}
+-                    </div>
+-                  </li>
+-                  <li>
+-                    <cr-icon icon="settings20:gshield" aria-hidden="true">
+-                    </cr-icon>
+-                    <div class="secondary">
+-                      $i18n{safeBrowsingEnhancedWhenOnBulThree}
+-                    </div>
+-                  </li>
+-                  <li>
+-                    <cr-icon icon="settings:language" aria-hidden="true">
+-                    </cr-icon>
+-                    <div class="secondary">
+-                      $i18n{safeBrowsingEnhancedWhenOnBulFour}
+-                    </div>
+-                  </li>
+-                </ul>
+-              </div>
+-              <div class="column">
+-                <h3 class="description-header">
+-                  $i18n{columnHeadingConsider}
+-                </h3>
+-                <ul class="icon-bulleted-list">
+-                  <li>
+-                    <cr-icon icon="settings20:link"></cr-icon>
+-                    <div class="cr-secondary-text">
+-                      $i18n{safeBrowsingEnhancedThingsToConsiderBulOne}
+-                    </div>
+-                  </li>
+-                  <li>
+-                    <cr-icon icon="settings20:account-circle"></cr-icon>
+-                    <div class="cr-secondary-text">
+-                      $i18n{safeBrowsingEnhancedThingsToConsiderBulTwo}
+-                    </div>
+-                  </li>
+-                  <li>
+-                    <cr-icon icon="settings:performance"></cr-icon>
+-                    <div class="cr-secondary-text">
+-                      $i18n{safeBrowsingEnhancedThingsToConsiderBulThree}
+-                    </div>
+-                  </li>
+-                </ul>
+-              </div>
+-            </div>
+-            <div id="learnMoreLabelContainer">
+-              <div class="cr-secondary-text">
+-                $i18nRaw{safeBrowsingEnhancedLearnMoreLabel}
+-              </div>
+-            </div>
+-          </div>
+-        </settings-collapse-radio-button>
+-        <settings-collapse-radio-button id="safeBrowsingStandard"
+-            no-collapse="[[hideExtendedReportingRadioButton_]]"
+-            name="[[safeBrowsingSettingEnum_.STANDARD]]"
+-            pref="[[prefs.generated.safe_browsing]]"
+-            label="$i18n{safeBrowsingStandard}"
+-            sub-label="[[getSafeBrowsingStandardSubLabel_(
+-                        enableHashPrefixRealTimeLookups_)]]"
+-            indicator-aria-label="$i18n{controlledSettingPolicy}"
+-            expand-aria-label="$i18n{safeBrowsingStandardExpandA11yLabel}"
+-            info-opened="{{infoOpened_}}"
+-            on-expand-clicked="onStandardProtectionExpandButtonClicked_"
+-            no-automatic-collapse>
+-          <div slot="noSelectionCollapse">
+-            <template is="dom-if" if="[[!hideExtendedReportingRadioButton_]]">
+-              <settings-toggle-button id="safeBrowsingReportingToggle"
+-                pref="{{prefs.safebrowsing.scout_reporting_enabled}}"
+-                label="$i18n{safeBrowsingStandardReportingLabel}"
+-                sub-label="$i18n{safeBrowsingEnableExtendedReportingDesc}"
+-                on-change="onSafeBrowsingExtendedReportingChange_"
+-                disabled="[[getDisabledExtendedSafeBrowsing_(
+-                              prefs.generated.safe_browsing.*)]]">
+-              </settings-toggle-button>
+-            </template>
+-          </div>
+-        </settings-collapse-radio-button>
+-        <settings-collapse-radio-button id="safeBrowsingDisabled" no-collapse
+-            name="[[safeBrowsingSettingEnum_.DISABLED]]"
+-            pref="[[prefs.generated.safe_browsing]]"
+-            label="$i18n{safeBrowsingNone}"
+-            sub-label="$i18n{safeBrowsingNoneDesc}"
+-            indicator-aria-label="$i18n{controlledSettingPolicy}">
+-        </settings-collapse-radio-button>
+-      </settings-radio-group>
+-    </div>
+     <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
+       <div id="secureConnectionsSection">
+         <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
+@@ -233,15 +117,8 @@
+       </div>
+     </template>
+     <div class="cr-row first">
+-      <h2 class="cr-title-text">$i18n{advancedPageTitle}</h2>
++      <h2 class="cr-title-text">$i18n{securityPageTitle}</h2>
+     </div>
+-    <settings-toggle-button id="passwordsLeakToggle"
+-          label="$i18n{passwordsLeakDetectionLabel}"
+-          pref="{{prefs.generated.password_leak_detection}}"
+-          sub-label="[[getPasswordsLeakToggleSubLabel_(
+-                        prefs.profile.password_manager_leak_detection.*,
+-                        prefs.generated.password_leak_detection.*)]]">
+-    </settings-toggle-button>
+     <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
+       <settings-toggle-button id="httpsOnlyModeToggle"
+           pref="{{prefs.generated.https_first_mode_enabled}}"
+@@ -292,18 +169,46 @@
+         on-click="onManageCertificatesClick_" external>
+     </cr-link-row>
+
+-    <cr-link-row id="advancedProtectionProgramLink" class="hr"
+-        label="$i18n{advancedProtectionProgramTitle}"
+-        sub-label="$i18n{advancedProtectionProgramDesc}"
+-        on-click="onAdvancedProtectionProgramLinkClick_"
+-        external>
+-    </cr-link-row>
+-    <template is="dom-if" if="[[showDisableSafebrowsingDialog_]]" restamp>
+-      <settings-simple-confirmation-dialog
+-          title-text="$i18n{safeBrowsingDisableDialog}"
+-          body-text="$i18n{safeBrowsingDisableDialogDesc}"
+-          confirm-text="$i18n{safeBrowsingDisableDialogConfirm}"
+-          on-close="onDisableSafebrowsingDialogClose_">
+-      </settings-simple-confirmation-dialog>
+-    </template>
++    <div id="hardeningSection">
++      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
++      <settings-toggle-button class="cr-row first"
++        pref="{{prefs.incognito.launch_mode}}"
++        label="$i18n{incognitoLaunchLabel}"
++        sub-label="$i18n{incognitoLaunchDesc}">
++      </settings-toggle-button>
++      <template is="dom-if" if="[[prefs.incognito.launch_mode.value]]">
++        <settings-toggle-button class="cr-row first"
++          pref="{{prefs.incognito.startup_mode}}"
++          label="$i18n{incognitoStartupLabel}"
++          sub-label="$i18n{incognitoStartupDesc}">
++        </settings-toggle-button>
++      </template>
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.disable_3d_apis}}"
++        label="$i18n{disable3dApisLabel}"
++        sub-label="$i18n{disable3dApisDesc}">
++      </settings-toggle-button>
++      <div class="cr-row">
++        <div id="webrtcLabel" class="flex cr-padded-text" aria-hidden="true">
++          $i18n{webrtcHandlingPolicyLabel}
++        </div>
++        <settings-dropdown-menu
++          label="$i18n{webrtcHandlingPolicyLabel}"
++          pref="{{prefs.webrtc.ip_handling_policy}}"
++          menu-options="[[webrtcHandlingPolicyOptions_]]">
++        </settings-dropdown-menu>
++      </div>
++<if expr="is_linux or is_win">
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.net.network_service_sandbox}}"
++        label="$i18n{netServSandboxLabel}"
++        sub-label="$i18n{netServSandboxDesc}">
++      </settings-toggle-button>
++</if>
++      <settings-toggle-button class="cr-row"
++        pref="{{prefs.extensions.disabled}}"
++        label="$i18n{disableExtensionsLabel}"
++        sub-label="$i18n{disableExtensionsDesc}">
++      </settings-toggle-button>
++    </div>
+   </settings-subpage>
+diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.ts b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
+index 92eb5ebaef..4f3726dd7e 100644
+--- a/chrome/browser/resources/settings/privacy_page/security/security_page.ts
++++ b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
+@@ -17,6 +17,7 @@ import '../../settings_page/settings_subpage.js';
+ import '../../settings_shared.css.js';
+ import '../../simple_confirmation_dialog.js';
+ import './secure_dns.js';
++import '../../controls/settings_dropdown_menu.js';
+
+ import {PrefsMixin} from '/shared/settings/prefs/prefs_mixin.js';
+ import {CrSettingsPrefs} from '/shared/settings/prefs/prefs_types.js';
+@@ -33,6 +34,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+ import type {SettingsCollapseRadioButtonElement} from '../../controls/collapse_radio_button.js';
+ import type {SettingsRadioGroupElement} from '../../controls/settings_radio_group.js';
+ import type {SettingsToggleButtonElement} from '../../controls/settings_toggle_button.js';
++import type {DropdownMenuOptionList} from '../../controls/settings_dropdown_menu.js';
+ import {loadTimeData} from '../../i18n_setup.js';
+ import type {MetricsBrowserProxy} from '../../metrics_browser_proxy.js';
+ import {MetricsBrowserProxyImpl, PrivacyElementInteractions, SafeBrowsingInteractions} from '../../metrics_browser_proxy.js';
+@@ -112,6 +114,19 @@ export class SettingsSecurityPageElement extends
+       },
+       // </if>
+
++      webrtcHandlingPolicyOptions_: {
++        readOnly: true,
++        type: Array,
++        value() {
++          return [
++            {value: "default", name: "Default"},
++            {value: "default_public_and_private_interfaces", name: "Default Public and Private Interfaces"},
++            {value: "default_public_interface_only", name: "Default Public Interface Only"},
++            {value: "disable_non_proxied_udp", name: "Disable Non-Proxied UDP"},
++          ];
++        },
++      },
++
+       /**
+        * Valid safe browsing states.
+        */
+@@ -176,6 +191,7 @@ export class SettingsSecurityPageElement extends
+       showDisableSafebrowsingDialog_: Boolean,
+     };
+   }
++  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
+   declare private showSecureDnsSetting_: boolean;
+
+   // <if expr="is_chromeos">
+@@ -219,10 +235,6 @@ export class SettingsSecurityPageElement extends
+       }
+     });
+
+-    this.registerHelpBubble(
+-        'kEnhancedProtectionSettingElementId',
+-        this.$.safeBrowsingEnhanced.getBubbleAnchor(), {anchorPaddingTop: 10});
+-
+     this.addWebUiListener(
+         'contentSettingCategoryChanged', (category: ContentSettingsTypes) => {
+           if (category === ContentSettingsTypes.JAVASCRIPT_OPTIMIZER) {
+diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
+index 5f4217446a..8dc0759c9b 100644
+--- a/components/security_interstitials/core/browser/resources/interstitial_large.js
++++ b/components/security_interstitials/core/browser/resources/interstitial_large.js
+@@ -335,8 +335,6 @@ function setupEvents() {
+   }
+ 
+   preventDefaultOnPoundLinkClicks();
+-  setupExtendedReportingCheckbox();
+-  setupEnhancedProtectionMessage();
+   setupSSLDebuggingInfo();
+ 
+   const disableKeyboardOverride =
+ 

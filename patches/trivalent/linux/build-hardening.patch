@@ -1,0 +1,121 @@
+Copyright 2024-2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index c092446fa0715..11abf5e542083 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -443,14 +443,24 @@ config("compiler") {
+       # On Aarch64, SCS requires the x18 register to be unused because it will hold
+       # a pointer to the shadow stack. For Android we know that Clang doesn't use
+       # x18 by default. On other OSs adding "-ffixed-x18" might be required.
+-      assert(is_android)
++      assert((is_linux || is_android) && target_cpu == "arm64")
+ 
+       scs_parameters = [
+         "-fsanitize=shadow-call-stack",
+-        "-fno-stack-protector",
++        "-fstack-protector-strong",
+       ]
++
++      rs_scs_params = [
++        #"-Zsanitizer=shadow-call-stack",
++        "-Zstack-protector=strong",
++      ]
++      if (!is_android) {
++        scs_parameters += [ "-ffixed-x18" ]
++        #rs_scs_params += [ "-Zfixed-x18" ]
++      }
+       cflags += scs_parameters
+       ldflags += scs_parameters
++      rustflags += rs_scs_params
+     } else {
+       if (is_apple) {
+         # The strong variant of the stack protector significantly increases
+@@ -465,10 +475,17 @@ config("compiler") {
+       } else if (is_posix || is_fuchsia) {
+         if (current_os != "aix") {
+           # Not available on aix.
+-          cflags += [ "-fstack-protector" ]
++          cflags += [ "-fstack-protector-strong" ]
++          rustflags += [ "-Zstack-protector=strong" ]
+         }
+       }
+     }
++    if (is_linux) {
++      cflags += [
++        "-fstack-clash-protection",
++        "-mharden-sls=all",
++      ]
++    }
+   }
+ 
+   # Non-Apple Posix and Fuchsia compiler flags setup.
+@@ -583,6 +600,12 @@ config("compiler") {
+   if (is_clang) {
+     cflags += [ "-fcolor-diagnostics" ]
+ 
++    cflags += [ "-ftrivial-auto-var-init=zero" ]
++
++    if (!is_ubsan && !is_ubsan_security) {
++      cflags += [ "-fwrapv" ]
++    }
++
+     # Enable -fmerge-all-constants. This used to be the default in clang
+     # for over a decade. It makes clang non-conforming, but is fairly safe
+     # in practice and saves some binary size. We might want to consider
+@@ -2406,7 +2429,7 @@ config("chromium_code") {
+       # Non-chromium code is not guaranteed to compile cleanly with
+       # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
+       # disabled, so only do that for Release build.
+-      fortify_level = "2"
++      fortify_level = "3"
+ 
+       # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
+       # implementation with a few custom glibc patches. Use that if it's
+@@ -3474,8 +3497,14 @@ buildflag_header("compiler_buildflags") {
+ }
+ 
+ config("cet_shadow_stack") {
+-  if (enable_cet_shadow_stack && is_win) {
++  if (enable_cet_shadow_stack) {
+     assert(target_cpu == "x64")
+-    ldflags = [ "/CETCOMPAT" ]
++    if (is_win) {
++      ldflags = [ "/CETCOMPAT" ]
++    } else if (is_linux) {
++      cflags = [ "-fcf-protection=full" ]
++      ldflags = [ "-fcf-protection=full", "-Wl,-z,shstk" ]
++      rustflags = [ "-Zcf-protection=full" ]
++    }
+   }
+ }
+diff --git a/build/config/linux/BUILD.gn b/build/config/linux/BUILD.gn
+index 131bb71d1d3b8..55f8590d2423f 100644
+--- a/build/config/linux/BUILD.gn
++++ b/build/config/linux/BUILD.gn
+@@ -19,12 +19,15 @@ config("compiler") {
+     import("//build/config/arm.gni")
+     cflags = []
+     asmflags = []
++    rustflags = []
+     if (arm_control_flow_integrity == "standard") {
+       cflags += [ "-mbranch-protection=standard" ]
+       asmflags += [ "-mbranch-protection=standard" ]
++      rustflags += [ "-Zbranch-protection=bti,pac-ret" ]
+     } else if (arm_control_flow_integrity == "pac") {
+       cflags += [ "-mbranch-protection=pac-ret" ]
+       asmflags += [ "-mbranch-protection=pac-ret" ]
++      rustflags += [ "-Zbranch-protection=pac-ret" ]
+     }
+   }
+ }

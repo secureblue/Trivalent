@@ -1,0 +1,84 @@
+Copyright 2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
+index 220bfa52fa..076c4ec3dc 100644
+--- a/chrome/browser/resources/settings/people_page/people_page.html
++++ b/chrome/browser/resources/settings/people_page/people_page.html
+@@ -123,30 +123,6 @@
+           </div>
+         </cr-link-row>
+
+-        <cr-link-row id="sync-setup"
+-            label="$i18n{syncAndNonPersonalizedServices}"
+-            on-click="onSyncClick_"
+-            role-description="$i18n{subpageArrowRoleDescription}"
+-            hidden="[[shouldHideSyncSetupLinkRow_(syncStatus)]]">
+-        </cr-link-row>
+-        <cr-link-row id="google-services"
+-            label="$i18n{googleServicesPageTitle}"
+-            on-click="onGoogleServicesClick_"
+-            role-description="$i18n{subpageArrowRoleDescription}"
+-            hidden="[[!shouldHideSyncSetupLinkRow_(syncStatus)]]">
+-        </cr-link-row>
+-
+-        <template is="dom-if" if="[[signinAllowed_]]">
+-          <cr-link-row id="manage-google-account"
+-              label="$i18n{manageGoogleAccount}"
+-              hidden="[[!shouldShowGoogleAccount_]]"
+-              on-click="openGoogleAccount_" external></cr-link-row>
+-
+-          <cr-link-row id="edit-profile"
+-              label="$i18n{profileNameAndPicture}"
+-              on-click="onProfileClick_" ></cr-link-row>
+-        </template>
+-
+         <cr-link-row id="importDataDialogTrigger"
+             label="$i18n{importTitle}"
+             on-click="onImportDataClick_"></cr-link-row>
+diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
+index 19aebba1df..45d59b65ec 100644
+--- a/chrome/browser/ui/webui/settings/settings_ui.cc
++++ b/chrome/browser/ui/webui/settings/settings_ui.cc
+@@ -346,7 +346,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   bool show_privacy_guide =
+       base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
+       (!ShouldDisplayManagedUi(profile) && !profile->IsChild());
+-  html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
++  html_source->AddBoolean("showPrivacyGuide", false);
+ 
+   html_source->AddBoolean(
+       "showResetProfileBannerV2",
+@@ -510,7 +510,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+       base::FeatureList::IsEnabled(privacy_sandbox::kRelatedWebsiteSetsUi));
+   html_source->AddBoolean("isPrivacySandboxAdPrivacyUxDeprecationEnabled",
+                           is_ad_privacy_ux_deprecation_enabled);
+-  html_source->AddBoolean("isAdPrivacyAvailable", is_ad_privacy_available);
++  html_source->AddBoolean("isAdPrivacyAvailable", false);
+ 
+   // Performance
+   AddSettingsPageUIHandler(std::make_unique<PerformanceHandler>());
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+index 3eb464c572..e9498414b8 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+@@ -32,8 +32,8 @@
+           $i18n{resetDialogCommit}
+         </cr-button>
+       </div>
+-      <div slot="footer">
+-        <cr-checkbox id="sendSettings" checked>
++      <div style="display:none" slot="footer">
++        <cr-checkbox id="sendSettings">
+           $i18nRaw{resetPageFeedback}</cr-checkbox>
+       </div>
+     </cr-dialog>
