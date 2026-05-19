@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2025 The Trivalent Authors
+# Copyright 2025-2026 The Trivalent Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 
 set -oue pipefail
 
-repo_directory="$(pwd)"
-readonly repo_directory
+patches_directory="$(pwd)"
+readonly patches_directory
 remote_vanadium_patches=()
 truncated_remote_vanadium_patches=()
 
@@ -32,7 +32,7 @@ get_remote_vanadium_patches() {
 			fi
 			if [[ $retry == 2 ]]; then
 				echo "Aborting!"
-				cd "$repo_directory"
+				cd "${patches_directory}"
 				rm -rf vanadium-patches-tmp/
 				exit 1
 			fi
@@ -50,17 +50,17 @@ get_remote_vanadium_patches() {
 		else
 			echo "ERROR! Remote patch ${remote_vanadium_patches[$i]} does match expected naming scheme!"
 			echo "Aborting!"
-			cd "$repo_directory"
+			cd "${patches_directory}"
 			rm -rf vanadium-patches-tmp/
 			exit 1
 		fi
 	done
-	cd "$repo_directory"
+	cd "${patches_directory}"
 }
 
 update_vanadium_patches() {
 	get_remote_vanadium_patches
-	cd "./vanadium_patches/"
+	cd "./vanadium/"
 	GLOBIGNORE="modified-*"
 	local current_vanadium_patches=(*.patch)
  	unset GLOBIGNORE
@@ -82,7 +82,7 @@ update_vanadium_patches() {
 					echo "	Patch renamed to: ${remote_vanadium_patches[$j]}"
 				fi
 				rm "${current_vanadium_patches[$i]}"
-				cp "$repo_directory/vanadium-patches-tmp/Vanadium/patches/${remote_vanadium_patches[$j]}" ./
+				cp "${patches_directory}/vanadium-patches-tmp/Vanadium/patches/${remote_vanadium_patches[$j]}" ./
 				updated_counter=$((updated_counter+1))
 			else
 				patch_not_found_counter=$((patch_not_found_counter+1))
@@ -100,7 +100,7 @@ update_vanadium_patches() {
 	echo ""
 	echo "Updated $updated_counter patches."
 	echo "Removed $removed_counter patches."
-	cd "$repo_directory"
+	cd "${patches_directory}"
 }
 
 mkdir vanadium-patches-tmp/ # create a temporary directory for cloning the Vanadium patches
