@@ -94,7 +94,7 @@ index f977c9fed7..a062b0205f 100644
 +      ldflags = [ "/CETCOMPAT" ]
 +    } else if (is_linux) {
 +      cflags = [ "-fcf-protection=full" ]
-+      ldflags = [ "-fcf-protection=full", "-Wl,-z,shstk,-z,ibt" ]
++      ldflags = [ "-fcf-protection=full", "-Wl,-z,shstk" ]
 +      rustflags = [ "-Zcf-protection=full" ]
 +    }
    }
