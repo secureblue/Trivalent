@@ -156,3 +156,16 @@ index c01de2e0f7..b37b6254e2 100644
    registry->RegisterBooleanPref(localstate::kOnDeviceAiUserSettingsEnabled,
                                  true);
    registry->RegisterDictionaryPref(localstate::kManifestAssetLedger);
+diff --git a/chrome/browser/glic/glic_pref_names.cc b/chrome/browser/glic/glic_pref_names.cc
+index 128e61fe32..12e021e73c 100644
+--- a/chrome/browser/glic/glic_pref_names.cc
++++ b/chrome/browser/glic/glic_pref_names.cc
+@@ -70,7 +70,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+ 
+   registry->RegisterIntegerPref(
+       prefs::kGlicActuationOnWeb,
+-      std::to_underlying(GetGlicActuationOnWebPolicyState()));
++      1);
+ 
+   registry->RegisterListPref(prefs::kGlicActuationOnWebAllowedForURLs);
+   registry->RegisterListPref(prefs::kGlicActuationOnWebBlockedForURLs);
