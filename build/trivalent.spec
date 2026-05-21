@@ -70,7 +70,6 @@ Source3: %{chromium_name}.sh
 Source4: %{chromium_name}.desktop
 Source9: %{chromium_name}.xml
 Source10: %{chromium_name}.appdata.xml
-Source11: master_preferences
 
 Source12: %{chromium_name}16.png
 Source13: %{chromium_name}32.png
@@ -636,9 +635,6 @@ cp -a %{SOURCE17} %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
 cp -a %{SOURCE18} %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_name}.png
 
-# Install the master_preferences file
-install -m 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/%{chromium_name}/
-
 mkdir -p %{buildroot}%{_datadir}/applications/
 desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE4}
 
@@ -670,7 +666,6 @@ install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_user_tmpfilesdir}/%{modulename}-d
 # Config
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf
 %config %{_sysconfdir}/%{chromium_name}/%{chromium_name}.conf.d/
-%config %{_sysconfdir}/%{chromium_name}/master_preferences
 %config %{_sysconfdir}/%{chromium_name}/policies/
 # System entries
 %{_datadir}/applications/%{chromium_name}.desktop
