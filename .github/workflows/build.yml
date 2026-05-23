@@ -20,6 +20,10 @@ on:
         required: false
         type: boolean
         default: false
+      override_version:
+        required: true
+        type: string
+        default: ""
     secrets:
       RPM_SIGNING_KEY:
         required: false
@@ -52,10 +56,17 @@ jobs:
         id: srpm_build
         env:
           BRANCH: ${{ github.ref_name }}
+          CACHE_OVERRIDE_VERSION: ${{ inputs.override_version }}
         run: |
           dnf copr enable secureblue/trivalent -y
           dnf update -y
-          dnf install git wget rpmbuild yum-utils rpm-sign trivalent-chromium-clean-source -y
+          dnf install git wget rpmbuild yum-utils rpm-sign -y
+          if [ -n "${CACHE_OVERRIDE_VERSION}" ]; then
+              dnf install "trivalent-chromium-clean-source-${CACHE_OVERRIDE_VERSION}" -y
+          else
+              dnf install trivalent-chromium-clean-source -y
+          fi
+
           SOURCE_CACHE_HASH=$(sha256sum /usr/src/chromium/chromium-*.xz)
           echo "SOURCE_CACHE_HASH: ${SOURCE_CACHE_HASH}"
           git clone --branch "${BRANCH}" https://github.com/secureblue/Trivalent.git
