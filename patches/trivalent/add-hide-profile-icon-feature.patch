@@ -24,30 +24,30 @@ index 45501ce4b4..dffd87c1e2 100644
  BASE_FEATURE(kAllowEyeDropperWGCScreenCapture,
  #if BUILDFLAG(IS_WIN)
 diff --git a/chrome/browser/ui/ui_features.h b/chrome/browser/ui/ui_features.h
-index 43f876760f..d1a60b37ab 100644
+index ec4e5c2d2b..b276e1a066 100644
 --- a/chrome/browser/ui/ui_features.h
 +++ b/chrome/browser/ui/ui_features.h
-@@ -20,6 +20,8 @@ namespace features {
+@@ -19,6 +19,8 @@ namespace features {
  // All features in alphabetical order. The features should be documented
  // alongside the definition of their values in the .cc file.
-
+ 
 +BASE_DECLARE_FEATURE(kHideProfileIcon);
 +
  BASE_DECLARE_FEATURE(kAllowEyeDropperWGCScreenCapture);
-
- BASE_DECLARE_FEATURE(kBrowserWidgetCacheThemeService);
+ 
+ BASE_DECLARE_FEATURE(kCreateNewTabGroupAppMenuTopLevel);
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-index d1519e7f3782a..548be223ca340 100644
+index f4a09082bd..f129849413 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
 +++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-@@ -481,7 +481,9 @@ void ToolbarView::Init() {
-   // DevTools profiles are OffTheRecord, so hide it there.
-   show_avatar_toolbar_button = browser_->profile()->IsIncognitoProfile() ||
-                                browser_->profile()->IsGuestSession() ||
--                               browser_->profile()->IsRegularProfile();
-+                               (browser_->profile()->IsRegularProfile() &&
-+                               !base::FeatureList::IsEnabled(
-+                                                   features::kHideProfileIcon));
+@@ -591,7 +591,9 @@ void ToolbarView::Init() {
+     // DevTools profiles are OffTheRecord, so hide it there.
+     show_avatar_toolbar_button = browser_->profile()->IsIncognitoProfile() ||
+                                  browser_->profile()->IsGuestSession() ||
+-                                 browser_->profile()->IsRegularProfile();
++                                 (browser_->profile()->IsRegularProfile() &&
++                                 !base::FeatureList::IsEnabled(
++                                                     features::kHideProfileIcon));
  #endif
-   avatar_->SetVisible(show_avatar_toolbar_button);
- 
+     avatar_->SetVisible(show_avatar_toolbar_button);
+   }
