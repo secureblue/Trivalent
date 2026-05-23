@@ -20,7 +20,7 @@ on:
       override_version:
         description: 'Override version?'
         type: string
-        required: true
+        required: false
         default: ""
 
 jobs:
