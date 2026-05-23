@@ -8,10 +8,10 @@ Subject: [PATCH] Enable HSTS upgrades for top-level navigation only by default
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/base/features.cc b/net/base/features.cc
-index 745a899cee83d..43c8d60f28870 100644
+index ce913be53aaab..2d414b21d1bd2 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
-@@ -555,7 +555,7 @@ const base::FeatureParam<base::TimeDelta>
+@@ -558,7 +558,7 @@ const base::FeatureParam<base::TimeDelta>
          /*name=*/"SimpleCachePrioritizedCachingPrioritizationPeriod",
          /*default_value=*/base::Days(1)};
  

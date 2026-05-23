@@ -9,7 +9,7 @@ Subject: [PATCH] enable certificate transparency feature by default for
  1 file changed, 4 deletions(-)
 
 diff --git a/chrome/browser/browser_features.cc b/chrome/browser/browser_features.cc
-index 0f63c883ad8d9..a26eea0595c71 100644
+index b08620f11d7ba..33b3d467fc6b8 100644
 --- a/chrome/browser/browser_features.cc
 +++ b/chrome/browser/browser_features.cc
 @@ -45,11 +45,7 @@ BASE_FEATURE(kBookmarkTriggerForPrefetch, base::FEATURE_DISABLED_BY_DEFAULT);
