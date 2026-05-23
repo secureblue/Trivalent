@@ -15,7 +15,13 @@ name: build-x86_64
 permissions: {}
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # allow using non-latest cache version
+    inputs:
+      override_version:
+        description: 'Override version?'
+        type: string
+        required: true
+        default: ""
 
 jobs:
   build-x86_64:
@@ -26,6 +32,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       arch: 'x86_64'
+      override_version: ${{ inputs.override_version }}
     permissions:
       actions: read # To read the workflow path.
       id-token: write # To sign the provenance.

@@ -15,7 +15,13 @@ name: build-aarch64-test
 permissions: {}
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # allow using non-latest cache version
+    inputs:
+      override_version:
+        description: 'Override version?'
+        type: string
+        required: true
+        default: ""
 
 jobs:
   build-aarch64-test:
@@ -27,6 +33,7 @@ jobs:
     with:
       arch: 'aarch64'
       test_build: true
+      override_version: ${{ inputs.override_version }}
     permissions:
       actions: read # To read the workflow path.
       id-token: write # To sign the provenance.
