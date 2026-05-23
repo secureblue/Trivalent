@@ -8,7 +8,7 @@ Subject: [PATCH] enable more Local Network Access coverage checks by default
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/services/network/public/cpp/features.cc b/services/network/public/cpp/features.cc
-index 19746a6518d00..39a0dca70ab61 100644
+index 93e0767d387e9..ca17d459d3192 100644
 --- a/services/network/public/cpp/features.cc
 +++ b/services/network/public/cpp/features.cc
 @@ -249,7 +249,7 @@ BASE_FEATURE_PARAM(bool,
