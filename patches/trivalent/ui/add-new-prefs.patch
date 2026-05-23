@@ -71,7 +71,7 @@ index 2a44a0d606..f3790357da 100644
 +</if>
      <!-- <if expr="is_win"> -->
      <template is="dom-if" if="[[showProcessIsolationSetting_]]" restamp>
-       <settings-toggle-button id="isolationState"
+       <div class="hr"></div>
 diff --git a/chrome/browser/resources/settings/search_page/search_page.html b/chrome/browser/resources/settings/search_page/search_page.html
 index 819dc168bd..460caa8b67 100644
 --- a/chrome/browser/resources/settings/search_page/search_page.html
