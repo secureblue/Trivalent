@@ -274,25 +274,25 @@ index 92eb5ebaef..4f3726dd7e 100644
        /**
         * Valid safe browsing states.
         */
-@@ -176,6 +191,7 @@ export class SettingsSecurityPageElement extends
-       showDisableSafebrowsingDialog_: Boolean,
+@@ -217,6 +232,7 @@ export class SettingsSecurityPageElement extends
+       },
      };
    }
 +  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
    declare private showSecureDnsSetting_: boolean;
-
+ 
    // <if expr="is_chromeos">
-@@ -219,10 +235,6 @@ export class SettingsSecurityPageElement extends
+@@ -266,10 +282,6 @@ export class SettingsSecurityPageElement extends
        }
      });
-
+ 
 -    this.registerHelpBubble(
 -        'kEnhancedProtectionSettingElementId',
 -        this.$.safeBrowsingEnhanced.getBubbleAnchor(), {anchorPaddingTop: 10});
 -
-     this.addWebUiListener(
-         'contentSettingCategoryChanged', (category: ContentSettingsTypes) => {
-           if (category === ContentSettingsTypes.JAVASCRIPT_OPTIMIZER) {
+     // Initialize the last focus time on page load.
+     this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();
+ 
 diff --git a/components/security_interstitials/core/browser/resources/interstitial_large.js b/components/security_interstitials/core/browser/resources/interstitial_large.js
 index 5f4217446a..8dc0759c9b 100644
 --- a/components/security_interstitials/core/browser/resources/interstitial_large.js

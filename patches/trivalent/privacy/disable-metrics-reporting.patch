@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@ diff --git a/chrome/browser/browser_process_impl.cc b/chrome/browser/browser_pro
 index 1c3854d029..13c0e2d62b 100644
 --- a/chrome/browser/browser_process_impl.cc
 +++ b/chrome/browser/browser_process_impl.cc
-@@ -1288,7 +1288,7 @@ void BrowserProcessImpl::RegisterPrefs(PrefRegistrySimple* registry) {
+@@ -1305,7 +1305,7 @@ void BrowserProcessImpl::RegisterPrefs(PrefRegistrySimple* registry) {
  #endif  // BUILDFLAG(IS_CHROMEOS)
  
    registry->RegisterBooleanPref(metrics::prefs::kMetricsReportingEnabled,
 -                                GoogleUpdateSettings::GetCollectStatsConsent());
 +                                false);
-   registry->RegisterIntegerPref(
-       metrics::prefs::kMetricsReportingLevel,
-       static_cast<int>(GoogleUpdateSettings::GetMetricsReportingLevel()));
+   registry->RegisterBooleanPref(prefs::kDevToolsRemoteDebuggingAllowed, true);
+   registry->RegisterBooleanPref(prefs::kDevToolsRemoteDebuggingEnabled, false);
+ 
