@@ -157,9 +157,12 @@ optional_policy(`
 tunable_policy(`trivalent_exec_flatpaks', `
 	gen_require(`
 		type data_home_t;
+		type flatpak_home_t;
 	')
 	exec_files_pattern(trivalent_domain, data_home_t, data_home_t)
 	read_lnk_files_pattern(trivalent_domain, data_home_t, data_home_t)
+	exec_files_pattern(trivalent_domain, flatpak_home_t, flatpak_home_t)
+	read_lnk_files_pattern(trivalent_domain, flatpak_home_t, flatpak_home_t)
 ')
 
 tunable_policy(`trivalent_drm', `
@@ -385,12 +388,11 @@ optional_policy(`
 optional_policy(`
 	gen_require(`
 		type flatpak_t;
-    type unconfined_trivalent_script_t;
+		type unconfined_trivalent_script_t;
 	')
 
 	domtrans_pattern(flatpak_t, trivalent_script_exec_t, unconfined_trivalent_script_t)
 ')
-
 
 optional_policy(`
 	gen_require(`
