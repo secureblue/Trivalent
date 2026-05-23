@@ -1,60 +1,72 @@
+Copyright 2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
 diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
-index 81776c22d5..88e6f8d392 100644
+index aae688f787..1ab79f7b31 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
-@@ -1322,6 +1322,52 @@
-     Browsing and searching is faster than standard preloading
-   </message>
-
-+  <!-- Trivalent -->
-+  <message name="IDS_WEBSITE_DARK_MODE" desc="Trivalent String.">
-+    Website dark mode
-+  </message>
-+  <message name="IDS_PRINTING_CAPABILITIES" desc="Trivalent String.">
-+    Printing capabilities
-+  </message>
+@@ -1335,6 +1335,52 @@
+       Browsing and searching is faster than standard preloading
+     </message>
+ 
++    <!-- Trivalent -->
++    <message name="IDS_WEBSITE_DARK_MODE" desc="Trivalent String.">
++      Website dark mode
++    </message>
++    <message name="IDS_PRINTING_CAPABILITIES" desc="Trivalent String.">
++      Printing capabilities
++    </message>
 +
-+  <!-- Trivalent security section -->
-+  <message name="IDS_HARDENING_TITLE" desc="Trivalent String.">
-+    Hardening
-+  </message>
-+  <message name="IDS_INCOGNITO_LAUNCH_LABEL" desc="Trivalent String.">
-+    Incognito Launch
-+  </message>
-+  <message name="IDS_INCOGNITO_LAUNCH_DESCRIPTION" desc="Trivalent String.">
-+    Open external links in Incognito tabs
-+  </message>
-+  <message name="IDS_INCOGNITO_STARTUP_LABEL" desc="Trivalent String.">
-+    Incognito Startup
-+  </message>
-+  <message name="IDS_INCOGNITO_STARTUP_DESCRIPTION" desc="Trivalent String.">
-+    Opens new sessions in Incognito tabs
-+  </message>
-+  <message name="IDS_DISABLE_3D_APIS_LABEL" desc="Trivalent String.">
-+    Block 3D APIs
-+  </message>
-+  <message name="IDS_DISABLE_3D_APIS_DESCRIPTION" desc="Trivalent String.">
-+    Block web-facing access to features like WebGL
-+  </message>
-+  <message name="IDS_WEBRTC_HANDLING_POLICY_LABEL" desc="Trivalent String.">
-+    WebRTC Handling Policy
-+  </message>
-+  <message name="IDS_NETWORK_SERVICE_SANDBOX_LABEL" desc="Trivalent String.">
-+    Network Service Sandbox
-+  </message>
-+  <message name="IDS_NETWORK_SERVICE_SANDBOX_DESCRIPTION" desc="Trivalent String.">
-+    Disabling may fix issues with data persistence but will reduce security slightly, requires a restart to apply
-+  </message>
-+  <message name="IDS_DISABLE_EXTENSIONS_LABEL" desc="Trivalent String.">
-+    Block Extensions
-+  </message>
-+  <message name="IDS_DISABLE_EXTENSIONS_DESCRIPTION" desc="Trivalent String.">
-+    Changes to this setting requires a restart to apply
-+  </message>
++    <!-- Trivalent security section -->
++    <message name="IDS_HARDENING_TITLE" desc="Trivalent String.">
++      Hardening
++    </message>
++    <message name="IDS_INCOGNITO_LAUNCH_LABEL" desc="Trivalent String.">
++      Incognito Launch
++    </message>
++    <message name="IDS_INCOGNITO_LAUNCH_DESCRIPTION" desc="Trivalent String.">
++      Open external links in Incognito tabs
++    </message>
++    <message name="IDS_INCOGNITO_STARTUP_LABEL" desc="Trivalent String.">
++      Incognito Startup
++    </message>
++    <message name="IDS_INCOGNITO_STARTUP_DESCRIPTION" desc="Trivalent String.">
++      Opens new sessions in Incognito tabs
++    </message>
++    <message name="IDS_DISABLE_3D_APIS_LABEL" desc="Trivalent String.">
++      Block 3D APIs
++    </message>
++    <message name="IDS_DISABLE_3D_APIS_DESCRIPTION" desc="Trivalent String.">
++      Block web-facing access to features like WebGL
++    </message>
++    <message name="IDS_WEBRTC_HANDLING_POLICY_LABEL" desc="Trivalent String.">
++      WebRTC Handling Policy
++    </message>
++    <message name="IDS_NETWORK_SERVICE_SANDBOX_LABEL" desc="Trivalent String.">
++      Network Service Sandbox
++    </message>
++    <message name="IDS_NETWORK_SERVICE_SANDBOX_DESCRIPTION" desc="Trivalent String.">
++      Disabling may fix issues with data persistence but will reduce security slightly, requires a restart to apply
++    </message>
++    <message name="IDS_DISABLE_EXTENSIONS_LABEL" desc="Trivalent String.">
++     Block Extensions
++    </message>
++    <message name="IDS_DISABLE_EXTENSIONS_DESCRIPTION" desc="Trivalent String.">
++      Changes to this setting requires a restart to apply
++    </message>
 +
-   <!-- Privacy Page -->
-   <message name="IDS_SETTINGS_PRIVACY" desc="Name of the settings page which allows users to modify privacy and security settings.">
-     Privacy and security
+     <!-- Privacy Page -->
+     <message name="IDS_SETTINGS_PRIVACY" desc="Name of the settings page which allows users to modify privacy and security settings.">
+       Privacy and security
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 index 556a396168..a6547ce454 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc

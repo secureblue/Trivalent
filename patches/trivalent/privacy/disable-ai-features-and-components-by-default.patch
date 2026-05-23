@@ -95,10 +95,10 @@ index 014e4ad46ec9e..088c44bac95af 100644
  BASE_FEATURE(kAimServerEligibilityEnabled, base::FEATURE_ENABLED_BY_DEFAULT);
  
 diff --git a/components/omnibox/common/omnibox_features.cc b/components/omnibox/common/omnibox_features.cc
-index a9d1a0a25dbe8..fbca614044dfd 100644
+index 32155a1750..8aed226d7e 100644
 --- a/components/omnibox/common/omnibox_features.cc
 +++ b/components/omnibox/common/omnibox_features.cc
-@@ -168,7 +168,7 @@ BASE_FEATURE(kOmniboxMultimodalInput, DISABLED);
+@@ -170,7 +170,7 @@ BASE_FEATURE(kAndroidDesktopAimGate, DISABLED);
  
  // Whether the AI Mode entrypoint is shown in the Omnibox as a RHS button. Only
  // used on desktop platforms.
@@ -107,11 +107,11 @@ index a9d1a0a25dbe8..fbca614044dfd 100644
  
  // Hides the AIM entrypoint in the Omnibox when user input is in progress. Only
  // used on desktop platforms.
-@@ -246,7 +246,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
+@@ -264,7 +264,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
  BASE_FEATURE(kOmniboxSiteSearch, DISABLED);
  
  // Enables additional site search providers for the Site search Starter Pack.
--BASE_FEATURE(kStarterPackExpansion, enable_if(!IS_ANDROID && !IS_IOS));
+-BASE_FEATURE(kStarterPackExpansion, enable_if(!IS_IOS));
 +BASE_FEATURE(kStarterPackExpansion, DISABLED);
  
  // Enables an informational IPH message at the bottom of the Omnibox directing
@@ -156,3 +156,16 @@ index c01de2e0f7..b37b6254e2 100644
    registry->RegisterBooleanPref(localstate::kOnDeviceAiUserSettingsEnabled,
                                  true);
    registry->RegisterDictionaryPref(localstate::kManifestAssetLedger);
+diff --git a/chrome/browser/glic/glic_pref_names.cc b/chrome/browser/glic/glic_pref_names.cc
+index 128e61fe32..12e021e73c 100644
+--- a/chrome/browser/glic/glic_pref_names.cc
++++ b/chrome/browser/glic/glic_pref_names.cc
+@@ -70,7 +70,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
+ 
+   registry->RegisterIntegerPref(
+       prefs::kGlicActuationOnWeb,
+-      std::to_underlying(GetGlicActuationOnWebPolicyState()));
++      1);
+ 
+   registry->RegisterListPref(prefs::kGlicActuationOnWebAllowedForURLs);
+   registry->RegisterListPref(prefs::kGlicActuationOnWebBlockedForURLs);

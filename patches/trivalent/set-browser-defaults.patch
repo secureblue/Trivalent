@@ -23,7 +23,7 @@ index 837e75e79b..bb8acd5cb1 100644
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
    registry->RegisterDictionaryPref(prefs::kBrowserWindowPlacement);
    registry->RegisterDictionaryPref(prefs::kBrowserWindowPlacementPopup);
-@@ -142,24 +142,24 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -150,23 +150,23 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
                                  false);
  #endif
    registry->RegisterStringPref(prefs::kWebRTCIPHandlingPolicy,
@@ -39,20 +39,19 @@ index 837e75e79b..bb8acd5cb1 100644
    registry->RegisterListPref(
        prefs::kWebRTCDiagnosticLogCollectionAllowedForOrigins,
        base::ListValue());
-
+ 
    // We need to register the type of these preferences in order to query
    // them even though they're only typically controlled via policy.
 -  registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, false);
 -  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, true);
 +  registry->RegisterBooleanPref(policy::policy_prefs::kHideWebStoreIcon, true);
 +  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, false);
-
- #if BUILDFLAG(ENABLE_CLICK_TO_CALL)
+ 
 -  registry->RegisterBooleanPref(prefs::kClickToCallEnabled, true);
 +  registry->RegisterBooleanPref(prefs::kClickToCallEnabled, false);
- #endif  // BUILDFLAG(ENABLE_CLICK_TO_CALL)
-
+ 
  #if BUILDFLAG(IS_MAC)
+   // This really belongs in platform code, but there's no good place to
 @@ -188,7 +188,7 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
 
    registry->RegisterBooleanPref(prefs::kEnterpriseHardwarePlatformAPIEnabled,
