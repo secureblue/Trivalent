@@ -527,10 +527,11 @@ index c4e4614eb8..288f7f03ea 100644
  
  #include "sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.h"
 +#include "sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.h"
++#include <sys/mman.h>
  
  // Define these so that unistd.h pulls in needed symbols.
  #if !defined(__ARCH_WANT_SYSCALL_NO_AT) || \
-@@ -29,7 +30,21 @@ CrosNvidiaGpuProcessPolicy::~CrosNvidiaGpuProcessPolicy() = default;
+@@ -29,7 +31,21 @@ CrosNvidiaGpuProcessPolicy::~CrosNvidiaGpuProcessPolicy() = default;
  ResultExpr CrosNvidiaGpuProcessPolicy::EvaluateSyscall(int sysno) const {
    switch (sysno) {
      case __NR_sched_setscheduler:
