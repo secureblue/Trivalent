@@ -545,7 +545,7 @@ CHROMIUM_GN_DEFINES+=' target_os="linux"'
 CHROMIUM_GN_DEFINES+=' current_os="linux"'
 CHROMIUM_GN_DEFINES+=' treat_warnings_as_errors=false'
 CHROMIUM_GN_DEFINES+=' enable_vr=false'
-CHROMIUM_GN_DEFINES+=' use_webgpu_on_vulkan_gl_interop=false' # disable WebGPU
+CHROMIUM_GN_DEFINES+=' use_webgpu_on_vulkan_via_gl_interop=false' # disable WebGPU
 CHROMIUM_GN_DEFINES+=' use_static_angle=true angle_shared_libvulkan=false' # bundle graphics libraries
 CHROMIUM_GN_DEFINES+=' enable_swiftshader=false enable_swiftshader_vulkan=false' # build without swiftshader
 CHROMIUM_GN_DEFINES+=' dawn_use_swiftshader=false angle_enable_swiftshader=false' # disable rendering usage of swiftshader
