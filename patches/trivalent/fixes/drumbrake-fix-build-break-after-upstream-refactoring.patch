@@ -78,7 +78,7 @@ index 4cfdecbe39f..9efe7499a12 100644
      }
    }
 
-diff --git a/v8/src/wasm/interpreter/ b/v8/src/wasm/interpreter/wasm-interpreter.cc
+diff --git a/v8/src/wasm/interpreter/wasm-interpreter.cc  b/v8/src/wasm/interpreter/wasm-interpreter.cc
 index 7fb5a3d2ca1..fb27ff4c1fd 100644
 --- a/v8/src/wasm/interpreter/wasm-interpreter.cc
 +++ b/v8/src/wasm/interpreter/wasm-interpreter.cc
