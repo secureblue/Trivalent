@@ -12,22 +12,22 @@ Finally, fix build break after type checker signature change.
 
 Change-Id: I4546dfddcc3d439cb59404acc546cf4a6d94ca11
 ---
- src/wasm/interpreter/wasm-interpreter-runtime-inl.h | 6 +++---
- src/wasm/interpreter/wasm-interpreter-runtime.cc    | 6 +++---
- src/wasm/interpreter/wasm-interpreter.cc            | 6 ++++--
+ v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h | 6 +++---
+ v8/src/wasm/interpreter/wasm-interpreter-runtime.cc    | 6 +++---
+ v8/src/wasm/interpreter/wasm-interpreter.cc            | 6 ++++--
  3 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/src/wasm/interpreter/wasm-interpreter-runtime-inl.h b/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
+diff --git a/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h b/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
 index 1684801fcbf..ab2da147bf6 100644
---- a/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
-+++ b/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
+--- a/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
++++ b/v8/src/wasm/interpreter/wasm-interpreter-runtime-inl.h
 @@ -15,7 +15,7 @@
  #include "src/execution/arguments-inl.h"
  #include "src/objects/objects-inl.h"
  #include "src/wasm/interpreter/wasm-interpreter-inl.h"
 -#include "src/wasm/wasm-objects.h"
 +#include "src/wasm/wasm-objects-inl.h"
- 
+
  namespace v8 {
  namespace internal {
 @@ -168,14 +168,14 @@ inline bool WasmInterpreterRuntime::IsNull(Isolate* isolate, const WasmRef obj,
@@ -38,19 +38,19 @@ index 1684801fcbf..ab2da147bf6 100644
 +    return i::IsWasmNull(*obj);
    }
  }
- 
+
  inline bool WasmInterpreterRuntime::IsRefNull(
      DirectHandle<Object> object) const {
    // This function assumes that it is executed in a HandleScope.
 -  return i::IsNull(*object, isolate_) || IsWasmNull(*object, isolate_);
 +  return i::IsNull(*object, isolate_) || IsWasmNull(*object);
  }
- 
+
  inline DirectHandle<Object> WasmInterpreterRuntime::GetFunctionRef(
-diff --git a/src/wasm/interpreter/wasm-interpreter-runtime.cc b/src/wasm/interpreter/wasm-interpreter-runtime.cc
+diff --git a/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc b/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc
 index 4cfdecbe39f..9efe7499a12 100644
---- a/src/wasm/interpreter/wasm-interpreter-runtime.cc
-+++ b/src/wasm/interpreter/wasm-interpreter-runtime.cc
+--- a/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc
++++ b/v8/src/wasm/interpreter/wasm-interpreter-runtime.cc
 @@ -739,7 +739,7 @@ WasmInterpreterRuntime::HandleException(uint32_t* sp,
                isolate_, catch_handler.catch_block_index, exception);
            isolate_->clear_exception();
@@ -63,11 +63,11 @@ index 4cfdecbe39f..9efe7499a12 100644
 @@ -2140,7 +2140,7 @@ void WasmInterpreterRuntime::CallWasmToJSBuiltin(
      } while (TryCast(*js_function, &js_proxy));
    }
- 
+
 -  if (!IsJSFunction(*js_function, isolate_)) {
 +  if (!IsJSFunction(*js_function)) {
      AllowHeapAllocation allow_gc;
- 
+
      isolate->set_exception(*isolate_->factory()->NewTypeError(
 @@ -2660,7 +2660,7 @@ bool WasmInterpreterRuntime::SubtypeCheck(const WasmRef obj,
      if (obj_type == kWasmExternRef || obj_type == kWasmNullExternRef) {
@@ -77,11 +77,11 @@ index 4cfdecbe39f..9efe7499a12 100644
 +      if (i::IsWasmNull(*obj)) return null_succeeds;
      }
    }
- 
-diff --git a/src/wasm/interpreter/wasm-interpreter.cc b/src/wasm/interpreter/wasm-interpreter.cc
+
+diff --git a/v8/src/wasm/interpreter/ b/v8/src/wasm/interpreter/wasm-interpreter.cc
 index 7fb5a3d2ca1..fb27ff4c1fd 100644
---- a/src/wasm/interpreter/wasm-interpreter.cc
-+++ b/src/wasm/interpreter/wasm-interpreter.cc
+--- a/v8/src/wasm/interpreter/wasm-interpreter.cc
++++ b/v8/src/wasm/interpreter/wasm-interpreter.cc
 @@ -14,7 +14,6 @@
  #include "src/builtins/builtins.h"
  #include "src/handles/global-handles-inl.h"
@@ -93,7 +93,7 @@ index 7fb5a3d2ca1..fb27ff4c1fd 100644
 @@ -25,6 +24,9 @@
  #include "src/wasm/wasm-opcodes-inl.h"
  #include "src/zone/zone.h"
- 
+
 +// Include this after all other object headers.
 +#include "src/objects/object-macros.h"
 +
