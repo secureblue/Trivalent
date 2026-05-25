@@ -522,7 +522,7 @@ diff --git a/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc b/sandbox/
 index c4e4614eb8..288f7f03ea 100644
 --- a/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc
 +++ b/sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.cc
-@@ -3,6 +3,7 @@
+@@ -3,6 +3,8 @@
  // found in the LICENSE file.
  
  #include "sandbox/policy/linux/bpf_cros_nvidia_gpu_policy_linux.h"
