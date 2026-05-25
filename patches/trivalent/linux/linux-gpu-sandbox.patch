@@ -531,21 +531,15 @@ index c4e4614eb8..288f7f03ea 100644
  
  // Define these so that unistd.h pulls in needed symbols.
  #if !defined(__ARCH_WANT_SYSCALL_NO_AT) || \
-@@ -29,7 +31,21 @@ CrosNvidiaGpuProcessPolicy::~CrosNvidiaGpuProcessPolicy() = default;
+@@ -29,7 +31,15 @@ CrosNvidiaGpuProcessPolicy::~CrosNvidiaGpuProcessPolicy() = default;
  ResultExpr CrosNvidiaGpuProcessPolicy::EvaluateSyscall(int sysno) const {
    switch (sysno) {
      case __NR_sched_setscheduler:
 +    case __NR_mprotect:
        return Allow();
-+#if defined(__i386__) || defined(__x86_64__) || defined(__mips__)
-+    // (MAP_EXECUTABLE | MAP_32BIT)
-+    case __NR_mmap:
 +#if defined(__x86_64__)
-+      const uint64_t kSpecificAllowedMask = MAP_EXECUTABLE | MAP_32BIT;
-+#else
-+      const uint64_t kSpecificAllowedMask = MAP_EXECUTABLE;
-+#endif
-+      return RestrictMmapFlags(kSpecificAllowedMask);
++    case __NR_mmap:
++      return RestrictMmapFlags(MAP_EXECUTABLE | MAP_32BIT);
 +#endif
 +    case __NR_memfd_create:
 +      // TODO(crbug.com/442771181)
