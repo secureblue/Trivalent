@@ -483,12 +483,8 @@ FLAGS+=' -Wno-unused-const-variable -Wno-unneeded-internal-declaration -Wno-unkn
 CFLAGS="$FLAGS"
 CXXFLAGS="$FLAGS"
 
-# reduce the size of relocations
-LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
-echo "LDFLAGS=$LDFLAGS"
-echo "RUSTFLAGS=$RUSTFLAGS"
-RUSTFLAGS=${RUSTFLAGS/--cap-lints/-Clink-arg=-Wl,-z,pack-relative-relocs --cap-lints}
-RUSTFLAGS=${RUSTFLAGS/debuginfo=?/debuginfo=0}
+LDFLAGS=""
+RUSTFLAGS=""
 
 export CC=clang
 export CXX=clang++
