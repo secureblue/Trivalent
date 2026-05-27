@@ -476,9 +476,7 @@ bzip2 -9 %{modulename}.pp
 %endif
 
 # reduce warnings
-FLAGS=' -Wno-deprecated-declarations -Wno-unknown-warning-option -Wno-unused-command-line-argument'
-FLAGS+=' -Wno-unused-but-set-variable -Wno-unused-result -Wno-unused-function -Wno-unused-variable'
-FLAGS+=' -Wno-unused-const-variable -Wno-unneeded-internal-declaration -Wno-unknown-attributes -Wno-unknown-pragmas'
+FLAGS=''
 
 CFLAGS="$FLAGS"
 CXXFLAGS="$FLAGS"
