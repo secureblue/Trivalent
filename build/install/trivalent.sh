@@ -113,7 +113,7 @@ BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very co
 if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will error out
   BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
 fi
-BWRAP_ARGS+=" --bind ${TMPFS_CACHE_DIR} ${HOME}/.cache" # avoid issues with other applications messing with cache
+BWRAP_ARGS+=" --bind ${TMPFS_CACHE_DIR} ${XDG_CACHE_HOME:-$HOME/.cache}" # avoid issues with other applications messing with cache
 BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
 
 # Do this at the end so that everything else still gets hardened_malloc
