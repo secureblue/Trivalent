@@ -476,7 +476,10 @@ bzip2 -9 %{modulename}.pp
 %endif
 
 # reduce warnings
-FLAGS=''
+FLAGS=""
+%if %{use_system_toolchain}
+FLAGS+=" -Wno-unknown-warning-option"
+%endif
 
 CFLAGS="$FLAGS"
 CXXFLAGS="$FLAGS"
