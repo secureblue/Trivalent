@@ -11,10 +11,10 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index c092446fa0715..11abf5e542083 100644
+index f977c9fed7..a062b0205f 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -443,14 +443,24 @@ config("compiler") {
+@@ -444,14 +444,24 @@ config("compiler") {
        # On Aarch64, SCS requires the x18 register to be unused because it will hold
        # a pointer to the shadow stack. For Android we know that Clang doesn't use
        # x18 by default. On other OSs adding "-ffixed-x18" might be required.
@@ -41,7 +41,7 @@ index c092446fa0715..11abf5e542083 100644
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
-@@ -465,10 +475,17 @@ config("compiler") {
+@@ -466,10 +476,17 @@ config("compiler") {
        } else if (is_posix || is_fuchsia) {
          if (current_os != "aix") {
            # Not available on aix.
@@ -60,9 +60,9 @@ index c092446fa0715..11abf5e542083 100644
    }
  
    # Non-Apple Posix and Fuchsia compiler flags setup.
-@@ -583,6 +600,12 @@ config("compiler") {
-   if (is_clang) {
-     cflags += [ "-fcolor-diagnostics" ]
+@@ -598,6 +615,12 @@ config("compiler") {
+       cflags += [ "-fdiagnostics-print-source-range-info" ]
+     }
  
 +    cflags += [ "-ftrivial-auto-var-init=zero" ]
 +
@@ -73,7 +73,7 @@ index c092446fa0715..11abf5e542083 100644
      # Enable -fmerge-all-constants. This used to be the default in clang
      # for over a decade. It makes clang non-conforming, but is fairly safe
      # in practice and saves some binary size. We might want to consider
-@@ -2406,7 +2429,7 @@ config("chromium_code") {
+@@ -2440,7 +2463,7 @@ config("chromium_code") {
        # Non-chromium code is not guaranteed to compile cleanly with
        # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
        # disabled, so only do that for Release build.
@@ -82,7 +82,7 @@ index c092446fa0715..11abf5e542083 100644
  
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3474,8 +3497,14 @@ buildflag_header("compiler_buildflags") {
+@@ -3519,8 +3542,14 @@ buildflag_header("compiler_buildflags") {
  }
  
  config("cet_shadow_stack") {

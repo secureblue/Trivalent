@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,14 +25,14 @@ index 67786bb905..f49a5bb28c 100644
  
  const ContentSettingsImageDetails* GetImageDetails(ContentSettingsType type) {
 diff --git a/chrome/browser/user_education/user_education_service_factory.cc b/chrome/browser/user_education/user_education_service_factory.cc
-index 2bc8bbc578..04df4bf832 100644
+index 80135033b5..3f4815b2a4 100644
 --- a/chrome/browser/user_education/user_education_service_factory.cc
 +++ b/chrome/browser/user_education/user_education_service_factory.cc
-@@ -112,6 +112,7 @@ UserEducationServiceFactory::BuildServiceInstanceForBrowserContextImpl(
-
+@@ -117,6 +117,7 @@ UserEducationServiceFactory::BuildServiceInstanceForBrowserContextImpl(
+ 
  // static
  bool UserEducationServiceFactory::ProfileAllowsUserEducation(Profile* profile) {
-+  return false; // Disable user education services
++  return false;
  #if BUILDFLAG(CHROME_FOR_TESTING)
-   // IPH is always disabled in Chrome for Testing.
-   return false;
+   if (!chrome_for_testing::IsEnableUserEducationUI()) {
+     return false;
