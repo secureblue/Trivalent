@@ -14,7 +14,7 @@ diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
 index aae688f787..1ab79f7b31 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
-@@ -1335,6 +1335,52 @@
+@@ -1335,6 +1335,55 @@
        Browsing and searching is faster than standard preloading
      </message>
  
@@ -62,6 +62,9 @@ index aae688f787..1ab79f7b31 100644
 +    </message>
 +    <message name="IDS_DISABLE_EXTENSIONS_DESCRIPTION" desc="Trivalent String.">
 +      Changes to this setting requires a restart to apply
++    </message>
++    <message name="IDS_SITE_SETTINGS_JAVASCRIPT_JIT" desc="Trivalent String.">
++      JavaScript JIT
 +    </message>
 +
      <!-- Privacy Page -->
