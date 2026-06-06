@@ -93,3 +93,28 @@ index d989c90598e38..985a47c20c397 100644
  </div>
  <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
      restamp>
+diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+index b8170f520a..9732670e2e 100644
+--- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
++++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+@@ -3051,7 +3051,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+       {"siteSettingsCategoryLocation", IDS_SITE_SETTINGS_TYPE_LOCATION},
+       {"siteSettingsCategoryJavascript", IDS_SITE_SETTINGS_TYPE_JAVASCRIPT},
+       {"siteSettingsCategoryJavascriptOptimizer",
+-       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},
++       IDS_SITE_SETTINGS_JAVASCRIPT_JIT},
+       {"siteSettingsCategoryMicrophone", IDS_SITE_SETTINGS_TYPE_MIC},
+       {"siteSettingsMicrophoneLabel", IDS_SITE_SETTINGS_TYPE_MIC},
+       {"siteSettingsCategoryNotifications",
+@@ -3140,9 +3140,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+       {"siteSettingsJavascriptMidSentence",
+        IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_MID_SENTENCE},
+       {"siteSettingsJavascriptOptimizer",
+-       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},
++       IDS_SITE_SETTINGS_JAVASCRIPT_JIT},
+       {"siteSettingsJavascriptOptimizerMidsentence",
+-       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},  // Deliberately the same
++       IDS_SITE_SETTINGS_JAVASCRIPT_JIT},  // Deliberately the same
+                                                       // form.
+       {"siteSettingsSound", IDS_SITE_SETTINGS_TYPE_SOUND},
+       {"siteSettingsSoundMidSentence",
