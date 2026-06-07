@@ -10,6 +10,20 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/components/site_settings_strings.grdp b/components/site_settings_strings.grdp
+index dbf4e88dbd..1e1746315b 100644
+--- a/components/site_settings_strings.grdp
++++ b/components/site_settings_strings.grdp
+@@ -124,6 +124,9 @@
+   <message name="IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER" desc="The label for the JavaScript optimizer site settings controls.">
+     JavaScript optimization &amp; security
+   </message>
++  <message name="IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT" desc="Trivalent string.">
++    JavaScript JIT
++  </message>
+   <message name="IDS_SITE_SETTINGS_TYPE_LOCATION" desc="The label used for geolocation site settings controls." meaning="Geolocation">
+     Location
+   </message>
 diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
 index aae688f787..1ab79f7b31 100644
 --- a/chrome/app/settings_strings.grdp
@@ -98,6 +112,27 @@ index 556a396168..a6547ce454 100644
        {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
        {"privacyPageMore", IDS_SETTINGS_PRIVACY_MORE},
        {"doNotTrack", IDS_SETTINGS_ENABLE_DO_NOT_TRACK},
+@@ -3051,7 +3051,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+       {"siteSettingsCategoryLocation", IDS_SITE_SETTINGS_TYPE_LOCATION},
+       {"siteSettingsCategoryJavascript", IDS_SITE_SETTINGS_TYPE_JAVASCRIPT},
+       {"siteSettingsCategoryJavascriptOptimizer",
+-       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},
++       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT},
+       {"siteSettingsCategoryMicrophone", IDS_SITE_SETTINGS_TYPE_MIC},
+       {"siteSettingsMicrophoneLabel", IDS_SITE_SETTINGS_TYPE_MIC},
+       {"siteSettingsCategoryNotifications",
+@@ -3140,9 +3140,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+       {"siteSettingsJavascriptMidSentence",
+        IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_MID_SENTENCE},
+       {"siteSettingsJavascriptOptimizer",
+-       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},
++       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT},
+       {"siteSettingsJavascriptOptimizerMidsentence",
+-       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},  // Deliberately the same
++       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT},  // Deliberately the same
+                                                       // form.
+       {"siteSettingsSound", IDS_SITE_SETTINGS_TYPE_SOUND},
+       {"siteSettingsSoundMidSentence",
 @@ -3826,6 +3837,7 @@ void AddSiteDataPageStrings(content::WebUIDataSource* html_source,
  #if !BUILDFLAG(IS_CHROMEOS)
  void AddSystemStrings(content::WebUIDataSource* html_source) {
