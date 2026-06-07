@@ -58,3 +58,15 @@ index abf7b63a7b..b93c1ce031 100644
  
  bool IsShaderDiskCacheEnabled(const base::CommandLine* command_line) {
    if (command_line->HasSwitch(switches::kDisableGpuShaderDiskCache)) {
+@@ -426,11 +427,7 @@ BASE_FEATURE(kSkiaGraphiteDawnUseD3D12, base::FEATURE_DISABLED_BY_DEFAULT);
+ // Usage for Graphite is controlled independently with
+ // kSkiaGraphiteDawnUsePersistentCache.
+ BASE_FEATURE(kGpuPersistentCache,
+-#if BUILDFLAG(IS_WIN)
+              base::FEATURE_DISABLED_BY_DEFAULT);
+-#else
+-             base::FEATURE_ENABLED_BY_DEFAULT);
+-#endif
+ 
+ // Use a 100-command limit before forcing context switch per command buffer
+ // instead of 20.
