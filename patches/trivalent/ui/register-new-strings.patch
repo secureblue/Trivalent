@@ -117,7 +117,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsCategoryJavascript", IDS_SITE_SETTINGS_TYPE_JAVASCRIPT},
        {"siteSettingsCategoryJavascriptOptimizer",
 -       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},
-+       IDS_SITE_SETTINGS_JAVASCRIPT_JIT},
++       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT},
        {"siteSettingsCategoryMicrophone", IDS_SITE_SETTINGS_TYPE_MIC},
        {"siteSettingsMicrophoneLabel", IDS_SITE_SETTINGS_TYPE_MIC},
        {"siteSettingsCategoryNotifications",
@@ -126,10 +126,10 @@ index 556a396168..a6547ce454 100644
         IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_MID_SENTENCE},
        {"siteSettingsJavascriptOptimizer",
 -       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},
-+       IDS_SITE_SETTINGS_JAVASCRIPT_JIT},
++       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT},
        {"siteSettingsJavascriptOptimizerMidsentence",
 -       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_OPTIMIZER},  // Deliberately the same
-+       IDS_SITE_SETTINGS_JAVASCRIPT_JIT},  // Deliberately the same
++       IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_JIT},  // Deliberately the same
                                                        // form.
        {"siteSettingsSound", IDS_SITE_SETTINGS_TYPE_SOUND},
        {"siteSettingsSoundMidSentence",
