@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,3 +35,26 @@ index 6990304448..3df4913451 100644
 
  // Enable VA-API hardware low power encoder for all codecs on intel Gen9x gpu.
  BASE_FEATURE(kVaapiLowPowerEncoderGen9x, base::FEATURE_ENABLED_BY_DEFAULT);
+diff --git a/gpu/config/gpu_finch_features.cc b/gpu/config/gpu_finch_features.cc
+index abf7b63a7b..b93c1ce031 100644
+--- a/gpu/config/gpu_finch_features.cc
++++ b/gpu/config/gpu_finch_features.cc
+@@ -132,7 +132,8 @@ BASE_FEATURE(kNvidiaWaylandYuvHardwareConversionWorkaround,
+ // Android and Linux.
+ BASE_FEATURE(kDefaultEnableGpuRasterization,
+ #if BUILDFLAG(IS_APPLE) || BUILDFLAG(IS_WIN) || BUILDFLAG(IS_CHROMEOS) || \
+-    BUILDFLAG(IS_ANDROID) || BUILDFLAG(USE_WEBGPU_ON_VULKAN_VIA_GL_INTEROP)
++    BUILDFLAG(IS_ANDROID) || BUILDFLAG(USE_WEBGPU_ON_VULKAN_VIA_GL_INTEROP) || \
++    BUILDFLAG(IS_LINUX)
+              base::FEATURE_ENABLED_BY_DEFAULT
+ #else
+              base::FEATURE_DISABLED_BY_DEFAULT
+@@ -169,7 +170,7 @@ BASE_FEATURE(kClearGrShaderDiskCacheOnInvalidPrefix,
+ // kill-switch for working around issues with the disk cache and assessing the
+ // performance value of the disk cache. The --disable-gpu-shader-disk-cache flag
+ // overrides this feature and forces the disk cache to be disabled.
+-BASE_FEATURE(kGpuShaderDiskCache, base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kGpuShaderDiskCache, base::FEATURE_DISABLED_BY_DEFAULT);
+ 
+ bool IsShaderDiskCacheEnabled(const base::CommandLine* command_line) {
+   if (command_line->HasSwitch(switches::kDisableGpuShaderDiskCache)) {
