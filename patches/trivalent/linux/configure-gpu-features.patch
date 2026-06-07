@@ -1,0 +1,72 @@
+Copyright 2024-2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
+diff --git a/media/base/media_switches.cc b/media/base/media_switches.cc
+index 6990304448..3df4913451 100644
+--- a/media/base/media_switches.cc
++++ b/media/base/media_switches.cc
+@@ -680,7 +680,11 @@ BASE_FEATURE(kAcceleratedVideoDecodeLinuxGL, base::FEATURE_ENABLED_BY_DEFAULT);
+
+ BASE_FEATURE(kAcceleratedVideoEncodeLinux,
+              "AcceleratedVideoEncoder",
++#if BUILDFLAG(USE_VAAPI)
++             base::FEATURE_ENABLED_BY_DEFAULT);
++#else
+              base::FEATURE_DISABLED_BY_DEFAULT);
++#endif
+
+ // Ignore the non-intel driver blacklist for VaapiVideoDecoder implementations.
+ // Intended for manual usage only in order to gague the status of newer driver
+@@ -690,7 +694,7 @@ BASE_FEATURE(kVaapiIgnoreDriverChecks, base::FEATURE_DISABLED_BY_DEFAULT);
+
+ // NVIDIA VA-API drivers do not support Chromium and can sometimes cause
+ // crashes, disable VA-API on NVIDIA GPUs by default. See crbug.com/1492880.
+-BASE_FEATURE(kVaapiOnNvidiaGPUs, base::FEATURE_DISABLED_BY_DEFAULT);
++BASE_FEATURE(kVaapiOnNvidiaGPUs, base::FEATURE_ENABLED_BY_DEFAULT);
+
+ // Enable VA-API hardware low power encoder for all codecs on intel Gen9x gpu.
+ BASE_FEATURE(kVaapiLowPowerEncoderGen9x, base::FEATURE_ENABLED_BY_DEFAULT);
+diff --git a/gpu/config/gpu_finch_features.cc b/gpu/config/gpu_finch_features.cc
+index abf7b63a7b..b93c1ce031 100644
+--- a/gpu/config/gpu_finch_features.cc
++++ b/gpu/config/gpu_finch_features.cc
+@@ -132,7 +132,8 @@ BASE_FEATURE(kNvidiaWaylandYuvHardwareConversionWorkaround,
+ // Android and Linux.
+ BASE_FEATURE(kDefaultEnableGpuRasterization,
+ #if BUILDFLAG(IS_APPLE) || BUILDFLAG(IS_WIN) || BUILDFLAG(IS_CHROMEOS) || \
+-    BUILDFLAG(IS_ANDROID) || BUILDFLAG(USE_WEBGPU_ON_VULKAN_VIA_GL_INTEROP)
++    BUILDFLAG(IS_ANDROID) || BUILDFLAG(USE_WEBGPU_ON_VULKAN_VIA_GL_INTEROP) || \
++    BUILDFLAG(IS_LINUX)
+              base::FEATURE_ENABLED_BY_DEFAULT
+ #else
+              base::FEATURE_DISABLED_BY_DEFAULT
+@@ -169,7 +170,7 @@ BASE_FEATURE(kClearGrShaderDiskCacheOnInvalidPrefix,
+ // kill-switch for working around issues with the disk cache and assessing the
+ // performance value of the disk cache. The --disable-gpu-shader-disk-cache flag
+ // overrides this feature and forces the disk cache to be disabled.
+-BASE_FEATURE(kGpuShaderDiskCache, base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kGpuShaderDiskCache, base::FEATURE_DISABLED_BY_DEFAULT);
+ 
+ bool IsShaderDiskCacheEnabled(const base::CommandLine* command_line) {
+   if (command_line->HasSwitch(switches::kDisableGpuShaderDiskCache)) {
+@@ -426,11 +427,7 @@ BASE_FEATURE(kSkiaGraphiteDawnUseD3D12, base::FEATURE_DISABLED_BY_DEFAULT);
+ // Usage for Graphite is controlled independently with
+ // kSkiaGraphiteDawnUsePersistentCache.
+ BASE_FEATURE(kGpuPersistentCache,
+-#if BUILDFLAG(IS_WIN)
+              base::FEATURE_DISABLED_BY_DEFAULT);
+-#else
+-             base::FEATURE_ENABLED_BY_DEFAULT);
+-#endif
+ 
+ // Use a 100-command limit before forcing context switch per command buffer
+ // instead of 20.
