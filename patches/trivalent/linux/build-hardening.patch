@@ -99,23 +99,3 @@ index f977c9fed7..a062b0205f 100644
 +    }
    }
  }
-diff --git a/build/config/linux/BUILD.gn b/build/config/linux/BUILD.gn
-index 131bb71d1d3b8..55f8590d2423f 100644
---- a/build/config/linux/BUILD.gn
-+++ b/build/config/linux/BUILD.gn
-@@ -19,12 +19,15 @@ config("compiler") {
-     import("//build/config/arm.gni")
-     cflags = []
-     asmflags = []
-+    rustflags = []
-     if (arm_control_flow_integrity == "standard") {
-       cflags += [ "-mbranch-protection=standard" ]
-       asmflags += [ "-mbranch-protection=standard" ]
-+      rustflags += [ "-Zbranch-protection=bti,pac-ret" ]
-     } else if (arm_control_flow_integrity == "pac") {
-       cflags += [ "-mbranch-protection=pac-ret" ]
-       asmflags += [ "-mbranch-protection=pac-ret" ]
-+      rustflags += [ "-Zbranch-protection=pac-ret" ]
-     }
-   }
- }
