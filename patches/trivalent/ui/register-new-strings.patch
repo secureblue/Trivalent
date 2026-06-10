@@ -232,6 +232,19 @@ index 556a396168..a6547ce454 100644
        {"systemPageTitle", IDS_SETTINGS_SYSTEM},
  #if !BUILDFLAG(IS_MAC)
        {"backgroundAppsLabel", IDS_SETTINGS_SYSTEM_BACKGROUND_APPS_LABEL},
+diff --git a/chrome/browser/ui/browser_actions.cc b/chrome/browser/ui/browser_actions.cc
+index 7e3c7be3c5..17c4af4b2b 100644
+--- a/chrome/browser/ui/browser_actions.cc
++++ b/chrome/browser/ui/browser_actions.cc
+@@ -562,7 +562,7 @@ void BrowserActions::InitializePageActionIconActions() {
+                 bwi))
+             .SetActionId(kActionShowJsOptimizationsIcon)
+             .SetTooltipText(l10n_util::GetStringUTF16(
+-                IDS_JS_OPTIMIZATIONS_DISABLED_ICON_TOOLTIP))
++                IDS_JS_JIT_DISABLED_ICON_TOOLTIP))
+             .SetImage(ui::ImageModel::FromVectorIcon(
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+                 vector_icons::kV8OffIcon,
 diff --git a/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc b/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
 index 3fb5490f77..d9f23ce20d 100644
 --- a/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
