@@ -10,6 +10,21 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
+index 38b5029eab..71d669f792 100644
+--- a/chrome/app/chromium_strings.grd
++++ b/chrome/app/chromium_strings.grd
+@@ -3283,6 +3283,10 @@ Chromium is unable to recover your settings.
+         Chromium turns off JavaScript optimization when you visit a site for the first time.&#xA;
+ If this page isn’t working as expected, try allowing optimization.
+       </message>
++      <message name="IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled for other reasons.">
++        Chromium turns off JavaScript JIT by default.&#xA;
++If this page isn’t working as expected, try allowing JIT.
++      </message>
+     </messages>
+   </release>
+ </grit>
 diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
 index b3263e1207..ac23e9bf9d 100644
 --- a/chrome/app/generated_resources.grd
@@ -258,7 +273,7 @@ index 3fb5490f77..d9f23ce20d 100644
        .SetDialogDestroyingCallback(base::BindOnce(
            &JsOptimizationsPageActionController::OnBubbleHidden,
            weak_factory_.GetWeakPtr(), base::Unretained(action_item)));
-@@ -101,7 +101,7 @@ views::BubbleDialogModelHost* JsOptimizationsPageActionController::CreateBubble(
+@@ -101,13 +101,13 @@ views::BubbleDialogModelHost* JsOptimizationsPageActionController::CreateBubble(
        content_settings::SettingSource::kPolicy) {
      dialog_model_builder.AddParagraph(
          ui::DialogModelLabel(
@@ -267,3 +282,9 @@ index 3fb5490f77..d9f23ce20d 100644
          std::u16string(),
          JsOptimizationsPageActionController::kBubbleBodyElementId);
    } else {
+     dialog_model_builder.AddParagraph(
+         ui::DialogModelLabel(l10n_util::GetStringUTF16(
+-            IDS_JS_OPTIMIZATION_BUBBLE_BODY_NON_POLICY_BODY)),
++            IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY)),
+         std::u16string(),
+         JsOptimizationsPageActionController::kBubbleBodyElementId);
