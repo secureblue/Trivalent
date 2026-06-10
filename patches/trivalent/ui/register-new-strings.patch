@@ -10,6 +10,26 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
+index b3263e1207..ac23e9bf9d 100644
+--- a/chrome/app/generated_resources.grd
++++ b/chrome/app/generated_resources.grd
+@@ -4217,6 +4217,15 @@ are declared in tools/grit/grit_args.gni.
+       <message name="IDS_JS_OPTIMIZATION_BUBBLE_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled by enterprise policy.">
+         JavaScript optimization is off for this site.
+       </message>
++      <message name="IDS_JS_JIT_DISABLED_ICON_TOOLTIP" desc="Tooltip for the JS Optimizations chip in the toolbar when it's disabled.">
++        JavaScript JIT is disabled.
++      </message>
++      <message name="IDS_JS_JIT_BUBBLE_TITLE" desc="Title for the JavaScript optimization disabled bubble.">
++        JavaScript JIT is off
++      </message>
++      <message name="IDS_JS_OPTIMIZATION_BUBBLE_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled by enterprise policy.">
++        JavaScript JIT is off for this site.
++      </message>
+      <if expr="not use_titlecase">
+       <message name="IDS_JS_OPTIMIZATION_BUBBLE_ENABLE_BUTTON" desc="Button text to enable JavaScript optimization for the current site.">
+         Allow for this site
 diff --git a/components/site_settings_strings.grdp b/components/site_settings_strings.grdp
 index dbf4e88dbd..1e1746315b 100644
 --- a/components/site_settings_strings.grdp
@@ -81,6 +101,42 @@ index aae688f787..1ab79f7b31 100644
      <!-- Privacy Page -->
      <message name="IDS_SETTINGS_PRIVACY" desc="Name of the settings page which allows users to modify privacy and security settings.">
        Privacy and security
+@@ -2205,6 +2251,9 @@
+     <message name="IDS_SETTINGS_SECURITY_JAVASCRIPT_OPTIMIZATION_LINK_TITLE" desc="Title for the link row to the V8 security settings.">
+       Manage JavaScript optimization &amp; security
+     </message>
++    <message name="IDS_SETTINGS_SECURITY_JAVASCRIPT_JIT_LINK_TITLE" desc="Title for the link row to the V8 security settings.">
++      Manage JavaScript JIT
++    </message>
+     <message name="IDS_SETTINGS_CONTENT_SETTINGS" desc="Text of the button that takes a user to settings page thats allows users to modify site settings. Also the title of that settings page.">
+       Content settings
+     </message>
+@@ -2886,6 +2935,12 @@
+     <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED" desc="Label for the disabled option of the JavaScript optimizer content setting.">
+       Don’t allow sites to use JavaScript optimization
+     </message>
++    <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_ALLOWED" desc="Label for the enabled option of the JavaScript optimizer content setting.">
++      Sites can use JavaScript JIT
++    </message>
++    <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_BLOCKED" desc="Label for the disabled option of the JavaScript optimizer content setting.">
++      Don’t allow sites to use JavaScript JIT
++    </message>
+     <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_UNFAMILIAR_SITES" desc="Label for option where JavaScript optimizer is disabled for sites which are unfamiliar to the user. Familiarity is determined using a heuristic based on the user's Chrome history.">
+       Automatically disable JavaScript optimizers on unfamiliar sites
+     </message>
+@@ -2901,6 +2956,12 @@
+     <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_EXCEPTIONS" desc="Label for the blocked exceptions site list of the JavaScript optimizer content setting.">
+       Not allowed to use JavaScript optimization
+     </message>
++    <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_ALLOWED_EXCEPTIONS" desc="Label for the allowed exceptions site list of the JavaScript optimizer content setting.">
++      Always allowed to use JavaScript JIT
++    </message>
++    <message name="IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_BLOCKED_EXCEPTIONS" desc="Label for the blocked exceptions site list of the JavaScript optimizer content setting.">
++      Not allowed to use JavaScript JIT
++    </message>
+     <message name="IDS_SETTINGS_SITE_SETTINGS_KEYBOARD_LOCK_DESCRIPTION" desc="Description of the keyboard lock content setting.">
+       Sites use this feature to override the input of your keyboard, like for games or remote desktop apps
+     </message>
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 index 556a396168..a6547ce454 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
@@ -112,6 +168,15 @@ index 556a396168..a6547ce454 100644
        {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
        {"privacyPageMore", IDS_SETTINGS_PRIVACY_MORE},
        {"doNotTrack", IDS_SETTINGS_ENABLE_DO_NOT_TRACK},
+@@ -2425,7 +2425,7 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
+       {"preloadingPageThingsToConsiderBulletOne",
+        IDS_SETTINGS_PRELOAD_PAGES_THINGS_TO_CONSIDER_BULLET_ONE},
+       {"securityJavascriptOptimizerLinkTitle",
+-       IDS_SETTINGS_SECURITY_JAVASCRIPT_OPTIMIZATION_LINK_TITLE},
++       IDS_SETTINGS_SECURITY_JAVASCRIPT_JIT_LINK_TITLE},
+       {"securityJavascriptOptimizerLinkRowLabelEnabled",
+        IDS_SETTINGS_SECURITY_JAVASCRIPT_OPTIMIZATION_LINK_ROW_ENABLED},
+       {"securityJavascriptOptimizerLinkRowLabelDisabled",
 @@ -3051,7 +3051,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsCategoryLocation", IDS_SITE_SETTINGS_TYPE_LOCATION},
        {"siteSettingsCategoryJavascript", IDS_SITE_SETTINGS_TYPE_JAVASCRIPT},
@@ -133,6 +198,32 @@ index 556a396168..a6547ce454 100644
                                                        // form.
        {"siteSettingsSound", IDS_SITE_SETTINGS_TYPE_SOUND},
        {"siteSettingsSoundMidSentence",
+@@ -3573,11 +3573,11 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+       {"siteSettingsJavascriptOptimizerDescription",
+        IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_DESCRIPTION},
+       {"siteSettingsJavascriptOptimizerAllowed",
+-       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_ALLOWED},
++       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_ALLOWED},
+       {"siteSettingsJavascriptOptimizerAllowedSubLabel",
+        IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_ALLOWED_SUB_LABEL},
+       {"siteSettingsJavascriptOptimizerBlocked",
+-       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED},
++       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_BLOCKED},
+       {"siteSettingsJavascriptOptimizerBlockedUnfamiliarSites",
+        IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_UNFAMILIAR_SITES},
+       {"siteSettingsJavascriptOptimizerBlockedUnfamiliarSitesSubLabel",
+@@ -3588,9 +3588,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+       {"siteSettingsJavascriptOptimizerBlockedSubLabel",
+        IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_SUB_LABEL},
+       {"siteSettingsJavascriptOptimizerAllowedExceptions",
+-       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_ALLOWED_EXCEPTIONS},
++       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_ALLOWED_EXCEPTIONS},
+       {"siteSettingsJavascriptOptimizerBlockedExceptions",
+-       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_EXCEPTIONS},
++       IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_JIT_BLOCKED_EXCEPTIONS},
+       {"siteSettingsKeyboardLock", IDS_SITE_SETTINGS_TYPE_KEYBOARD_LOCK},
+       {"siteSettingsKeyboardLockAsk",
+        IDS_SETTINGS_SITE_SETTINGS_KEYBOARD_LOCK_ASK},
 @@ -3826,6 +3837,7 @@ void AddSiteDataPageStrings(content::WebUIDataSource* html_source,
  #if !BUILDFLAG(IS_CHROMEOS)
  void AddSystemStrings(content::WebUIDataSource* html_source) {
@@ -141,3 +232,25 @@ index 556a396168..a6547ce454 100644
        {"systemPageTitle", IDS_SETTINGS_SYSTEM},
  #if !BUILDFLAG(IS_MAC)
        {"backgroundAppsLabel", IDS_SETTINGS_SYSTEM_BACKGROUND_APPS_LABEL},
+diff --git a/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc b/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
+index 3fb5490f77..d9f23ce20d 100644
+--- a/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
++++ b/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
+@@ -91,7 +91,7 @@ views::BubbleDialogModelHost* JsOptimizationsPageActionController::CreateBubble(
+     actions::ActionItem* action_item) {
+   auto dialog_model_builder = ui::DialogModel::Builder();
+   dialog_model_builder
+-      .SetTitle(l10n_util::GetStringUTF16(IDS_JS_OPTIMIZATION_BUBBLE_TITLE))
++      .SetTitle(l10n_util::GetStringUTF16(IDS_JS_JIT_BUBBLE_TITLE))
+       .SetDialogDestroyingCallback(base::BindOnce(
+           &JsOptimizationsPageActionController::OnBubbleHidden,
+           weak_factory_.GetWeakPtr(), base::Unretained(action_item)));
+@@ -101,7 +101,7 @@ views::BubbleDialogModelHost* JsOptimizationsPageActionController::CreateBubble(
+       content_settings::SettingSource::kPolicy) {
+     dialog_model_builder.AddParagraph(
+         ui::DialogModelLabel(
+-            l10n_util::GetStringUTF16(IDS_JS_OPTIMIZATION_BUBBLE_POLICY_BODY)),
++            l10n_util::GetStringUTF16(IDS_JS_JIT_BUBBLE_POLICY_BODY)),
+         std::u16string(),
+         JsOptimizationsPageActionController::kBubbleBodyElementId);
+   } else {
