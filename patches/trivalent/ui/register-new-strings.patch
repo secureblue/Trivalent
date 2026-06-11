@@ -39,7 +39,7 @@ index b3263e1207..ac23e9bf9d 100644
 +      <message name="IDS_JS_JIT_BUBBLE_TITLE" desc="Title for the JavaScript optimization disabled bubble.">
 +        JavaScript JIT is off
 +      </message>
-+      <message name="IDS_JS_OPTIMIZATION_BUBBLE_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled by enterprise policy.">
++      <message name="IDS_JS_JIT_BUBBLE_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled by enterprise policy.">
 +        JavaScript JIT is off for this site.
 +      </message>
       <if expr="not use_titlecase">
