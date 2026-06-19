@@ -203,8 +203,8 @@ new file mode 100644
 +    Trivalent's subresource filter cannot perform script injection or observe and alter what happens
 +    inside YouTube's video player, so it can't reliably intercept the scripts and dynamic behavior
 +    YouTube uses to serve ads. To avoid ads, you need a tool capable of doing that. Common options
-+    are <a href="https://flathub.org/apps/io.freetubeapp.FreeTube">FreeTube electron flatpak</a>,
-+    <a href="https://flathub.org/apps/de.schmidhuberj.tubefeeder">Pipeline piped proxy flatpak</a>,
++    are <a href="https://flathub.org/apps/io.freetubeapp.FreeTube">FreeTube Electron Flatpak</a>,
++    <a href="https://flathub.org/apps/de.schmidhuberj.tubefeeder">Pipeline Piped Proxy Flatpak</a>,
 +    and the YouTube PWA (progressive web-app) paired with uBlock Origin Lite. Consider creating a
 +    separate profile for the Youtube PWA, so you can continue browsing extensionless for your
 +    usual profile.<br>
