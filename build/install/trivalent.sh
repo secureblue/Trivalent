@@ -95,7 +95,7 @@ fi
 declare -r CHROMIUM_ALL_FLAGS="${CHROMIUM_FLAGS} ${CHROMIUM_SYSTEM_FLAGS}"
 
 # desktop integration
-declare -r xdg_app_dir="${XDG_DATA_HOME:-${HOME}/.local/share/applications}"
+declare -r xdg_app_dir="${XDG_DATA_HOME:-"${HOME}/.local/share/applications"}"
 mkdir -p "${xdg_app_dir}"
 [[ -f "${xdg_app_dir}/mimeapps.list" ]] || touch "${xdg_app_dir}/mimeapps.list"
 
@@ -108,13 +108,17 @@ fi
 declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
 mkdir -p "$TMPFS_CACHE_DIR"
 
-declare BWRAP_ARGS="--dev-bind / /"
-BWRAP_ARGS+=" --cap-drop ALL" # if the browser has capabilities, that is very concerning
+declare -a BWRAP_ARGS=('--dev-bind' '/' '/')
+# If the browser has capabilities, that is very concerning
+BWRAP_ARGS+=('--cap-drop' 'ALL')
 if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will error out
-  BWRAP_ARGS+=" --ro-bind-try /dev/null /etc/ld.so.preload" # avoid ld preload usage
+  # Avoid ld preload usage
+  BWRAP_ARGS+=('--ro-bind-try' '/dev/null' '/etc/ld.so.preload')
 fi
-BWRAP_ARGS+=" --bind ${TMPFS_CACHE_DIR} ${XDG_CACHE_HOME:-$HOME/.cache}" # avoid issues with other applications messing with cache
-BWRAP_ARGS+=" --setenv GDK_DISABLE icon-nodes" # avoid issues with glycin
+# Avoid issues with other applications messing with cache
+BWRAP_ARGS+=('--bind' "${TMPFS_CACHE_DIR}" "${XDG_CACHE_HOME:-"${HOME}/.cache"}")
+# Avoid issues with glycin
+BWRAP_ARGS+=('--setenv' 'GDK_DISABLE' 'icon-nodes')
 
 # Do this at the end so that everything else still gets hardened_malloc
 declare -rx LD_PRELOAD=""
@@ -126,4 +130,4 @@ exec > >(exec cat)
 exec 2> >(exec cat >&2)
 
 # shellcheck disable=SC2086
-exec bwrap ${BWRAP_ARGS} -- "${HERE}/${CHROMIUM_NAME}" ${CHROMIUM_ALL_FLAGS} "${@}"
+exec bwrap "${BWRAP_ARGS[@]}" -- "${HERE}/${CHROMIUM_NAME}" ${CHROMIUM_ALL_FLAGS} "${@}"
