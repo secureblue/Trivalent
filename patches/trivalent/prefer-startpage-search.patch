@@ -11,20 +11,28 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/third_party/search_engines_data/resources/definitions/regional_settings.json b/third_party/search_engines_data/resources/definitions/regional_settings.json
-index 9bd4f39..9f259e8 100644
+index b73c17e..bb62aee 100644
 --- a/third_party/search_engines_data/resources/definitions/regional_settings.json
 +++ b/third_party/search_engines_data/resources/definitions/regional_settings.json
-@@ -165,6 +165,7 @@
+@@ -192,6 +192,7 @@
+     },
+     "AU": {
+       "search_engines": [
++        "&startpage",
+         "&google",
+         "&bing",
+         "&yahoo_au",
+@@ -297,6 +298,7 @@
+     },
      "CA": {
-       // Canada
        "search_engines": [
 +        "&startpage",
          "&google",
          "&bing",
          "&yahoo_ca",
-@@ -245,12 +246,12 @@
+@@ -375,12 +377,12 @@
+     },
      "DE": {
-       // Germany
        "search_engines": [
 +        "&startpage",
          "&google",
@@ -36,36 +44,43 @@ index 9bd4f39..9f259e8 100644
          "&yahoo_de",
          "&qwant"
        ]
-@@ -373,6 +374,7 @@
+@@ -492,6 +494,7 @@
+     },
      "GB": {
-       // United Kingdom
        "search_engines": [
 +        "&startpage",
          "&google",
          "&bing",
          "&yahoo_uk",
-@@ -758,6 +760,7 @@
+@@ -858,6 +861,7 @@
+     },
      "NL": {
-       // Netherlands
        "search_engines": [
 +        "&startpage",
          "&google",
          "&duckduckgo",
          "&brave",
-@@ -1086,6 +1089,7 @@
+@@ -882,6 +886,7 @@
+     },
+     "NZ": {
+       "search_engines": [
++        "&startpage",
+         "&google",
+         "&bing",
+         "&yahoo_nz",
+@@ -1161,6 +1166,7 @@
+     },
      "US": {
-       // United States
        "search_engines": [
 +        "&startpage",
          "&google",
          "&bing",
          "&yahoo",
-@@ -1146,7 +1150,7 @@
-     // See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#ZZ
+@@ -1224,10 +1230,11 @@
+     },
      "ZZ": {
-       // Default
--      "search_engines": ["&google", "&bing", "&yahoo"]
-+      "search_engines": ["&startpage", "&google", "&bing", "&yahoo"]
-     }
-   },
-   "aggregation": {
+       "search_engines": [
++        "&startpage",
+         "&google",
+         "&bing",
+         "&yahoo"
