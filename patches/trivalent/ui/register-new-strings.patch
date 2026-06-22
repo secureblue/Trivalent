@@ -288,3 +288,4 @@ index 3fb5490f77..d9f23ce20d 100644
 +            IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY)),
          std::u16string(),
          JsOptimizationsPageActionController::kBubbleBodyElementId);
+
