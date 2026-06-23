@@ -153,18 +153,18 @@ index aae688f787..1ab79f7b31 100644
        Sites use this feature to override the input of your keyboard, like for games or remote desktop apps
      </message>
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index 556a396168..a6547ce454 100644
+index 1d656809ee..f59eb36f58 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -510,6 +510,7 @@ void AddAiStrings(content::WebUIDataSource* html_source) {
+@@ -535,6 +535,7 @@ void AddAiStrings(content::WebUIDataSource* html_source) {
  void AddAppearanceStrings(content::WebUIDataSource* html_source,
                            Profile* profile) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
 +      {"websiteDarkMode", IDS_WEBSITE_DARK_MODE},
        {"appearancePageTitle", IDS_SETTINGS_APPEARANCE},
+       {"ctrlTabMru", IDS_SETTINGS_CTRL_TAB_MRU},
        {"customWebAddress", IDS_SETTINGS_CUSTOM_WEB_ADDRESS},
-       {"enterCustomWebAddress", IDS_SETTINGS_ENTER_CUSTOM_WEB_ADDRESS},
-@@ -2129,6 +2130,18 @@ bool ShouldLinkSecureDnsOsSettings() {
+@@ -2349,6 +2350,18 @@ bool ShouldLinkSecureDnsOsSettings() {
  void AddPrivacyStrings(content::WebUIDataSource* html_source,
                         Profile* profile) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
@@ -180,10 +180,10 @@ index 556a396168..a6547ce454 100644
 +      {"netServSandboxDesc", IDS_NETWORK_SERVICE_SANDBOX_DESCRIPTION},
 +      {"disableExtensionsLabel", IDS_DISABLE_EXTENSIONS_LABEL},
 +      {"disableExtensionsDesc", IDS_DISABLE_EXTENSIONS_DESCRIPTION},
+       {"newBadgeLabel", IDS_NEW_BADGE},
        {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
        {"privacyPageMore", IDS_SETTINGS_PRIVACY_MORE},
-       {"doNotTrack", IDS_SETTINGS_ENABLE_DO_NOT_TRACK},
-@@ -2425,7 +2425,7 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
+@@ -2529,7 +2542,7 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
        {"preloadingPageThingsToConsiderBulletOne",
         IDS_SETTINGS_PRELOAD_PAGES_THINGS_TO_CONSIDER_BULLET_ONE},
        {"securityJavascriptOptimizerLinkTitle",
@@ -192,7 +192,7 @@ index 556a396168..a6547ce454 100644
        {"securityJavascriptOptimizerLinkRowLabelEnabled",
         IDS_SETTINGS_SECURITY_JAVASCRIPT_OPTIMIZATION_LINK_ROW_ENABLED},
        {"securityJavascriptOptimizerLinkRowLabelDisabled",
-@@ -3051,7 +3051,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3153,7 +3166,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsCategoryLocation", IDS_SITE_SETTINGS_TYPE_LOCATION},
        {"siteSettingsCategoryJavascript", IDS_SITE_SETTINGS_TYPE_JAVASCRIPT},
        {"siteSettingsCategoryJavascriptOptimizer",
@@ -201,7 +201,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsCategoryMicrophone", IDS_SITE_SETTINGS_TYPE_MIC},
        {"siteSettingsMicrophoneLabel", IDS_SITE_SETTINGS_TYPE_MIC},
        {"siteSettingsCategoryNotifications",
-@@ -3140,9 +3140,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3242,9 +3255,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsJavascriptMidSentence",
         IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_MID_SENTENCE},
        {"siteSettingsJavascriptOptimizer",
@@ -213,7 +213,7 @@ index 556a396168..a6547ce454 100644
                                                        // form.
        {"siteSettingsSound", IDS_SITE_SETTINGS_TYPE_SOUND},
        {"siteSettingsSoundMidSentence",
-@@ -3573,11 +3573,11 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3675,11 +3688,11 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsJavascriptOptimizerDescription",
         IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_DESCRIPTION},
        {"siteSettingsJavascriptOptimizerAllowed",
@@ -227,7 +227,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsJavascriptOptimizerBlockedUnfamiliarSites",
         IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_UNFAMILIAR_SITES},
        {"siteSettingsJavascriptOptimizerBlockedUnfamiliarSitesSubLabel",
-@@ -3588,9 +3588,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3690,9 +3703,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsJavascriptOptimizerBlockedSubLabel",
         IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_SUB_LABEL},
        {"siteSettingsJavascriptOptimizerAllowedExceptions",
@@ -239,7 +239,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsKeyboardLock", IDS_SITE_SETTINGS_TYPE_KEYBOARD_LOCK},
        {"siteSettingsKeyboardLockAsk",
         IDS_SETTINGS_SITE_SETTINGS_KEYBOARD_LOCK_ASK},
-@@ -3826,6 +3837,7 @@ void AddSiteDataPageStrings(content::WebUIDataSource* html_source,
+@@ -4154,6 +4167,7 @@ void AddSiteDataPageStrings(content::WebUIDataSource* html_source,
  #if !BUILDFLAG(IS_CHROMEOS)
  void AddSystemStrings(content::WebUIDataSource* html_source) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
