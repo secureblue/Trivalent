@@ -159,17 +159,17 @@ index c442fa1941..db6ef82436 100644
    if (!base::FeatureList::IsEnabled(tabs::kHorizontalTabStripComboButton) &&
        features::HasTabSearchToolbarButton()) {
 diff --git a/chrome/app/vector_icons/BUILD.gn b/chrome/app/vector_icons/BUILD.gn
-index 7537afaf13..9c17b4466e 100644
+index 7549ff5614..7b607f2518 100644
 --- a/chrome/app/vector_icons/BUILD.gn
 +++ b/chrome/app/vector_icons/BUILD.gn
-@@ -244,6 +244,7 @@ aggregate_vector_icons("chrome_vector_icons") {
-     "webauthn/windows_hello_color.icon",
-     "webid/webid_arrow.icon",
-     "webid/webid_globe.icon",
+@@ -406,6 +406,7 @@ aggregate_vector_icons("chrome_vector_icons") {
+     "webid/arrow_range.icon",
+     "webid/webid_arrow_old.icon",
+     "webid/webid_globe_old.icon",
 +    "website_darkmode.icon",
      "zoom_in.icon",
      "zoom_in_map.icon",
-     "zoom_minus.icon",
+     "zoom_in_map_old.icon",
 diff --git a/chrome/app/vector_icons/website_darkmode.icon b/chrome/app/vector_icons/website_darkmode.icon
 --- /dev/null
 +++ b/chrome/app/vector_icons/website_darkmode.icon

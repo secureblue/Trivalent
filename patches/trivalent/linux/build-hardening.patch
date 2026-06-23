@@ -10,23 +10,34 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
+Copyright 2024-2026 The Trivalent Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is
+distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+---
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index f977c9fed7..a062b0205f 100644
+index e1da11405c..254c14e46f 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -444,14 +444,24 @@ config("compiler") {
-       # On Aarch64, SCS requires the x18 register to be unused because it will hold
-       # a pointer to the shadow stack. For Android we know that Clang doesn't use
-       # x18 by default. On other OSs adding "-ffixed-x18" might be required.
+@@ -437,14 +437,23 @@ config("compiler") {
+       # hold a pointer to the shadow stack. For Android we know that Clang
+       # doesn't use x18 by default. On other OSs adding "-ffixed-x18" might be
+       # required.
 -      assert(is_android)
-+      assert((is_linux || is_android) && target_cpu == "arm64")
++      assert((is_android || is_linux) && target_cpu == "arm64")
  
        scs_parameters = [
          "-fsanitize=shadow-call-stack",
 -        "-fno-stack-protector",
 +        "-fstack-protector-strong",
        ]
-+
 +      rs_scs_params = [
 +        #"-Zsanitizer=shadow-call-stack",
 +        "-Zstack-protector=strong",
@@ -41,7 +52,7 @@ index f977c9fed7..a062b0205f 100644
      } else {
        if (is_apple) {
          # The strong variant of the stack protector significantly increases
-@@ -466,10 +476,17 @@ config("compiler") {
+@@ -459,10 +468,18 @@ config("compiler") {
        } else if (is_posix || is_fuchsia) {
          if (current_os != "aix") {
            # Not available on aix.
@@ -51,6 +62,7 @@ index f977c9fed7..a062b0205f 100644
          }
        }
      }
++
 +    if (is_linux) {
 +      cflags += [
 +        "-fstack-clash-protection",
@@ -60,7 +72,7 @@ index f977c9fed7..a062b0205f 100644
    }
  
    # Non-Apple Posix and Fuchsia compiler flags setup.
-@@ -598,6 +615,12 @@ config("compiler") {
+@@ -586,6 +603,12 @@ config("compiler") {
        cflags += [ "-fdiagnostics-print-source-range-info" ]
      }
  
@@ -73,7 +85,7 @@ index f977c9fed7..a062b0205f 100644
      # Enable -fmerge-all-constants. This used to be the default in clang
      # for over a decade. It makes clang non-conforming, but is fairly safe
      # in practice and saves some binary size. We might want to consider
-@@ -2440,7 +2463,7 @@ config("chromium_code") {
+@@ -2102,7 +2125,7 @@ config("chromium_code") {
        # Non-chromium code is not guaranteed to compile cleanly with
        # _FORTIFY_SOURCE. Also, fortified build may fail when optimizations are
        # disabled, so only do that for Release build.
@@ -82,7 +94,7 @@ index f977c9fed7..a062b0205f 100644
  
        # ChromeOS's toolchain supports a high-quality _FORTIFY_SOURCE=3
        # implementation with a few custom glibc patches. Use that if it's
-@@ -3519,8 +3542,14 @@ buildflag_header("compiler_buildflags") {
+@@ -3199,8 +3222,14 @@ buildflag_header("compiler_buildflags") {
  }
  
  config("cet_shadow_stack") {

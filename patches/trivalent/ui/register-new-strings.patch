@@ -10,21 +10,21 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
-index 38b5029eab..71d669f792 100644
+iff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
+index 384521cdbe..8229efaeb6 100644
 --- a/chrome/app/chromium_strings.grd
 +++ b/chrome/app/chromium_strings.grd
-@@ -3283,6 +3283,10 @@ Chromium is unable to recover your settings.
-         Chromium turns off JavaScript optimization when you visit a site for the first time.&#xA;
+@@ -3295,6 +3295,10 @@ Chromium is unable to recover your settings.
+       <message name="IDS_JS_OPTIMIZATION_BUBBLE_BODY_NON_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled for other reasons.">
+         For security, Chromium turns off JavaScript optimization when you visit a site for the first time.&#xA;
  If this page isn’t working as expected, try allowing optimization.
-       </message>
-+      <message name="IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled for other reasons.">
-+        Chromium turns off JavaScript JIT by default.&#xA;
-+If this page isn’t working as expected, try allowing JIT.
 +      </message>
-     </messages>
-   </release>
- </grit>
++      <message name="IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled for other reasons.">
++        For security, Chromium turns off JavaScript JIT by default.&#xA;.&#xA;
++If this page isn’t working as expected, try allowing JIT.
+       </message>
+       <!-- Send Tab To Self -->
+       <message name="IDS_SEND_TAB_TO_SELF_SIGN_IN_PROMO_TITLE" desc="Title of the send-tab-to-self sign-in promo bubble.">
 diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
 index b3263e1207..ac23e9bf9d 100644
 --- a/chrome/app/generated_resources.grd
@@ -153,18 +153,18 @@ index aae688f787..1ab79f7b31 100644
        Sites use this feature to override the input of your keyboard, like for games or remote desktop apps
      </message>
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index 556a396168..a6547ce454 100644
+index 1d656809ee..f59eb36f58 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -510,6 +510,7 @@ void AddAiStrings(content::WebUIDataSource* html_source) {
+@@ -535,6 +535,7 @@ void AddAiStrings(content::WebUIDataSource* html_source) {
  void AddAppearanceStrings(content::WebUIDataSource* html_source,
                            Profile* profile) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
 +      {"websiteDarkMode", IDS_WEBSITE_DARK_MODE},
        {"appearancePageTitle", IDS_SETTINGS_APPEARANCE},
+       {"ctrlTabMru", IDS_SETTINGS_CTRL_TAB_MRU},
        {"customWebAddress", IDS_SETTINGS_CUSTOM_WEB_ADDRESS},
-       {"enterCustomWebAddress", IDS_SETTINGS_ENTER_CUSTOM_WEB_ADDRESS},
-@@ -2129,6 +2130,18 @@ bool ShouldLinkSecureDnsOsSettings() {
+@@ -2349,6 +2350,18 @@ bool ShouldLinkSecureDnsOsSettings() {
  void AddPrivacyStrings(content::WebUIDataSource* html_source,
                         Profile* profile) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
@@ -180,10 +180,10 @@ index 556a396168..a6547ce454 100644
 +      {"netServSandboxDesc", IDS_NETWORK_SERVICE_SANDBOX_DESCRIPTION},
 +      {"disableExtensionsLabel", IDS_DISABLE_EXTENSIONS_LABEL},
 +      {"disableExtensionsDesc", IDS_DISABLE_EXTENSIONS_DESCRIPTION},
+       {"newBadgeLabel", IDS_NEW_BADGE},
        {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
        {"privacyPageMore", IDS_SETTINGS_PRIVACY_MORE},
-       {"doNotTrack", IDS_SETTINGS_ENABLE_DO_NOT_TRACK},
-@@ -2425,7 +2425,7 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
+@@ -2529,7 +2542,7 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
        {"preloadingPageThingsToConsiderBulletOne",
         IDS_SETTINGS_PRELOAD_PAGES_THINGS_TO_CONSIDER_BULLET_ONE},
        {"securityJavascriptOptimizerLinkTitle",
@@ -192,7 +192,7 @@ index 556a396168..a6547ce454 100644
        {"securityJavascriptOptimizerLinkRowLabelEnabled",
         IDS_SETTINGS_SECURITY_JAVASCRIPT_OPTIMIZATION_LINK_ROW_ENABLED},
        {"securityJavascriptOptimizerLinkRowLabelDisabled",
-@@ -3051,7 +3051,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3153,7 +3166,7 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsCategoryLocation", IDS_SITE_SETTINGS_TYPE_LOCATION},
        {"siteSettingsCategoryJavascript", IDS_SITE_SETTINGS_TYPE_JAVASCRIPT},
        {"siteSettingsCategoryJavascriptOptimizer",
@@ -201,7 +201,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsCategoryMicrophone", IDS_SITE_SETTINGS_TYPE_MIC},
        {"siteSettingsMicrophoneLabel", IDS_SITE_SETTINGS_TYPE_MIC},
        {"siteSettingsCategoryNotifications",
-@@ -3140,9 +3140,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3242,9 +3255,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsJavascriptMidSentence",
         IDS_SITE_SETTINGS_TYPE_JAVASCRIPT_MID_SENTENCE},
        {"siteSettingsJavascriptOptimizer",
@@ -213,7 +213,7 @@ index 556a396168..a6547ce454 100644
                                                        // form.
        {"siteSettingsSound", IDS_SITE_SETTINGS_TYPE_SOUND},
        {"siteSettingsSoundMidSentence",
-@@ -3573,11 +3573,11 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3675,11 +3688,11 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsJavascriptOptimizerDescription",
         IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_DESCRIPTION},
        {"siteSettingsJavascriptOptimizerAllowed",
@@ -227,7 +227,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsJavascriptOptimizerBlockedUnfamiliarSites",
         IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_UNFAMILIAR_SITES},
        {"siteSettingsJavascriptOptimizerBlockedUnfamiliarSitesSubLabel",
-@@ -3588,9 +3588,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -3690,9 +3703,9 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
        {"siteSettingsJavascriptOptimizerBlockedSubLabel",
         IDS_SETTINGS_SITE_SETTINGS_JAVASCRIPT_OPTIMIZER_BLOCKED_SUB_LABEL},
        {"siteSettingsJavascriptOptimizerAllowedExceptions",
@@ -239,7 +239,7 @@ index 556a396168..a6547ce454 100644
        {"siteSettingsKeyboardLock", IDS_SITE_SETTINGS_TYPE_KEYBOARD_LOCK},
        {"siteSettingsKeyboardLockAsk",
         IDS_SETTINGS_SITE_SETTINGS_KEYBOARD_LOCK_ASK},
-@@ -3826,6 +3837,7 @@ void AddSiteDataPageStrings(content::WebUIDataSource* html_source,
+@@ -4154,6 +4167,7 @@ void AddSiteDataPageStrings(content::WebUIDataSource* html_source,
  #if !BUILDFLAG(IS_CHROMEOS)
  void AddSystemStrings(content::WebUIDataSource* html_source) {
    static constexpr webui::LocalizedString kLocalizedStrings[] = {
@@ -248,18 +248,18 @@ index 556a396168..a6547ce454 100644
  #if !BUILDFLAG(IS_MAC)
        {"backgroundAppsLabel", IDS_SETTINGS_SYSTEM_BACKGROUND_APPS_LABEL},
 diff --git a/chrome/browser/ui/browser_actions.cc b/chrome/browser/ui/browser_actions.cc
-index 7e3c7be3c5..17c4af4b2b 100644
+index f9503246a2..1239504bac 100644
 --- a/chrome/browser/ui/browser_actions.cc
 +++ b/chrome/browser/ui/browser_actions.cc
-@@ -562,7 +562,7 @@ void BrowserActions::InitializePageActionIconActions() {
-                 bwi))
-             .SetActionId(kActionShowJsOptimizationsIcon)
-             .SetTooltipText(l10n_util::GetStringUTF16(
--                IDS_JS_OPTIMIZATIONS_DISABLED_ICON_TOOLTIP))
-+                IDS_JS_JIT_DISABLED_ICON_TOOLTIP))
-             .SetImage(ui::ImageModel::FromVectorIcon(
- #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-                 vector_icons::kV8OffIcon,
+@@ -612,7 +612,7 @@ void BrowserActions::InitializePageActionIconActions() {
+               bwi))
+           .SetActionId(kActionShowJsOptimizationsIcon)
+           .SetTooltipText(l10n_util::GetStringUTF16(
+-              IDS_JS_OPTIMIZATIONS_DISABLED_ICON_TOOLTIP))
++              IDS_JS_JIT_DISABLED_ICON_TOOLTIP))
+           .SetImage(ui::ImageModel::FromVectorIcon(
+               vector_icons::kShieldIcon, ui::kColorIcon,
+               ui::SimpleMenuModel::kDefaultIconSize))
 diff --git a/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc b/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
 index 3fb5490f77..d9f23ce20d 100644
 --- a/chrome/browser/ui/views/js_optimization/js_optimizations_page_action_controller.cc
@@ -288,3 +288,4 @@ index 3fb5490f77..d9f23ce20d 100644
 +            IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY)),
          std::u16string(),
          JsOptimizationsPageActionController::kBubbleBodyElementId);
+
