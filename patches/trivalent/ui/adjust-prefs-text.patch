@@ -39,18 +39,18 @@ index 95b225cc32..06e98d1a25 100644
          role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
      <cr-link-row id="siteSettingsLinkRow" start-icon="privacy:page-info"
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index 1fd9c83cb7..931b3b5aee 100644
+index 51af5ee843..d6e8f04729 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -178,7 +178,7 @@ function createRoutes(): SettingsRoutes {
-
+@@ -172,7 +172,7 @@ function createRoutes(): SettingsRoutes {
+ 
    if (visibility.people !== false) {
      r.PEOPLE = r.BASIC.createSection(
 -        '/people', 'people', loadTimeData.getString('peoplePageTitle'));
 +        '/people', 'people', loadTimeData.getString('editPerson'));
-     // <if expr="not is_chromeos">
-     r.SIGN_OUT = r.PEOPLE.createChild('/signOut');
-     r.SIGN_OUT.isNavigableDialog = true;
+     if (loadTimeData.getBoolean('replaceSyncPromosWithSignInPromos')) {
+       r.ACCOUNT = r.PEOPLE.createChild('/account');
+       r.GOOGLE_SERVICES = r.PEOPLE.createChild('/googleServices');
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 index 3cb9e3af7a..12b7f1fa3b 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
