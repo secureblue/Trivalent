@@ -11,26 +11,24 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/resources/settings/site_settings/v8_page.html b/chrome/browser/resources/settings/site_settings/v8_page.html
-index 3e6101bb07..50a7b6ec05 100644
+index 4c9fb387a8..50a7b6ec05 100644
 --- a/chrome/browser/resources/settings/site_settings/v8_page.html
 +++ b/chrome/browser/resources/settings/site_settings/v8_page.html
-@@ -25,19 +25,6 @@
+@@ -25,17 +25,6 @@
            sub-label="$i18n{siteSettingsJavascriptOptimizerAllowedSubLabel}"
            no-collapse>
        </settings-collapse-radio-button>
--      <template is="dom-if"
--          if="[[enableBlockV8OptimizerOnUnfamiliarSites_]]">
--        <settings-collapse-radio-button
--            id="blockForUnfamiliarSites"
--            class="two-line"
--            name="[[javascriptOptimizerSettingEnum_.BLOCKED_FOR_UNFAMILIAR_SITES]]"
--            pref="[[prefs.generated.javascript_optimizer]]"
--            label="$i18n{siteSettingsJavascriptOptimizerBlockedUnfamiliarSites}"
--            sub-label="[[getBlockForUnfamiliarSitesSubLabel_(
--                prefs.generated.javascript_optimizer.value)]]"
--            no-collapse>
--        </settings-collapse-radio-button>
--      </template>
+-      <settings-collapse-radio-button
+-          id="blockForUnfamiliarSites"
+-          class="two-line"
+-          name="[[
+-              javascriptOptimizerSettingEnum_.BLOCKED_FOR_UNFAMILIAR_SITES]]"
+-          pref="[[prefs.generated.javascript_optimizer]]"
+-          label="$i18n{siteSettingsJavascriptOptimizerBlockedUnfamiliarSites}"
+-          sub-label="[[getBlockForUnfamiliarSitesSubLabel_(
+-              prefs.generated.javascript_optimizer.value)]]"
+-          no-collapse>
+-      </settings-collapse-radio-button>
        <settings-collapse-radio-button
            id="blockForAllSites"
            class="two-line"
