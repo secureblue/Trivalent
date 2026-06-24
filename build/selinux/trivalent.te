@@ -159,10 +159,14 @@ tunable_policy(`trivalent_exec_flatpaks', `
 		type data_home_t;
 		type flatpak_home_t;
 	')
+	# User flatpaks
 	exec_files_pattern(trivalent_domain, data_home_t, data_home_t)
 	read_lnk_files_pattern(trivalent_domain, data_home_t, data_home_t)
 	exec_files_pattern(trivalent_domain, flatpak_home_t, flatpak_home_t)
 	read_lnk_files_pattern(trivalent_domain, flatpak_home_t, flatpak_home_t)
+	# System flatpaks
+	exec_files_pattern(trivalent_domain, var_lib_t, var_lib_t)
+	read_lnk_files_pattern(trivalent_domain, var_lib_t, var_lib_t)
 ')
 
 tunable_policy(`trivalent_drm', `
