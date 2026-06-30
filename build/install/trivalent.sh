@@ -105,7 +105,7 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
   /bin/bash /usr/lib64/trivalent/install_filter.sh
 fi
 
-declare -r TMPFS_CACHE_DIR="/tmp/${CHROMIUM_NAME}_cache/"
+declare -r TMPFS_CACHE_DIR="/var/tmp/${CHROMIUM_NAME}_cache/"
 mkdir -p "$TMPFS_CACHE_DIR"
 
 declare -a BWRAP_ARGS=('--dev-bind' '/' '/')
