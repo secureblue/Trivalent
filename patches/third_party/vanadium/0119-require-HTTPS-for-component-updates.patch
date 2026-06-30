@@ -4,23 +4,9 @@ Date: Tue, 25 Apr 2023 04:53:22 -0400
 Subject: [PATCH] require HTTPS for component updates
 
 ---
- .../component_updater/aw_component_updater_configurator.cc      | 2 +-
  .../component_updater/chrome_component_updater_configurator.cc  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/android_webview/nonembedded/component_updater/aw_component_updater_configurator.cc b/android_webview/nonembedded/component_updater/aw_component_updater_configurator.cc
-index 0f9acf93572a5..2cc02eba6aed8 100644
---- a/android_webview/nonembedded/component_updater/aw_component_updater_configurator.cc
-+++ b/android_webview/nonembedded/component_updater/aw_component_updater_configurator.cc
-@@ -39,7 +39,7 @@ AwComponentUpdaterConfigurator::AwComponentUpdaterConfigurator(
-     PrefService* pref_service)
-     : configurator_impl_(
-           component_updater::ComponentUpdaterCommandLineConfigPolicy(cmdline),
--          false),
-+          true),
-       pref_service_(pref_service),
-       persisted_data_(update_client::CreatePersistedData(
-           base::BindRepeating(
 diff --git a/chrome/browser/component_updater/chrome_component_updater_configurator.cc b/chrome/browser/component_updater/chrome_component_updater_configurator.cc
 index 744a905fa17d6..476f2db900ba9 100644
 --- a/chrome/browser/component_updater/chrome_component_updater_configurator.cc
