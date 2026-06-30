@@ -11,19 +11,21 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/resources/settings/people_page/people_page.html b/chrome/browser/resources/settings/people_page/people_page.html
-index 220bfa52fa..076c4ec3dc 100644
+index 43d3787472..d102a44824 100644
 --- a/chrome/browser/resources/settings/people_page/people_page.html
 +++ b/chrome/browser/resources/settings/people_page/people_page.html
-@@ -123,30 +123,6 @@
+@@ -153,33 +153,7 @@
            </div>
          </cr-link-row>
-
+ 
 -        <cr-link-row id="sync-setup"
 -            label="$i18n{syncAndNonPersonalizedServices}"
+-            sub-label="[[getSyncAndNonPersonalizedServicesSubtext_(syncStatus)]]"
 -            on-click="onSyncClick_"
 -            role-description="$i18n{subpageArrowRoleDescription}"
 -            hidden="[[shouldHideSyncSetupLinkRow_(syncStatus)]]">
 -        </cr-link-row>
+-
 -        <cr-link-row id="google-services"
 -            label="$i18n{googleServicesPageTitle}"
 -            on-click="onGoogleServicesClick_"
@@ -31,6 +33,7 @@ index 220bfa52fa..076c4ec3dc 100644
 -            hidden="[[!shouldHideSyncSetupLinkRow_(syncStatus)]]">
 -        </cr-link-row>
 -
+ <if expr="not is_chromeos">
 -        <template is="dom-if" if="[[signinAllowed_]]">
 -          <cr-link-row id="manage-google-account"
 -              label="$i18n{manageGoogleAccount}"
