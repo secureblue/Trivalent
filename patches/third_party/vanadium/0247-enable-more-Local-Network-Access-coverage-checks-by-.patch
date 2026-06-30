@@ -8,7 +8,7 @@ Subject: [PATCH] enable more Local Network Access coverage checks by default
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/services/network/public/cpp/features.cc b/services/network/public/cpp/features.cc
-index 93e0767d387e9..ca17d459d3192 100644
+index 18c92103b9023..8c59d26a6f08d 100644
 --- a/services/network/public/cpp/features.cc
 +++ b/services/network/public/cpp/features.cc
 @@ -249,7 +249,7 @@ BASE_FEATURE_PARAM(bool,
@@ -36,5 +36,5 @@ index 93e0767d387e9..ca17d459d3192 100644
 -             base::FEATURE_ENABLED_BY_DEFAULT);
 +             base::FEATURE_ENABLED_BY_DEFAULT); // guard for test
  
- // Splits the Local Network Access permission into 2 permissions. See
- // crbug.com/465491626.
+ // If enabled, then the network service will parse the Cookie-Indices header.
+ // This does not currently control changing cache behavior according to the
