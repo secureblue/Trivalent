@@ -140,9 +140,9 @@ index 3a07c761e3..dd1a14ffa3 100644
 -      static_cast<int>(kSearchContentSharingAllowedDefault));
 +      static_cast<int>(contextual_search::
 +                       SearchContentSharingSettingsValue::kDisabled));
-   registry->RegisterBooleanPref(
-       kDriveDisclaimerAccepted, false,
-       user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+   registry->RegisterIntegerPref(
+       kDriveConsentState, 0, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+ }
 diff --git a/components/optimization_guide/core/model_execution/model_execution_prefs.cc b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
 index c01de2e0f7..b37b6254e2 100644
 --- a/components/optimization_guide/core/model_execution/model_execution_prefs.cc
