@@ -42,7 +42,7 @@ jobs:
   buildsrpm:
     name: Build SRPM
     if: github.triggering_actor == 'royaloughtness'
-    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
+    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-26.04' || 'ubuntu-26.04-arm' }}
     container:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:44@sha256:f717d3f59ea0dc45d3c024c9477e786bab7d418d26636920d17b48016f1e69ca' || 'fedora:44@sha256:63a832c5308c808ecee9a90a0459f67beee9205db01bd967bde410429cd33fc0' }}
     steps:
@@ -144,7 +144,7 @@ jobs:
     name: Push RPM
     if: github.triggering_actor == 'royaloughtness'
     environment: ${{ inputs.test_build && 'TestBuild' || 'Build' }}
-    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
+    runs-on: ${{ inputs.arch == 'x86_64' && 'ubuntu-26.04' || 'ubuntu-26.04-arm' }}
     container:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:44@sha256:f717d3f59ea0dc45d3c024c9477e786bab7d418d26636920d17b48016f1e69ca' || 'fedora:44@sha256:63a832c5308c808ecee9a90a0459f67beee9205db01bd967bde410429cd33fc0' }}
     needs: buildrpm
