@@ -63,7 +63,8 @@ declare USE_VULKAN="${USE_VULKAN:-false}"
 # USE_WAYLAND=[true|false|unknown]
 declare USE_WAYLAND="${USE_WAYLAND:-}"
 
-declare FEATURES="" # shellcheck disable=SC2034
+ # shellcheck disable=SC2034
+declare FEATURES=""
 declare CHROMIUM_FLAGS=""
 
 # obtain extra flags that are likely user-configured
