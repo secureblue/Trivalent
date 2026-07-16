@@ -390,7 +390,7 @@ index 65dea86a65..ab9d387a01 100644
 +  if (command_line->HasSwitch("libgallium-version")) {
 +    const std::string libgalliumVersion =
 +          command_line->GetSwitchValueASCII("libgallium-version");
-+    // We may recieve untrusted input, so validate it matches a version format
++    // We may receive untrusted input, so validate it matches a version format
 +    if (RE2::FullMatch(libgalliumVersion, "[1-9][0-9]+\\.[0-9]\\.[0-9]"))
 +      gpu_preferences.gallium_version = libgalliumVersion;
 +  }

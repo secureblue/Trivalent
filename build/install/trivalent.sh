@@ -29,7 +29,7 @@ declare -rx DISPLAY="${DISPLAY:-}"
 declare -rx WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-}"
 
 # Exit immediately if run as root
-if [ "$(id -u)" -eq 0 ]; then
+if [[ "$(id -u)" -eq 0 ]]; then
   echo "Trivalent must not be run as root."
   exit 1
 fi
@@ -39,7 +39,7 @@ declare -r ARCH
 
 # enable hardware CFI feature
 # https://www.gnu.org/software/libc/manual/html_node/Hardware-Capability-Tunables.html
-if [[ "$ARCH" == "x86_64" ]]; then
+if [[ "${ARCH}" == "x86_64" ]]; then
   declare -rx GLIBC_TUNABLES="glibc.cpu.x86_ibt=on:glibc.cpu.x86_shstk=permissive"
 fi
 
@@ -106,12 +106,12 @@ if [[ -f "/usr/lib64/trivalent/install_filter.sh" ]] ; then
 fi
 
 declare -r TMPFS_CACHE_DIR="/var/tmp/${CHROMIUM_NAME}_cache/"
-mkdir -p "$TMPFS_CACHE_DIR"
+mkdir -p "${TMPFS_CACHE_DIR}"
 
 declare -a BWRAP_ARGS=('--dev-bind' '/' '/')
 # If the browser has capabilities, that is very concerning
 BWRAP_ARGS+=('--cap-drop' 'ALL')
-if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesnt exist, bwrap will error out
+if [[ -r "/etc/ld.so.preload" ]]; then # if the file doesn't exist, bwrap will error out
   # Avoid ld preload usage
   BWRAP_ARGS+=('--ro-bind-try' '/dev/null' '/etc/ld.so.preload')
 fi

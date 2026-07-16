@@ -24,13 +24,13 @@ get_remote_vanadium_patches() {
 	local retry=0
 	while true; do
 		git clone "https://github.com/GrapheneOS/Vanadium.git"
-		if [ ! -d Vanadium/patches/ ]; then
+		if [[ ! -d Vanadium/patches/ ]]; then
 			rm -rf Vanadium/
 			echo "ERROR! git operation failed!"
-			if [[ $retry -gt 0 ]]; then
+			if [[ ${retry} -gt 0 ]]; then
 				echo "Failed to clone $((retry+1)) times..."
 			fi
-			if [[ $retry == 2 ]]; then
+			if [[ ${retry} == 2 ]]; then
 				echo "Aborting!"
 				cd "${patches_directory}"
 				rm -rf vanadium-patches-tmp/
@@ -45,8 +45,8 @@ get_remote_vanadium_patches() {
 	cd Vanadium/patches/
 	remote_vanadium_patches=(*.patch)
 	for ((i=0; i<${#remote_vanadium_patches[@]}; i++)); do
-		if [[ ${remote_vanadium_patches[$i]} =~ ^[0-9]{4}[\-] ]]; then
-			truncated_remote_vanadium_patches[i]="${remote_vanadium_patches[$i]:4}"
+		if [[ ${remote_vanadium_patches[${i}]} =~ ^[0-9]{4}[\-] ]]; then
+			truncated_remote_vanadium_patches[i]="${remote_vanadium_patches[${i}]:4}"
 		else
 			echo "ERROR! Remote patch ${remote_vanadium_patches[$i]} does match expected naming scheme!"
 			echo "Aborting!"
@@ -66,40 +66,40 @@ update_vanadium_patches() {
  	unset GLOBIGNORE
     local truncated_vanadium_patches=()
 	for ((i=0; i<${#current_vanadium_patches[@]}; i++)); do
-		truncated_vanadium_patches[i]="${current_vanadium_patches[$i]:4}"
+		truncated_vanadium_patches[i]="${current_vanadium_patches[${i}]:4}"
 	done
 	local updated_counter=0
 	local removed_counter=0
 	local patch_not_found_counter=0
 	for ((i=0; i<${#truncated_vanadium_patches[@]}; i++)); do
 		for ((j=0; j<${#truncated_remote_vanadium_patches[@]}; j++)); do
-			if [[ "${truncated_remote_vanadium_patches[$j]}" == "${truncated_vanadium_patches[$i]}" ]]; then
-				if [[ "${remote_vanadium_patches[$j]}" == "${current_vanadium_patches[$i]}" ]]; then
-					echo "Updating patch ${current_vanadium_patches[$i]}"
+			if [[ "${truncated_remote_vanadium_patches[${j}]}" == "${truncated_vanadium_patches[${i}]}" ]]; then
+				if [[ "${remote_vanadium_patches[${j}]}" == "${current_vanadium_patches[${i}]}" ]]; then
+					echo "Updating patch ${current_vanadium_patches[${i}]}"
 					echo "	No name change"
 				else
-					echo "Updating patch ${current_vanadium_patches[$i]}"
-					echo "	Patch renamed to: ${remote_vanadium_patches[$j]}"
+					echo "Updating patch ${current_vanadium_patches[${i}]}"
+					echo "	Patch renamed to: ${remote_vanadium_patches[${j}]}"
 				fi
-				rm "${current_vanadium_patches[$i]}"
-				cp "${patches_directory}/vanadium-patches-tmp/Vanadium/patches/${remote_vanadium_patches[$j]}" ./
+				rm "${current_vanadium_patches[${i}]}"
+				cp "${patches_directory}/vanadium-patches-tmp/Vanadium/patches/${remote_vanadium_patches[${j}]}" ./
 				updated_counter=$((updated_counter+1))
 			else
 				patch_not_found_counter=$((patch_not_found_counter+1))
 			fi
 		done
 		# Assume, since the patch has not been found, the patch has been removed
-		if [[ $patch_not_found_counter == "${#truncated_remote_vanadium_patches[@]}" ]]; then
+		if [[ ${patch_not_found_counter} == "${#truncated_remote_vanadium_patches[@]}" ]]; then
 			echo "Removing ${current_vanadium_patches[i]}"
 			echo "	Patch has been removed in Vanadium"
-			rm "${current_vanadium_patches[$i]}"
+			rm "${current_vanadium_patches[${i}]}"
 			removed_counter=$((removed_counter+1))
 		fi
 		patch_not_found_counter=0
 	done
 	echo ""
-	echo "Updated $updated_counter patches."
-	echo "Removed $removed_counter patches."
+	echo "Updated ${updated_counter} patches."
+	echo "Removed ${removed_counter} patches."
 	cd "${patches_directory}"
 }
 

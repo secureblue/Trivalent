@@ -1,0 +1,3 @@
+[codespell]
+skip = *.desktop,*.patch
+ignore-words-list = te
