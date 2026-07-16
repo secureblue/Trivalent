@@ -70,7 +70,7 @@ declare CHROMIUM_FLAGS=""
 # obtain extra flags that are likely user-configured
 if [[ -d "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf.d" ]]; then
   for conf_file in "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf.d"/*.conf; do
-    # shellcheck disable=SC1091
+    # shellcheck disable=SC1091,SC1090
     source "${conf_file}"
   done
 fi
@@ -89,7 +89,7 @@ function logecho () {
 # shellcheck source=build/trivalent.conf
 declare CHROMIUM_SYSTEM_FLAGS=""
 if [[ -f "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf" ]]; then
-  # shellcheck disable=SC1091
+  # shellcheck disable=SC1091,SC1090
   source "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf"
 fi
 
