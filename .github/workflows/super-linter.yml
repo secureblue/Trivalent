@@ -5,9 +5,6 @@ on:
   pull_request:
     branches:
       - live
-      - staging
-      - next
-      - testing
 
 permissions: {}
 
