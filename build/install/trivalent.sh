@@ -63,13 +63,13 @@ declare USE_VULKAN="${USE_VULKAN:-false}"
 # USE_WAYLAND=[true|false|unknown]
 declare USE_WAYLAND="${USE_WAYLAND:-}"
 
-declare FEATURES=""
+declare FEATURES="" # shellcheck disable=SC2034
 declare CHROMIUM_FLAGS=""
 
 # obtain extra flags that are likely user-configured
 if [[ -d "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf.d" ]]; then
   for conf_file in "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf.d"/*.conf; do
-    # shellcheck source=/etc/trivalent/trivalent.conf.d/99-example.conf
+    # shellcheck disable=SC1091
     source "${conf_file}"
   done
 fi
@@ -88,7 +88,7 @@ function logecho () {
 # shellcheck source=build/trivalent.conf
 declare CHROMIUM_SYSTEM_FLAGS=""
 if [[ -f "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf" ]]; then
-  # shellcheck source=build/trivalent.conf
+  # shellcheck disable=SC1091
   source "/etc/${CHROMIUM_NAME}/${CHROMIUM_NAME}.conf"
 fi
 

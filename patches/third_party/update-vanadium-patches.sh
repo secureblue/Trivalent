@@ -48,7 +48,7 @@ get_remote_vanadium_patches() {
 		if [[ ${remote_vanadium_patches[${i}]} =~ ^[0-9]{4}[\-] ]]; then
 			truncated_remote_vanadium_patches[i]="${remote_vanadium_patches[${i}]:4}"
 		else
-			echo "ERROR! Remote patch ${remote_vanadium_patches[$i]} does match expected naming scheme!"
+			echo "ERROR! Remote patch ${remote_vanadium_patches[${i}]} does match expected naming scheme!"
 			echo "Aborting!"
 			cd "${patches_directory}"
 			rm -rf vanadium-patches-tmp/
