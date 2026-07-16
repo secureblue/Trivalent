@@ -18,7 +18,7 @@ on:
   workflow_dispatch: # allow using non-latest cache version
     inputs:
       override_version:
-        description: 'Override version?'
+        description: "Override version?"
         type: string
         required: false
         default: ""
@@ -31,7 +31,7 @@ jobs:
       fail-fast: false
     uses: ./.github/workflows/build.yml
     with:
-      arch: 'x86_64'
+      arch: "x86_64"
       override_version: ${{ inputs.override_version }}
     permissions:
       actions: read # To read the workflow path.

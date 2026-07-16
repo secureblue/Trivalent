@@ -18,15 +18,15 @@ A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadi
 
 ### In scope
 
-* Desktop-relevant patches from Vanadium (located in vanadium_patches)
-* Changes that increase hardening against known and unknown vulnerabilities
-* Changes that make secondary browser features opt-in instead of opt-out (for example, making the password manager and search suggestions opt-in)
-* Changes that disable opt-in metrics and data collection, so long as they have no security implications
+- Desktop-relevant patches from Vanadium (located in vanadium_patches)
+- Changes that increase hardening against known and unknown vulnerabilities
+- Changes that make secondary browser features opt-in instead of opt-out (for example, making the password manager and search suggestions opt-in)
+- Changes that disable opt-in metrics and data collection, so long as they have no security implications
 
 ### Out of scope
 
-* Any changes that sacrifice security for "privacy" (for example, enabling MV2) <sup>[why?](https://developer.chrome.com/docs/extensions/develop/migrate/improve-security)</sup>
-* Any novel functionality that is unrelated to security
+- Any changes that sacrifice security for "privacy" (for example, enabling MV2) <sup>[why?](https://developer.chrome.com/docs/extensions/develop/migrate/improve-security)</sup>
+- Any novel functionality that is unrelated to security
 
 ## Installation
 
@@ -41,8 +41,8 @@ There is also a Website Dark Mode preference added to `chrome://settings/appeara
 \
 Additionally, the following flags are available that provide extra hardening but may cause breakage or usability issues:
 
-* `chrome://flags/#show-punycode-domains`
-* `chrome://flags/#clear-cross-origin-referrers`
+- `chrome://flags/#show-punycode-domains`
+- `chrome://flags/#clear-cross-origin-referrers`
 
 Other flags are also provided for compatibility should you experience an issue related to some of the hardening enabled by default. For example, the default pop-up blocker is very strict, it may optionally be disabled `chrome://flags/#strict-popup-blocking` to improve usability.
 
