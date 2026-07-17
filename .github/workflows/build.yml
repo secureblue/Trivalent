@@ -55,7 +55,7 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
             -d "{\"content\": \"Build **${WORKFLOW_NAME}** started on branch \`${BRANCH_NAME}\`\"}" \
-            ${DISCORD_WEBHOOK}
+            "${DISCORD_WEBHOOK}"
 
       - name: Enable egress auditing
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
@@ -232,7 +232,7 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
             -d "{\"content\": \"Build **${WORKFLOW_NAME}** completed on branch \`${BRANCH_NAME}\`\"}" \
-            ${DISCORD_WEBHOOK}
+            "${DISCORD_WEBHOOK}"
 
   provenance:
     needs: [pushrpm]
