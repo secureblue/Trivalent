@@ -46,6 +46,17 @@ jobs:
     container:
       image: ${{ inputs.arch == 'x86_64' && 'fedora:44@sha256:f717d3f59ea0dc45d3c024c9477e786bab7d418d26636920d17b48016f1e69ca' || 'fedora:44@sha256:63a832c5308c808ecee9a90a0459f67beee9205db01bd967bde410429cd33fc0' }}
     steps:
+      - name: Notify Discord webhook of build start
+        continue-on-error: true
+        env:
+          WORKFLOW_NAME: ${{ github.workflow }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"Build **${WORKFLOW_NAME}** started on branch \`${BRANCH_NAME}\`\"}" \
+            ${DISCORD_WEBHOOK}
+
       - name: Enable egress auditing
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
@@ -211,6 +222,17 @@ jobs:
           SOURCE_DIR: .
         run: |
           rclone copy ./secureblue/ R2:/
+
+      - name: Notify Discord webhook of build end
+        continue-on-error: true
+        env:
+          WORKFLOW_NAME: ${{ github.workflow }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"Build **${WORKFLOW_NAME}** completed on branch \`${BRANCH_NAME}\`\"}" \
+            ${DISCORD_WEBHOOK}
 
   provenance:
     needs: [pushrpm]
