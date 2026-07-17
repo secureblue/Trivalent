@@ -33,6 +33,8 @@ on:
         required: false
       R2_ENDPOINT:
         required: false
+      DISCORD_WEBHOOK:
+        required: false
 
 name: Create RPM Release
 

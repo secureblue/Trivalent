@@ -38,6 +38,7 @@ jobs:
       id-token: write # To sign the provenance.
       contents: write # To add assets to a release.
     secrets:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       RPM_SIGNING_KEY: ${{ secrets.RPM_SIGNING_KEY }}
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
