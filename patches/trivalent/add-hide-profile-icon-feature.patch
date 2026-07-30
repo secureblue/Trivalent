@@ -46,7 +46,7 @@ index 5a42610d05..cf57e55074 100644
          AvatarToolbarButtonInterface::CanShowForProfile(browser_->profile());
 +    if (browser_->profile()->IsRegularProfile())
 +      show_avatar_toolbar_button = show_avatar_toolbar_button &&
-+                     !base::FeatureList::IsEnabled(features::kHideProfileIcon));
++                     !base::FeatureList::IsEnabled(features::kHideProfileIcon);
      avatar_->SetVisible(show_avatar_toolbar_button);
    }
  
