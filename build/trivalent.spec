@@ -460,9 +460,6 @@ rm third_party/node/linux/node-linux-x64/bin/node
 ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 %endif
 
-# Hard code extra version
-sed -i 's/getenv("CHROME_VERSION_EXTRA")/"%{chromium_name}"/' chrome/common/channel_info_posix.cc
-
 %if 0%{?with_selinux}
 mkdir -p selinux
 cp -a %{SOURCE21} %{SOURCE22} %{SOURCE23} selinux
