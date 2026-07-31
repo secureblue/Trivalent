@@ -56,19 +56,19 @@ index a490fefce8c79..1b071f5c7c571 100644
        prefs::kSearchSuggestEnabled,
        true,
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index 32141931a58d5..93cf4c2a33d54 100644
+index 7f2ccebd7e..5e619fa2bf 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -28,6 +28,12 @@ namespace prefs {
+@@ -33,6 +33,12 @@ namespace prefs {
  // *************** PROFILE PREFS ***************
  // These are attached to the user profile
- 
+
 +// Launch external links in Incognito
 +inline constexpr char kIncognitoLaunch[] = "incognito.launch_mode";
 +
 +// Start sessions in Incognito
 +inline constexpr char kIncognitoStartup[] = "incognito.startup_mode";
 +
- // A string property indicating whether default apps should be installed
- // in this profile.  Use the value "install" to enable defaults apps, or
+ // A string property indicating whether default extensions should be installed
+ // in this profile.  Use the value "install" to enable default extensions, or
  // "noinstall" to disable them.  This property is usually set in the

@@ -11,43 +11,42 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/ui/ui_features.cc b/chrome/browser/ui/ui_features.cc
-index 45501ce4b4..dffd87c1e2 100644
+index e7c8cc09dd..d313942e5a 100644
 --- a/chrome/browser/ui/ui_features.cc
 +++ b/chrome/browser/ui/ui_features.cc
-@@ -18,6 +18,8 @@
+@@ -29,6 +29,8 @@ bool IsProcessOverheadExperimentActive() {
 
  namespace features {
 
 +BASE_FEATURE(kHideProfileIcon, base::FEATURE_DISABLED_BY_DEFAULT);
 +
- // Enables the use of WGC for the Eye Dropper screen capture.
- BASE_FEATURE(kAllowEyeDropperWGCScreenCapture,
- #if BUILDFLAG(IS_WIN)
+ // Enables the migration of browser commands to Action API.
+ BASE_FEATURE(kUseActionsForBrowserCommands, base::FEATURE_DISABLED_BY_DEFAULT);
+
 diff --git a/chrome/browser/ui/ui_features.h b/chrome/browser/ui/ui_features.h
-index ec4e5c2d2b..b276e1a066 100644
+index 5588ad208d..b72a395db3 100644
 --- a/chrome/browser/ui/ui_features.h
 +++ b/chrome/browser/ui/ui_features.h
-@@ -19,6 +19,8 @@ namespace features {
- // All features in alphabetical order. The features should be documented
- // alongside the definition of their values in the .cc file.
- 
+@@ -16,6 +16,8 @@
+
+ namespace features {
+
 +BASE_DECLARE_FEATURE(kHideProfileIcon);
 +
- BASE_DECLARE_FEATURE(kAllowEyeDropperWGCScreenCapture);
- 
- BASE_DECLARE_FEATURE(kCreateNewTabGroupAppMenuTopLevel);
+ // All features in alphabetical order. The features should be documented
+ // alongside the definition of their values in the .cc file.
+
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-index f4a09082bd..f129849413 100644
+index 5a42610d05..cf57e55074 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
 +++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-@@ -591,7 +591,9 @@ void ToolbarView::Init() {
-     // DevTools profiles are OffTheRecord, so hide it there.
-     show_avatar_toolbar_button = browser_->profile()->IsIncognitoProfile() ||
-                                  browser_->profile()->IsGuestSession() ||
--                                 browser_->profile()->IsRegularProfile();
-+                                 (browser_->profile()->IsRegularProfile() &&
-+                                 !base::FeatureList::IsEnabled(
-+                                                     features::kHideProfileIcon));
- #endif
+@@ -583,6 +583,9 @@ void ToolbarView::Init() {
+         AddChildView(std::make_unique<AvatarToolbarButton>(browser_view_));
+     bool show_avatar_toolbar_button =
+         AvatarToolbarButtonInterface::CanShowForProfile(browser_->profile());
++    if (browser_->profile()->IsRegularProfile())
++      show_avatar_toolbar_button = show_avatar_toolbar_button &&
++                     !base::FeatureList::IsEnabled(features::kHideProfileIcon);
      avatar_->SetVisible(show_avatar_toolbar_button);
    }
+ 

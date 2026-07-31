@@ -68,16 +68,19 @@ index 2c7878aec4a53..02cb255a30814 100644
  
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
-index ddb0d6c099..872eafd703 100644
+index de465ad4e7..3d8b3fd751 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
 +++ b/components/omnibox/browser/aim_eligibility_service.cc
-@@ -252,8 +252,7 @@ bool AimEligibilityService::GenericKillSwitchFeatureCheck(
+@@ -247,10 +247,8 @@ bool AimEligibilityService::GenericKillSwitchFeatureCheck(
  // static
  void AimEligibilityService::RegisterProfilePrefs(PrefRegistrySimple* registry) {
    registry->RegisterStringPref(kResponsePrefName, "");
 -  registry->RegisterIntegerPref(omnibox::kAIModeSettings,
 -                                kAiModeAllowedDefault);
+-  registry->RegisterIntegerPref(omnibox::kThirdPartyAiChatSettings,
+-                                kAiModeAllowedDefault);
 +  registry->RegisterIntegerPref(omnibox::kAIModeSettings, 1);
++  registry->RegisterIntegerPref(omnibox::kThirdPartyAiChatSettings, 1);
  }
 
  // static
@@ -95,25 +98,16 @@ index 014e4ad46ec9e..088c44bac95af 100644
  BASE_FEATURE(kAimServerEligibilityEnabled, base::FEATURE_ENABLED_BY_DEFAULT);
  
 diff --git a/components/omnibox/common/omnibox_features.cc b/components/omnibox/common/omnibox_features.cc
-index 32155a1750..8aed226d7e 100644
+index bbd4290959..cda52bcacc 100644
 --- a/components/omnibox/common/omnibox_features.cc
 +++ b/components/omnibox/common/omnibox_features.cc
-@@ -170,7 +170,7 @@ BASE_FEATURE(kAndroidDesktopAimGate, DISABLED);
- 
- // Whether the AI Mode entrypoint is shown in the Omnibox as a RHS button. Only
- // used on desktop platforms.
--BASE_FEATURE(kAiModeOmniboxEntryPoint, ENABLED);
-+BASE_FEATURE(kAiModeOmniboxEntryPoint, DISABLED);
- 
- // Hides the AIM entrypoint in the Omnibox when user input is in progress. Only
- // used on desktop platforms.
-@@ -264,7 +264,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
+@@ -300,7 +300,7 @@ BASE_FEATURE(kOmniboxTouchDownTriggerForPrefetch, enable_if(IS_ANDROID));
  BASE_FEATURE(kOmniboxSiteSearch, DISABLED);
- 
+
  // Enables additional site search providers for the Site search Starter Pack.
 -BASE_FEATURE(kStarterPackExpansion, enable_if(!IS_IOS));
 +BASE_FEATURE(kStarterPackExpansion, DISABLED);
- 
+
  // Enables an informational IPH message at the bottom of the Omnibox directing
  // users to certain starter pack engines.
 diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc

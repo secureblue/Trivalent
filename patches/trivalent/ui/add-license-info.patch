@@ -10,15 +10,15 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
-index 6864d76343794..678a7c240d91e 100644
---- a/chrome/browser/resources/settings/about_page/about_page.html
-+++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -148,7 +148,103 @@
-     <settings-section>
-       <div class="info-sections">
-         <div class="info-section">
--          <div class="secondary">$i18n{aboutProductTitle}</div>
+diff --git a/chrome/browser/resources/settings/about_page/about_page.html.ts b/chrome/browser/resources/settings/about_page/about_page.html.ts
+index b9ac4e634f..3a6f4d60d7 100644
+--- a/chrome/browser/resources/settings/about_page/about_page.html.ts
++++ b/chrome/browser/resources/settings/about_page/about_page.html.ts
+@@ -108,7 +108,103 @@ export function getHtml(this: SettingsAboutPageElement) {
+ <settings-section>
+   <div class="info-sections">
+     <div class="info-section">
+-      <div class="secondary">$i18n{aboutProductTitle}</div>
 +          <div class="secondary">Trivalent</div>
 +          <div class="secondary">Copyright 2024-2026 The Trivalent Authors.</div>
 +          <div class="secondary">Trivalent license:
@@ -116,6 +116,6 @@ index 6864d76343794..678a7c240d91e 100644
 +        <hr />
 +        <div class="info-section">
 +          <div class="secondary">This project is based on the Chromium open source project.</div>
-           <div class="secondary">$i18n{aboutProductCopyright}</div>
-         </div>
+       <div class="secondary">$i18n{aboutProductCopyright}</div>
+     </div>
  

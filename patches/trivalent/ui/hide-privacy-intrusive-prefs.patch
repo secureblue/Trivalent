@@ -48,40 +48,67 @@ index 43d3787472..d102a44824 100644
          <cr-link-row id="importDataDialogTrigger"
              label="$i18n{importTitle}"
              on-click="onImportDataClick_"></cr-link-row>
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html.ts b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html.ts
+index 158cc88454..8322d7a327 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html.ts
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html.ts
+@@ -33,7 +33,7 @@ export function getHtml(this: SettingsResetProfileDialogElement) {
+     </cr-button>
+   </div>
+   <div slot="footer">
+-    <cr-checkbox id="sendSettings" checked>
++    <cr-checkbox id="sendSettings">
+       $i18nRaw{resetPageFeedback}
+     </cr-checkbox>
+   </div>
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 19aebba1df..45d59b65ec 100644
+index d5c37bda84..13e0197694 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -346,7 +346,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
-   bool show_privacy_guide =
-       base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
-       (!ShouldDisplayManagedUi(profile) && !profile->IsChild());
--  html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
-+  html_source->AddBoolean("showPrivacyGuide", false);
- 
-   html_source->AddBoolean(
-       "showResetProfileBannerV2",
-@@ -510,7 +510,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
-       base::FeatureList::IsEnabled(privacy_sandbox::kRelatedWebsiteSetsUi));
-   html_source->AddBoolean("isPrivacySandboxAdPrivacyUxDeprecationEnabled",
-                           is_ad_privacy_ux_deprecation_enabled);
--  html_source->AddBoolean("isAdPrivacyAvailable", is_ad_privacy_available);
-+  html_source->AddBoolean("isAdPrivacyAvailable", false);
- 
-   // Performance
-   AddSettingsPageUIHandler(std::make_unique<PerformanceHandler>());
-diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
-index 3eb464c572..e9498414b8 100644
---- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
-+++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
-@@ -32,8 +32,8 @@
-           $i18n{resetDialogCommit}
-         </cr-button>
-       </div>
--      <div slot="footer">
--        <cr-checkbox id="sendSettings" checked>
-+      <div style="display:none" slot="footer">
-+        <cr-checkbox id="sendSettings">
-           $i18nRaw{resetPageFeedback}</cr-checkbox>
-       </div>
-     </cr-dialog>
+@@ -360,9 +360,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   html_source->AddBoolean("isOSSettings", false);
+ #endif  // BUILDFLAG(IS_CHROMEOS)
+
+-  bool show_privacy_guide =
+-      base::FeatureList::IsEnabled(features::kPrivacyGuideForceAvailable) ||
+-      (!ShouldDisplayManagedUi(profile) && !profile->IsChild());
++  bool show_privacy_guide = false;
+   html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
+
+
+@@ -507,12 +505,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+       privacy_sandbox_service->IsRestrictedNoticeEnabled();
+   bool is_ad_privacy_ux_deprecation_enabled = base::FeatureList::IsEnabled(
+       privacy_sandbox::kPrivacySandboxAdPrivacyUxDeprecation);
+-  bool is_ad_privacy_available = true;
+-  if (is_ad_privacy_ux_deprecation_enabled) {
+-    is_ad_privacy_available = false;
+-  } else if (is_privacy_sandbox_restricted) {
+-    is_ad_privacy_available = is_restricted_notice_enabled;
+-  }
++  bool is_ad_privacy_available = false;
+
+   html_source->AddBoolean("isPrivacySandboxRestricted",
+                           is_privacy_sandbox_restricted);
+@@ -595,7 +588,6 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   bool glic_disallowed_by_admin = false;
+
+   auto glic_enablement = glic::GlicEnabling::EnablementForProfile(profile);
+-  show_glic_section = glic_enablement.ShouldShowSettingsPage();
+   glic_disallowed_by_admin = glic_enablement.DisallowedByAdmin();
+
+   if (glic_enablement.IsProfileEligible()) {
+@@ -656,10 +656,10 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+
+   // Show the AI features section in the AI page if any of the AI features are
+   // enabled.
+-  bool show_ai_features_section = show_ai_settings_for_testing;
++  bool show_ai_features_section = false;
++
+   for (auto [name, visible] : optimization_guide_features) {
+-    html_source->AddBoolean(name, visible || show_ai_settings_for_testing);
+-    show_ai_features_section |= visible;
++    html_source->AddBoolean(name, show_ai_features_section);
+   }
+
+   // Within the AI subpage are separate sections for Glic and for all other AI

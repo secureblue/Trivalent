@@ -36,10 +36,10 @@ index 9da2b68be3..f7cb7b9104 100644
    E(kActionSendTabToSelf, IDC_SEND_TAB_TO_SELF) \
    E(kActionQrCodeGenerator, IDC_QRCODE_GENERATOR) \
 diff --git a/chrome/browser/ui/browser_actions.cc b/chrome/browser/ui/browser_actions.cc
-index bf32395f9b..58ac707068 100644
+index 812961aed2..a3a1089019 100644
 --- a/chrome/browser/ui/browser_actions.cc
 +++ b/chrome/browser/ui/browser_actions.cc
-@@ -687,6 +687,16 @@ void BrowserActions::InitializeBrowserActions() {
+@@ -1055,6 +1055,16 @@ void BrowserActions::InitializeChromeMenuActions() {
            .SetEnabled(chrome::CanPrint(bwi))
            .Build());
 
@@ -55,12 +55,12 @@ index bf32395f9b..58ac707068 100644
 +
    const bool is_incognito = profile_->IsIncognitoProfile();
    root_action_item_->AddChild(
-       ChromeMenuAction(base::BindRepeating(
+       ChromeMenuAction(
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index d637eecb9e..621b51f79c 100644
+index a457075948..46287614a2 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
-@@ -745,6 +745,10 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+@@ -908,6 +908,10 @@ void BrowserCommandController::HandleCommandWithDisposition(
        Print(browser_);
        break;
 
@@ -71,14 +71,14 @@ index d637eecb9e..621b51f79c 100644
  #if BUILDFLAG(ENABLE_PRINTING)
      case IDC_BASIC_PRINT:
        base::RecordAction(base::UserMetricsAction("Accel_Advanced_Print"));
-@@ -1687,6 +1691,7 @@ void BrowserCommandController::InitCommandState() {
-   command_updater_.UpdateCommandEnabled(
+@@ -1817,6 +1821,7 @@ void BrowserCommandController::InitCommandState() {
+   command_updater_->UpdateCommandEnabled(
        IDC_SHOW_TABS_FROM_OTHER_DEVICES_SIDE_PANEL,
        TabsFromOtherDevicesSidePanelCoordinator::IsSupported(profile()));
-+  command_updater_.UpdateCommandEnabled(IDC_WEBSITE_DARKMODE, true);
-   command_updater_.UpdateCommandEnabled(IDC_SHOW_DOWNLOADS, true);
-   command_updater_.UpdateCommandEnabled(IDC_SHOW_COMMENTS_SIDE_PANEL, true);
-   command_updater_.UpdateCommandEnabled(IDC_FIND_AND_EDIT_MENU, true);
++  command_updater_->UpdateCommandEnabled(IDC_WEBSITE_DARKMODE, true);
+   command_updater_->UpdateCommandEnabled(IDC_SHOW_DOWNLOADS, true);
+   command_updater_->UpdateCommandEnabled(IDC_SHOW_COMMENTS_SIDE_PANEL, true);
+   command_updater_->UpdateCommandEnabled(IDC_FIND_AND_EDIT_MENU, true);
 diff --git a/chrome/browser/ui/browser_commands.cc b/chrome/browser/ui/browser_commands.cc
 index cd7f650386..261e7e0d53 100644
 --- a/chrome/browser/ui/browser_commands.cc
@@ -128,10 +128,10 @@ index dc2fed7651..d1956d42ce 100644
    kShowHistoryCluster,
    kShowReadAnything,
 diff --git a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
-index c442fa1941..db6ef82436 100644
+index 96695a255d..6dc57f6362 100644
 --- a/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
 +++ b/chrome/browser/ui/webui/side_panel/customize_chrome/customize_toolbar/customize_toolbar_handler.cc
-@@ -40,6 +40,8 @@ namespace {
+@@ -41,6 +41,8 @@ namespace {
  std::optional<side_panel::customize_chrome::mojom::ActionId>
  MojoActionForChromeAction(actions::ActionId action_id) {
    switch (action_id) {
@@ -140,7 +140,7 @@ index c442fa1941..db6ef82436 100644
      case kActionSidePanelShowBookmarks:
        return side_panel::customize_chrome::mojom::ActionId::kShowBookmarks;
      case kActionSidePanelShowHistoryCluster:
-@@ -102,6 +104,8 @@ MojoActionForChromeAction(actions::ActionId action_id) {
+@@ -106,6 +108,8 @@ MojoActionForChromeAction(actions::ActionId action_id) {
  std::optional<actions::ActionId> ChromeActionForMojoAction(
      side_panel::customize_chrome::mojom::ActionId action_id) {
    switch (action_id) {
@@ -149,15 +149,15 @@ index c442fa1941..db6ef82436 100644
      case side_panel::customize_chrome::mojom::ActionId::kShowBookmarks:
        return kActionSidePanelShowBookmarks;
      case side_panel::customize_chrome::mojom::ActionId::kShowHistoryCluster:
-@@ -350,6 +354,8 @@ void CustomizeToolbarHandler::ListActions(ListActionsCallback callback) {
+@@ -339,6 +343,8 @@ void CustomizeToolbarHandler::ListActions(ListActionsCallback callback) {
               side_panel::customize_chrome::mojom::CategoryId::kYourChrome);
    add_action(kActionClearBrowsingData,
               side_panel::customize_chrome::mojom::CategoryId::kYourChrome);
 +  add_action(kActionWebsiteDarkmode,
 +             side_panel::customize_chrome::mojom::CategoryId::kYourChrome);
- 
-   if (!base::FeatureList::IsEnabled(tabs::kHorizontalTabStripComboButton) &&
-       features::HasTabSearchToolbarButton()) {
+
+   add_action(kActionPrint,
+              side_panel::customize_chrome::mojom::CategoryId::kTools);
 diff --git a/chrome/app/vector_icons/BUILD.gn b/chrome/app/vector_icons/BUILD.gn
 index 7549ff5614..7b607f2518 100644
 --- a/chrome/app/vector_icons/BUILD.gn

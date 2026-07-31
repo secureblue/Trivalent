@@ -217,7 +217,7 @@ index 6b9bd1adee..6e0bea5eee 100644
 +        <settings-dropdown-menu
 +          label="$i18n{webrtcHandlingPolicyLabel}"
 +          pref="{{prefs.webrtc.ip_handling_policy}}"
-+          menu-options="[[webrtcHandlingPolicyOptions_]]">
++          .menuOptions="${this.webrtcHandlingPolicyOptions_}"
 +        </settings-dropdown-menu>
 +      </div>
 +<if expr="is_linux or is_win">
@@ -235,7 +235,7 @@ index 6b9bd1adee..6e0bea5eee 100644
 +    </div>
    </settings-subpage>
 diff --git a/chrome/browser/resources/settings/privacy_page/security/security_page.ts b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
-index 92eb5ebaef..4f3726dd7e 100644
+index f0ca661a05..dc46797316 100644
 --- a/chrome/browser/resources/settings/privacy_page/security/security_page.ts
 +++ b/chrome/browser/resources/settings/privacy_page/security/security_page.ts
 @@ -17,6 +17,7 @@ import '../../settings_page/settings_subpage.js';
@@ -246,7 +246,7 @@ index 92eb5ebaef..4f3726dd7e 100644
 
  import {PrefsMixin} from '/shared/settings/prefs/prefs_mixin.js';
  import {CrSettingsPrefs} from '/shared/settings/prefs/prefs_types.js';
-@@ -33,6 +34,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
+@@ -32,6 +33,7 @@ import {PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bu
  import type {SettingsCollapseRadioButtonElement} from '../../controls/collapse_radio_button.js';
  import type {SettingsRadioGroupElement} from '../../controls/settings_radio_group.js';
  import type {SettingsToggleButtonElement} from '../../controls/settings_toggle_button.js';
@@ -254,7 +254,7 @@ index 92eb5ebaef..4f3726dd7e 100644
  import {loadTimeData} from '../../i18n_setup.js';
  import type {MetricsBrowserProxy} from '../../metrics_browser_proxy.js';
  import {MetricsBrowserProxyImpl, PrivacyElementInteractions, SafeBrowsingInteractions} from '../../metrics_browser_proxy.js';
-@@ -112,6 +114,19 @@ export class SettingsSecurityPageElement extends
+@@ -126,6 +128,19 @@ export class SettingsSecurityPageElement extends
        },
        // </if>
 
@@ -280,15 +280,15 @@ index 92eb5ebaef..4f3726dd7e 100644
    }
 +  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
    declare private showSecureDnsSetting_: boolean;
- 
+
    // <if expr="is_chromeos">
-@@ -266,10 +282,6 @@ export class SettingsSecurityPageElement extends
+@@ -267,10 +283,6 @@ export class SettingsSecurityPageElement extends
        }
      });
- 
+
 -    this.registerHelpBubble(
 -        'kEnhancedProtectionSettingElementId',
--        this.$.safeBrowsingEnhanced.getBubbleAnchor(), {anchorPaddingTop: 10});
+-        this.$.safeBrowsingEnhanced.getBubbleAnchor(), {paddingTop: 10});
 -
      // Initialize the last focus time on page load.
      this.lastFocusTime_ = HatsBrowserProxyImpl.getInstance().now();

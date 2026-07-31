@@ -11,25 +11,24 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 25458578a8..5a59d3f789 100644
+index cbac8ed617..1e5cdbb498 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -7905,20 +7905,19 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
+@@ -8216,20 +8216,17 @@ bool ChromeContentBrowserClient::IsJitDisabledForSite(
      const GURL& site_url) {
    Profile* profile = Profile::FromBrowserContext(browser_context);
    auto* map = HostContentSettingsMapFactory::GetForProfile(profile);
-+  // Disable JIT & WASM for non-(web|file|extension) schemes.
+-  // Special case to determine if any policy is set.
+-  if (map && site_url.is_empty()) {
 +  if (!map || !(site_url.SchemeIsHTTPOrHTTPS() || site_url.SchemeIsFile()
 +      || site_url.SchemeIs("chrome-extension") || site_url.SchemeIs("devtools")))
 +    return true;
 +
-   // Special case to determine if any policy is set.
--  if (map && site_url.is_empty()) {
 +  if (site_url.is_empty()) {
      return map->GetDefaultContentSetting(ContentSettingsType::JAVASCRIPT_JIT,
                                           nullptr) == CONTENT_SETTING_BLOCK;
    }
--
+
 -  // Only disable JIT for web schemes.
 -  if (!site_url.SchemeIsHTTPOrHTTPS()) {
 -    return false;
@@ -39,12 +38,11 @@ index 25458578a8..5a59d3f789 100644
 -                                        ContentSettingsType::JAVASCRIPT_JIT) ==
 -                     CONTENT_SETTING_BLOCK);
 +  return map->GetContentSetting(site_url, site_url,
-+                                       ContentSettingsType::JAVASCRIPT_JIT) ==
-+                     CONTENT_SETTING_BLOCK;
++            ContentSettingsType::JAVASCRIPT_JIT) == CONTENT_SETTING_BLOCK;
  }
- 
+
  bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
-@@ -7926,18 +7925,10 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
+@@ -8237,18 +8234,10 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
      const std::optional<base::SafeRef<content::ProcessSelectionUserData>>&
          process_selection_user_data,
      const GURL& site_url) {
@@ -62,9 +60,9 @@ index 25458578a8..5a59d3f789 100644
 -    return true;
 +    return !IsJitDisabledForSite(browser_context, site_url.is_empty() ? GURL() : site_url);
    }
- 
+
    if (site_url.is_empty()) {
-@@ -7967,83 +7967,14 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
+@@ -8258,85 +8247,14 @@ bool ChromeContentBrowserClient::AreV8OptimizationsEnabledForSite(
      // familiarity or site-specific settings cannot be considered here, because
      // the process will be shared among many sites.
      return map->GetDefaultContentSetting(
@@ -100,10 +98,12 @@ index 25458578a8..5a59d3f789 100644
 -            content_settings::SettingSource::kUser);
 -
 -  if (default_javascript_optimizer_setting !=
--      JavascriptOptimizerSetting::kBlockedForUnfamiliarSites) {
--    // If site familiarity is turned off, use content settings to set v8
--    // optimization. Use `site_content_setting` to honor exceptions for specific
--    // sites over a default policy that applies to all sites.
+-          JavascriptOptimizerSetting::kBlockedForUnfamiliarSites ||
+-      site_protection::IsV8OptimizerMigrationDryRun(profile)) {
+-    // If site familiarity is turned off or we are in dry-run mode, use content
+-    // settings to set v8 optimization. Use `site_content_setting` to honor
+-    // exceptions for specific sites over a default policy that applies to all
+-    // sites.
 -    return site_content_setting == CONTENT_SETTING_ALLOW;
 -  }
 -
@@ -154,7 +154,7 @@ index 25458578a8..5a59d3f789 100644
 +                     CONTENT_SETTING_ALLOW
 +         || IsJitDisabledForSite(browser_context, site_url);
  }
- 
+
  bool ChromeContentBrowserClient::DisallowV8FeatureFlagOverridesForSite(
 diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
 index 4abe687249..ccce7a5b55 100644

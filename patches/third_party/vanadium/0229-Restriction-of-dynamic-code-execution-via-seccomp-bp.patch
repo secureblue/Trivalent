@@ -25,10 +25,10 @@ code generation in the same processes on Linux via seccomp-bpf.
  8 files changed, 128 insertions(+), 17 deletions(-)
 
 diff --git a/content/renderer/renderer_main_platform_delegate_android.cc b/content/renderer/renderer_main_platform_delegate_android.cc
-index 6486ffd030869..c4979e5c68c29 100644
+index cd27d5c6f883a..2d26c09ae7810 100644
 --- a/content/renderer/renderer_main_platform_delegate_android.cc
 +++ b/content/renderer/renderer_main_platform_delegate_android.cc
-@@ -17,6 +17,10 @@
+@@ -18,6 +18,10 @@
  #include "sandbox/policy/linux/bpf_renderer_policy_linux.h"
  #include "sandbox/policy/mojom/sandbox.mojom.h"
  #include "sandbox/policy/sandbox_type.h"
@@ -39,7 +39,7 @@ index 6486ffd030869..c4979e5c68c29 100644
  #endif
  
  namespace content {
-@@ -52,10 +56,28 @@ bool RendererMainPlatformDelegate::EnableSandbox() {
+@@ -58,10 +62,28 @@ bool RendererMainPlatformDelegate::EnableSandbox() {
    if (sandbox::policy::SandboxTypeFromCommandLine(
            *base::CommandLine::ForCurrentProcess()) ==
            sandbox::mojom::Sandbox::kRenderer &&

@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,45 +11,48 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/net/base/features.cc b/net/base/features.cc
-index fc6da73277..47d80767b4 100644
+index 2d22050c0b..a7a4349df2 100644
 --- a/net/base/features.cc
 +++ b/net/base/features.cc
-@@ -24,9 +24,12 @@ BASE_FEATURE(kAlpsForHttp2, base::FEATURE_ENABLED_BY_DEFAULT);
+@@ -29,6 +29,12 @@
 
- BASE_FEATURE(kAvoidH2Reprioritization, base::FEATURE_DISABLED_BY_DEFAULT);
+ namespace net::features {
 
--BASE_FEATURE(kCapReferrerToOriginOnCrossOrigin,
 +BASE_FEATURE(kDisableCrossOriginReferrers,
-              base::FEATURE_DISABLED_BY_DEFAULT);
-
++             base::FEATURE_DISABLED_BY_DEFAULT);
++
 +BASE_FEATURE(kCapReferrerToOriginOnCrossOrigin,
 +             base::FEATURE_ENABLED_BY_DEFAULT);
 +
- BASE_FEATURE(kAsyncDns,
- #if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_ANDROID) || \
-     BUILDFLAG(IS_WIN) || BUILDFLAG(IS_LINUX)
+ BASE_FEATURE(kAlpsForHttp2, base::FEATURE_ENABLED_BY_DEFAULT);
+
+ BASE_FEATURE(kAsyncRetryOnTooManyConnectionErrors,
 diff --git a/net/base/features.h b/net/base/features.h
-index 8d1d6e3beb..fed8be738f 100644
+index 4ebdde0c18..35836fb270 100644
 --- a/net/base/features.h
 +++ b/net/base/features.h
-@@ -29,6 +29,9 @@ NET_EXPORT BASE_DECLARE_FEATURE(kAlpsForHttp2);
- // Disable H2 reprioritization, in order to measure its impact.
- NET_EXPORT BASE_DECLARE_FEATURE(kAvoidH2Reprioritization);
+@@ -22,6 +22,13 @@
+
+ namespace net::features {
 
 +// Disables referrers when navigating across origins.
 +NET_EXPORT BASE_DECLARE_FEATURE(kDisableCrossOriginReferrers);
 +
- // When kCapReferrerToOriginOnCrossOrigin is enabled, HTTP referrers on cross-
- // origin requests are restricted to contain at most the source origin.
- NET_EXPORT BASE_DECLARE_FEATURE(kCapReferrerToOriginOnCrossOrigin);
++// When kCapReferrerToOriginOnCrossOrigin is enabled, HTTP referrers on cross-
++// origin requests are restricted to contain at most the source origin.
++NET_EXPORT BASE_DECLARE_FEATURE(kCapReferrerToOriginOnCrossOrigin);
++
+ // Enables ALPS extension of TLS 1.3 for HTTP/2, see
+ // https://vasilvv.github.io/tls-alps/draft-vvv-tls-alps.html and
+ // https://vasilvv.github.io/httpbis-alps/draft-vvv-httpbis-alps.html.
 diff --git a/net/url_request/url_request_job.cc b/net/url_request/url_request_job.cc
-index a3d565a410685..8c7b19dd8515d 100644
+index b014aa95ff..1eb6abb535 100644
 --- a/net/url_request/url_request_job.cc
 +++ b/net/url_request/url_request_job.cc
-@@ -327,6 +327,16 @@ GURL URLRequestJob::ComputeReferrerForPolicy(
-   if (same_origin_out_for_metrics)
-     *same_origin_out_for_metrics = same_origin;
- 
+@@ -344,6 +344,20 @@ GURL URLRequestJob::ComputeReferrerForPolicy(
+       original_referrer.SchemeIsCryptographic() &&
+       !destination.SchemeIsCryptographic();
+
 +  if (base::FeatureList::IsEnabled(
 +          features::kDisableCrossOriginReferrers) &&
 +      !same_origin) {
@@ -58,29 +61,33 @@ index a3d565a410685..8c7b19dd8515d 100644
 +    // Returns here since the referrer policy doesn't matter if it is
 +    // cross-origin (if it is same origin then this will never happen)
 +    return GURL();
++  } else if (base::FeatureList::IsEnabled(
++                 features::kCapReferrerToOriginOnCrossOrigin) &&
++             !same_origin) {
++    should_strip_to_origin = true;
 +  }
 +
-   // 7. The user agent MAY alter referrerURL or referrerOrigin at this point to
-   // enforce arbitrary policy considerations in the interests of minimizing data
-   // leakage. For example, the user agent could strip the URL down to an origin,
+   switch (policy) {
+     case ReferrerPolicy::CLEAR_ON_TRANSITION_FROM_SECURE_TO_INSECURE:
+       if (secure_referrer_but_insecure_destination)
 diff --git a/services/network/network_service_network_delegate.cc b/services/network/network_service_network_delegate.cc
-index 24034fb3a78f7..c67fb7bde22eb 100644
+index fa98a19c9f..687dcee192 100644
 --- a/services/network/network_service_network_delegate.cc
 +++ b/services/network/network_service_network_delegate.cc
-@@ -60,9 +60,13 @@ void NetworkServiceNetworkDelegate::MaybeTruncateReferrer(
+@@ -75,6 +75,16 @@ void NetworkServiceNetworkDelegate::MaybeTruncateReferrer(
+     request->set_referrer_policy(net::ReferrerPolicy::NO_REFERRER);
      return;
    }
- 
--  if (base::FeatureList::IsEnabled(
--          net::features::kCapReferrerToOriginOnCrossOrigin)) {
--    if (!url::IsSameOriginWith(effective_url, GURL(request->referrer()))) {
-+  // If the target URL isn't the same origin as the current URL
 +  if (!url::IsSameOriginWith(effective_url, GURL(request->referrer()))) {
 +    if (base::FeatureList::IsEnabled(
 +          net::features::kDisableCrossOriginReferrers)) {
 +      request->SetReferrer(std::string());
 +    } else if (base::FeatureList::IsEnabled(
 +                net::features::kCapReferrerToOriginOnCrossOrigin)) {
-       auto capped_referrer = url::Origin::Create(GURL(request->referrer()));
-       request->SetReferrer(capped_referrer.GetURL().spec());
-     }
++      auto capped_referrer = url::Origin::Create(GURL(request->referrer()));
++      request->SetReferrer(capped_referrer.GetURL().spec());
++    }
++  }
+ }
+
+ int NetworkServiceNetworkDelegate::OnBeforeURLRequest(
