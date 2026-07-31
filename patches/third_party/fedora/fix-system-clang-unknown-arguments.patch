@@ -1,24 +1,26 @@
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index f977c9fed7..562d83ab3b 100644
+index 7df3e18c4c..a5998552cb 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -588,12 +588,6 @@ config("compiler") {
+@@ -576,14 +576,6 @@ config("compiler") {
    if (is_clang) {
      # Flags for diagnostics.
      cflags += [ "-fcolor-diagnostics" ]
--    if (!is_win) {
--      cflags += [ "-fdiagnostics-show-inlining-chain" ]
--    } else {
--      # Combine after https://github.com/llvm/llvm-project/pull/192241
--      cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+-    if (!is_wasm) {
+-      if (!is_win) {
+-        cflags += [ "-fdiagnostics-show-inlining-chain" ]
+-      } else {
+-        # Combine after https://github.com/llvm/llvm-project/pull/192241
+-        cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+-      }
 -    }
      if (diagnostics_print_source_range_info && !is_win) {
        cflags += [ "-fdiagnostics-print-source-range-info" ]
      }
-@@ -624,13 +618,6 @@ config("compiler") {
+@@ -614,13 +606,6 @@ config("compiler") {
        ]
      }
- 
+
 -    # The performance improvement does not seem worth the risk. See
 -    # https://crbug.com/484082200 for background and https://crrev.com/c/7593035
 -    # for discussion.
@@ -29,6 +31,16 @@ index f977c9fed7..562d83ab3b 100644
      # TODO(hans): Remove this once Clang generates better optimized debug info
      # by default. https://crbug.com/765793
      cflags += [
+@@ -1924,9 +1909,6 @@ config("default_warnings") {
+
+       # TODO(crbug.com/40284799): Fix and re-enable.
+       "-Wno-thread-safety-reference-return",
+-
+-      # TODO(crbug.com/376641662): Fix and re-enable.
+-      "-Wno-nontrivial-memcall",
+     ]
+
+     if (!is_wasm) {
 diff --git a/build/config/sanitizers/sanitizers.gni b/build/config/sanitizers/sanitizers.gni
 index 329a2fc8b4..903b87c7b6 100644
 --- a/build/config/sanitizers/sanitizers.gni
