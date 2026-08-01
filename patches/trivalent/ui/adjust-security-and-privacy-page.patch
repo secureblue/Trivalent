@@ -217,7 +217,7 @@ index 6b9bd1adee..6e0bea5eee 100644
 +        <settings-dropdown-menu
 +          label="$i18n{webrtcHandlingPolicyLabel}"
 +          pref="{{prefs.webrtc.ip_handling_policy}}"
-+          .menuOptions="${this.webrtcHandlingPolicyOptions_}"
++          .menuOptions="[[webrtcHandlingPolicyOptions_]]"
 +        </settings-dropdown-menu>
 +      </div>
 +<if expr="is_linux or is_win">
