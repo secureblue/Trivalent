@@ -18,7 +18,7 @@ A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadi
 
 ### In scope
 
-- Desktop-relevant patches from Vanadium (located in vanadium_patches)
+- Desktop-relevant patches from Vanadium (located in `patches/third_party/vanadium`)
 - Changes that increase hardening against known and unknown vulnerabilities
 - Changes that make secondary browser features opt-in instead of opt-out (for example, making the password manager and search suggestions opt-in)
 - Changes that disable opt-in metrics and data collection, so long as they have no security implications
