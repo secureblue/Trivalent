@@ -240,6 +240,7 @@ Requires: bubblewrap
 Requires: procps-ng
 Requires: policycoreutils-python-utils
 Requires: policycoreutils
+Requires: xdg-utils
 
 ExclusiveArch: x86_64 aarch64
 
