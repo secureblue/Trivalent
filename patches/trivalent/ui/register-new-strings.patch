@@ -20,7 +20,7 @@ index 384521cdbe..8229efaeb6 100644
  If this page isn’t working as expected, try allowing optimization.
 +      </message>
 +      <message name="IDS_JS_JIT_BUBBLE_BODY_NON_POLICY_BODY" desc="Body text for the JavaScript optimization bubble when disabled for other reasons.">
-+        For security, Chromium turns off JavaScript JIT by default.&#xA;.&#xA;
++        For security, Chromium turns off JavaScript JIT by default.&#xA;
 +If this page isn’t working as expected, try allowing JIT.
        </message>
        <!-- Send Tab To Self -->
