@@ -23,9 +23,9 @@ index 22af8003c7..54c42a6871 100644
 +    config_.provider_types &= AutocompleteProvider::TYPE_KEYWORD | AutocompleteProvider::TYPE_SEARCH |
 +        AutocompleteProvider::TYPE_HISTORY_URL;
 +    if (std::ranges::contains(switch_values, "bookmarks"))
-+      config_.provider_types &= AutocompleteProvider::TYPE_BOOKMARK;
++      config_.provider_types |= AutocompleteProvider::TYPE_BOOKMARK;
 +    if (std::ranges::contains(switch_values, "chrome"))
-+      config_.provider_types &= AutocompleteProvider::TYPE_BUILTIN;
++      config_.provider_types |= AutocompleteProvider::TYPE_BUILTIN;
 +  }
  
    // Providers run in the order they're added. Async providers should run first
