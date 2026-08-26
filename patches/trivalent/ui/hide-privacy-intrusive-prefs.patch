@@ -62,10 +62,10 @@ index 158cc88454..8322d7a327 100644
      </cr-checkbox>
    </div>
 diff --git a/chrome/browser/resources/settings/route.ts b/chrome/browser/resources/settings/route.ts
-index c8856314f8..ddb79ceb20 100644
+index 98e81d33d5..ddb79ceb20 100644
 --- a/chrome/browser/resources/settings/route.ts
 +++ b/chrome/browser/resources/settings/route.ts
-@@ -171,35 +171,6 @@ function createRoutes(): SettingsRoutes {
+@@ -171,38 +171,6 @@ function createRoutes(): SettingsRoutes {
      r.IMPORT_DATA.isNavigableDialog = true;
      r.MANAGE_PROFILE = r.PEOPLE.createChild('/manageProfile');
      // </if>
@@ -98,10 +98,13 @@ index c8856314f8..ddb79ceb20 100644
 -    if (loadTimeData.getBoolean('showSkillsSettingPage')) {
 -      r.SKILLS = r.AI.createChild('/ai/skills');
 -    }
+-    if (loadTimeData.getBoolean('showDictationControl')) {
+-      r.DICTATION = r.AI.createChild('/ai/dictation');
+-    }
    }
 
    if (visibility.appearance !== false) {
-@@ -224,10 +195,6 @@ function createRoutes(): SettingsRoutes {
+@@ -227,10 +195,6 @@ function createRoutes(): SettingsRoutes {
        if (loadTimeData.getBoolean('shoppingIntegrationEnabled')) {
          r.YOUR_SAVED_INFO_SHOPPING = r.YOUR_SAVED_INFO.createChild('/shopping');
        }
@@ -112,7 +115,7 @@ index c8856314f8..ddb79ceb20 100644
        // <if expr="is_win or is_macosx">
        r.PASSKEYS = r.YOUR_SAVED_INFO.createChild('/passkeys');
        // </if>
-@@ -238,10 +205,6 @@ function createRoutes(): SettingsRoutes {
+@@ -241,10 +205,6 @@ function createRoutes(): SettingsRoutes {
      r.PAYMENTS = r.AUTOFILL.createChild('/payments');
      r.ADDRESSES = r.AUTOFILL.createChild('/addresses');
 
