@@ -39,7 +39,7 @@ index 47fb8dbd05..4a248c73ad 100644
 -  return (map && map->GetContentSetting(site_url, site_url,
 -                                        ContentSettingsType::JAVASCRIPT_JIT) ==
 -                     CONTENT_SETTING_BLOCK);
-+  return && map->GetContentSetting(site_url, site_url,
++  return map->GetContentSetting(site_url, site_url,
 +               ContentSettingsType::JAVASCRIPT_JIT) == CONTENT_SETTING_BLOCK;
  }
 
