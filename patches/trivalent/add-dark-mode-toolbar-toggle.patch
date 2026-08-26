@@ -65,7 +65,7 @@ index a457075948..46287614a2 100644
        break;
 
 +    case IDC_WEBSITE_DARKMODE:
-+      ToggleWebsiteDarkmode(browser_->profile()->GetPrefs());
++      ToggleWebsiteDarkmode(browser_->GetProfile()->GetPrefs());
 +      break;
 +
  #if BUILDFLAG(ENABLE_PRINTING)

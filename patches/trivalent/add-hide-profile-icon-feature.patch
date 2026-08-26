@@ -44,7 +44,7 @@ index 03aedd9edd..7472fd8814 100644
          AddChildView(std::make_unique<AvatarToolbarButton>(browser_view_));
      bool show_avatar_toolbar_button =
          AvatarToolbarButtonInterface::CanShowForProfile(browser_->GetProfile());
-+    if (browser_->profile()->IsRegularProfile())
++    if (browser_->GetProfile()->IsRegularProfile())
 +      show_avatar_toolbar_button = show_avatar_toolbar_button &&
 +                     !base::FeatureList::IsEnabled(features::kHideProfileIcon);
      avatar_->SetVisible(show_avatar_toolbar_button);
