@@ -56,19 +56,18 @@ index 5d4e803be9693..1609d4291c53e 100644
        /* enabled */ 0);
  #if BUILDFLAG(IS_CHROMEOS)
 diff --git a/components/omnibox/browser/aim_eligibility_service.cc b/components/omnibox/browser/aim_eligibility_service.cc
-index de465ad4e7..3d8b3fd751 100644
+index 0d6ba3f732..ae7a276660 100644
 --- a/components/omnibox/browser/aim_eligibility_service.cc
 +++ b/components/omnibox/browser/aim_eligibility_service.cc
-@@ -247,10 +247,8 @@ bool AimEligibilityService::GenericKillSwitchFeatureCheck(
- // static
- void AimEligibilityService::RegisterProfilePrefs(PrefRegistrySimple* registry) {
-   registry->RegisterStringPref(kResponsePrefName, "");
--  registry->RegisterIntegerPref(omnibox::kAIModeSettings,
+@@ -258,9 +258,9 @@ void AimEligibilityService::RegisterProfilePrefs(PrefRegistrySimple* registry) {
+   registry->RegisterBooleanPref(kManualOverridePrefName, false);
+   registry->RegisterTimePref(kManualOverrideTimestampPrefName, base::Time());
+   registry->RegisterIntegerPref(omnibox::kAIModeSettings,
 -                                kAiModeAllowedDefault);
--  registry->RegisterIntegerPref(omnibox::kThirdPartyAiChatSettings,
++                                1);
+   registry->RegisterIntegerPref(omnibox::kThirdPartyAiChatSettings,
 -                                kAiModeAllowedDefault);
-+  registry->RegisterIntegerPref(omnibox::kAIModeSettings, 1);
-+  registry->RegisterIntegerPref(omnibox::kThirdPartyAiChatSettings, 1);
++                                1);
  }
 
  // static
