@@ -30,7 +30,7 @@ index b9ac4e634f..3a6f4d60d7 100644
 +            </pre>
 +          </div>
 +          <div class="secondary">The Trivalent source code is available <a href="https://github.com/secureblue/Trivalent">on github</a>.</div>
-+          <div class="secondary">The Trivalent patches are licensed under the <a href="https://github.com/secureblue/Trivalent/blob/live/patches/LICENSE">Apache License, Version 2.0</a>.</div>
++          <div class="secondary">The Trivalent patches are licensed under the <a href="https://github.com/secureblue/Trivalent/blob/live/patches/trivalent/LICENSE">Apache License, Version 2.0</a>.</div>
 +        </div>
 +        <hr />
 +        <div class="info-section">
