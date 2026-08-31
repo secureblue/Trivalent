@@ -1,4 +1,4 @@
-policy_module(trivalent, 1.0.1)
+policy_module(trivalent, 1.0.2)
 
 # SPDX-FileCopyrightText: Copyright 2025-2026 The Secureblue Authors
 #
@@ -102,7 +102,6 @@ allow trivalent_domain self:cap_userns { sys_admin sys_chroot sys_ptrace net_adm
 # Internal sockets
 allow trivalent_domain self:netlink_kobject_uevent_socket client_stream_socket_perms;
 allow trivalent_domain self:netlink_route_socket create_netlink_socket_perms;
-allow trivalent_domain self:sctp_socket create_stream_socket_perms;
 allow trivalent_domain self:tcp_socket create_stream_socket_perms;
 allow trivalent_domain self:udp_socket create_socket_perms;
 allow trivalent_domain self:unix_dgram_socket create_socket_perms;
@@ -381,6 +380,10 @@ seutil_exec_setfiles(trivalent_script_domain)
 seutil_manage_file_contexts(trivalent_script_domain)
 userdom_use_inherited_user_terminals(trivalent_script_domain)
 fs_all_mount_fs_perms_xattr_fs(trivalent_script_domain)
+
+optional_policy(`
+	bubblewrap_exec(trivalent_script_domain)
+')
 
 optional_policy(`
 	gen_require(`
