@@ -26,7 +26,6 @@ pushd build
 	cp trivalent.spec "${BUILD_DIR}"
 	cp install/* "${BUILD_DIR}"
 	cp resources/* "${BUILD_DIR}"
-	cp selinux/* "${BUILD_DIR}"
 popd
 
 pushd patches
@@ -34,7 +33,7 @@ pushd patches
 		local -r patch="${1}"
 		local -r source="${2}"
 		local -i count="${3}"
-		
+
 		local -ri REVERSE_PATCH_PREFIX_LEN=8
 		if [[ "${patch:0:${REVERSE_PATCH_PREFIX_LEN}}" == "REVERSE-" ]]; then
 			cp "${patch}" "${BUILD_DIR}/${patch:${REVERSE_PATCH_PREFIX_LEN}}"

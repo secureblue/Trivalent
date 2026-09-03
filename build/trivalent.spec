@@ -18,10 +18,6 @@
 %global chromium_name_branding Trivalent
 %global chromium_path %{_libdir}/%{chromium_name}
 
-%global with_selinux 1
-%global modulename %{chromium_name}
-%global selinuxtype targeted
-
 # To generate this list, go into %%{buildroot}%%{chromium_path} and run
 # for i in `find . -name "*.so" | sort`; do NAME=`basename -s .so $i`; printf "$NAME|"; done
 %global __provides_exclude_from ^(%{chromium_path}/.*\\.so|%{chromium_path}/.*\\.so.*)$
@@ -82,9 +78,6 @@ Source18: %{chromium_name}256.png
 #Source19: %{chromium_name}22-text.png
 #Source20: %{chromium_name}22-text-white.png
 
-Source21: %{chromium_name}.fc
-Source22: %{chromium_name}.if
-Source23: %{chromium_name}.te
 %if %{enable_proprietary_codecs}
 Source24: %{chromium_name}-drm-fix-secontexts.conf
 %endif
@@ -203,6 +196,7 @@ BuildRequires: python3-jinja2
 BuildRequires: yasm
 BuildRequires: zlib-devel
 BuildRequires:	systemd
+BuildRequires:  systemd-rpm-macros
 BuildRequires: libevdev-devel
 # One of the python scripts invokes git to look for a hash. So helpful.
 BuildRequires:	git-core
@@ -224,14 +218,6 @@ BuildRequires: nodejs
 	ninja -j %{numjobs} -C '%1' '%2'
 %endif
 
-%if 0%{?with_selinux}
-BuildRequires:  container-selinux
-BuildRequires:  make
-BuildRequires:  selinux-policy-devel
-BuildRequires:  systemd-rpm-macros
-Recommends:     (%{name}-selinux if selinux-policy-%{selinuxtype})
-%endif
-
 Requires: nss%{_isa} >= 3.26
 Requires: nss-mdns%{_isa}
 Requires: libcanberra-gtk3%{_isa}
@@ -240,6 +226,7 @@ Requires: bubblewrap
 Requires: procps-ng
 Requires: policycoreutils-python-utils
 Requires: policycoreutils
+Recommends:     (%{name}-selinux if selinux-policy)
 
 ExclusiveArch: x86_64 aarch64
 
@@ -422,7 +409,7 @@ find . -type f \( -iname "*.grd" -o -iname "*.grdp" -o -iname "*.xtb" \) \
         -e 's/REMOVE_PLACEHOLDER_GOOGLE_CHROME/Google Chrome/g' \
         -e 's/REMOVE_PLACEHOLDER_CHROME_WEB_STORE/Chrome Web Store/g' \
         -e 's/REMOVE_PLACEHOLDER_THE_CHROMIUM_AUTHORS/The Chromium Authors/g' \
-        -e 's/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/ph>Chromium<ph/g' {} + 
+        -e 's/REMOVE_PLACEHOLDER_CHROMIUM_PROJECT_TAG/ph>Chromium<ph/g' {} +
 
 ### Branding ###
 cp -a %{SOURCE12} chrome/app/theme/chromium/product_logo_16.png
@@ -460,18 +447,7 @@ rm third_party/node/linux/node-linux-x64/bin/node
 ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 %endif
 
-%if 0%{?with_selinux}
-mkdir -p selinux
-cp -a %{SOURCE21} %{SOURCE22} %{SOURCE23} selinux
-%endif
-
 %build
-# Build SELinux policy module first so any failure in this step makes the build fail early.
-%if 0%{?with_selinux}
-make -f %{_datadir}/selinux/devel/Makefile %{modulename}.pp
-bzip2 -9 %{modulename}.pp
-%endif
-
 # reduce warnings
 FLAGS=""
 %if %{use_system_toolchain}
@@ -639,12 +615,8 @@ appstream-util validate-relax --nonet ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{ch
 mkdir -p %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 
-%if 0%{?with_selinux}
-install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype} %{modulename}.pp.bz2
-install -Dp -m 0644 -t %{buildroot}%{_datadir}/selinux/devel/include/distributed selinux/%{modulename}.if
 %if %{enable_proprietary_codecs}
-install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_user_tmpfilesdir}/%{modulename}-drm-fix-secontexts.conf
-%endif
+install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_user_tmpfilesdir}/%{chromium_name}-drm-fix-secontexts.conf
 %endif
 
 %files
@@ -678,6 +650,10 @@ install -Dp -m 0644 %{SOURCE24} %{buildroot}%{_user_tmpfilesdir}/%{modulename}-d
 %dir %{chromium_path}/locales/
 %{chromium_path}/locales/*.pak
 
+%if %{enable_proprietary_codecs}
+%{_user_tmpfilesdir}/%{chromium_name}-drm-fix-secontexts.conf
+%endif
+
 %package qt6-ui
 Summary: Qt6 UI built from %{chromium_name_branding}
 Requires: %{chromium_name}%{_isa} = %{version}-%{release}
@@ -687,46 +663,3 @@ Qt6 UI for %{chromium_name_branding}.
 
 %files qt6-ui
 %{chromium_path}/libqt6_shim.so
-
-%if 0%{?with_selinux}
-%package selinux
-Summary:        SELinux policies for %{chromium_name_branding}
-License:        Apache-2.0 OR MIT
-
-Requires:       %{name}
-Requires:       selinux-policy-%{selinuxtype}
-Requires:       systemd
-Requires(post): selinux-policy-%{selinuxtype}
-Requires(post): systemd
-Recommends:     container-selinux
-BuildArch:      noarch
-%{?selinux_requires_min}
-
-%description selinux
-SELinux policy modules for %{chromium_name_branding}.
-
-%pre selinux
-%selinux_relabel_pre -s %{selinuxtype}
-
-%post selinux
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.bz2
-
-%postun selinux
-if [ "$1" -eq 0 ]; then
-    %selinux_modules_uninstall -s %{selinuxtype} %{modulename}
-    %selinux_relabel_post -s %{selinuxtype}
-fi
-
-%posttrans selinux
-%selinux_relabel_post -s %{selinuxtype}
-%{_sbindir}/restorecon -R %{chromium_path}
-
-%files selinux
-%{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.*
-%{_datadir}/selinux/devel/include/distributed/%{modulename}.if
-%ghost %verify(not md5 size mode mtime) %{_selinux_store_path}/%{selinuxtype}/active/modules/200/%{modulename}
-%if %{enable_proprietary_codecs}
-%{_user_tmpfilesdir}/%{modulename}-drm-fix-secontexts.conf
-%endif
-# if with_selinux
-%endif
