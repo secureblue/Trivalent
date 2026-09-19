@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index 3692a01c1e..4ba109b3d8 100644
+index 6714f1eb10..6ac6c53a76 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
 @@ -25,7 +25,7 @@
@@ -29,7 +29,7 @@ index 3692a01c1e..4ba109b3d8 100644
        <!-- TODO(crbug.com/40267370): Make the page searchable.-->
 -      <settings-safety-hub-page slot="view" id="safetyHub" no-search
 +      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
-           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}"
+           data-parent-view-id="safetyHubEntryPoint"
            route-path$="[[routes_.SAFETY_HUB.path]]">
        </settings-safety-hub-page>
 diff --git a/chrome/browser/resources/settings/a11y_page/live_translate.html.ts b/chrome/browser/resources/settings/a11y_page/live_translate.html.ts
@@ -49,7 +49,7 @@ index 94859e1cb8..bc57e3f578 100644
        sub-label="$i18n{captionsEnableLiveTranslateSubtitle}">
    </settings-toggle-button>
  </div>
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
  <cr-collapse ?opened="${this.isLiveTranslateEnabled_}">
    <div class="cr-row continuation subsection-group">
      <div class="start cr-padded-text" aria-hidden="true">
@@ -69,7 +69,7 @@ index ea471ade16..d2bb45f62b 100644
    }
  </style>
 
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
  <cr-expand-button class="cr-row first" expanded="{{expanded_}}">
    <div id="header-text">
      <div>$i18n{yourSavedInfoAutofillSettingsLabel}</div>
@@ -78,22 +78,24 @@ index ea471ade16..d2bb45f62b 100644
    </template>
  </cr-collapse>
 +</if>
-diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html b/chrome/browser/resources/settings/languages_page/translate_page.html
-index ab5a8c7672..1537190373 100644
---- a/chrome/browser/resources/settings/languages_page/translate_page.html
-+++ b/chrome/browser/resources/settings/languages_page/translate_page.html
-@@ -1,4 +1,5 @@
- <style include="cr-shared-style settings-shared md-select"></style>
-+<if expr="is_chromeos">
+diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html.ts b/chrome/browser/resources/settings/languages_page/translate_page.html.ts
+index 69bd00f7ae..969891eeaa 100644
+--- a/chrome/browser/resources/settings/languages_page/translate_page.html.ts
++++ b/chrome/browser/resources/settings/languages_page/translate_page.html.ts
+@@ -8,6 +8,7 @@ import type {SettingsTranslatePageElement} from './translate_page.js';
+
+ export function getHtml(this: SettingsTranslatePageElement) {
+   return html`<!--_html_template_start_-->
++<if expr="not is_linux and is_linux">
  <settings-section page-title="$i18n{translatePageTitle}">
  <settings-toggle-button id="offerTranslateOtherLanguages"
      pref-key="translate.enabled"
-@@ -6,6 +7,7 @@
-     sub-label="$i18n{offerToEnableTranslateSublabel}"
-     on-settings-boolean-control-change="onTranslateToggleChange_">
+@@ -16,6 +17,7 @@ export function getHtml(this: SettingsTranslatePageElement) {
+     @settings-boolean-control-change="${
+         this.onOfferTranslateOtherLanguagesSettingsBooleanControlChange_}">
  </settings-toggle-button>
 +</if>
- <cr-collapse opened="[[translateEnabledPref_.value]]">
+ <cr-collapse ?opened="${!!this.translateEnabledPref_?.value}">
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
 diff --git a/chrome/browser/resources/settings/site_settings/v8_page.html b/chrome/browser/resources/settings/site_settings/v8_page.html
@@ -104,7 +106,7 @@ index 4c9fb387a8..a1182f5726 100644
            sub-label="$i18n{siteSettingsJavascriptOptimizerAllowedSubLabel}"
            no-collapse>
        </settings-collapse-radio-button>
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
        <settings-collapse-radio-button
            id="blockForUnfamiliarSites"
            class="two-line"
