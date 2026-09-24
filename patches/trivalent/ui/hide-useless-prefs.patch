@@ -10,30 +10,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ---
-diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-index 3692a01c1e..4ba109b3d8 100644
---- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-+++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
-@@ -25,7 +25,7 @@
-   <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
-     <template is="dom-if" if="[[renderView_(
-         routes_.PRIVACY, currentRoute, inSearchMode)]]" update-when-false>
--      <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
-+      <settings-safety-hub-entry-point style="display:none" slot="view" id="safetyHubEntryPoint">
-       </settings-safety-hub-entry-point>
-     </template>
-
-@@ -33,7 +33,7 @@
-         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]"
-         update-when-false>
-       <!-- TODO(crbug.com/40267370): Make the page searchable.-->
--      <settings-safety-hub-page slot="view" id="safetyHub" no-search
-+      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
-           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}"
-           route-path$="[[routes_.SAFETY_HUB.path]]">
-       </settings-safety-hub-page>
 diff --git a/chrome/browser/resources/settings/a11y_page/live_translate.html.ts b/chrome/browser/resources/settings/a11y_page/live_translate.html.ts
-index 94859e1cb8..bc57e3f578 100644
+index 94859e1cb8..af478353fa 100644
 --- a/chrome/browser/resources/settings/a11y_page/live_translate.html.ts
 +++ b/chrome/browser/resources/settings/a11y_page/live_translate.html.ts
 @@ -9,7 +9,7 @@ import type {SettingsLiveTranslateElement} from './live_translate.js';
@@ -49,7 +27,7 @@ index 94859e1cb8..bc57e3f578 100644
        sub-label="$i18n{captionsEnableLiveTranslateSubtitle}">
    </settings-toggle-button>
  </div>
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
  <cr-collapse ?opened="${this.isLiveTranslateEnabled_}">
    <div class="cr-row continuation subsection-group">
      <div class="start cr-padded-text" aria-hidden="true">
@@ -62,14 +40,14 @@ index 94859e1cb8..bc57e3f578 100644
    // clang-format on
  }
 diff --git a/chrome/browser/resources/settings/autofill_page/collapsible_autofill_settings_card.html b/chrome/browser/resources/settings/autofill_page/collapsible_autofill_settings_card.html
-index ea471ade16..d2bb45f62b 100644
+index ea471ade16..3609e96c74 100644
 --- a/chrome/browser/resources/settings/autofill_page/collapsible_autofill_settings_card.html
 +++ b/chrome/browser/resources/settings/autofill_page/collapsible_autofill_settings_card.html
 @@ -12,6 +12,7 @@
    }
  </style>
-
-+<if expr="is_chromeos">
+ 
++<if expr="not is_linux and is_linux">
  <cr-expand-button class="cr-row first" expanded="{{expanded_}}">
    <div id="header-text">
      <div>$i18n{yourSavedInfoAutofillSettingsLabel}</div>
@@ -79,12 +57,12 @@ index ea471ade16..d2bb45f62b 100644
  </cr-collapse>
 +</if>
 diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html b/chrome/browser/resources/settings/languages_page/translate_page.html
-index ab5a8c7672..1537190373 100644
+index ab5a8c7672..8a6adb3953 100644
 --- a/chrome/browser/resources/settings/languages_page/translate_page.html
 +++ b/chrome/browser/resources/settings/languages_page/translate_page.html
 @@ -1,4 +1,5 @@
  <style include="cr-shared-style settings-shared md-select"></style>
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
  <settings-section page-title="$i18n{translatePageTitle}">
  <settings-toggle-button id="offerTranslateOtherLanguages"
      pref-key="translate.enabled"
@@ -96,15 +74,37 @@ index ab5a8c7672..1537190373 100644
  <cr-collapse opened="[[translateEnabledPref_.value]]">
    <div class="cr-row continuation">
      <div id="targetLanguageLabel" class="flex cr-padded-text"
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
+index 10ce6554c5..8cc6bca21b 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page_index.html
+@@ -25,7 +25,7 @@
+   <template is="dom-if" if="[[showPage_(pageVisibility_.safetyHub)]]">
+     <template is="dom-if" if="[[renderView_(
+         routes_.PRIVACY, currentRoute, inSearchMode)]]" update-when-false>
+-      <settings-safety-hub-entry-point slot="view" id="safetyHubEntryPoint">
++      <settings-safety-hub-entry-point style="display:none" slot="view" id="safetyHubEntryPoint">
+       </settings-safety-hub-entry-point>
+     </template>
+ 
+@@ -33,7 +33,7 @@
+         routes_.SAFETY_HUB, currentRoute, inSearchMode)]]"
+         update-when-false>
+       <!-- TODO(crbug.com/40267370): Make the page searchable.-->
+-      <settings-safety-hub-page slot="view" id="safetyHub" no-search
++      <settings-safety-hub-page style="display:none" slot="view" id="safetyHub" no-search
+           data-parent-view-id="safetyHubEntryPoint" prefs="{{prefs}}"
+           route-path$="[[routes_.SAFETY_HUB.path]]">
+       </settings-safety-hub-page>
 diff --git a/chrome/browser/resources/settings/site_settings/v8_page.html b/chrome/browser/resources/settings/site_settings/v8_page.html
-index 4c9fb387a8..a1182f5726 100644
+index 4c9fb387a8..9251ed7313 100644
 --- a/chrome/browser/resources/settings/site_settings/v8_page.html
 +++ b/chrome/browser/resources/settings/site_settings/v8_page.html
 @@ -25,6 +25,7 @@
            sub-label="$i18n{siteSettingsJavascriptOptimizerAllowedSubLabel}"
            no-collapse>
        </settings-collapse-radio-button>
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
        <settings-collapse-radio-button
            id="blockForUnfamiliarSites"
            class="two-line"

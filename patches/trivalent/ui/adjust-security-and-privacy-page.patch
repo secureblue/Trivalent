@@ -33,7 +33,7 @@ index 2918ece84f..49cfa2112d 100644
 +  <settings-subpage page-title="$i18n{privacyPageTitle}"
        learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
        route-path$="[[routePath]]">
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
      <div id="safeBrowsingSection">
        <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
        <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
@@ -41,7 +41,7 @@ index 2918ece84f..49cfa2112d 100644
          </settings-collapse-radio-button>
        </settings-radio-group>
      </div>
-+</if> <!-- chromeos -->
++</if>
      <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
        <div id="secureConnectionsSection">
          <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
@@ -52,7 +52,7 @@ index 2918ece84f..49cfa2112d 100644
 -      <h2 class="cr-title-text">$i18n{advancedPageTitle}</h2>
 +      <h2 class="cr-title-text">$i18n{securityPageTitle}</h2>
      </div>
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
      <settings-toggle-button id="passwordsLeakToggle"
            label="$i18n{passwordsLeakDetectionLabel}"
            pref="{{prefs.generated.password_leak_detection}}"
@@ -68,7 +68,7 @@ index 2918ece84f..49cfa2112d 100644
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
 
-+<if expr="is_chromeos">
++<if expr="not is_linux and is_linux">
      <cr-link-row id="advancedProtectionProgramLink" class="hr"
          label="$i18n{advancedProtectionProgramTitle}"
          sub-label="$i18n{advancedProtectionProgramDesc}"

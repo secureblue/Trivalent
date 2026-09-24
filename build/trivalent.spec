@@ -421,7 +421,6 @@ CHROMIUM_GN_DEFINES=''
 CHROMIUM_GN_DEFINES+=' target_cpu="arm64"'
 CHROMIUM_GN_DEFINES+=' use_v4l2_codec=true'
 CHROMIUM_GN_DEFINES+=' use_vaapi=false'
-# CHROMIUM_GN_DEFINES+=' enable_shadow_call_stack=true'
 %else
 CHROMIUM_GN_DEFINES+=' use_sysroot=false' # we dont use the sysroot on x64
 CHROMIUM_GN_DEFINES+=' system_libdir="%{_lib}"'
