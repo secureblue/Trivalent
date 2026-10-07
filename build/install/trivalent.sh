@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -p
 
 # Copyright 2025 The Trivalent Authors
 #
@@ -12,7 +12,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-set -ueo pipefail
+set -euo pipefail
 
 # Make filename expansion patterns (like *.conf) expand to nothing if no files match the pattern.
 shopt -s nullglob
@@ -20,6 +20,7 @@ shopt -s nullglob
 # Sanitize & protect risky variables
 declare -rx LD_LIBRARY_PATH=""
 declare -rx LD_AUDIT=""
+declare -rx LD_PRELOAD=""
 declare -rx LD_PROFILE=""
 declare -rx PATH="/usr/bin:/bin"
 declare -rx HOME="${HOME}"
@@ -120,9 +121,6 @@ fi
 BWRAP_ARGS+=('--setenv' 'XDG_CACHE_HOME' "${TMPFS_CACHE_DIR}")
 # Avoid issues with glycin
 BWRAP_ARGS+=('--setenv' 'GDK_DISABLE' 'icon-nodes')
-
-# Do this at the end so that everything else still gets hardened_malloc
-declare -rx LD_PRELOAD=""
 
 # Sanitize std{in,out,err} because they'll be shared with untrusted child
 # processes (http://crbug.com/376567).
