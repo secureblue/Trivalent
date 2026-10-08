@@ -32,17 +32,18 @@
 %global enable_proprietary_codecs 1
 
 Source69: chromium-version.txt
+Source70: trivalent-release.txt
 
 Name:	%{chromium_name}
 %{lua:
   local f = io.open(macros['_sourcedir']..'/chromium-version.txt', 'r')
   local version_tag = f:read "*all"
-
   -- This will dynamically set the version based on chromium's latest stable release channel
   print("Version: "..version_tag.."\n")
 
-  -- This will automatically increment the release every ~1 hour
-  print("Release: "..(os.time() // 4000).."\n")
+  local r = io.open(macros['_sourcedir']..'/trivalent-release.txt', 'r')
+  local release = r:read "*all"
+  print("Release: "..release.."\n")
 }
 
 Summary: A security-focused browser built upon Google's Chromium web browser

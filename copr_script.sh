@@ -72,3 +72,6 @@ popd
 # Move all the source files into the parent directory for the COPR build system to find them
 cp /usr/src/chromium/chromium-*-clean.tar.xz "${BUILD_DIR}"
 cp /usr/src/chromium/chromium-version.txt "${BUILD_DIR}"
+
+# This will automatically increment the release every ~1 hour
+echo "$(( $(date +%s) / 4000 ))" > "${BUILD_DIR}/trivalent-release.txt"
