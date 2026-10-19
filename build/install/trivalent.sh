@@ -78,7 +78,7 @@ fi
 
 # BROWSER_LOG_LEVEL=[0,1,2]
 declare BROWSER_LOG_LEVEL="${BROWSER_LOG_LEVEL:-0}"
-if [[ ${BROWSER_LOG_LEVEL} =~ ^[0-2]$ ]]; then
+if [[ ! ${BROWSER_LOG_LEVEL} =~ ^[0-2]$ ]]; then
   BROWSER_LOG_LEVEL=0
   echo "BROWSER_LOG_LEVEL not valid, falling back to 0"
 fi
