@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/common/url_constants.h b/chrome/common/url_constants.h
-index 1bbf3afad9..41bb12825a 100644
+index 1bbf3afad9..4cffa5e06b 100644
 --- a/chrome/common/url_constants.h
 +++ b/chrome/common/url_constants.h
 @@ -91,7 +91,7 @@ inline constexpr char kChromeHelpViaKeyboardURL[] =
@@ -46,3 +46,12 @@ index 1bbf3afad9..41bb12825a 100644
  #endif
  
  // "Learn more" URL for "Aw snap" page when showing "Send feedback" button.
+@@ -332,7 +332,7 @@ inline constexpr char16_t kManagedUiLearnMoreUrl[] =
+ #if BUILDFLAG(IS_CHROMEOS)
+     u"https://support.google.com/chromebook?p=is_chrome_managed";
+ #else
+-    u"https://support.google.com/chrome?p=is_chrome_managed";
++    u"https://chromeenterprise.google/policies/";
+ #endif
+ 
+ // The URL for the "Learn more" page for insecure download blocking.
