@@ -35,6 +35,8 @@ on:
         required: false
       DISCORD_WEBHOOK:
         required: false
+      BSKY_APP_PASSWORD:
+        required: false
 
 name: Create RPM Release
 
@@ -216,6 +218,8 @@ jobs:
       cancel-in-progress: false
     outputs:
       hashes: ${{ steps.sign.outputs.hashes }}
+      tag: ${{ steps.sign.outputs.tag }}
+      version: ${{ steps.sign.outputs.version }}
     steps:
       - name: Enable egress auditing
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
@@ -245,13 +249,27 @@ jobs:
         if: ${{ ! inputs.test_build }}
         id: sign
         run: |
-          trivalent_rpm_file=$(ls | grep -E '^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.(x86_64|aarch64)\.rpm$')
+          shopt -s nullglob
+          pattern='^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.(x86_64|aarch64)\.rpm$'
+          for file in trivalent-*.rpm; do
+            if [[ "${file}" =~ ${pattern} ]]; then
+              trivalent_rpm_file="${file}"
+              break
+            fi
+          done
           if [[ -z "$trivalent_rpm_file" ]]; then
             echo "Trivalent RPM not found"
             exit 1
           else
             echo "Trivalent RPM found: ${trivalent_rpm_file}"
           fi
+
+          rpm_name_version_release_arch="${trivalent_rpm_file%.rpm}"
+          rpm_name_version_release="${rpm_name_version_release_arch%.*}"
+          rpm_version_release="${rpm_name_version_release#trivalent-}"
+          rpm_arch="${rpm_name_version_release_arch##*.}"
+          echo "tag=${rpm_version_release}-${rpm_arch}" >> "$GITHUB_OUTPUT"
+          echo "version=${rpm_version_release%-*}" >> "$GITHUB_OUTPUT"
 
           rpm --addsign *.rpm
           rpm_hash=$(sha256sum *.rpm | base64 -w0)
@@ -290,8 +308,60 @@ jobs:
             -d "{\"content\": \"Build **${WORKFLOW_NAME}** completed on branch \`${BRANCH_NAME}\`\"}" \
             "${DISCORD_WEBHOOK}"
 
+  createrelease:
+    name: Create Release
+    if: ${{ ! inputs.test_build && github.actor == 'royaloughtness' && (github.triggering_actor == 'royaloughtness' || github.triggering_actor == 'runson-v3-secureblue[bot]') }} # zizmor: ignore[bot-conditions]
+    environment: Build
+    runs-on: "ubuntu-26.04"
+    needs: pushrpm
+    permissions:
+      contents: write # to write to releases
+    steps:
+      - name: Enable egress auditing
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+
+      - name: Create release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.pushrpm.outputs.tag }}
+          VERSION: ${{ needs.pushrpm.outputs.version }}
+          ARCH: ${{ inputs.arch }}
+          LATEST: ${{ inputs.arch == 'x86_64' }}
+        run: |
+          previous_release="$(gh release list | cut -f3 | grep --max-count=1 -- "-${ARCH}$")"
+          upstream_feed="$(curl -fsSL --retry 3 -G https://chromereleases.googleblog.com/feeds/posts/default \
+            --data-urlencode alt=json \
+            --data-urlencode "q=\"${VERSION}\" label:\"Desktop Update\"")"
+          upstream_link="$(jq -r '.feed.entry[-1].link[] | select(.rel == "alternate").href' <<< "${upstream_feed}")"
+          printf -v release_notes '## Upstream Changes\n\n%s\n' "${upstream_link}"
+          gh release create "${TAG}" --target "${GITHUB_SHA}" --title "${TAG}" --latest="${LATEST}" \
+            --generate-notes --notes-start-tag "${previous_release}" --notes "${release_notes}"
+
+      - name: Post to Bluesky
+        if: ${{ inputs.arch == 'x86_64' }}
+        continue-on-error: true
+        shell: bash
+        env:
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          VERSION: ${{ needs.pushrpm.outputs.version }}
+          TAG: ${{ needs.pushrpm.outputs.tag }}
+          BSKY_ACTION_VERSION: v1.2.11
+        run: |
+          curl -fLsS --retry 5 \
+            -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64" \
+            -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64.asc"
+          gpg --keyserver keys.openpgp.org --recv-keys DE2CA41786945C5CC12F5F435F1F18563E476666
+          gpg --verify bluesky-github-action_linux-amd64.asc bluesky-github-action_linux-amd64
+          printf -v bluesky_message "Trivalent %s released:\n\nhttps://github.com/%s/releases/tag/%s" "${VERSION}" "${GITHUB_REPOSITORY}" "${TAG}"
+          chmod +x bluesky-github-action_linux-amd64
+          ./bluesky-github-action_linux-amd64 --handle secureblue.dev --password "${BSKY_APP_PASSWORD}" --lang en --text "${bluesky_message}"
+
   provenance:
-    needs: [pushrpm]
+    needs: [pushrpm, createrelease]
     permissions:
       actions: read # To read the workflow path.
       id-token: write # To sign the provenance.
@@ -300,11 +370,13 @@ jobs:
     with:
       base64-subjects: ${{ needs.pushrpm.outputs.hashes }}
       upload-assets: true
+      upload-tag-name: ${{ needs.pushrpm.outputs.tag }}
+      provenance-name: multiple.intoto.jsonl
 
   notify-failure:
     name: Notify Discord webhook of failure
     if: failure()
-    needs: [buildsrpm, buildrpm, pushrpm, provenance]
+    needs: [buildsrpm, buildrpm, pushrpm, createrelease, provenance]
     runs-on: ubuntu-26.04
     steps:
       - name: Notify Discord webhook of build failure
