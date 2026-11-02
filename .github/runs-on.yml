@@ -5,7 +5,7 @@ runners:
     family: ["m7", "m8"]
     spot: capacity-optimized
     volume: 120gb
-    image: ubuntu24-stepsecurity-x64
+    image: ubuntu26-stepsecurity-x64
     ssh: false
 
   arm64-runner:
@@ -14,5 +14,14 @@ runners:
     family: ["m7", "m8"]
     spot: capacity-optimized
     volume: 120gb
-    image: ubuntu24-stepsecurity-arm64
+    image: ubuntu26-stepsecurity-arm64
+    ssh: false
+
+  x86_64-runner-small:
+    cpu: 2
+    ram: 4
+    family: ["t8i", "t3"]
+    spot: false
+    volume: 40gb
+    image: ubuntu26-stepsecurity-x64
     ssh: false
