@@ -249,7 +249,14 @@ jobs:
         if: ${{ ! inputs.test_build }}
         id: sign
         run: |
-          trivalent_rpm_file=$(ls | grep -E '^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.(x86_64|aarch64)\.rpm$')
+          shopt -s nullglob
+          pattern='^trivalent-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.(x86_64|aarch64)\.rpm$'
+          for file in trivalent-*.rpm; do
+            if [[ "${file}" =~ ${pattern} ]]; then
+              trivalent_rpm_file="${file}"
+              break
+            fi
+          done
           if [[ -z "$trivalent_rpm_file" ]]; then
             echo "Trivalent RPM not found"
             exit 1
@@ -344,8 +351,9 @@ jobs:
           TAG: ${{ needs.pushrpm.outputs.tag }}
           BSKY_ACTION_VERSION: v1.2.11
         run: |
-          curl -fLsS --retry 5 -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64"
-          curl -fLsS --retry 5 -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64.asc"
+          curl -fLsS --retry 5 \
+            -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64" \
+            -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64.asc"
           gpg --keyserver keys.openpgp.org --recv-keys DE2CA41786945C5CC12F5F435F1F18563E476666
           gpg --verify bluesky-github-action_linux-amd64.asc bluesky-github-action_linux-amd64
           printf -v bluesky_message "Trivalent %s released:\n\nhttps://github.com/%s/releases/tag/%s" "${VERSION}" "${GITHUB_REPOSITORY}" "${TAG}"
