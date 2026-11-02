@@ -335,14 +335,22 @@ jobs:
             --generate-notes --notes-start-tag "${previous_release}" --notes "${release_notes}"
 
       - name: Post to Bluesky
-        uses: docker://ghcr.io/cbrgm/bluesky-github-action@sha256:7cfd7768e6a2b6fa67ae6c81509e2d6d9d099284e0e5e25d582ac17fc70437b2 # v1.2.11
         if: ${{ inputs.arch == 'x86_64' }}
         continue-on-error: true
+        shell: bash
         env:
-          ATP_AUTH_HANDLE: secureblue.dev
-          ATP_AUTH_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
-          BSKY_LANG: en
-          BSKY_MESSAGE: "Trivalent ${{ needs.pushrpm.outputs.version }} released:\n\nhttps://github.com/${{ github.repository }}/releases/tag/${{ needs.pushrpm.outputs.tag }}"
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          VERSION: ${{ needs.pushrpm.outputs.version }}
+          TAG: ${{ needs.pushrpm.outputs.tag }}
+          BSKY_ACTION_VERSION: v1.2.11
+        run: |
+          curl -fLsS --retry 5 -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64"
+          curl -fLsS --retry 5 -O "https://github.com/cbrgm/bluesky-github-action/releases/download/${BSKY_ACTION_VERSION}/bluesky-github-action_linux-amd64.asc"
+          gpg --keyserver keys.openpgp.org --recv-keys DE2CA41786945C5CC12F5F435F1F18563E476666
+          gpg --verify bluesky-github-action_linux-amd64.asc bluesky-github-action_linux-amd64
+          printf -v bluesky_message "Trivalent %s released:\n\nhttps://github.com/%s/releases/tag/%s" "${VERSION}" "${GITHUB_REPOSITORY}" "${TAG}"
+          chmod +x bluesky-github-action_linux-amd64
+          ./bluesky-github-action_linux-amd64 --handle secureblue.dev --password "${BSKY_APP_PASSWORD}" --lang en --text "${bluesky_message}"
 
   provenance:
     needs: [pushrpm, createrelease]
