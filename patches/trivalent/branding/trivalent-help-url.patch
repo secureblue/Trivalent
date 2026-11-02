@@ -1,4 +1,4 @@
-Copyright 2024-2025 The Trivalent Authors
+Copyright 2024-2026 The Trivalent Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,10 +11,24 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/common/url_constants.h b/chrome/common/url_constants.h
-index f16884e429de1..7e69337046e84 100644
+index 1bbf3afad9..4cffa5e06b 100644
 --- a/chrome/common/url_constants.h
 +++ b/chrome/common/url_constants.h
-@@ -135,7 +135,7 @@ inline constexpr char kChromeHelpViaMenuURL[] =
+@@ -91,7 +91,7 @@ inline constexpr char kChromeHelpViaKeyboardURL[] =
+     "https://support.google.com/chromebook?p=help&ctx=keyboard";
+ #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ #else
+-    "https://support.google.com/chrome?p=help&ctx=keyboard";
++    "https://github.com/secureblue/Trivalent/issues";
+ #endif  // BUILDFLAG(IS_CHROMEOS)
+ 
+ inline constexpr char kChromeHelpViaMenuURL[] =
+@@ -102,11 +102,11 @@ inline constexpr char kChromeHelpViaMenuURL[] =
+     "https://support.google.com/chromebook?p=help&ctx=menu";
+ #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ #else
+-    "https://support.google.com/chrome?p=help&ctx=menu";
++    "https://github.com/secureblue/Trivalent/issues";
  #endif  // BUILDFLAG(IS_CHROMEOS)
  
  inline constexpr char kChromeHelpViaWebUIURL[] =
@@ -23,3 +37,21 @@ index f16884e429de1..7e69337046e84 100644
  #if BUILDFLAG(IS_CHROMEOS)
  inline constexpr char kChromeOsHelpViaWebUIURL[] =
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+@@ -188,7 +188,7 @@ inline constexpr char kCrashReasonURL[] =
+ #if BUILDFLAG(IS_CHROMEOS)
+     "https://support.google.com/chromebook?p=e_awsnap";
+ #else
+-    "https://support.google.com/chrome?p=e_awsnap";
++    "https://github.com/secureblue/Trivalent/issues";
+ #endif
+ 
+ // "Learn more" URL for "Aw snap" page when showing "Send feedback" button.
+@@ -332,7 +332,7 @@ inline constexpr char16_t kManagedUiLearnMoreUrl[] =
+ #if BUILDFLAG(IS_CHROMEOS)
+     u"https://support.google.com/chromebook?p=is_chrome_managed";
+ #else
+-    u"https://support.google.com/chrome?p=is_chrome_managed";
++    u"https://chromeenterprise.google/policies/";
+ #endif
+ 
+ // The URL for the "Learn more" page for insecure download blocking.
