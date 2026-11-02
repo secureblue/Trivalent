@@ -33,7 +33,7 @@ index 1af61d6b21..b42ee2be9d 100644
  
  // An index of style rules optimized for lookup. It's primarily a list of
 diff --git a/components/subresource_filter/core/common/style_rule_indexer.cc b/components/subresource_filter/core/common/style_rule_indexer.cc
-index 6313910d5c..6493168a90 100644
+index 6313910d5c..2b77bfee66 100644
 --- a/components/subresource_filter/core/common/style_rule_indexer.cc
 +++ b/components/subresource_filter/core/common/style_rule_indexer.cc
 @@ -23,13 +23,13 @@ flatbuffers::Offset<
@@ -46,8 +46,9 @@ index 6313910d5c..6493168a90 100644
  
    for (const auto& [name, indices] : rules_map) {
      auto name_offset = builder.CreateSharedString(name);
-     uint16_t first_index = StyleRuleIndexer::kImplicitStyleRuleIndex;
+-    uint16_t first_index = StyleRuleIndexer::kImplicitStyleRuleIndex;
 -    flatbuffers::Offset<flatbuffers::Vector<uint16_t>> more_offset;
++    uint32_t first_index = StyleRuleIndexer::kImplicitStyleRuleIndex;
 +    flatbuffers::Offset<flatbuffers::Vector<uint32_t>> more_offset;
  
      if (!indices.empty()) {
@@ -70,7 +71,7 @@ index 6313910d5c..6493168a90 100644
        rule.selector(), /*is_site_specific=*/!rule.domains().empty(),
        /*is_exclusion=*/is_exclusion, rule.classes(), rule.ids());
  
-@@ -98,13 +98,13 @@ bool StyleRuleIndexer::AddStyleRuleFromProto(
+@@ -98,17 +98,17 @@ bool StyleRuleIndexer::AddStyleRuleFromProto(
                           rule.ids());
  }
  
@@ -86,6 +87,11 @@ index 6313910d5c..6493168a90 100644
        selector_to_index_.find(selector);
    if (it != selector_to_index_.end()) {
      // We have an existing index for this selector.
+-    uint16_t rule_index = it->second;
++    uint32_t rule_index = it->second;
+ 
+     // The incoming unindexed ruleset should be in order of site-specific
+     // before global rules. If it's not, we DCHECK instead of CHECK to avoid
 @@ -143,7 +143,7 @@ std::optional<uint16_t> StyleRuleIndexer::GetOrCreateStyleRuleIndex(
    return explicit_index;
  }
