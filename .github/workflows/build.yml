@@ -335,7 +335,7 @@ jobs:
             --generate-notes --notes-start-tag "${previous_release}" --notes "${release_notes}"
 
       - name: Post to Bluesky
-        uses: docker://ghcr.io/cbrgm/bluesky-github-action@sha256:f25491ca013ff94ad226f67c43c2dc35e6d0ff115551b89e583a515a1acbf193 # v1.2.10
+        uses: docker://ghcr.io/cbrgm/bluesky-github-action@sha256:7cfd7768e6a2b6fa67ae6c81509e2d6d9d099284e0e5e25d582ac17fc70437b2 # v1.2.11
         if: ${{ inputs.arch == 'x86_64' }}
         continue-on-error: true
         env:
