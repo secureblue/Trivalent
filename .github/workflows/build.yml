@@ -46,7 +46,7 @@ jobs:
   buildsrpm:
     name: Build SRPM
     if: github.actor == 'royaloughtness' && (github.triggering_actor == 'royaloughtness' || github.triggering_actor == 'runson-v3-secureblue[bot]') # zizmor: ignore[bot-conditions]
-    runs-on: "ubuntu-26.04"
+    runs-on: "runs-on=${{ github.run_id }}/runner=x86_64-runner-small"
     container:
       image: "fedora:44@sha256:f717d3f59ea0dc45d3c024c9477e786bab7d418d26636920d17b48016f1e69ca"
     steps:
@@ -209,7 +209,7 @@ jobs:
     name: Push RPM
     if: github.actor == 'royaloughtness' && (github.triggering_actor == 'royaloughtness' || github.triggering_actor == 'runson-v3-secureblue[bot]') # zizmor: ignore[bot-conditions]
     environment: ${{ inputs.test_build && 'TestBuild' || 'Build' }}
-    runs-on: "ubuntu-26.04"
+    runs-on: "runs-on=${{ github.run_id }}/runner=x86_64-runner-small"
     container:
       image: "fedora:44@sha256:f717d3f59ea0dc45d3c024c9477e786bab7d418d26636920d17b48016f1e69ca"
     needs: sanitycheck
