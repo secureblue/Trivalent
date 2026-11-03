@@ -14,7 +14,7 @@ diff --git a/chrome/browser/resources/settings/privacy_page/security/security_pa
 index 2918ece84f..49cfa2112d 100644
 --- a/chrome/browser/resources/settings/privacy_page/security/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security/security_page.html
-@@ -3,7 +3,12 @@ import {SafeBrowsingSetting} from './safe_browsing_types.js';
+@@ -3,9 +3,15 @@ import {SafeBrowsingSetting} from './safe_browsing_types.js';
  import {HttpsFirstModeSetting} from './security_page.js';
  #html_wrapper_imports_end -->
  
@@ -27,18 +27,35 @@ index 2918ece84f..49cfa2112d 100644
 +  <settings-subpage page-title="$i18n{privacyPageTitle}"
        learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
        route-path="${this.routePath}">
++<if expr="not is_linux and is_linux">
      <div id="safeBrowsingSection">
-@@ -233,8 +239,9 @@
+       <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
+       <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
+@@ -124,6 +130,7 @@ import {HttpsFirstModeSetting} from './security_page.js';
+         </settings-collapse-radio-button>
+       </settings-radio-group>
+     </div>
++</if>
+     ${this.enableHttpsFirstModeNewSettings_ ? html`
+       <div id="secureConnectionsSection">
+         <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
+@@ -160,13 +167,15 @@ import {HttpsFirstModeSetting} from './security_page.js';
        </div>
-     </template>
+     ` : ''}
      <div class="cr-row first">
 -      <h2 class="cr-title-text">$i18n{advancedPageTitle}</h2>
 +      <h2 class="cr-title-text">$i18n{securityPageTitle}</h2>
      </div>
 +<if expr="not is_linux and is_linux">
      <settings-toggle-button id="passwordsLeakToggle"
-           label="$i18n{passwordsLeakDetectionLabel}"
-           pref="{{prefs.generated.password_leak_detection}}"
+         label="$i18n{passwordsLeakDetectionLabel}"
+         pref-key="generated.password_leak_detection"
+         sub-label="${this.getPasswordsLeakToggleSubLabel_()}">
+     </settings-toggle-button>
++</if>
+     ${!this.enableHttpsFirstModeNewSettings_ ? html`
+       <settings-toggle-button id="httpsOnlyModeToggle"
+           pref-key="generated.https_first_mode_enabled"
 @@ -292,6 +300,7 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
@@ -47,7 +64,7 @@ index 2918ece84f..49cfa2112d 100644
      <cr-link-row id="advancedProtectionProgramLink" class="hr"
          label="$i18n{advancedProtectionProgramTitle}"
          sub-label="$i18n{advancedProtectionProgramDesc}"
-@@ -227,4 +234,47 @@ import {HttpsFirstModeSetting} from './security_page.js';
+@@ -227,4 +237,47 @@ import {HttpsFirstModeSetting} from './security_page.js';
            @close="${this.onDisableSafebrowsingDialogClose_}">
        </settings-simple-confirmation-dialog>
      ` : ''}
@@ -55,19 +72,19 @@ index 2918ece84f..49cfa2112d 100644
 +    <div id="hardeningSection">
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
 +      <settings-toggle-button class="cr-row first"
-+        pref="{{prefs.incognito.launch_mode}}"
++        pref-key="incognito.launch_mode"
 +        label="$i18n{incognitoLaunchLabel}"
 +        sub-label="$i18n{incognitoLaunchDesc}">
 +      </settings-toggle-button>
-+      <template is="dom-if" if="[[prefs.incognito.launch_mode.value]]">
++      ${this.incognitoLaunchModePref_?.value ? html`
 +        <settings-toggle-button class="cr-row first"
-+          pref="{{prefs.incognito.startup_mode}}"
++          pref-key="incognito.startup_mode"
 +          label="$i18n{incognitoStartupLabel}"
 +          sub-label="$i18n{incognitoStartupDesc}">
 +        </settings-toggle-button>
-+      </template>
++      ` : ''}
 +      <settings-toggle-button class="cr-row"
-+        pref="{{prefs.disable_3d_apis}}"
++        pref-key="disable_3d_apis"
 +        label="$i18n{disable3dApisLabel}"
 +        sub-label="$i18n{disable3dApisDesc}">
 +      </settings-toggle-button>
@@ -78,18 +95,18 @@ index 2918ece84f..49cfa2112d 100644
 +        <settings-dropdown-menu
 +          label="$i18n{webrtcHandlingPolicyLabel}"
 +          pref-key="webrtc.ip_handling_policy"
-+          menu-options="[[webrtcHandlingPolicyOptions_]]">
++          .menuOptions="${this.webrtcHandlingPolicyOptions_}">
 +        </settings-dropdown-menu>
 +      </div>
 +<if expr="is_linux or is_win">
 +      <settings-toggle-button class="cr-row"
-+        pref="{{prefs.net.network_service_sandbox}}"
++        pref-key="net.network_service_sandbox"
 +        label="$i18n{netServSandboxLabel}"
 +        sub-label="$i18n{netServSandboxDesc}">
 +      </settings-toggle-button>
 +</if>
 +      <settings-toggle-button class="cr-row"
-+        pref="{{prefs.extensions.disabled}}"
++        pref-key="extensions.disabled"
 +        label="$i18n{disableExtensionsLabel}"
 +        sub-label="$i18n{disableExtensionsDesc}">
 +      </settings-toggle-button>
@@ -115,35 +132,42 @@ index f0ca661a05..dc46797316 100644
  import {loadTimeData} from '../../i18n_setup.js';
  import type {MetricsBrowserProxy} from '../../metrics_browser_proxy.js';
  import {MetricsBrowserProxyImpl, PrivacyElementInteractions, SafeBrowsingInteractions} from '../../metrics_browser_proxy.js';
-@@ -126,6 +128,19 @@ export class SettingsSecurityPageElement extends
-       },
-       // </if>
-
-+      webrtcHandlingPolicyOptions_: {
-+        readOnly: true,
-+        type: Array,
-+        value() {
-+          return [
-+            {value: "default", name: "Default"},
-+            {value: "default_public_and_private_interfaces", name: "Default Public and Private Interfaces"},
-+            {value: "default_public_interface_only", name: "Default Public Interface Only"},
-+            {value: "disable_non_proxied_udp", name: "Disable Non-Proxied UDP"},
-+          ];
-+        },
-+      },
+@@ -130,6 +132,9 @@ export class SettingsSecurityPageElement extends
+       hideExtendedReportingRadioButton_: {type: Boolean},
+       showDisableSafebrowsingDialog_: {type: Boolean},
+ 
++      incognitoLaunchModePref_: {type: Object},
++      webrtcHandlingPolicyOptions_: {type: Array},
 +
        /**
-        * Valid safe browsing states.
-        */
-@@ -155,6 +170,8 @@ export class SettingsSecurityPageElement extends
+        * A timestamp that records the last time the user visited this page or
+        * returned to it.
+@@ -155,6 +160,17 @@ export class SettingsSecurityPageElement extends
      };
    }
  
-+  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
++  protected accessor incognitoLaunchModePref_:
++      chrome.settingsPrivate.PrefObject<boolean>|undefined;
++  protected accessor webrtcHandlingPolicyOptions_: DropdownMenuOptionList = [
++    {value: "default", name: "Default"},
++    {value: "default_public_and_private_interfaces",
++     name: "Default Public and Private Interfaces"},
++    {value: "default_public_interface_only",
++     name: "Default Public Interface Only"},
++    {value: "disable_non_proxied_udp", name: "Disable Non-Proxied UDP"},
++  ];
 +
    protected accessor showSecureDnsSetting_: boolean =
        loadTimeData.getBoolean('showSecureDnsSetting');
  
+@@ -205,6 +221,7 @@ export class SettingsSecurityPageElement extends
+       'generated.safe_browsing': 'safeBrowsingPref_',
+       'generated.https_first_mode_enabled': 'httpsFirstModePref_',
+       'generated.password_leak_detection': 'passwordLeakDetectionPref_',
++      'incognito.launch_mode': 'incognitoLaunchModePref_',
+       'profile.password_manager_leak_detection':
+           'passwordManagerLeakDetectionPref_',
+     });
 @@ -267,10 +283,6 @@ export class SettingsSecurityPageElement extends
        }
      });

@@ -475,7 +475,7 @@ index 09780f226f..b40e4392ec 100644
    return nullptr;
  #endif
  }
-+ 
++
 +// TODO: Add the following
 +//angle::IsNVIDIA(vendor_id)
 +//angle::IsVirtIO(vendor_id)
