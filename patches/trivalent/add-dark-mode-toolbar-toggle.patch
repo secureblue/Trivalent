@@ -71,10 +71,10 @@ index a457075948..46287614a2 100644
  #if BUILDFLAG(ENABLE_PRINTING)
      case IDC_BASIC_PRINT:
        base::RecordAction(base::UserMetricsAction("Accel_Advanced_Print"));
-@@ -1817,6 +1821,7 @@ void BrowserCommandController::InitCommandState() {
+@@ -1922,6 +1926,7 @@ void BrowserCommandController::InitCommandState() {
    command_updater_->UpdateCommandEnabled(
-       IDC_SHOW_TABS_FROM_OTHER_DEVICES_SIDE_PANEL,
-       TabsFromOtherDevicesSidePanelCoordinator::IsSupported(profile()));
+       IDC_SHOW_HISTORY_CLUSTERS_SIDE_PANEL,
+       (!guest_session && !profile()->IsSystemProfile()));
 +  command_updater_->UpdateCommandEnabled(IDC_WEBSITE_DARKMODE, true);
    command_updater_->UpdateCommandEnabled(IDC_SHOW_DOWNLOADS, true);
    command_updater_->UpdateCommandEnabled(IDC_SHOW_COMMENTS_SIDE_PANEL, true);

@@ -69,11 +69,14 @@ index dc64cf060b..11f88f4f21 100644
    html_source->AddBoolean("showPrivacyGuide", show_privacy_guide);
 
    html_source->AddBoolean("enableHandTrackingContentSetting",
-@@ -559,7 +557,6 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
-   bool glic_disallowed_by_admin = false;
-
-   auto glic_enablement = glic::GlicEnabling::EnablementForProfile(profile);
--  show_glic_section = glic_enablement.ShouldShowSettingsPage();
+@@ -587,10 +585,6 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   // kAiSettingsPageForceAvailable; keep showing the Gemini page there.
+   // TODO(crbug.com/571928442): Derive AI settings page visibility in one place
+   // instead of checking the settings section per provider.
+-  show_glic_section =
+-      glic_enablement.ShouldShowSettingsPage() &&
+-      (!glic_service || glic_service->provider_spec().GetSettingsSection() ==
+-                            glic::GlicSettingsSection::kGemini);
    glic_disallowed_by_admin = glic_enablement.DisallowedByAdmin();
 
    if (glic_enablement.IsProfileEligible()) {

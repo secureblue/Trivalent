@@ -14,37 +14,20 @@ diff --git a/chrome/browser/resources/settings/privacy_page/security/security_pa
 index 2918ece84f..49cfa2112d 100644
 --- a/chrome/browser/resources/settings/privacy_page/security/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security/security_page.html
-@@ -3,6 +3,10 @@
-       padding: 0 var(--cr-section-padding);
-     }
-
+@@ -3,7 +3,12 @@ import {SafeBrowsingSetting} from './safe_browsing_types.js';
+ import {HttpsFirstModeSetting} from './security_page.js';
+ #html_wrapper_imports_end -->
+ 
+-  <settings-subpage page-title="$i18n{securityPageTitle}"
++  <style>
 +    #webrtcLabel {
 +      flex: 1;
 +    }
-+
-     .bullet-line {
-       align-items: center;
-       display: flex;
-@@ -70,9 +74,10 @@
-       pointer-events: auto;
-     }
-   </style>
--  <settings-subpage page-title="$i18n{securityPageTitle}"
++  </style>
 +  <settings-subpage page-title="$i18n{privacyPageTitle}"
        learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
-       route-path$="[[routePath]]">
-+<if expr="not is_linux and is_linux">
+       route-path="${this.routePath}">
      <div id="safeBrowsingSection">
-       <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
-       <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
-@@ -193,6 +198,7 @@
-         </settings-collapse-radio-button>
-       </settings-radio-group>
-     </div>
-+</if>
-     <template is="dom-if" if="[[enableHttpsFirstModeNewSettings_]]" restamp>
-       <div id="secureConnectionsSection">
-         <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
 @@ -233,8 +239,9 @@
        </div>
      </template>
@@ -56,14 +39,6 @@ index 2918ece84f..49cfa2112d 100644
      <settings-toggle-button id="passwordsLeakToggle"
            label="$i18n{passwordsLeakDetectionLabel}"
            pref="{{prefs.generated.password_leak_detection}}"
-@@ -242,6 +249,7 @@
-                         prefs.profile.password_manager_leak_detection.*,
-                         prefs.generated.password_leak_detection.*)]]">
-     </settings-toggle-button>
-+</if>
-     <template is="dom-if" if="[[!enableHttpsFirstModeNewSettings_]]" restamp>
-       <settings-toggle-button id="httpsOnlyModeToggle"
-           pref="{{prefs.generated.https_first_mode_enabled}}"
 @@ -292,6 +300,7 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
@@ -72,10 +47,10 @@ index 2918ece84f..49cfa2112d 100644
      <cr-link-row id="advancedProtectionProgramLink" class="hr"
          label="$i18n{advancedProtectionProgramTitle}"
          sub-label="$i18n{advancedProtectionProgramDesc}"
-@@ -306,4 +315,47 @@
-           on-close="onDisableSafebrowsingDialogClose_">
+@@ -227,4 +234,47 @@ import {HttpsFirstModeSetting} from './security_page.js';
+           @close="${this.onDisableSafebrowsingDialogClose_}">
        </settings-simple-confirmation-dialog>
-     </template>
+     ` : ''}
 +</if>
 +    <div id="hardeningSection">
 +      <div class="cr-row first"><h2 class="cr-title-text">Hardening</h2></div>
@@ -160,14 +135,15 @@ index f0ca661a05..dc46797316 100644
        /**
         * Valid safe browsing states.
         */
-@@ -217,6 +232,7 @@ export class SettingsSecurityPageElement extends
-       },
+@@ -155,6 +170,8 @@ export class SettingsSecurityPageElement extends
      };
    }
+ 
 +  declare private webrtcHandlingPolicyOptions_: DropdownMenuOptionList;
-   declare private showSecureDnsSetting_: boolean;
-
-   // <if expr="is_chromeos">
++
+   protected accessor showSecureDnsSetting_: boolean =
+       loadTimeData.getBoolean('showSecureDnsSetting');
+ 
 @@ -267,10 +283,6 @@ export class SettingsSecurityPageElement extends
        }
      });
