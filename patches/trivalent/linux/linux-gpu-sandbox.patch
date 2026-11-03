@@ -471,10 +471,11 @@ index 09780f226f..b40e4392ec 100644
  #if BUILDFLAG(IS_OZONE)
  #if BUILDFLAG(ENABLE_VULKAN)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
-@@ -367,6 +371,14 @@ GpuInit::~GpuInit() {
-   StopForceDiscreteGPU();
+@@ -435,6 +439,14 @@ VulkanImplementation* GpuInitLegacy::vulkan_implementation() {
+   return nullptr;
+ #endif
  }
- 
++
 +// TODO: Add the following
 +//angle::IsNVIDIA(vendor_id)
 +//angle::IsVirtIO(vendor_id)
@@ -482,10 +483,9 @@ index 09780f226f..b40e4392ec 100644
 +bool IsGpuSandboxSupportedPlatform(uint32_t vendor_id) {
 +  return angle::IsAMD(vendor_id) || angle::IsIntel(vendor_id);
 +}
-+
- bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
-                                         const GpuPreferences& gpu_preferences) {
-   TRACE_EVENT("gpu,startup", "gpu::GpuInit::InitializeAndStartSandbox");
+ 
+ bool GpuInitLegacy::InitializeAndStartSandbox(
+     base::CommandLine* command_line,
 @@ -433,8 +445,22 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif

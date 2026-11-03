@@ -39,23 +39,6 @@ index 94859e1cb8..af478353fa 100644
  <!--_html_template_end_-->`;
    // clang-format on
  }
-diff --git a/chrome/browser/resources/settings/autofill_page/autofill_page.html b/chrome/browser/resources/settings/autofill_page/autofill_page.html
-index e502f1c29b..a33320338d 100644
---- a/chrome/browser/resources/settings/autofill_page/autofill_page.html
-+++ b/chrome/browser/resources/settings/autofill_page/autofill_page.html
-@@ -120,6 +120,7 @@
-   </template>
- </div>
- 
-+<if expr="not is_linux and is_linux">
- <settings-section page-title="$i18n{yourSavedInfoAutofillSettingsLabel}">
-   <collapsible-autofill-settings-card prefs="{{prefs}}">
-   </collapsible-autofill-settings-card>
-@@ -141,3 +142,4 @@
-     </cr-link-row>
-   </div>
- </settings-section>
-+</if>
 diff --git a/chrome/browser/resources/settings/languages_page/translate_page.html.ts b/chrome/browser/resources/settings/languages_page/translate_page.html.ts
 index 69bd00f7ae..2711207bfb 100644
 --- a/chrome/browser/resources/settings/languages_page/translate_page.html.ts
@@ -118,3 +101,22 @@ index 4c9fb387a8..9251ed7313 100644
        <settings-collapse-radio-button
            id="blockForAllSites"
            class="two-line"
+diff --git a/chrome/browser/resources/settings/autofill_page/autofill_page.html.ts b/chrome/browser/resources/settings/autofill_page/autofill_page.html.ts
+index 2f5ab2a886..2ccdf436c8 100644
+--- a/chrome/browser/resources/settings/autofill_page/autofill_page.html.ts
++++ b/chrome/browser/resources/settings/autofill_page/autofill_page.html.ts
+@@ -64,6 +64,7 @@ export function getHtml(this: SettingsAutofillPageElement) {
+   ` : ''}
+ </div>
+ 
++<if expr="not is_linux and is_linux">
+ <settings-section page-title="$i18n{yourSavedInfoAutofillSettingsLabel}">
+   <collapsible-autofill-settings-card></collapsible-autofill-settings-card>
+ </settings-section>
+@@ -84,5 +85,6 @@ export function getHtml(this: SettingsAutofillPageElement) {
+     </cr-link-row>
+   </div>
+ </settings-section>
++</if>
+ <!--_html_template_end_-->`;
+ }

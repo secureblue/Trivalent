@@ -43,7 +43,7 @@ diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.h
 index 41b80c71f3..1f4f2bedf7 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html.ts
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html.ts
-@@ -80,6 +80,11 @@ export function getHtml(this: SettingsAppearancePageElement) {
+@@ -79,6 +79,11 @@ export function getHtml(this: SettingsAppearancePageElement) {
          `)}
        </select>
      </div>
@@ -52,9 +52,9 @@ index 41b80c71f3..1f4f2bedf7 100644
 +       pref-key="webkit.webprefs.force_dark_mode_enabled"
 +       label="$i18n{websiteDarkMode}">
 +    </settings-toggle-button>
-     <div class="hr" ?hidden="${!this.showHr_(
-         this.pageVisibility_.setTheme, this.pageVisibility_.homeButton)}">
-     </div>
+     <div class="hr"
+         ?hidden="${!this.showHr_(
+             this.pageVisibility_.setTheme, this.pageVisibility_.homeButton)}">
 diff --git a/chrome/browser/resources/settings/system_page/system_page.html.ts b/chrome/browser/resources/settings/system_page/system_page.html.ts
 index f70f5d24aa..e20ab1a318 100644
 --- a/chrome/browser/resources/settings/system_page/system_page.html.ts

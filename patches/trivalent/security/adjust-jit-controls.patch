@@ -141,9 +141,9 @@ index 499ba9f14a..7a722bbf74 100644
 +const base::FeatureParam<bool> kFullJITlessWithDrumbrake{
 +      &kJITMitigation, "full_jitless_with_drumbrake", false};
 +
- // Marks navigations as aborted when the NavigationHandle is destroyed mid
- // navigation, likely due to a tab closure. This is a kill switch.
- BASE_FEATURE(kAbortNavigationsFromTabClosures,
+ // Allows loading Top Chrome Webium.
+ BASE_FEATURE(kDebugTopChromeWebUI, base::FEATURE_DISABLED_BY_DEFAULT);
+
 @@ -1188,7 +1197,7 @@ BASE_FEATURE(kDisableProcessReuse, base::FEATURE_DISABLED_BY_DEFAULT);
  // Controls whether SpareRenderProcessHostManager tries to always have a warm
  // spare renderer process around for the most recently requested BrowserContext.
