@@ -46,7 +46,7 @@ diff --git a/chrome/browser/ui/webui/trivalent_faq.h b/chrome/browser/ui/webui/t
 new file mode 100644
 --- /dev/null
 +++ b/chrome/browser/ui/webui/trivalent_faq.h
-@@ -0,0 +1,214 @@
+@@ -0,0 +1,221 @@
 +#ifndef CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +#define CHROME_BROWSER_UI_WEBUI_TRIVALENT_FAQ_H_
 +
@@ -177,7 +177,7 @@ new file mode 100644
 +    are <a href="https://flathub.org/apps/io.freetubeapp.FreeTube">FreeTube electron flatpak</a>,
 +    <a href="https://flathub.org/apps/de.schmidhuberj.tubefeeder">Pipeline piped proxy flatpak</a>,
 +    and the YouTube PWA (progressive web-app) paired with uBlock Origin Lite. Consider creating a
-+    separate profile for the Youtube PWA, so you can continue browsing extensionless for your
++    separate profile for the YouTube PWA, so you can continue browsing extensionless for your
 +    usual profile.<br>
 +    To install a PWA, click the <code>Install</code> button in the address bar, or at the top right,
 +    click the three dots, then </code>Save and Share -> Install page as app</code>.
@@ -226,12 +226,19 @@ new file mode 100644
 +    <a href="chrome://settings/content/protectedContent">chrome://settings/content/protectedContent</a>
 +    and select <code>Sites can play protected content</code>.
 +  </details>
++  <details><summary><b>Why don't voice calls (e.g. on Discord) work in Trivalent by default?</b></summary><br>
++    Voice calling generally requires you to enable JIT and WebRTC. To enable JIT, you need to
++    visit <a href="chrome://settings/content/v8">chrome://settings/content/v8</a> and add the
++    relevant URL to your allow list, or enable JIT globally. To enable WebRTC, you need to navigate
++    to <a href="chrome://settings/security">security settings</a> and set WebRTC Handling Policy
++    to <code>Default Public Interface Only</code> under the <code>Hardening</code> section.
++  </details>
 +</section>
 +<section>
 +  <h2>Additional Feature Toggles</h2><p>
 +    Trivalent introduces some extra flags and features that can be viewed at
 +    <a href="chrome://flags">chrome://flags</a>. The default state of each flag/feature
-+    is explained in it's respective description. Some are features already present in chromium,
++    is explained in its respective description. Some are features already present in chromium,
 +    just exposed, and some are Trivalent-provided features. Both of these are labeled as such.
 +</section>
 +<section>
