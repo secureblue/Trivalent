@@ -452,6 +452,8 @@ CHROMIUM_GN_DEFINES+=' use_qt6=true moc_qt6_path="%{_libdir}/qt6/libexec/"'
 CHROMIUM_GN_DEFINES+=' use_pulseaudio=true'
 CHROMIUM_GN_DEFINES+=' rtc_use_pipewire=true'
 CHROMIUM_GN_DEFINES+=' v8_enable_drumbrake=true'
+CHROMIUM_GN_DEFINES+=' v8_enable_cet_ibt=true'
+CHROMIUM_GN_DEFINES+=' v8_enable_memory_sealing=true'
 export CHROMIUM_GN_DEFINES
 
 # Check that there is no system 'google' module, shadowing bundled ones:
