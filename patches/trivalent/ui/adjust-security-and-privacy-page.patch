@@ -14,7 +14,7 @@ diff --git a/chrome/browser/resources/settings/privacy_page/security/security_pa
 index 2918ece84f..49cfa2112d 100644
 --- a/chrome/browser/resources/settings/privacy_page/security/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security/security_page.html
-@@ -3,9 +3,15 @@ import {SafeBrowsingSetting} from './safe_browsing_types.js';
+@@ -3,10 +3,15 @@ import {SafeBrowsingSetting} from './safe_browsing_types.js';
  import {HttpsFirstModeSetting} from './security_page.js';
  #html_wrapper_imports_end -->
  
@@ -27,35 +27,23 @@ index 2918ece84f..49cfa2112d 100644
 +  <settings-subpage page-title="$i18n{privacyPageTitle}"
        learn-more-url="$i18n{safeBrowsingHelpCenterURL}"
        route-path="${this.routePath}">
-+<if expr="not is_linux and is_linux">
-     <div id="safeBrowsingSection">
+-    <div id="safeBrowsingSection">
++    <div id="safeBrowsingSection" hidden>
        <h2 class="cr-title-text">$i18n{safeBrowsingSectionLabel}</h2>
        <settings-radio-group id="safeBrowsingRadioGroup" no-set-pref
-@@ -124,6 +130,7 @@ import {HttpsFirstModeSetting} from './security_page.js';
-         </settings-collapse-radio-button>
-       </settings-radio-group>
-     </div>
-+</if>
-     ${this.enableHttpsFirstModeNewSettings_ ? html`
-       <div id="secureConnectionsSection">
-         <h2 class="cr-title-text">$i18n{secureConnectionsSectionTitle}</h2>
-@@ -160,13 +167,15 @@ import {HttpsFirstModeSetting} from './security_page.js';
+           pref-key="generated.safe_browsing"
+@@ -160,9 +165,9 @@ import {HttpsFirstModeSetting} from './security_page.js';
        </div>
      ` : ''}
      <div class="cr-row first">
 -      <h2 class="cr-title-text">$i18n{advancedPageTitle}</h2>
 +      <h2 class="cr-title-text">$i18n{securityPageTitle}</h2>
      </div>
-+<if expr="not is_linux and is_linux">
-     <settings-toggle-button id="passwordsLeakToggle"
+-    <settings-toggle-button id="passwordsLeakToggle"
++    <settings-toggle-button id="passwordsLeakToggle" hidden
          label="$i18n{passwordsLeakDetectionLabel}"
          pref-key="generated.password_leak_detection"
          sub-label="${this.getPasswordsLeakToggleSubLabel_()}">
-     </settings-toggle-button>
-+</if>
-     ${!this.enableHttpsFirstModeNewSettings_ ? html`
-       <settings-toggle-button id="httpsOnlyModeToggle"
-           pref-key="generated.https_first_mode_enabled"
 @@ -292,6 +300,7 @@
          on-click="onManageCertificatesClick_" external>
      </cr-link-row>
