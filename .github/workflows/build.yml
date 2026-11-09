@@ -42,6 +42,10 @@ name: Create RPM Release
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   buildsrpm:
     name: Build SRPM
@@ -67,7 +71,6 @@ jobs:
           egress-policy: audit
 
       - name: Build SRPM
-        shell: bash
         id: srpm_build
         env:
           BRANCH: ${{ github.ref_name }}
@@ -121,7 +124,6 @@ jobs:
           name: srpm-artifact
 
       - name: Build RPM
-        shell: bash
         id: rpm_build
         env:
           ARCH: ${{inputs.arch}}
@@ -145,7 +147,6 @@ jobs:
           retention-days: 30
 
       - name: Prepare for upload
-        shell: bash
         run: |
           rm trivalent-*.src.rpm
 
@@ -235,7 +236,6 @@ jobs:
           name: rpm-artifact
 
       - name: Setup
-        shell: bash
         env:
           RPM_SIGNING_KEY: ${{ secrets.RPM_SIGNING_KEY }}
         run: |
@@ -247,8 +247,20 @@ jobs:
           %_gpg_name 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41
           " > ~/.rpmmacros
 
+      - name: Acquire rpm repo lockfile
+        if: ${{ ! inputs.test_build }}
+        id: acquire_lock
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+        run: |
+          echo 1 | rclone rcat R2:/release/lock --header-upload "If-None-Match: *"
+
       - name: Sign
-        shell: bash
         if: ${{ ! inputs.test_build }}
         id: sign
         run: |
@@ -287,7 +299,6 @@ jobs:
           gpg --detach-sign --local-user 26B4463ED8F313BC7E3FBDF9D9223AF0F47B3E41 --armor repodata/repomd.xml
 
       - name: Upload RPM and logs to R2 to trivalent Bucket
-        shell: bash
         if: ${{ ! inputs.test_build }}
         env:
           RCLONE_CONFIG_R2_TYPE: s3
@@ -299,6 +310,18 @@ jobs:
           SOURCE_DIR: .
         run: |
           rclone copy ./secureblue/ R2:/
+
+      - name: Release rpm repo lockfile
+        if: always() && steps.acquire_lock.outcome == 'success'
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+        run: |
+          rclone deletefile R2:/release/lock
 
       - name: Notify Discord webhook of build end
         continue-on-error: true
@@ -347,7 +370,6 @@ jobs:
           name: slsa-attestations
 
       - name: Create release
-        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -369,7 +391,6 @@ jobs:
       - name: Post to Bluesky
         if: ${{ inputs.arch == 'x86_64' }}
         continue-on-error: true
-        shell: bash
         env:
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
           VERSION: ${{ needs.pushrpm.outputs.version }}
