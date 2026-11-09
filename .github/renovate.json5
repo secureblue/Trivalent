@@ -1,0 +1,23 @@
+{
+    extends: ["config:best-practices"],
+    minimumReleaseAge: "3 days",
+    customManagers: [
+        {
+            customType: "regex",
+            managerFilePatterns: [
+                ".github/workflows/*.yaml",
+                ".github/workflows/*.yml",
+            ],
+            matchStrings: [
+                "#\\s?renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( extractVersion=(?<extractVersion>\\S+))?\\s*[\\w-]+:\\s*(?<currentValue>\\S+)",
+            ],
+        },
+    ],
+    packageRules: [
+        {
+            matchDepTypes: ["container"],
+            matchUpdateTypes: ["major"],
+            enabled: false,
+        },
+    ],
+}
