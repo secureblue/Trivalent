@@ -11,7 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/net/dns/public/doh_provider_entry.cc b/net/dns/public/doh_provider_entry.cc
-index f48d26044b..33f6166877 100644
+index f48d26044b..0acd15bc8a 100644
 --- a/net/dns/public/doh_provider_entry.cc
 +++ b/net/dns/public/doh_provider_entry.cc
 @@ -98,7 +98,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
@@ -175,7 +175,7 @@ index f48d26044b..33f6166877 100644
             /*display_countries=*/{},
         },
         {
-@@ -341,13 +411,13 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
+@@ -341,7 +411,7 @@ const DohProviderEntry::List& DohProviderEntry::GetList() {
         {
             "Quad9Secure",
             MAKE_STATIC_STORAGE_BASE_FEATURE(kDohProviderQuad9Secure,
@@ -184,11 +184,3 @@ index f48d26044b..33f6166877 100644
             {"9.9.9.9", "149.112.112.112", "2620:fe::fe", "2620:fe::9"},
             /*dns_over_tls_hostnames=*/{"dns.quad9.net", "dns9.quad9.net"},
             "https://dns.quad9.net/dns-query",
-            /*ui_name=*/"Quad9 (9.9.9.9)",
-            /*privacy_policy=*/"https://www.quad9.net/home/privacy/",
--           /*display_globally=*/true,
-+           /*display_globally=*/false,
-            /*display_countries=*/{},
-        },
-        {
-
