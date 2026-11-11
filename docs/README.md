@@ -36,6 +36,12 @@ A security-focused, Chromium-based browser for desktop Linux inspired by [Vanadi
 
 Official support is only provided via [secureblue](https://github.com/secureblue/secureblue/). Unsupported installation is also possible [via our repo](https://repo.secureblue.dev/secureblue.repo). "Support" here refers to which systems Trivalent is tested against. It does not mean that it's forbidden to open GitHub issues regarding Trivalent's use on other systems.
 
+Note that this RPM repo also includes other packages such as secureblue's kernel builds. If you only want to install Trivalent, you can add the following line to the end of the repo file:
+
+```
+includepkgs=trivalent*
+```
+
 ## Post-install
 
 Some additional preferences are added to `chrome://settings/security`, these provide additional security and privacy controls should they be needed. An example of one toggle is the `Network Service Sandbox` (disabled by default), which is known to occasionally [clear cookies on exit](https://secureblue.dev/faq#trivalent-net-sandbox).
