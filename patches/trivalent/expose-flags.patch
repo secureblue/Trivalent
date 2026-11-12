@@ -115,7 +115,7 @@ index b0b6bb4005..8beb9a421e 100644
 +     "Enables the GPU sandbox if your system supports it, this depends on "
 +     "your graphics card, whether Vulkan is in use, or if X11 is used for "
 +     "windowing. This flag is provided by Trivalent.",
-+     kOsLinux, SINGLE_VALUE_TYPE("enable-gpu-sandbox-linux")},
++     kOsLinux, SINGLE_DISABLE_VALUE_TYPE(switches::kDisableGpuSandbox)},
 +    {"gpu-sandbox-test", "Force GPU Sandbox For Testing",
 +     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
 +     "can disable hardware acceleration or cause crashes. It is for "
