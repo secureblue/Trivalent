@@ -406,24 +406,10 @@ jobs:
           chmod +x bluesky-github-action_linux-amd64
           ./bluesky-github-action_linux-amd64 --handle secureblue.dev --password "${BSKY_APP_PASSWORD}" --lang en --text "${bluesky_message}"
 
-  old-provenance:
-    needs: [pushrpm, createrelease]
-    permissions:
-      actions: read # To read the workflow path.
-      id-token: write # To sign the provenance.
-      contents: write # To add assets to a release.
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
-    with:
-      base64-subjects: ${{ needs.pushrpm.outputs.hashes }}
-      upload-assets: true
-      upload-tag-name: ${{ needs.pushrpm.outputs.tag }}
-      provenance-name: multiple.intoto.jsonl
-
   notify-failure:
     name: Notify Discord webhook of failure
     if: failure()
-    needs:
-      [buildsrpm, buildrpm, pushrpm, provenance, createrelease, old-provenance]
+    needs: [buildsrpm, buildrpm, pushrpm, provenance, createrelease]
     runs-on: ubuntu-26.04
     steps:
       - name: Notify Discord webhook of build failure
