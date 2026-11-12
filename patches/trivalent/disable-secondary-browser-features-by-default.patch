@@ -61,22 +61,19 @@ index 2e0e1e41c3c58..d4b7b33d8830d 100644
  #if BUILDFLAG(IS_CHROMEOS)
    registry->RegisterDictionaryPref(kChromeLabsNewBadgeDictAshChrome);
  #endif
-diff --git a/components/history_clusters/core/features.cc b/components/history_clusters/core/features.cc
-index 54c0b44aca..c69d7a2ab3 100644
---- a/components/history_clusters/core/features.cc
-+++ b/components/history_clusters/core/features.cc
-@@ -16,11 +16,7 @@ namespace history_clusters {
- namespace {
+diff --git a/components/history_clusters/core/history_clusters_prefs.cc b/components/history_clusters/core/history_clusters_prefs.cc
+index 981005ed31..16941c5542 100644
+--- a/components/history_clusters/core/history_clusters_prefs.cc
++++ b/components/history_clusters/core/history_clusters_prefs.cc
+@@ -24,7 +24,7 @@ const char kAllCache[] = "history_clusters.all_cache";
+ const char kLastSelectedTab[] = "history_clusters.last_selected_tab";
 
- constexpr auto enabled_by_default_desktop_only =
--#if BUILDFLAG(IS_ANDROID) || BUILDFLAG(IS_IOS)
-     base::FEATURE_DISABLED_BY_DEFAULT;
--#else
--    base::FEATURE_ENABLED_BY_DEFAULT;
--#endif
-
- }  // namespace
- 
+ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
+-  registry->RegisterBooleanPref(prefs::kVisible, true);
++  registry->RegisterBooleanPref(prefs::kVisible, false);
+   registry->RegisterDictionaryPref(prefs::kAllCache);
+   registry->RegisterDictionaryPref(prefs::kShortCache);
+   registry->RegisterIntegerPref(prefs::kLastSelectedTab, TabbedPage::DATE);
 diff --git a/components/collaboration/public/pref_names.cc b/components/collaboration/public/pref_names.cc
 index 701b1adf50..af25f314c4 100644
 --- a/components/collaboration/public/pref_names.cc
