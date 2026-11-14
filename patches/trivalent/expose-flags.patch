@@ -43,7 +43,7 @@ index b0b6bb4005..8beb9a421e 100644
  #if !BUILDFLAG(IS_ANDROID)
  const FeatureEntry::Choice kIwaKeyDistributionComponentExpCohortChoices[] = {
      {flags_ui::kGenericExperimentChoiceDisabled, "", ""},
-@@ -5140,6 +5162,84 @@ constexpr char kEnterpriseIsolatedModeInternalName[] =
+@@ -5140,6 +5162,87 @@ constexpr char kEnterpriseIsolatedModeInternalName[] =
 
  // When adding a new choice, add it to the end of the list.
  const FeatureEntry kFeatureEntries[] = {
@@ -114,7 +114,10 @@ index b0b6bb4005..8beb9a421e 100644
 +    {"gpu-sandbox-autoconfig", "Enable GPU Sandbox Auto-Configuration",
 +     "Enables the GPU sandbox if your system supports it, this depends on "
 +     "your graphics card, whether Vulkan is in use, or if X11 is used for "
-+     "windowing. This flag is provided by Trivalent.",
++     "windowing. You can check if the sandbox is enabled on your system in "
++     "chrome://gpu. If you experience issues with anything graphical, video "
++     "decoding/encoding, or a notable loss in performance, try disabling "
++     "this flag. This flag is provided by Trivalent.",
 +     kOsLinux, SINGLE_DISABLE_VALUE_TYPE(switches::kDisableGpuSandbox)},
 +    {"gpu-sandbox-test", "Force GPU Sandbox For Testing",
 +     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
