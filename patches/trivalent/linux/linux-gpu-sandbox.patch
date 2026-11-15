@@ -471,14 +471,15 @@ index 09780f226f..b40e4392ec 100644
  
  bool GpuInitLegacy::InitializeAndStartSandbox(
      base::CommandLine* command_line,
-@@ -433,8 +445,21 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -433,8 +445,22 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    enable_watchdog = false;
  #endif
  
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
 +  // Only enable on platforms where the sandbox works
-+  bool gpu_sandbox_linux = IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id);
++  bool gpu_sandbox_linux = IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id)
++                           && !gpu_preferences_.gallium_version.empty();
 +  if (gpu_sandbox_linux) {
 +    for (const auto& gpu : gpu_info_.secondary_gpus) {
 +      if (!IsGpuSandboxSupportedPlatform(gpu.vendor_id)) {
@@ -494,7 +495,7 @@ index 09780f226f..b40e4392ec 100644
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -476,7 +501,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -476,7 +502,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.
