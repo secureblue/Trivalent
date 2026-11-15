@@ -118,7 +118,7 @@ index b0b6bb4005..8beb9a421e 100644
 +     "chrome://gpu. If you experience issues with anything graphical, video "
 +     "decoding/encoding, or a notable loss in performance, try disabling "
 +     "this flag. This flag is provided by Trivalent.", kOsLinux,
-+     SINGLE_DISABLE_VALUE_TYPE(sandbox::policy::switches::kDisableGpuSandbox)},
++     SINGLE_DISABLE_VALUE_TYPE("disable-gpu-sandbox-linux")},
 +    {"gpu-sandbox-test", "Force GPU Sandbox For Testing",
 +     "Enables the GPU sandbox. WARNING: This is HIGHLY experimental and "
 +     "can disable hardware acceleration or cause crashes. It is for "
