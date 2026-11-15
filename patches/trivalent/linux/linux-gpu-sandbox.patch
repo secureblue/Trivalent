@@ -516,3 +516,15 @@ index 7fe9953416..1b660058c4 100644
    };
  
    SandboxSeccompBPF() = delete;
+diff --git a/chrome/browser/ui/startup/bad_flags_prompt.cc b/chrome/browser/ui/startup/bad_flags_prompt.cc
+index 4d5f261982..08a06a324f 100644
+--- a/chrome/browser/ui/startup/bad_flags_prompt.cc
++++ b/chrome/browser/ui/startup/bad_flags_prompt.cc
+@@ -92,10 +92,9 @@ const char* const kBadFlags[] = {
+     network::switches::kNetLogCaptureMode,
+
+     // These flags disable sandbox-related security.
+-    sandbox::policy::switches::kDisableGpuSandbox,
+     sandbox::policy::switches::kDisableLandlockSandbox,
+     sandbox::policy::switches::kDisableSeccompFilterSandbox,
+     sandbox::policy::switches::kDisableSetuidSandbox,
