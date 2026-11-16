@@ -24,17 +24,17 @@ index f526d4df2d..b87300939b 100644
  #define IDC_CUT                         36000
  #define IDC_COPY                        36001
 diff --git a/chrome/browser/ui/actions/chrome_action_id.h b/chrome/browser/ui/actions/chrome_action_id.h
-index 4bcf8e9afd..87a4b1ddcc 100644
+index 4bcf8e9afd..63da8fa3ba 100644
 --- a/chrome/browser/ui/actions/chrome_action_id.h
 +++ b/chrome/browser/ui/actions/chrome_action_id.h
-@@ -71,6 +71,7 @@
-   E(kActionSavePage, IDC_SAVE_PAGE) \
-   E(kActionEmailPageLocation, IDC_EMAIL_PAGE_LOCATION) \
-   E(kActionBasicPrint, IDC_BASIC_PRINT) \
+@@ -367,6 +367,7 @@
+   E(kActionShowDownloads) \
+   E(kActionClearBrowsingData, IDC_CLEAR_BROWSING_DATA) \
+   E(kActionPrint, IDC_PRINT) \
 +  E(kActionWebsiteDarkmode, IDC_WEBSITE_DARKMODE) \
-   E(kActionWindowMuteSite, IDC_WINDOW_MUTE_SITE) \
-   E(kActionWindowPinTab, IDC_WINDOW_PIN_TAB) \
-   E(kActionWindowGroupTab, IDC_WINDOW_GROUP_TAB) \
+   E(kActionShowTranslate, IDC_SHOW_TRANSLATE) \
+   E(kActionSendTabToSelf, IDC_SEND_TAB_TO_SELF) \
+   E(kActionQrCodeGenerator, IDC_QRCODE_GENERATOR) \
 diff --git a/chrome/browser/ui/browser_actions.cc b/chrome/browser/ui/browser_actions.cc
 index 812961aed2..a3a1089019 100644
 --- a/chrome/browser/ui/browser_actions.cc
