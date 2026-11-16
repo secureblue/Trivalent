@@ -82,14 +82,13 @@ index 87b28c196eb30..5d3a56f226044 100644
      <div class="bulletpoints first">$i18nRaw{incognitoTabFeatures}</div>
      <div class="bulletpoints">$i18nRaw{incognitoTabWarning}</div>
 diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
-index d989c90598e38..985a47c20c397 100644
+index a7e073c70e..9d8033f1cb 100644
 --- a/chrome/browser/resources/settings/settings_main/settings_main.html
 +++ b/chrome/browser/resources/settings/settings_main/settings_main.html
-@@ -35,7 +35,6 @@
- </style>
- <div id="noSearchResults" hidden$="[[!showNoResultsFound_]]">
+@@ -1,6 +1,5 @@
+ <div id="noSearchResults" ?hidden="${!this.showNoResultsFound_}">
    <div>$i18n{searchNoResults}</div>
 -  <div>$i18nRaw{searchNoResultsHelp}</div>
  </div>
- <template is="dom-if" if="[[showManagedHeader_(inSearchMode_, lastRoute_)]]"
-     restamp>
+ ${this.showManagedHeader_() ? html`
+   <managed-footnote></managed-footnote>
