@@ -11,12 +11,12 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 900df063b86fa..8ac0084983784 100644
+index 565bd580ba..583d5bf840 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -1520,7 +1520,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+@@ -1737,7 +1737,7 @@ void ChromeContentBrowserClient::RegisterProfilePrefs(
+   registry->RegisterBooleanPref(
        prefs::kServiceWorkerToControlSrcdocIframeEnabled, true);
-   registry->RegisterBooleanPref(prefs::kReduceAcceptLanguageEnabled, true);
    registry->RegisterBooleanPref(policy::policy_prefs::kBuiltInAIAPIsEnabled,
 -                                true);
 +                                false);
@@ -98,15 +98,15 @@ index bbd4290959..cda52bcacc 100644
  // Enables an informational IPH message at the bottom of the Omnibox directing
  // users to certain starter pack engines.
 diff --git a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
-index c5ceac4713a5b..a25847ee6022d 100644
+index 69add19641..5fe7131509 100644
 --- a/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
 +++ b/components/optimization_guide/core/feature_registry/enterprise_policy_registry.cc
-@@ -59,7 +59,7 @@ void EnterprisePolicyRegistry::RegisterProfilePrefs(
+@@ -53,7 +53,7 @@ void EnterprisePolicyRegistry::RegisterProfilePrefs(
+     PrefRegistrySimple* registry) {
+   for (const EnterprisePolicyPref& policy : enterprise_policies_) {
      registry->RegisterIntegerPref(
-         policy.name(),
-         static_cast<int>(model_execution::prefs::
--                             ModelExecutionEnterprisePolicyValue::kAllow),
-+                             ModelExecutionEnterprisePolicyValue::kDisable),
+-        policy.name(), static_cast<int>(EnterprisePolicyValue::kAllow),
++        policy.name(), static_cast<int>(EnterprisePolicyValue::kDisable),
          PrefRegistry::LOSSY_PREF);
    }
    // From that point on, it's too late to modify the registry as the prefs
@@ -150,19 +150,19 @@ index d38f101331..d6bf7766ec 100644
    registry->RegisterIntegerPref(
        kDriveConsentState, static_cast<int>(DriveConsentState::kRestricted),
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
-diff --git a/components/optimization_guide/core/model_execution/model_execution_prefs.cc b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-index 36240678e7..c2c6f7cb72 100644
---- a/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-+++ b/components/optimization_guide/core/model_execution/model_execution_prefs.cc
-@@ -129,9 +129,9 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
-   registry->RegisterInt64Pref(localstate::kModelQualityLoggingClientId, 0,
-                               PrefRegistry::LOSSY_PREF);
+diff --git a/components/optimization_guide/core/model_execution/on_device_prefs.cc b/components/optimization_guide/core/model_execution/on_device_prefs.cc
+index 5a0bdb7d30..e03d260d11 100644
+--- a/components/optimization_guide/core/model_execution/on_device_prefs.cc
++++ b/components/optimization_guide/core/model_execution/on_device_prefs.cc
+@@ -89,9 +89,9 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
+   registry->RegisterDictionaryPref(localstate::kOnDeviceModelValidationResult);
+   registry->RegisterDictionaryPref(localstate::kLastUsageByFeature);
    registry->RegisterIntegerPref(
 -      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 0);
 +      localstate::kGenAILocalFoundationalModelEnterprisePolicySettings, 1);
    registry->RegisterBooleanPref(localstate::kOnDeviceAiUserSettingsEnabled,
 -                                true);
 +                                false);
+   registry->RegisterBooleanPref(
+       localstate::kOnDeviceAiAutoRemoveUnusedModelsEnabled, true);
    registry->RegisterBooleanPref(localstate::kEmbeddingApiModelDownloadEligible,
-                                 false);
-   registry->RegisterDictionaryPref(localstate::kManifestAssetLedger);
