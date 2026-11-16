@@ -381,7 +381,7 @@ index e263d95cc3..8359e1440d 100644
  
 +  gpu_preferences.gpu_sandbox_linux =
 +#if BUILDFLAG(IS_LINUX)
-+      command_line->HasSwitch("enable-gpu-sandbox-linux");
++      !command_line->HasSwitch("disable-gpu-sandbox-linux");
 +#else
 +      false;
 +#endif
@@ -457,13 +457,13 @@ index 2f0216e084..a30f35e9dd 100644
      return prefs.enable_low_latency_dxva;
    }
 diff --git a/gpu/ipc/service/gpu_init.cc b/gpu/ipc/service/gpu_init.cc
-index 09780f226f..b40e4392ec 100644
+index 1c728a460b..b489f6ba13 100644
 --- a/gpu/ipc/service/gpu_init.cc
 +++ b/gpu/ipc/service/gpu_init.cc
-@@ -56,6 +56,10 @@
+@@ -57,6 +57,10 @@
  #include <GLES2/gl2.h>
  #endif
- 
+
 +#if BUILDFLAG(IS_LINUX)
 +#include "third_party/angle/src/gpu_info_util/SystemInfo.h"
 +#endif
@@ -471,11 +471,10 @@ index 09780f226f..b40e4392ec 100644
  #if BUILDFLAG(IS_OZONE)
  #if BUILDFLAG(ENABLE_VULKAN)
  #include "gpu/command_buffer/service/drm_modifiers_filter_vulkan.h"
-@@ -435,6 +439,14 @@ VulkanImplementation* GpuInitLegacy::vulkan_implementation() {
-   return nullptr;
+@@ -431,6 +435,14 @@ VulkanImplementation* GpuInitLegacy::vulkan_implementation() {
  #endif
  }
-+
+
 +// TODO: Add the following
 +//angle::IsNVIDIA(vendor_id)
 +//angle::IsVirtIO(vendor_id)
@@ -483,19 +482,23 @@ index 09780f226f..b40e4392ec 100644
 +bool IsGpuSandboxSupportedPlatform(uint32_t vendor_id) {
 +  return angle::IsAMD(vendor_id) || angle::IsIntel(vendor_id);
 +}
- 
++
  bool GpuInitLegacy::InitializeAndStartSandbox(
      base::CommandLine* command_line,
-@@ -433,8 +445,22 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
-   enable_watchdog = false;
+     const GpuPreferences& gpu_preferences) {
+@@ -503,7 +515,23 @@ bool GpuInitLegacy::InitializeAndStartSandbox(
  #endif
- 
-+  bool gpu_sandbox_linux = gpu_preferences_.gpu_sandbox_linux;
+
  #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 -  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early;
 +  // Only enable on platforms where the sandbox works
-+  if (gpu_sandbox_linux &&
-+      IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id)) {
++  bool gpu_sandbox_linux = gpu_preferences_.gpu_sandbox_linux &&
++      !gpu_preferences_.gallium_version.empty() &&
++      IsGpuSandboxSupportedPlatform(gpu_info_.active_gpu().vendor_id) &&
++      // The sandbox does not currently work with Vulkan or x11
++      !features::IsUsingVulkan() &&
++      ui::OzonePlatform::RunningOnWaylandForTest();
++  if (gpu_sandbox_linux) {
 +    for (const auto& gpu : gpu_info_.secondary_gpus) {
 +      if (!IsGpuSandboxSupportedPlatform(gpu.vendor_id)) {
 +        gpu_sandbox_linux = false;
@@ -504,13 +507,11 @@ index 09780f226f..b40e4392ec 100644
 +    }
 +  }
 +  bool gpu_sandbox_start_early = gpu_preferences_.gpu_sandbox_start_early ||
-+      // The sandbox does not work with Vulkan currently or x11
-+      (gpu_sandbox_linux && !features::IsUsingVulkan() &&
-+       ui::OzonePlatform::RunningOnWaylandForTest());
++                                 gpu_sandbox_linux;
  #else   // !(BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS))
    // For some reasons MacOSX's VideoToolbox might crash when called after
    // initializing GL, see crbug.com/1047643 and crbug.com/871280. On other
-@@ -476,7 +502,7 @@ bool GpuInit::InitializeAndStartSandbox(base::CommandLine* command_line,
+@@ -545,7 +573,7 @@ bool GpuInitLegacy::InitializeAndStartSandbox(
    // On Chrome OS ARM Mali, GPU driver userspace creates threads when
    // initializing a GL context, so start the sandbox early.
    // TODO(zmo): Need to collect OS version before this.
