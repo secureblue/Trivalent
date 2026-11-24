@@ -11,28 +11,27 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 ---
 diff --git a/components/url_formatter/url_formatter.cc b/components/url_formatter/url_formatter.cc
-index 63b6e1583a837..a0b8b8c588161 100644
+index 2f6cb31790..cdb9231222 100644
 --- a/components/url_formatter/url_formatter.cc
 +++ b/components/url_formatter/url_formatter.cc
-@@ -26,6 +26,7 @@
+@@ -27,6 +27,7 @@
  #include "url/third_party/mozilla/url_parse.h"
  #include "url/url_constants.h"
  #include "url/url_util.h"
 +#include "url/url_features.h"
- 
+
  namespace url_formatter {
- 
-@@ -318,6 +319,10 @@ IDNConversionResult IDNToUnicodeWithAdjustmentsImpl(
-   GetTopLevelDomain(host, &top_level_domain, &top_level_domain_unicode);
- 
-   IDNConversionResult result;
-+  if (base::FeatureList::IsEnabled(url::kShowPunycodeDomains)) {
-+    result.result = host16;
-+    return result;
-+  }
-   // Do each component of the host separately, since we enforce script matching
-   // on a per-component basis.
-   std::u16string out16;
+
+@@ -368,7 +369,8 @@ IDNConversionResult IDNToUnicodeWithAdjustmentsImpl(
+     result.matching_top_domain =
+         GetIDNSpoofChecker().GetSimilarTopDomain(out16);
+     if (!ignore_spoof_check_results &&
+-        !result.matching_top_domain.domain.empty()) {
++        (!result.matching_top_domain.domain.empty() ||
++        base::FeatureList::IsEnabled(url::kShowPunycodeDomains))) {
+       if (adjustments) {
+         adjustments->clear();
+       }
 diff --git a/url/url_features.cc b/url/url_features.cc
 index 55cdc8b1ee..718c387490 100644
 --- a/url/url_features.cc
