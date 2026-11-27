@@ -42,7 +42,7 @@ We will then take care of the issue as soon as possible.
 ### Building locally
 
 > [!NOTE]
-> These steps can also be done in a distrobox (or any other container software) if preferred
+> These steps can also be done in a distrobox (or any other container software) if preferred. See below for instructions on how to use [systemd-nspawn](#setting-up-a-systemd-nspawn-container) if you're not running Fedora.
 
 #### Setup
 
@@ -75,6 +75,51 @@ Rebuild the source for your system:
 `mock --resultdir=dist -r %{distro}-%{version}-%{arch} --rebuild trivalent-%{version}.%{distro}.src.rpm`
 
 Install the built rpm...
+
+#### Setting up a systemd-nspawn container
+
+Start by installing `dnf` on your distro. Make sure to pick `dnf5` if your distro ships it as a separate package than dnf 4.x (e.g. Arch Linux). Configure the Fedora repositories in `/etc/dnf/dnf.conf`.
+
+```
+[fedora]
+name=Fedora $releasever - $basearch
+metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+gpgkey=https://fedoraproject.org/fedora.gpg
+gpgcheck=1
+
+[updates]
+name=Fedora $releasever - $basearch - Updates
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
+gpgkey=https://fedoraproject.org/fedora.gpg
+gpgcheck=1
+```
+
+Then create a directory (or btrfs subvolume if applicable) in `/var/lib/machines` and bootstrap a Fedora environment inside. You will need to set a password for the root user.
+
+```
+# mkdir /var/lib/machines/<container-name>  # If you're on btrfs, you likely will want to use a subvolume instead.
+# dnf5 --releasever=45 --setopt=install_weak_deps=False --best --use-host-config --installroot=/var/lib/machines/<container-name> install dbus dhcp-client dnf dnf5-plugins fedora-release glibc glibc-langpack-en iputils less ncurses passwd systemd systemd-networkd systemd-resolved util-linux vim-default-editor rpm rpm-build mock git
+# systemd-nspawn -D /var/lib/machines/<container-name> systemctl enable systemd-networkd systemd-resolved
+# systemd-nspawn -D /var/lib/machines/<container-name> passwd
+```
+
+If you're on a distro that does not use `systemd-networkd`, you'll need to start it on the host to get connectivity inside the container, or manually configure network connectivity. `systemd-networkd` does not touch interfaces unless it is configured to do so; starting it alongside e.g. NetworkManager should not cause any issues on the host and only the virtual ethernet adapter will be managed by `systemd-networkd`.
+
+Once this is done, you can start the container and login via `machinectl`.
+
+```
+machinectl start <container-name>
+machinectl login <container-name>
+```
+
+> [!TIP]
+> If you're encountering permission issues when running `mock`, a workaround is to use `mock --isolation=simple` which uses a chroot instead of trying to create a nested `nspawn` setup.
+
+See also:
+
+- [Arch Wiki - systemd-nspawn](https://wiki.archlinux.org/title/Systemd-nspawn)
+- [Fedora Server User Documentation - Setting up a systemd-nspawn Fedora container](https://docs.fedoraproject.org/en-US/fedora-server/containerization/systemd-nspawn-setup)
+- [systemd-nspawn(1)](https://man.archlinux.org/man/systemd-nspawn.1)
 
 ### Pull Requests
 
